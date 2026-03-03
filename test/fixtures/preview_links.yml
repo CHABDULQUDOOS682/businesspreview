@@ -1,0 +1,19 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  business: one
+  template: MyString
+  uuid: MyString
+  visit_count: 1
+  clicked_at: 2026-02-27 01:04:48
+  ip_address: MyString
+  user_agent: MyString
+
+two:
+  business: two
+  template: MyString
+  uuid: MyString
+  visit_count: 1
+  clicked_at: 2026-02-27 01:04:48
+  ip_address: MyString
+  user_agent: MyString

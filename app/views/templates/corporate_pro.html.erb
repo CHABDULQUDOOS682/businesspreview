@@ -1,0 +1,71 @@
+<div class="min-h-screen bg-slate-50 font-sans text-slate-900">
+  <!-- Hero Section -->
+  <div class="bg-white border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-28 text-center">
+      <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-slate-900 mb-6">
+        <%= @business.name %>
+      </h1>
+      <p class="mt-4 text-xl md:text-2xl text-slate-500 max-w-3xl mx-auto">
+        Premium <%= @business.niche.presence || "services" %> in <%= @business.city %>, <%= @business.country %>.
+      </p>
+      
+      <div class="mt-10 flex justify-center gap-x-6">
+        <a href="#claim" class="rounded-md bg-blue-600 px-6 py-3.5 text-lg font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 transition-all">
+          Claim This Design
+        </a>
+        <% if @business.website.present? %>
+          <a href="<%= @business.website %>" target="_blank" class="rounded-md bg-white px-6 py-3.5 text-lg font-semibold text-slate-900 shadow-sm ring-1 ring-inset ring-slate-300 hover:bg-slate-50 transition-all">
+            Visit Current Site
+          </a>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <!-- Content Section -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+      <div class="bg-white p-8 rounded-2xl shadow-sm ring-1 ring-slate-900/5">
+        <h2 class="text-3xl font-bold tracking-tight text-slate-900 mb-8">Why Choose Us?</h2>
+        <dl class="space-y-6">
+          <div class="flex gap-x-4">
+            <dt class="flex-none bg-blue-50 p-2 rounded-lg">
+              <span class="text-2xl">⭐</span>
+            </dt>
+            <dd class="flex-auto">
+              <p class="text-lg font-semibold text-slate-900">Top Rated Service</p>
+              <p class="mt-1 text-base text-slate-600">Loved by customers with a <%= @business.rating || "4.9" %> star average rating.</p>
+            </dd>
+          </div>
+          <div class="flex gap-x-4">
+            <dt class="flex-none bg-blue-50 p-2 rounded-lg">
+              <span class="text-2xl">📍</span>
+            </dt>
+            <dd class="flex-auto">
+              <p class="text-lg font-semibold text-slate-900">Local Experts</p>
+              <p class="mt-1 text-base text-slate-600">Proudly serving the <%= @business.city %> community.</p>
+            </dd>
+          </div>
+          <div class="flex gap-x-4">
+            <dt class="flex-none bg-blue-50 p-2 rounded-lg">
+              <span class="text-2xl">📞</span>
+            </dt>
+            <dd class="flex-auto">
+              <p class="text-lg font-semibold text-slate-900">Always Available</p>
+              <p class="mt-1 text-base text-slate-600">Call us today at <%= @business.phone.presence || "(555) 123-4567" %>.</p>
+            </dd>
+          </div>
+        </dl>
+      </div>
+
+      <div class="bg-blue-600 rounded-2xl p-10 text-white shadow-xl" id="claim">
+        <h3 class="text-2xl font-bold mb-4">Like what you see?</h3>
+        <p class="text-blue-100 mb-8 text-lg">We custom-built this prototype specifically for <%= @business.name %>. Upgrade your digital presence and start converting more visitors today.</p>
+        <form class="space-y-4" onsubmit="event.preventDefault(); alert('Demo only. Would submit lead info.');">
+          <input type="email" placeholder="Enter your email" class="w-full rounded-md border-0 bg-white/10 px-4 py-3 text-white placeholder:text-blue-200 focus:ring-2 focus:ring-inset focus:ring-white sm:text-sm sm:leading-6" required>
+          <button type="submit" class="w-full bg-white text-blue-600 font-bold py-3 px-4 rounded-md hover:bg-blue-50 transition-colors">Let's Talk</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

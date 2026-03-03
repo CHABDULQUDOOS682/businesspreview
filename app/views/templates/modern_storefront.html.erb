@@ -1,0 +1,77 @@
+<div class="min-h-screen bg-gray-50 font-sans text-gray-900 flex flex-col">
+  <!-- Top Banner -->
+  <div class="bg-green-600 text-white text-sm font-semibold text-center py-2 px-4 shadow-inner">
+    Currently serving the <%= @business.city %> area. Call us at <%= @business.phone.presence || "our local office" %>!
+  </div>
+
+  <!-- Header -->
+  <header class="bg-white shadow-sm sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+      <div class="flex items-center gap-x-2">
+        <div class="w-10 h-10 bg-green-100 text-green-600 rounded-lg flex items-center justify-center text-xl font-bold">
+          <%= @business.name.first(1).upcase %>
+        </div>
+        <span class="text-2xl font-bold tracking-tight text-gray-900"><%= @business.name %></span>
+      </div>
+      <nav class="hidden md:flex gap-x-8">
+        <a href="#" class="text-gray-600 hover:text-gray-900 font-medium text-sm">Services</a>
+        <a href="#" class="text-gray-600 hover:text-gray-900 font-medium text-sm">About Us</a>
+        <a href="#" class="text-gray-600 hover:text-gray-900 font-medium text-sm">Reviews</a>
+      </nav>
+      <div>
+        <button class="bg-gray-900 text-white px-5 py-2.5 rounded-md text-sm font-bold shadow-sm hover:bg-gray-800 transition-all">
+          Get a Quote
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Split Hero -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 flex-1 flex flex-col justify-center">
+    <div class="lg:grid lg:grid-cols-12 lg:gap-16 items-center">
+      <div class="lg:col-span-6 mb-12 lg:mb-0">
+        <span class="inline-block py-1 px-2 rounded-md bg-green-50 text-green-700 text-xs font-bold uppercase tracking-wider mb-4 border border-green-200">
+          <%= @business.niche.presence || "Local Business" %>
+        </span>
+        <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-gray-900 mb-6 leading-tight">
+          Your trusted local partner in <%= @business.city %>.
+        </h1>
+        <p class="text-lg text-gray-600 mb-8 max-w-xl leading-relaxed">
+          We provide reliable, top-tier services tailored to our community. With a <%= @business.rating.presence || "solid" %> reputation, we're ready to help.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4">
+          <button class="bg-green-600 text-white px-8 py-4 rounded-lg text-lg font-bold shadow-md hover:bg-green-700 transition duration-150">
+            Book Our Services
+          </button>
+          <a href="tel:<%= @business.phone %>" class="bg-white text-gray-900 border-2 border-gray-200 px-8 py-4 rounded-lg text-lg font-bold shadow-sm hover:border-gray-300 text-center transition duration-150">
+            Call <%= @business.phone.presence || "Us" %>
+          </a>
+        </div>
+      </div>
+      
+      <!-- Conceptual Image Placeholder -->
+      <div class="lg:col-span-6 relative">
+        <div class="absolute inset-0 bg-gradient-to-tr from-green-100 to-green-50 rounded-2xl transform translate-x-4 translate-y-4 shadow-inner"></div>
+        <div class="relative bg-white border-2 border-gray-100 rounded-2xl p-8 shadow-xl overflow-hidden aspect-square sm:aspect-video lg:aspect-square flex items-center justify-center">
+          <div class="text-center">
+            <div class="w-24 h-24 bg-green-100 text-green-600 rounded-full flex items-center justify-center text-4xl mx-auto mb-6 shadow-sm">
+              🏢
+            </div>
+            <h3 class="text-2xl font-bold text-gray-900 mb-2">High-Converting Storefront</h3>
+            <p class="text-gray-500">A clear, actionable design to turn your local <%= @business.city %> traffic into paying customers.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Trust Bar -->
+  <div class="bg-white border-t border-gray-200 py-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-wrap items-center justify-center gap-x-12 gap-y-6 opacity-60 grayscale filter hover:grayscale-0 transition-all duration-500">
+      <div class="flex items-center gap-2 font-bold text-gray-400 text-xl"><span class="text-yellow-400">★★★★★</span> <%= @business.rating || "5.0" %> Stars</div>
+      <div class="text-xl font-bold text-gray-400">Local Experts</div>
+      <div class="text-xl font-bold text-gray-400">Fast Response</div>
+      <div class="text-xl font-bold text-gray-400">Fully Licensed</div>
+    </div>
+  </div>
+</div>
