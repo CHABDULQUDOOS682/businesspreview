@@ -5,14 +5,14 @@ class Admin::TemplatesController < ApplicationController
     @template = params[:id]
 
     # Use the first business for realistic data, or create a mock one.
-    @business = Business.first || Business.new(
+    @business = Business.new(
       name: "Sample Business LLC",
       city: "New York",
       country: "USA",
       niche: "Software",
       phone: "(555) 123-4567",
       rating: 4.9,
-      website: "https://example.com"
+      website_url: "https://example.com"
     )
 
     render "templates/#{@template}"

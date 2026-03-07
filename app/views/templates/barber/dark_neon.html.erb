@@ -1,0 +1,193 @@
+<div class="min-h-screen bg-slate-950 font-sans text-slate-300 selection:bg-cyan-500/30">
+  <!-- Decorative background -->
+  <div class="absolute inset-x-0 top-0 -z-10 transform-gpu overflow-hidden blur-3xl" aria-hidden="true">
+    <div class="relative left-[calc(50%-11rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-20 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]" style="clip-path: polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)"></div>
+  </div>
+
+  <!-- Hero Section -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-20 text-center">
+    <div class="mb-8 flex justify-center">
+      <div class="relative rounded-full px-3 py-1 text-sm leading-6 text-cyan-400 ring-1 ring-cyan-400/20 hover:ring-cyan-400/40">
+        Next Generation <%= @business.niche.presence || "Business" %> Solutions <span aria-hidden="true" class="ml-1">&rarr;</span>
+      </div>
+    </div>
+    
+    <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight text-white mb-8 drop-shadow-sm">
+      <%= @business.name %>
+    </h1>
+    
+    <p class="mt-4 text-xl md:text-2xl text-slate-400 max-w-2xl mx-auto font-light leading-relaxed">
+      Elevating standards in <%= @business.city %>. Experience service that sets a new benchmark.
+    </p>
+    
+    <div class="mt-12 flex justify-center gap-x-6">
+      <a href="#claim" class="rounded-full bg-cyan-500 px-8 py-3.5 text-lg font-semibold text-slate-950 shadow-sm shadow-cyan-500/20 hover:bg-cyan-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-500 transition-all transform hover:scale-105">
+        Unlock Your Site
+      </a>
+    </div>
+  </div>
+
+  <!-- Stats / Info Section -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <div class="mx-auto max-w-2xl lg:max-w-none">
+      <dl class="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+        <div class="flex flex-col-reverse items-center justify-between gap-y-4 rounded-2xl bg-slate-900/50 p-8 ring-1 ring-white/10 hover:ring-cyan-500/30 transition-all backdrop-blur-sm">
+          <dt class="text-base leading-7 text-slate-400">Customer Satisfaction</dt>
+          <dd class="text-5xl font-semibold tracking-tight text-white"><%= @business.rating || "4.9" %><span class="text-cyan-500 text-3xl ml-1">★</span></dd>
+        </div>
+        <div class="flex flex-col-reverse items-center justify-between gap-y-4 rounded-2xl bg-slate-900/50 p-8 ring-1 ring-white/10 hover:ring-cyan-500/30 transition-all backdrop-blur-sm">
+          <dt class="text-base leading-7 text-slate-400">Direct Contact</dt>
+          <dd class="text-2xl sm:text-3xl font-semibold tracking-tight text-white"><%= @business.phone.presence || "Book Now" %></dd>
+        </div>
+        <div class="flex flex-col-reverse items-center justify-between gap-y-4 rounded-2xl bg-slate-900/50 p-8 ring-1 ring-white/10 hover:ring-cyan-500/30 transition-all backdrop-blur-sm sm:col-span-2 lg:col-span-1">
+          <dt class="text-base leading-7 text-slate-400">Location</dt>
+          <dd class="text-2xl sm:text-3xl font-semibold tracking-tight text-white"><%= @business.city %></dd>
+        </div>
+      </dl>
+    </div>
+  </div>
+  
+  <div id="claim" class="max-w-3xl mx-auto px-4 py-24 text-center">
+    <h2 class="text-3xl font-bold text-white mb-6">Ready to scale?</h2>
+    <p class="text-slate-400 mb-8">This dark-themed high-converting landing page is reserved for <%= @business.name %>. Claim it before your competitors do.</p>
+    <a href="mailto:hello@agency.com?subject=Claim my design for <%= @business.name %>" class="inline-block border border-cyan-500 text-cyan-400 px-8 py-4 rounded-full font-bold hover:bg-cyan-500 hover:text-slate-950 transition-colors">
+      Contact Us Now
+    </a>
+  </div>
+
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <div class="text-center mb-10">
+      <h3 class="text-3xl font-extrabold tracking-tight text-white">Services</h3>
+      <p class="mt-2 text-slate-400">Premium care with transparent pricing</p>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div class="rounded-2xl bg-slate-900/50 p-6 ring-1 ring-white/10 hover:ring-cyan-500/30 transition">
+        <div class="text-3xl mb-2">✂️</div>
+        <div class="font-semibold text-white">Haircut</div>
+        <p class="text-slate-400 text-sm mt-1">Clean lines and styled finish</p>
+        <div class="mt-3 text-cyan-400 font-bold">$30</div>
+      </div>
+      <div class="rounded-2xl bg-slate-900/50 p-6 ring-1 ring-white/10 hover:ring-cyan-500/30 transition">
+        <div class="text-3xl mb-2">🧔</div>
+        <div class="font-semibold text-white">Beard Trim</div>
+        <p class="text-slate-400 text-sm mt-1">Shape and define with care</p>
+        <div class="mt-3 text-cyan-400 font-bold">$15</div>
+      </div>
+      <div class="rounded-2xl bg-slate-900/50 p-6 ring-1 ring-white/10 hover:ring-cyan-500/30 transition">
+        <div class="text-3xl mb-2">🪒</div>
+        <div class="font-semibold text-white">Hair + Beard Combo</div>
+        <p class="text-slate-400 text-sm mt-1">Complete look, one session</p>
+        <div class="mt-3 text-cyan-400 font-bold">$40</div>
+      </div>
+      <div class="rounded-2xl bg-slate-900/50 p-6 ring-1 ring-white/10 hover:ring-cyan-500/30 transition">
+        <div class="text-3xl mb-2">👦</div>
+        <div class="font-semibold text-white">Kids Cut</div>
+        <p class="text-slate-400 text-sm mt-1">Comfortable, friendly experience</p>
+        <div class="mt-3 text-cyan-400 font-bold">$25</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+      <div class="rounded-2xl bg-slate-900/50 p-8 ring-1 ring-white/10">
+        <h3 class="text-2xl font-bold text-white">Crafted By Professionals</h3>
+        <p class="mt-3 text-slate-400">Years of experience, sharp attention to detail, and a passion for confidence. Every session is tailored to your style.</p>
+        <div class="mt-6 grid grid-cols-2 gap-4">
+          <div class="rounded-xl bg-slate-900/60 ring-1 ring-white/10 px-4 py-3 text-center">
+            <div class="text-cyan-400 font-black text-xl">10+</div>
+            <div class="text-slate-400 text-xs">Years</div>
+          </div>
+          <div class="rounded-xl bg-slate-900/60 ring-1 ring-white/10 px-4 py-3 text-center">
+            <div class="text-cyan-400 font-black text-xl">1K+</div>
+            <div class="text-slate-400 text-xs">Happy Clients</div>
+          </div>
+        </div>
+      </div>
+      <div class="rounded-2xl bg-slate-900/50 p-8 ring-1 ring-white/10">
+        <h3 class="text-2xl font-bold text-white">Our Promise</h3>
+        <p class="mt-3 text-slate-400">Clean fades, classic shaves, and tailored beard sculpting. We prioritize precision and comfort with every cut.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="reviews" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <div class="text-center mb-10">
+      <h3 class="text-3xl font-extrabold tracking-tight text-white">What Clients Say</h3>
+      <p class="mt-2 text-slate-400">Trusted by clients across <%= @business.city %></p>
+    </div>
+    <div class="grid md:grid-cols-3 gap-6">
+      <div class="rounded-2xl bg-slate-900/50 p-6 ring-1 ring-white/10">
+        <div class="text-cyan-400">★★★★★</div>
+        <p class="mt-3 text-slate-200">Best fade I've had. Attention to detail is unreal and the vibe is premium.</p>
+        <div class="mt-3 text-slate-400 text-sm">— James P.</div>
+      </div>
+      <div class="rounded-2xl bg-slate-900/50 p-6 ring-1 ring-white/10">
+        <div class="text-cyan-400">★★★★★</div>
+        <p class="mt-3 text-slate-200">Clean, professional, and fast. Booking was effortless and results were sharp.</p>
+        <div class="mt-3 text-slate-400 text-sm">— Aaron V.</div>
+      </div>
+      <div class="rounded-2xl bg-slate-900/50 p-6 ring-1 ring-white/10">
+        <div class="text-cyan-400">★★★★★</div>
+        <p class="mt-3 text-slate-200">Friendly team and premium experience. My go-to spot before big events.</p>
+        <div class="mt-3 text-slate-400 text-sm">— Malik R.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <div class="text-center">
+      <div class="inline-flex items-center gap-2 rounded-full bg-cyan-500/10 ring-1 ring-cyan-500/30 px-4 py-1 text-xs text-cyan-400">Limited slots today</div>
+      <h3 class="mt-4 text-3xl md:text-4xl font-bold text-white">Ready for Your Fresh Cut?</h3>
+      <p class="mt-2 text-slate-400">Book now to secure your preferred time. Walk-ins welcome.</p>
+      <div class="mt-6 flex flex-col sm:flex-row gap-3 justify-center">
+        <a href="<%= @business.website_url.presence || '#booking' %>" class="rounded-md bg-cyan-500 px-6 py-3 text-sm font-semibold text-slate-950 hover:bg-cyan-400">Book Appointment</a>
+        <a href="<%= @business.phone.present? ? "tel:#{@business.phone}" : "#" %>" class="rounded-md border border-cyan-500/50 px-6 py-3 text-sm font-semibold text-cyan-400 hover:bg-cyan-500 hover:text-slate-950">Call <%= @business.phone.presence || "" %></a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="bg-slate-950 text-slate-300 border-t border-white/10">
+    <div class="max-w-7xl mx-auto px-8 py-12 grid grid-cols-1 md:grid-cols-4 gap-10">
+      <div>
+        <p class="text-2xl font-serif tracking-tight text-white mb-4"><%= @business.name %></p>
+        <p class="text-slate-400 text-sm max-w-xs">Premium grooming in <%= @business.city %>. Confidence-first styling with modern techniques.</p>
+      </div>
+      <div>
+        <h4 class="text-xs uppercase tracking-widest text-slate-400 mb-4">Contact</h4>
+        <p class="text-sm text-slate-300 mb-1"><%= [@business.city, @business.country].compact.join(", ") %></p>
+        <p class="text-sm text-cyan-400"><%= @business.phone.presence || "(555) 123-4567" %></p>
+      </div>
+      <div>
+        <h4 class="text-xs uppercase tracking-widest text-slate-400 mb-4">Hours</h4>
+        <div class="space-y-2 text-xs text-slate-400">
+          <div class="flex justify-between"><span>Mon–Fri</span><span>8:30 – 17:30</span></div>
+          <div class="flex justify-between"><span>Sat</span><span>8:00 – 14:00</span></div>
+          <div class="flex justify-between"><span>Sun</span><span>Closed</span></div>
+        </div>
+      </div>
+      <div class="flex flex-col items-end">
+        <div class="w-full h-32 ring-1 ring-white/10 overflow-hidden rounded-lg mb-4">
+          <iframe
+            src="https://www.google.com/maps?q=<%= ERB::Util.url_encode([@business.website_name.presence || @business.name, @business.city, @business.country].compact.join(', ')) %>&output=embed"
+            width="100%"
+            height="128"
+            style="border:0;"
+            loading="lazy">
+          </iframe>
+        </div>
+        <div class="flex gap-4 text-sm">
+          <a href="#" class="text-slate-400 hover:text-white transition">Instagram</a>
+          <a href="#" class="text-slate-400 hover:text-white transition">Facebook</a>
+        </div>
+      </div>
+    </div>
+    <div class="max-w-7xl mx-auto px-8 py-6 border-t border-white/10 text-xs text-slate-400 flex items-center justify-between">
+      <p>© <%= Time.current.year %> <%= @business.name %>. All rights reserved.</p>
+      <div class="flex gap-6">
+        <a href="#" class="hover:text-white transition">Privacy</a>
+        <a href="#" class="hover:text-white transition">Terms</a>
+      </div>
+    </div>
+  </footer>
+</div>

@@ -1,0 +1,265 @@
+<nav class="fixed w-full z-50 bg-white/90 backdrop-blur-md border-b border-stone-200">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between h-20 items-center">
+      <div class="text-2xl font-bold tracking-tighter uppercase serif"><%= @business.name %></div>
+      <div class="hidden md:flex space-x-8 items-center uppercase text-sm tracking-widest font-semibold">
+        <a href="#history" class="hover:text-amber-700 transition">History</a>
+        <a href="#services" class="hover:text-amber-700 transition">Services</a>
+        <a href="#featured" class="hover:text-amber-700 transition">Featured</a>
+        <a href="#gallery" class="hover:text-amber-700 transition">Gallery</a>
+        <a href="#map" class="hover:text-amber-700 transition">Location</a>
+        <a href="#contact" class="hover:text-amber-700 transition">Contact</a>
+        <a href="<%= @business.website_url.presence || '#' %>" class="bg-stone-900 text-white px-6 py-2 hover:bg-amber-800 transition">Book Now</a>
+      </div>
+    </div>
+  </div>
+  </nav>
+
+<section class="relative h-screen flex items-center justify-center bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&q=80&w=2070');">
+  <div class="absolute inset-0 bg-black/60"></div>
+  <div class="relative z-10 text-center px-4">
+    <h2 class="text-amber-400 uppercase tracking-[0.3em] text-sm mb-4 font-semibold">Since 1961</h2>
+    <h1 class="text-5xl md:text-7xl text-white mb-6 serif">Where timeless tradition begins</h1>
+    <p class="text-stone-300 max-w-2xl mx-auto mb-8 italic text-lg">Serving <%= [@business.city, @business.country].compact.join(", ") %>. Premium grooming rooted in craft.</p>
+    <div class="flex flex-col md:flex-row gap-4 justify-center">
+      <a href="#services" class="border-2 border-white text-white px-8 py-3 hover:bg-white hover:text-black transition uppercase tracking-widest text-sm font-bold">View Prices</a>
+      <a href="<%= @business.phone.present? ? "tel:#{@business.phone}" : "#" %>" class="bg-amber-600 text-white px-8 py-3 hover:bg-amber-700 transition uppercase tracking-widest text-sm font-bold">Appointment</a>
+    </div>
+  </div>
+</section>
+
+<section id="history" class="py-20 px-4 max-w-4xl mx-auto text-center">
+  <h3 class="text-stone-400 uppercase tracking-widest text-xs mb-4">Welcome to the shop</h3>
+  <h2 class="text-4xl serif mb-8 italic">Premiere Service & Classic Traditional Haircuts</h2>
+  <p class="text-stone-600 leading-relaxed text-lg mb-6">
+    Located in <%= [@business.city, @business.country].compact.join(", ") %>, we are a premier <%= @business.niche.presence || "barber" %> establishment specializing in top-notch grooming.
+    Whether you need a fresh haircut or a beard trim, our skilled team delivers exceptional service and a tailored experience.
+  </p>
+  <div class="w-24 h-px bg-amber-600 mx-auto mt-10"></div>
+</section>
+
+<section id="services" class="py-20 bg-stone-100 px-4">
+  <div class="max-w-5xl mx-auto">
+    <div class="text-center mb-16">
+      <h2 class="text-5xl serif italic">Our Prices</h2>
+      <p class="text-stone-500 mt-2">Quality grooming for every generation.</p>
+    </div>
+    <div class="grid md:grid-cols-2 gap-x-16 gap-y-12">
+      <div class="flex justify-between items-start border-b border-stone-300 pb-4">
+        <div>
+          <h4 class="text-xl font-semibold serif uppercase tracking-wide">Men's Traditional Haircut</h4>
+          <p class="text-stone-500 text-sm mt-1">Includes hot lather straight razor on the neck by request.</p>
+        </div>
+        <span class="text-2xl serif font-bold">$30</span>
+      </div>
+      <div class="flex justify-between items-start border-b border-stone-300 pb-4">
+        <div>
+          <h4 class="text-xl font-semibold serif uppercase tracking-wide">Beard & Mustache Trim</h4>
+          <p class="text-stone-500 text-sm mt-1">Shape and trim your beard to well-groomed perfection.</p>
+        </div>
+        <span class="text-2xl serif font-bold">$15</span>
+      </div>
+      <div class="flex justify-between items-start border-b border-stone-300 pb-4">
+        <div>
+          <h4 class="text-xl font-semibold serif uppercase tracking-wide">Girl's Haircut (Under 12)</h4>
+          <p class="text-stone-500 text-sm mt-1">Tailored cuts in a welcoming environment.</p>
+        </div>
+        <span class="text-2xl serif font-bold">$30</span>
+      </div>
+      <div class="flex justify-between items-start border-b border-stone-300 pb-4">
+        <div>
+          <h4 class="text-xl font-semibold serif uppercase tracking-wide">Baby's First Haircut</h4>
+          <p class="text-stone-500 text-sm mt-1">Includes a certificate to commemorate the milestone.</p>
+        </div>
+        <span class="text-2xl serif text-amber-700 font-bold uppercase text-lg">Free</span>
+      </div>
+    </div>
+    <div class="text-center mt-16">
+      <a href="<%= @business.website_url.presence || '#' %>" class="inline-block bg-stone-900 text-white px-10 py-4 uppercase tracking-tighter font-bold hover:bg-stone-800 transition">Book Your Slot Now</a>
+    </div>
+  </div>
+</section>
+
+<section id="featured" class="py-20 bg-white px-4">
+  <div class="max-w-7xl mx-auto">
+    <div class="text-center mb-12">
+      <h2 class="text-4xl serif italic">Signature Experiences</h2>
+      <p class="text-stone-500 mt-2">Highly requested services crafted with care.</p>
+    </div>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div class="rounded-2xl border border-stone-200 bg-stone-50 p-6">
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="text-xl font-semibold serif">Straight Razor Shave</h3>
+          <span class="text-lg font-bold">$25</span>
+        </div>
+        <p class="text-stone-600">Classic hot towel prep followed by a close, comfortable shave using traditional techniques.</p>
+      </div>
+      <div class="rounded-2xl border border-stone-200 bg-stone-50 p-6">
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="text-xl font-semibold serif">Hot Towel Treatment</h3>
+          <span class="text-lg font-bold">$10</span>
+        </div>
+        <p class="text-stone-600">Relaxing aromatic towels to soothe and soften before trims or shaves.</p>
+      </div>
+      <div class="rounded-2xl border border-stone-200 bg-stone-50 p-6">
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="text-xl font-semibold serif">Classic Fade</h3>
+          <span class="text-lg font-bold">$35</span>
+        </div>
+        <p class="text-stone-600">Precision fades tailored to your style with clean lines and balanced blending.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="gallery" class="py-20 bg-stone-100 px-4">
+  <div class="max-w-7xl mx-auto">
+    <div class="text-center mb-12">
+      <h2 class="text-4xl serif italic">Gallery</h2>
+      <p class="text-stone-500 mt-2">A glimpse into our craft and space.</p>
+    </div>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <%= image_tag "barber/gallery1.svg", class: "rounded-xl object-cover w-full h-56", alt: "Barber gallery 1" %>
+      <%= image_tag "barber/gallery2.svg", class: "rounded-xl object-cover w-full h-56", alt: "Barber gallery 2" %>
+      <%= image_tag "barber/gallery3.svg", class: "rounded-xl object-cover w-full h-56", alt: "Barber gallery 3" %>
+      <%= image_tag "barber/gallery4.svg", class: "rounded-xl object-cover w-full h-56", alt: "Barber gallery 4" %>
+      <%= image_tag "barber/gallery5.svg", class: "rounded-xl object-cover w-full h-56", alt: "Barber gallery 5" %>
+      <%= image_tag "barber/gallery6.svg", class: "rounded-xl object-cover w-full h-56", alt: "Barber gallery 6" %>
+    </div>
+  </div>
+</section>
+
+<section id="testimonials" class="py-20 bg-white px-4">
+  <div class="max-w-6xl mx-auto">
+    <div class="text-center mb-12">
+      <h2 class="text-4xl serif italic">What Clients Say</h2>
+      <p class="text-stone-500 mt-2">Trusted in <%= [@business.city, @business.country].compact.join(", ") %>.</p>
+    </div>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div class="rounded-2xl ring-1 ring-stone-200 bg-white p-6">
+        <p class="text-stone-700 mb-4">The attention to detail is unmatched. Best shave I've ever had.</p>
+        <div class="text-stone-900 font-semibold">James P.</div>
+      </div>
+      <div class="rounded-2xl ring-1 ring-stone-200 bg-white p-6">
+        <p class="text-stone-700 mb-4">Friendly staff and clean fades every time. Highly recommended.</p>
+        <div class="text-stone-900 font-semibold">Ava R.</div>
+      </div>
+      <div class="rounded-2xl ring-1 ring-stone-200 bg-white p-6">
+        <p class="text-stone-700 mb-4">Classic shop vibes with modern quality. My go-to place.</p>
+        <div class="text-stone-900 font-semibold">Marcus K.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="team" class="py-20 bg-stone-100 px-4">
+  <div class="max-w-6xl mx-auto">
+    <div class="text-center mb-12">
+      <h2 class="text-4xl serif italic">Meet The Barbers</h2>
+      <p class="text-stone-500 mt-2">Craftsmanship, consistency, and care.</p>
+    </div>
+    <div class="grid sm:grid-cols-2 gap-8">
+      <div class="rounded-2xl bg-white ring-1 ring-stone-200 p-6 flex items-center gap-4">
+        <div class="w-16 h-16 rounded-full bg-stone-200"></div>
+        <div>
+          <div class="text-stone-900 font-semibold">Alex</div>
+          <div class="text-stone-500 text-sm">Master Barber • 10+ years</div>
+          <p class="text-stone-600 mt-2 text-sm">Specializes in classic fades, straight razor shaves, and tailored cuts.</p>
+        </div>
+      </div>
+      <div class="rounded-2xl bg-white ring-1 ring-stone-200 p-6 flex items-center gap-4">
+        <div class="w-16 h-16 rounded-full bg-stone-200"></div>
+        <div>
+          <div class="text-stone-900 font-semibold">Mia</div>
+          <div class="text-stone-500 text-sm">Senior Barber • 8+ years</div>
+          <p class="text-stone-600 mt-2 text-sm">Known for clean line work, beard sculpting, and attention to detail.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="faq" class="py-20 bg-white px-4">
+  <div class="max-w-5xl mx-auto">
+    <div class="text-center mb-12">
+      <h2 class="text-4xl serif italic">FAQs</h2>
+      <p class="text-stone-500 mt-2">Answers to common questions.</p>
+    </div>
+    <div class="space-y-4">
+      <div class="rounded-2xl ring-1 ring-stone-200 p-6">
+        <div class="font-semibold text-stone-900 mb-2">Do you accept walk-ins?</div>
+        <div class="text-stone-600">Yes, but appointments are recommended to ensure availability.</div>
+      </div>
+      <div class="rounded-2xl ring-1 ring-stone-200 p-6">
+        <div class="font-semibold text-stone-900 mb-2">What payment methods do you accept?</div>
+        <div class="text-stone-600">Cash and major cards are accepted.</div>
+      </div>
+      <div class="rounded-2xl ring-1 ring-stone-200 p-6">
+        <div class="font-semibold text-stone-900 mb-2">Do you offer kids’ cuts?</div>
+        <div class="text-stone-600">Yes, including first haircut with a commemorative certificate.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact" class="py-20 bg-stone-100 px-4">
+  <div class="max-w-5xl mx-auto text-center">
+    <h2 class="text-4xl serif italic mb-4">Get In Touch</h2>
+    <p class="text-stone-600 mb-6">Reach us in <%= [@business.city, @business.country].compact.join(", ") %>. We’re happy to help.</p>
+    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+      <a href="<%= @business.phone.present? ? "tel:#{@business.phone}" : "#" %>" class="rounded-md bg-stone-900 px-6 py-3 text-sm font-semibold text-white shadow-sm hover:bg-stone-800">Call <%= @business.phone.presence || "" %></a>
+      <a href="<%= @business.email.present? ? "mailto:#{@business.email}" : "#" %>" class="rounded-md bg-amber-600 px-6 py-3 text-sm font-semibold text-white shadow-sm hover:bg-amber-700">Email <%= @business.email.presence || "" %></a>
+      <a href="<%= @business.website_url.presence || '#' %>" class="rounded-md bg-white px-6 py-3 text-sm font-semibold text-stone-900 shadow-sm ring-1 ring-inset ring-stone-300 hover:bg-stone-50">Visit Website</a>
+    </div>
+  </div>
+</section>
+
+<section id="map" class="py-20 bg-white px-4">
+  <div class="max-w-6xl mx-auto">
+    <div class="text-center mb-8">
+      <h2 class="text-4xl serif italic">Location</h2>
+      <p class="text-stone-500 mt-2"><%= [@business.website_name.presence || @business.name, @business.city, @business.country].compact.join(", ") %></p>
+    </div>
+    <div class="rounded-2xl overflow-hidden ring-1 ring-stone-200">
+      <iframe
+        src="https://www.google.com/maps?q=<%= ERB::Util.url_encode([@business.website_name.presence || @business.name, @business.city, @business.country].compact.join(', ')) %>&output=embed"
+        width="100%"
+        height="420"
+        style="border:0;"
+        allowfullscreen
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade">
+      </iframe>
+    </div>
+    <div class="text-center mt-4">
+      <a href="https://www.google.com/maps/search/<%= ERB::Util.url_encode([@business.website_name.presence || @business.name, @business.city, @business.country].compact.join(', ')) %>" target="_blank" class="inline-block rounded-md bg-stone-900 px-6 py-3 text-sm font-semibold text-white shadow-sm hover:bg-stone-800">Open in Google Maps</a>
+    </div>
+  </div>
+</section>
+
+<footer id="location" class="bg-stone-900 text-white py-20 px-4">
+  <div class="max-w-7xl mx-auto grid md:grid-cols-3 gap-12 text-center md:text-left">
+    <div>
+      <h4 class="serif italic text-2xl mb-6">Opening Hours</h4>
+      <p class="text-stone-400 mb-2 font-mono">Tuesday - Friday: <span class="text-stone-200">8:30 AM – 5:30 PM</span></p>
+      <p class="text-stone-400 font-mono">Saturday: <span class="text-stone-200">8:00 AM - 2:00 PM</span></p>
+    </div>
+    <div>
+      <h4 class="serif italic text-2xl mb-6">Visit Us</h4>
+      <p class="text-stone-200"><%= @business.website_name.presence || @business.name %></p>
+      <p class="text-stone-200"><%= [@business.city, @business.country].compact.join(", ") %></p>
+      <p class="text-amber-500 mt-4 font-bold"><%= @business.phone.presence || "(555) 123-4567" %></p>
+    </div>
+    <div>
+      <h4 class="serif italic text-2xl mb-6">Connect</h4>
+      <p class="text-stone-400"><%= @business.email.presence || "info@example.com" %></p>
+      <div class="mt-6 flex justify-center md:justify-start space-x-6 text-sm uppercase tracking-widest font-bold">
+        <a href="#" class="hover:text-amber-500 transition">Instagram</a>
+        <a href="#" class="hover:text-amber-500 transition">Facebook</a>
+      </div>
+    </div>
+  </div>
+  <div class="text-center mt-20 pt-8 border-t border-stone-800 text-stone-600 text-sm">
+    © <%= Time.current.year %> <%= @business.name %>. All rights reserved.
+  </div>
+</footer>

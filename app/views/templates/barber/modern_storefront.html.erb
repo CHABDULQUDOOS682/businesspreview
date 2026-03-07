@@ -1,0 +1,256 @@
+<div class="min-h-screen bg-gray-50 font-sans text-gray-900 flex flex-col">
+  <!-- Top Banner -->
+  <div class="bg-green-600 text-white text-sm font-semibold text-center py-2 px-4 shadow-inner">
+    Premium barbering in <%= @business.city %>. Book online or call <%= @business.phone.presence || "our shop" %>.
+  </div>
+
+  <!-- Header -->
+  <header class="bg-white shadow-sm sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+      <div class="flex items-center gap-x-2">
+        <div class="w-10 h-10 bg-green-100 text-green-600 rounded-lg flex items-center justify-center text-xl font-bold">
+          <%= @business.name.first(1).upcase %>
+        </div>
+        <span class="text-2xl font-bold tracking-tight text-gray-900"><%= @business.name %></span>
+      </div>
+      <nav class="hidden md:flex gap-x-8">
+        <a href="#services" class="text-gray-600 hover:text-gray-900 font-medium text-sm">Services</a>
+        <a href="#about" class="text-gray-600 hover:text-gray-900 font-medium text-sm">About</a>
+        <a href="#testimonials" class="text-gray-600 hover:text-gray-900 font-medium text-sm">Reviews</a>
+        <a href="#location" class="text-gray-600 hover:text-gray-900 font-medium text-sm">Location</a>
+      </nav>
+      <div>
+        <a href="<%= @business.website_url.presence || '#' %>" class="bg-gray-900 text-white px-5 py-2.5 rounded-md text-sm font-bold shadow-sm hover:bg-gray-800 transition-all">Book Now</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Split Hero -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 flex-1 flex flex-col justify-center">
+    <div class="lg:grid lg:grid-cols-12 lg:gap-16 items-center">
+      <div class="lg:col-span-6 mb-12 lg:mb-0">
+        <span class="inline-block py-1 px-2 rounded-md bg-green-50 text-green-700 text-xs font-bold uppercase tracking-wider mb-4 border border-green-200">
+          <%= @business.niche.presence || "Local Business" %>
+        </span>
+        <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-gray-900 mb-6 leading-tight">
+          Precision cuts & modern grooming in <%= @business.city %>.
+        </h1>
+        <p class="text-lg text-gray-600 mb-8 max-w-xl leading-relaxed">
+          Clean fades, sharp lines, and confidence-first styling. Rated <%= @business.rating.presence || "5.0" %> by clients across <%= @business.city %>.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4">
+          <a href="<%= @business.website_url.presence || '#' %>" class="bg-green-600 text-white px-8 py-4 rounded-lg text-lg font-bold shadow-md hover:bg-green-700 transition duration-150 text-center">Book Appointment</a>
+          <a href="tel:<%= @business.phone %>" class="bg-white text-gray-900 border-2 border-gray-200 px-8 py-4 rounded-lg text-lg font-bold shadow-sm hover:border-gray-300 text-center transition duration-150">
+            Call <%= @business.phone.presence || "Us" %>
+          </a>
+        </div>
+      </div>
+      
+      <!-- Conceptual Image Placeholder -->
+      <div class="lg:col-span-6 relative">
+        <div class="absolute inset-0 bg-gradient-to-tr from-green-100 to-green-50 rounded-2xl transform translate-x-4 translate-y-4 shadow-inner"></div>
+        <div class="relative bg-white border-2 border-gray-100 rounded-2xl p-8 shadow-xl overflow-hidden aspect-square sm:aspect-video lg:aspect-square flex items-center justify-center">
+          <div class="text-center">
+            <div class="w-24 h-24 bg-green-100 text-green-600 rounded-full flex items-center justify-center text-4xl mx-auto mb-6 shadow-sm">
+              🏢
+            </div>
+            <h3 class="text-2xl font-bold text-gray-900 mb-2">Premium Barber Experience</h3>
+            <p class="text-gray-500">Modern cuts, beard sculpting, and classic shaves delivered with care.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Trust Bar -->
+  <div class="bg-white border-t border-gray-200 py-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-wrap items-center justify-center gap-x-12 gap-y-6 opacity-60 grayscale filter hover:grayscale-0 transition-all duration-500">
+      <div class="flex items-center gap-2 font-bold text-gray-400 text-xl"><span class="text-yellow-400">★★★★★</span> <%= @business.rating || "5.0" %> Stars</div>
+      <div class="text-xl font-bold text-gray-400">Local Experts</div>
+      <div class="text-xl font-bold text-gray-400">Fast Response</div>
+      <div class="text-xl font-bold text-gray-400">Fully Licensed</div>
+    </div>
+  </div>
+
+  <!-- Services -->
+  <section class="bg-gray-50 py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-10">
+        <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight text-gray-900">Barber Services</h2>
+        <p class="mt-2 text-gray-600">Transparent pricing and premium care</p>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="rounded-2xl bg-white shadow-sm ring-1 ring-gray-200 p-6 hover:shadow-md transition">
+          <div class="text-3xl mb-2">✂️</div>
+          <div class="font-semibold text-gray-900">Haircut</div>
+          <p class="text-gray-600 text-sm mt-1">Clean lines and styled finish</p>
+          <div class="mt-3 text-green-700 font-bold">$30</div>
+        </div>
+        <div class="rounded-2xl bg-white shadow-sm ring-1 ring-gray-200 p-6 hover:shadow-md transition">
+          <div class="text-3xl mb-2">�</div>
+          <div class="font-semibold text-gray-900">Beard Trim</div>
+          <p class="text-gray-600 text-sm mt-1">Shape and define with care</p>
+          <div class="mt-3 text-green-700 font-bold">$15</div>
+        </div>
+        <div class="rounded-2xl bg-white shadow-sm ring-1 ring-gray-200 p-6 hover:shadow-md transition">
+          <div class="text-3xl mb-2">🪒</div>
+          <div class="font-semibold text-gray-900">Hair + Beard Combo</div>
+          <p class="text-gray-600 text-sm mt-1">Complete look, one session</p>
+          <div class="mt-3 text-green-700 font-bold">$40</div>
+        </div>
+        <div class="rounded-2xl bg-white shadow-sm ring-1 ring-gray-200 p-6 hover:shadow-md transition">
+          <div class="text-3xl mb-2">👦</div>
+          <div class="font-semibold text-gray-900">Kids Cut</div>
+          <p class="text-gray-600 text-sm mt-1">Comfortable, friendly experience</p>
+          <div class="mt-3 text-green-700 font-bold">$25</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- About -->
+  <section class="bg-white py-16 border-t border-gray-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+      <div class="relative">
+        <div class="absolute inset-0 bg-gradient-to-tr from-green-100 to-green-50 rounded-2xl transform translate-x-4 translate-y-4 shadow-inner"></div>
+        <div class="relative bg-white border-2 border-gray-100 rounded-2xl p-8 shadow-xl overflow-hidden aspect-square sm:aspect-video flex items-center justify-center">
+          <div class="text-center">
+            <div class="w-24 h-24 bg-green-100 text-green-600 rounded-full flex items-center justify-center text-4xl mx-auto mb-6 shadow-sm">🏆</div>
+            <h3 class="text-2xl font-bold text-gray-900 mb-2">Experience & Care</h3>
+            <p class="text-gray-500">We focus on reliability, craftsmanship, and friendly service.</p>
+          </div>
+        </div>
+      </div>
+      <div>
+        <h3 class="text-3xl font-extrabold tracking-tight text-gray-900">Built on Trust</h3>
+        <p class="mt-4 text-lg text-gray-600 leading-relaxed">With years of experience serving <%= @business.city %>, our team is committed to delivering high-quality results and helpful guidance every step of the way.</p>
+        <div class="mt-6 grid grid-cols-2 gap-4">
+          <div class="rounded-lg bg-gray-50 ring-1 ring-gray-200 p-4 text-center">
+            <div class="text-green-700 font-black text-2xl">10+</div>
+            <div class="text-gray-600 text-xs">Years</div>
+          </div>
+          <div class="rounded-lg bg-gray-50 ring-1 ring-gray-200 p-4 text-center">
+            <div class="text-green-700 font-black text-2xl">1K+</div>
+            <div class="text-gray-600 text-xs">Happy Clients</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section class="bg-gray-50 py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-10">
+        <h3 class="text-3xl font-extrabold tracking-tight text-gray-900">What Clients Say</h3>
+        <p class="text-gray-600 mt-2">Trusted by clients across <%= @business.city %></p>
+      </div>
+      <div class="grid md:grid-cols-3 gap-6">
+        <div class="rounded-2xl bg-white shadow-sm ring-1 ring-gray-200 p-6">
+          <div class="text-yellow-400">★★★★★</div>
+          <p class="mt-3 text-gray-800">Clean fade, sharp styling, and friendly service. Highly recommend!</p>
+          <div class="mt-3 text-gray-500 text-sm">— Taylor M.</div>
+        </div>
+        <div class="rounded-2xl bg-white shadow-sm ring-1 ring-gray-200 p-6">
+          <div class="text-yellow-400">★★★★★</div>
+          <p class="mt-3 text-gray-800">Professional beard sculpting with attention to detail.</p>
+          <div class="mt-3 text-gray-500 text-sm">— Jordan P.</div>
+        </div>
+        <div class="rounded-2xl bg-white shadow-sm ring-1 ring-gray-200 p-6">
+          <div class="text-yellow-400">★★★★★</div>
+          <p class="mt-3 text-gray-800">Easy booking, fair pricing, and consistently great results.</p>
+          <div class="mt-3 text-gray-500 text-sm">— Casey R.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Booking CTA -->
+  <section class="bg-gray-900 py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h3 class="text-3xl md:text-4xl font-extrabold tracking-tight text-white">Ready for Your Fresh Cut?</h3>
+      <p class="mt-2 text-gray-300">Book now or call for quick assistance.</p>
+      <div class="mt-6 flex flex-col sm:flex-row gap-4 justify-center">
+        <a href="<%= @business.website_url.presence || '#' %>" class="bg-green-600 text-white px-8 py-4 rounded-lg text-lg font-bold shadow-md hover:bg-green-700 transition">Book Now</a>
+        <a href="<%= @business.phone.present? ? "tel:#{@business.phone}" : "#" %>" class="bg-white text-gray-900 border-2 border-gray-200 px-8 py-4 rounded-lg text-lg font-bold shadow-sm hover:border-gray-300 text-center transition">Call <%= @business.phone.presence || "" %></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Location & Hours -->
+  <section class="bg-white py-16 border-t border-gray-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-10">
+      <div>
+        <h4 class="text-2xl font-bold text-gray-900">Visit Us</h4>
+        <p class="mt-2 text-gray-600"><%= [@business.website_name.presence || @business.name, @business.city, @business.country].compact.join(", ") %></p>
+        <div class="mt-6 rounded-2xl overflow-hidden ring-1 ring-gray-200">
+          <iframe
+            src="https://www.google.com/maps?q=<%= ERB::Util.url_encode([@business.website_name.presence || @business.name, @business.city, @business.country].compact.join(', ')) %>&output=embed"
+            width="100%"
+            height="360"
+            style="border:0;"
+            allowfullscreen
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade">
+          </iframe>
+        </div>
+      </div>
+      <div class="rounded-2xl bg-gray-50 ring-1 ring-gray-200 p-6">
+        <h4 class="text-xl font-semibold text-gray-900">Hours</h4>
+        <div class="mt-4 space-y-3 text-sm">
+          <div class="flex justify-between text-gray-700"><span>Mon–Fri</span><span>8:30 AM – 5:30 PM</span></div>
+          <div class="flex justify-between text-gray-700"><span>Sat</span><span>8:00 AM – 2:00 PM</span></div>
+          <div class="flex justify-between text-gray-700"><span>Sun</span><span>Closed</span></div>
+        </div>
+        <div class="mt-6 flex items-center gap-4">
+          <a href="#" class="text-gray-500 hover:text-gray-700 transition text-sm">Instagram</a>
+          <a href="#" class="text-gray-500 hover:text-gray-700 transition text-sm">Facebook</a>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- Footer -->
+  <footer class="bg-gray-900 text-white border-t border-gray-800">
+    <div class="max-w-7xl mx-auto px-8 py-12 grid grid-cols-1 md:grid-cols-4 gap-10">
+      <div>
+        <p class="text-2xl font-serif tracking-wide mb-4"><%= @business.name %></p>
+        <p class="text-white/60 text-sm max-w-xs">Premium grooming in <%= @business.city %>. Confidence-first styling with modern techniques.</p>
+      </div>
+      <div>
+        <h4 class="text-xs uppercase tracking-widest text-white/60 mb-4">Contact</h4>
+        <p class="text-sm text-white/70 mb-1"><%= [@business.city, @business.country].compact.join(", ") %></p>
+        <p class="text-sm text-white/70"><%= @business.phone.presence || "(555) 123-4567" %></p>
+      </div>
+      <div>
+        <h4 class="text-xs uppercase tracking-widest text-white/60 mb-4">Hours</h4>
+        <div class="space-y-2 text-xs text-white/60">
+          <div class="flex justify-between"><span>Mon–Fri</span><span>8:30 – 17:30</span></div>
+          <div class="flex justify-between"><span>Sat</span><span>8:00 – 14:00</span></div>
+          <div class="flex justify-between"><span>Sun</span><span>Closed</span></div>
+        </div>
+      </div>
+      <div class="flex flex-col items-end">
+        <div class="w-full h-32 border border-white/10 overflow-hidden rounded-lg mb-4">
+          <iframe
+            src="https://www.google.com/maps?q=<%= ERB::Util.url_encode([@business.website_name.presence || @business.name, @business.city, @business.country].compact.join(', ')) %>&output=embed"
+            width="100%"
+            height="128"
+            style="border:0;"
+            loading="lazy">
+          </iframe>
+        </div>
+        <div class="flex gap-4 text-sm">
+          <a href="#" class="text-white/60 hover:text-white transition">Instagram</a>
+          <a href="#" class="text-white/60 hover:text.white transition">Facebook</a>
+        </div>
+      </div>
+    </div>
+    <div class="max-w-7xl mx-auto px-8 py-6 border-t border-gray-800 text-xs text-white/40 flex items-center justify-between">
+      <p>© <%= Time.current.year %> <%= @business.name %>. All rights reserved.</p>
+      <div class="flex gap-6">
+        <a href="#" class="hover:text-white transition">Privacy</a>
+        <a href="#" class="hover:text-white transition">Terms</a>
+      </div>
+    </div>
+  </footer>
+</div>

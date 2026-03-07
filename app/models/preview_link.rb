@@ -4,8 +4,14 @@ class PreviewLink < ApplicationRecord
   before_validation :generate_uuid, on: :create
 
   def self.available_templates
-    Dir.children(Rails.root.join("app/views/templates"))
-       .map { |f| f.split(".").first }
+    base_path = Rails.root.join("app/views/templates")
+
+    Dir.glob(base_path.join("**/*.html.erb")).map do |file|
+      Pathname.new(file)
+              .relative_path_from(base_path)
+              .to_s
+              .sub(".html.erb", "")
+    end
   end
 
   validates :template, inclusion: { in: ->(_) { available_templates } }

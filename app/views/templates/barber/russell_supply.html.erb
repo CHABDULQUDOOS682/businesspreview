@@ -1,0 +1,142 @@
+<header class="fixed top-0 w-full z-50 bg-stone-900/80 backdrop-blur-md border-b border-white/10">
+  <nav class="max-w-[1400px] mx-auto px-8 h-20 flex items-center justify-between">
+    <div class="flex items-center gap-12">
+      <a class="text-2xl serif tracking-[0.2em] uppercase" href="#overview"><%= (@business.website_name.presence || @business.name) %></a>
+      <div class="hidden lg:flex items-center gap-8">
+        <a class="text-[10px] uppercase tracking-[0.3em] hover:text-amber-500 transition-colors" href="#overview">Home</a>
+        <a class="text-[10px] uppercase tracking-[0.3em] hover:text-amber-500 transition-colors" href="#services">Products</a>
+        <a class="text-[10px] uppercase tracking-[0.3em] hover:text-amber-500 transition-colors" href="#story">Our Story</a>
+      </div>
+    </div>
+    <div class="flex items-center gap-6">
+      <a href="<%= @business.email.present? ? "mailto:#{@business.email}" : "#" %>" class="text-[10px] uppercase tracking-[0.3em] border border-white/20 px-6 py-2.5 hover:bg-white hover:text-black transition-all">Contact Us</a>
+    </div>
+  </nav>
+</header>
+
+<main class="bg-stone-900 text-white">
+  <section id="overview" class="relative h-screen flex items-center justify-center text-center overflow-hidden">
+    <div class="absolute inset-0 z-0">
+      <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuBJs0CsjzfdRZPUx9lRwcDQYBB4jWwIyawOXSQ0q8kM273_yNBVBktiBAWTpn2sfNO448R6WxbrcPcYXTSx9UN3DPPl78GZhBhD74U-DD5dmVdN62Uld59okP5r4vcCN5yhgB1_Rc9PRk0REI4KzQDrycEOTdqDWn6t9qjvUFgttl1YZCrav58ooZRZmSd0fsrlje03dVF56QMKciW8rx9oVRaS8oQ8OFNoPAcY6W4zKlW7z3p_4Ge_-cGsh_GTwjBxWDalWBFtuFgb" alt="" class="w-full h-full object-cover grayscale brightness-50">
+      <div class="absolute inset-0" style="background: linear-gradient(to bottom, rgba(10,10,10,0.4) 0%, rgba(10,10,10,0.8) 100%);"></div>
+    </div>
+    <div class="relative z-10 px-6">
+      <h1 class="text-5xl md:text-8xl font-light tracking-[0.15em] uppercase mb-6"><%= (@business.website_name.presence || @business.name) %></h1>
+      <p class="text-lg md:text-xl serif italic text-white/70 tracking-widest">Quality Supplies. Expert Advice.</p>
+      <div class="mt-12 flex justify-center">
+        <div class="w-px h-24 bg-gradient-to-b from-transparent via-white/40 to-transparent"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="services" class="py-24 px-6 max-w-[1400px] mx-auto">
+    <div class="text-center mb-16">
+      <span class="text-[10px] uppercase tracking-[0.5em] text-white/40 block mb-4">Curated Inventory</span>
+      <h2 class="text-4xl md:text-6xl font-light">Our Services</h2>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 border-t border-white/10">
+      <div class="p-12 border-b md:border-b-0 md:border-r border-white/10 group hover:bg-white/5 transition-colors">
+        <div class="text-white/30 text-4xl mb-8">🛠️</div>
+        <h3 class="text-2xl mb-6">Plumbing Supplies</h3>
+        <p class="text-white/50 leading-relaxed font-light mb-8">Premium fixtures and bespoke fittings for residential and commercial builds.</p>
+        <a class="text-[10px] uppercase tracking-[0.3em] text-amber-500 flex items-center gap-2 group-hover:gap-4 transition-all" href="#contact">Explore Collection</a>
+      </div>
+      <div class="p-12 border-b md:border-b-0 md:border-r border-white/10 group hover:bg-white/5 transition-colors">
+        <div class="text-white/30 text-4xl mb-8">🌲</div>
+        <h3 class="text-2xl mb-6">Lumber & Milling</h3>
+        <p class="text-white/50 leading-relaxed font-light mb-8">Sustainably sourced materials for structural integrity and finish work.</p>
+        <a class="text-[10px] uppercase tracking-[0.3em] text-amber-500 flex items-center gap-2 group-hover:gap-4 transition-all" href="#contact">View Grading</a>
+      </div>
+      <div class="p-12 group hover:bg-white/5 transition-colors">
+        <div class="text-white/30 text-4xl mb-8">🔧</div>
+        <h3 class="text-2xl mb-6">Hardware & Tools</h3>
+        <p class="text-white/50 leading-relaxed font-light mb-8">Professional grade tools designed for longevity and performance.</p>
+        <a class="text-[10px] uppercase tracking-[0.3em] text-amber-500 flex items-center gap-2 group-hover:gap-4 transition-all" href="#contact">Shop Equipment</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="story" class="py-32 bg-[#0d0d0d]">
+    <div class="max-w-[1400px] mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
+      <div class="space-y-10">
+        <span class="text-[10px] uppercase tracking-[0.5em] text-white/40 block">The Human Element</span>
+        <h2 class="text-4xl md:text-6xl font-light leading-tight">Expert Local Advice with a Personal Touch</h2>
+        <p class="text-lg text-white/60 leading-relaxed serif italic">
+          "At <%= (@business.website_name.presence || @business.name) %>, we don't just sell materials; we invest in your projects. Our team brings decades of building heritage to every consultation."
+        </p>
+        <div class="pt-6 border-t border-white/10">
+          <div class="flex items-center gap-4">
+            <div class="w-12 h-px bg-amber-500"></div>
+            <span class="text-[10px] uppercase tracking-[0.3em]">Senior Consultants</span>
+          </div>
+          <div class="mt-6 flex flex-wrap gap-8">
+            <div>
+              <p class="text-xl serif">Thomas Sholes</p>
+              <p class="text-[10px] uppercase tracking-[0.2em] text-white/40">Plumbing Specialist</p>
+            </div>
+            <div>
+              <p class="text-xl serif">Michael Cannon</p>
+              <p class="text-[10px] uppercase tracking-[0.2em] text-white/40">Lumber Operations</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="relative aspect-[4/5] overflow-hidden">
+        <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuCF1Vnx9yZxZwIWupOVAvLqsvZK7w67RnDBKEIlsgu_m29ZnbV_aKeybUdkW0v4XdoTYIzP-80QBlh7EqevbPKV5ybZoNKVN_66BJZY4cjC0uOyzT5GKhMUehQDVF3yWCq-0v03DVQQeXK3Pl95nG9xLj826GMjkaDGaZIK9Wyo4ZuvmPMoxIt_tCsVpV_OI9xBTQ8qV9qxlEhYGjLetUlBQRzieSsr8RWhKuFkhOVxH0l_6-tgphwgtPxPUqmzNDIK66RrB7ncb91z" alt="" class="w-full h-full object-cover grayscale">
+        <div class="absolute inset-0 border-[20px] border-stone-900/20"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="py-32 border-t border-white/10">
+    <div class="max-w-[1400px] mx-auto px-6 text-center">
+      <h2 class="text-3xl md:text-4xl font-light mb-10 tracking-tight uppercase">Ready to Begin?</h2>
+      <div class="flex flex-col md:flex-row justify-center items-center gap-6">
+        <a href="<%= @business.email.present? ? "mailto:#{@business.email}" : "#" %>" class="w-full md:w-auto px-12 py-5 bg-white text-black text-[10px] uppercase tracking-[0.4em] hover:bg-amber-600 hover:text-white transition-all">Request Quote</a>
+        <a href="<%= @business.website_url.presence || '#' %>" class="w-full md:w-auto px-12 py-5 border border-white/20 text-[10px] uppercase tracking-[0.4em] hover:bg-white/5 transition-all">Visit Our Showroom</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="bg-stone-900 pt-24 pb-12 border-t border-white/10">
+  <div class="max-w-[1400px] mx-auto px-8">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-16 mb-24">
+      <div>
+        <p class="text-2xl serif tracking-[0.2em] uppercase mb-8"><%= (@business.website_name.presence || @business.name) %></p>
+        <p class="text-white/40 text-xs leading-relaxed max-w-xs">Serving <%= @business.city %>, <%= @business.country %> with quality materials and expert advice.</p>
+      </div>
+      <div>
+        <h4 class="text-[10px] uppercase tracking-[0.4em] text-white/60 mb-8">Contact</h4>
+        <p class="text-sm text-white/50 mb-4"><%= [@business.city, @business.country].compact.join(", ") %></p>
+        <p class="text-sm text-white/50"><%= @business.phone.presence || "(555) 123-4567" %></p>
+      </div>
+      <div>
+        <h4 class="text-[10px] uppercase tracking-[0.4em] text-white/60 mb-8">Hours</h4>
+        <div class="space-y-4 text-xs text-white/40">
+          <div class="flex justify-between"><span>Mon - Fri</span> <span>7:00 - 17:00</span></div>
+          <div class="flex justify-between"><span>Saturday</span> <span>7:30 - 12:00</span></div>
+          <div class="flex justify-between"><span>Sunday</span> <span>Closed</span></div>
+        </div>
+      </div>
+      <div class="flex flex-col items-end">
+        <div class="w-full h-40 border border-white/10 grayscale opacity-60 overflow-hidden mb-4 rounded-lg">
+          <iframe
+            src="https://www.google.com/maps?q=<%= ERB::Util.url_encode([@business.website_name.presence || @business.name, @business.city, @business.country].compact.join(', ')) %>&output=embed"
+            width="100%"
+            height="160"
+            style="border:0;"
+            loading="lazy">
+          </iframe>
+        </div>
+      </div>
+    </div>
+    <div class="flex flex-col md:flex-row justify-between items-center gap-6 pt-12 border-t border-white/10 text-[10px] tracking-[0.2em] text-white/30 uppercase">
+      <p>© <%= Time.current.year %> <%= (@business.website_name.presence || @business.name) %>. All Rights Reserved.</p>
+      <div class="flex gap-8">
+        <a class="hover:text-white transition-colors" href="#">Privacy</a>
+        <a class="hover:text-white transition-colors" href="#">Terms</a>
+      </div>
+    </div>
+  </div>
+</footer>
