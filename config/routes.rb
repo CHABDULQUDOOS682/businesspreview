@@ -17,4 +17,8 @@ Rails.application.routes.draw do
   end
 
   get "up" => "rails/health#show", as: :rails_health_check
+
+  # Routes for frontend
+  get "design_1", to: "frontend#design_1", as: :design_1
+  
 end
