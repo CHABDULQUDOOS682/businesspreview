@@ -89,6 +89,15 @@ class Admin::BusinessesController < ApplicationController
     end
   end
 
+  def sms
+    from = params["From"]
+    body = params["Body"]
+
+    puts "Reply from #{from}: #{body}"
+
+    head :ok
+  end
+
   private
 
   def business_params

@@ -16,6 +16,13 @@ Rails.application.routes.draw do
     get "templates/:id/preview", to: "templates#preview", as: :template_preview
   end
 
+  # TWILIO ROUTES
+  # Create Voice Controller (TwiML)
+  post "twilio/voice", to: "twilio#voice"
+  # Receive Incoming SMS (Webhook)
+  post "twilio/sms"
+
+
   get "up" => "rails/health#show", as: :rails_health_check
 
   # Routes for frontend
