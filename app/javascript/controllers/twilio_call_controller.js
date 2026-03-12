@@ -10,12 +10,23 @@ export default class extends Controller {
     this.device = null
     this.activeCall = null
     console.log("Twilio Call Controller Connected for:", this.phoneNumberValue)
+    if (this.hasCallButtonTarget) this.callButtonTarget.disabled = true
+    this.toggleButtons(false)
     this.setupDevice()
   }
 
   async setupDevice() {
     try {
+      if (!window.isSecureContext && window.location.hostname !== "localhost") {
+        this.updateStatus("Error: Browser calling requires HTTPS")
+        return
+      }
+
       const response = await fetch("/twilio/token")
+      if (!response.ok) {
+        this.updateStatus("Error: Failed to fetch token")
+        return
+      }
       const data = await response.json()
       
       if (data.error) {
@@ -30,15 +41,24 @@ export default class extends Controller {
         enableIceRestart: true,
       })
 
-      this.device.on("ready", () => {
+      this.device.on("registered", () => {
         this.updateStatus("Ready")
-        this.callButtonTarget.disabled = false
+        if (this.hasCallButtonTarget) this.callButtonTarget.disabled = false
+      })
+
+      this.device.on("unregistered", () => {
+        this.updateStatus("Disconnected")
+        if (this.hasCallButtonTarget) this.callButtonTarget.disabled = true
+        this.toggleButtons(false)
       })
 
       this.device.on("error", (error) => {
-        const errorMsg = `Error: ${error.code} - ${error.message}`
+        const code = error?.code || error?.twilioError?.code || "Unknown"
+        const message = error?.message || error?.twilioError?.message || "Unknown error"
+        const errorMsg = `Error: ${code} - ${message}`
         this.updateStatus(errorMsg)
         console.error("Twilio Device Error:", error)
+        this.toggleButtons(false)
       })
 
       this.device.on("connect", (call) => {
@@ -54,25 +74,45 @@ export default class extends Controller {
         setTimeout(() => this.updateStatus("Ready"), 3000)
       })
 
+      try {
+        await this.device.register()
+      } catch (error) {
+        const code = error?.code || error?.twilioError?.code || "Unknown"
+        const message = error?.message || error?.twilioError?.message || "Unknown error"
+        this.updateStatus(`Error: ${code} - ${message}`)
+        console.error("Twilio Register Error:", error)
+      }
     } catch (error) {
       this.updateStatus("Failed to init")
       console.error("Setup Error:", error)
     }
   }
 
-  makeCall() {
+  async makeCall() {
     if (!this.device) return
 
     this.updateStatus("Connecting...")
-    this.activeCall = this.device.connect({
-      params: { To: this.phoneNumberValue }
-    })
+    this.toggleButtons(true)
+    try {
+      this.activeCall = await this.device.connect({
+        params: { To: this.phoneNumberValue }
+      })
+    } catch (error) {
+      const code = error?.code || error?.twilioError?.code || "Unknown"
+      const message = error?.message || error?.twilioError?.message || "Unknown error"
+      this.updateStatus(`Error: ${code} - ${message}`)
+      console.error("Twilio Connect Error:", error)
+      this.toggleButtons(false)
+    }
   }
 
   hangup() {
     if (this.device) {
       this.device.disconnectAll()
     }
+    this.updateStatus("Call Ended")
+    setTimeout(() => this.updateStatus("Ready"), 3000)
+    this.toggleButtons(false)
   }
 
   updateStatus(message) {
@@ -89,7 +129,11 @@ export default class extends Controller {
   }
 
   toggleButtons(isCallActive) {
-    if (this.hasCallButtonTarget) this.callButtonTarget.classList.toggle("hidden", isCallActive)
-    if (this.hasHangupButtonTarget) this.hangupButtonTarget.classList.toggle("hidden", !isCallActive)
+    if (this.hasCallButtonTarget) {
+      this.callButtonTarget.style.display = isCallActive ? "none" : "inline-flex"
+    }
+    if (this.hasHangupButtonTarget) {
+      this.hangupButtonTarget.style.display = isCallActive ? "inline-flex" : "none"
+    }
   }
 }
