@@ -21,11 +21,38 @@ class Admin::CommunicationsController < ApplicationController
 
     # Flexible matching for messages using the last 10 digits to ignore +, country codes, or formatting differences
     last_10 = @number.to_s.gsub(/\s+/, "").last(10)
+    @conversation_key = last_10
     if last_10.present?
       # Match by business ID or by phone number patterns
       @messages = Message.where("from_number LIKE ? OR to_number LIKE ?", "%#{last_10}", "%#{last_10}")
       @messages = @messages.or(Message.where(business_id: @business.id)) if @business
       @messages = @messages.order(created_at: :asc)
+
+      # Mark inbound messages as read for this conversation
+      if @business
+        @business.messages.inbound.unread.update_all(read_at: Time.current)
+        Turbo::StreamsChannel.broadcast_replace_to(
+          "business_conversations",
+          target: ApplicationController.helpers.dom_id(@business, :conversation),
+          partial: "admin/communications/business_conversation",
+          locals: { business: @business }
+        )
+        Turbo::StreamsChannel.broadcast_replace_to(
+          "unread_messages",
+          target: "unread_messages_badge",
+          partial: "admin/communications/unread_badge",
+          locals: { count: Message.inbound.unread.count }
+        )
+      else
+        Message.inbound.unread.where("from_number LIKE ? OR to_number LIKE ?", "%#{last_10}", "%#{last_10}")
+               .update_all(read_at: Time.current)
+        Turbo::StreamsChannel.broadcast_replace_to(
+          "unread_messages",
+          target: "unread_messages_badge",
+          partial: "admin/communications/unread_badge",
+          locals: { count: Message.inbound.unread.count }
+        )
+      end
     else
       @messages = Message.none
     end
