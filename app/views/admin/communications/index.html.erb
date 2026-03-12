@@ -1,0 +1,119 @@
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <div class="md:flex md:items-center md:justify-between mb-8">
+    <div class="flex-1 min-w-0">
+      <h2 class="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:truncate">
+        Communications Hub
+      </h2>
+      <p class="mt-1 text-sm text-gray-500">View and manage messages across all your businesses.</p>
+    </div>
+  </div>
+
+  <div class="space-y-8">
+    <!-- Businesses Section -->
+    <div>
+      <h3 class="text-lg font-medium leading-6 text-gray-900 mb-4 flex items-center">
+        <svg class="mr-2 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h18" />
+        </svg>
+        Business Conversations
+      </h3>
+      <div class="bg-white shadow overflow-hidden sm:rounded-md border border-gray-200">
+        <ul role="list" class="divide-y divide-gray-200">
+          <% if @businesses.any? %>
+            <% @businesses.each do |business| %>
+              <% latest_msg = business.messages.order(created_at: :desc).first %>
+              <li>
+                <%= link_to business.phone.present? ? admin_communication_path(business.phone) : "#", class: "block hover:bg-gray-50 #{'opacity-50 cursor-not-allowed' unless business.phone.present?}" do %>
+                  <div class="px-4 py-4 sm:px-6">
+                    <div class="flex items-center justify-between">
+                      <div class="flex items-center">
+                        <p class="text-sm font-bold text-indigo-600 truncate mr-2">
+                          <%= business.name %>
+                        </p>
+                        <span class="inline-flex items-center rounded-md bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-600">
+                          <%= business.phone.presence || "No Phone" %>
+                        </span>
+                      </div>
+                      <% if latest_msg %>
+                        <div class="ml-2 flex-shrink-0 flex">
+                          <p class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full <%= latest_msg.direction == "inbound" ? "bg-green-100 text-green-800" : "bg-blue-100 text-blue-800" %>">
+                            <%= latest_msg.direction.capitalize %>
+                          </p>
+                        </div>
+                      <% end %>
+                    </div>
+                    <div class="mt-2 sm:flex sm:justify-between">
+                      <div class="sm:flex">
+                        <p class="flex items-center text-sm text-gray-500 italic">
+                          <%= latest_msg&.body&.truncate(100) || "No messages yet." %>
+                        </p>
+                      </div>
+                      <% if latest_msg %>
+                        <div class="mt-2 flex items-center text-sm text-gray-400 sm:mt-0">
+                          <p>
+                            <%= time_ago_in_words(latest_msg.created_at) %> ago
+                          </p>
+                        </div>
+                      <% end %>
+                    </div>
+                  </div>
+                <% end %>
+              </li>
+            <% end %>
+          <% else %>
+            <li class="px-4 py-8 text-center text-gray-500">
+              No businesses found.
+            </li>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Unknown Conversations Section -->
+    <% if @standalone_conversations.any? %>
+      <div>
+        <h3 class="text-lg font-medium leading-6 text-gray-900 mb-4 flex items-center">
+          <svg class="mr-2 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 5.25h.008v.008H12v-.008Z" />
+          </svg>
+          Other Inquiries
+        </h3>
+        <div class="bg-white shadow overflow-hidden sm:rounded-md border border-gray-200">
+          <ul role="list" class="divide-y divide-gray-200">
+            <% @standalone_conversations.each do |msg| %>
+              <% other_number = msg.direction == "inbound" ? msg.from_number : msg.to_number %>
+              <li>
+                <%= link_to admin_communication_path(other_number), class: "block hover:bg-gray-50" do %>
+                  <div class="px-4 py-4 sm:px-6">
+                    <div class="flex items-center justify-between">
+                      <p class="text-sm font-medium text-orange-600 truncate">
+                        Unknown Contact: <%= other_number %>
+                      </p>
+                      <div class="ml-2 flex-shrink-0 flex">
+                        <p class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full <%= msg.direction == "inbound" ? "bg-green-100 text-green-800" : "bg-blue-100 text-blue-800" %>">
+                          <%= msg.direction.capitalize %>
+                        </p>
+                      </div>
+                    </div>
+                    <div class="mt-2 sm:flex sm:justify-between">
+                      <div class="sm:flex">
+                        <p class="flex items-center text-sm text-gray-500">
+                          <%= msg.body.truncate(100) %>
+                        </p>
+                      </div>
+                      <div class="mt-2 flex items-center text-sm text-gray-400 sm:mt-0">
+                        <p>
+                          <%= time_ago_in_words(msg.created_at) %> ago
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                <% end %>
+              </li>
+            <% end %>
+          </ul>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

@@ -13,6 +13,11 @@ Rails.application.routes.draw do
       end
       resources :preview_links, only: [ :create, :destroy ]
     end
+    resources :communications, only: [ :index, :show, :create ] do
+      member do
+        post :call
+      end
+    end
     get "templates/:id/preview", to: "templates#preview", as: :template_preview
   end
 
@@ -20,12 +25,15 @@ Rails.application.routes.draw do
   # Create Voice Controller (TwiML)
   post "twilio/voice", to: "twilio#voice"
   # Receive Incoming SMS (Webhook)
-  post "twilio/sms"
+  post "twilio/sms", to: "twilio#sms"
+
+  # Browser-to-phone calling
+  get "twilio/token", to: "twilio#access_token"
+  post "twilio/connect", to: "twilio#connect_call"
 
 
   get "up" => "rails/health#show", as: :rails_health_check
 
   # Routes for frontend
   get "design_1", to: "frontend#design_1", as: :design_1
-  
 end
