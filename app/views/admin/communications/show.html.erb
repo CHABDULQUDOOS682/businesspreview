@@ -1,3 +1,4 @@
+<%= turbo_stream_from "conversation:#{@conversation_key}" if @conversation_key.present? %>
 <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 h-[calc(100vh-64px)] flex flex-col" 
      data-controller="twilio-call" 
      data-twilio-call-phone-number-value="<%= @number %>">
@@ -38,17 +39,8 @@
     </div>
   </div>
 
-  <div class="flex-1 overflow-y-auto bg-gray-50 p-4 rounded-lg shadow-inner mb-4 space-y-4">
-    <% @messages.each do |msg| %>
-      <div class="flex <%= msg.direction == "outbound" ? "justify-end" : "justify-start" %>">
-        <div class="max-w-[80%] rounded-lg p-3 shadow-sm <%= msg.direction == "outbound" ? "bg-indigo-600 text-white" : "bg-white text-gray-900 border border-gray-200" %>">
-          <p class="text-sm"><%= msg.body %></p>
-          <p class="text-[10px] mt-1 opacity-70 text-right">
-            <%= msg.created_at.strftime("%I:%M %p") %>
-          </p>
-        </div>
-      </div>
-    <% end %>
+  <div id="messages" class="flex-1 overflow-y-auto bg-gray-50 p-4 rounded-lg shadow-inner mb-4 space-y-4">
+    <%= render partial: "admin/communications/message", collection: @messages, as: :msg %>
   </div>
 
   <div class="flex-shrink-0">

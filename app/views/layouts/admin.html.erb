@@ -28,7 +28,12 @@
             <div class="hidden sm:ml-10 sm:flex sm:space-x-8">
               <%= link_to "Dashboard", admin_root_path, class: "border-transparent text-slate-500 hover:border-blue-500 hover:text-slate-800 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors #{current_page?(admin_root_path) ? 'border-blue-500 text-slate-900' : ''}" %>
               <%= link_to "Businesses", admin_businesses_path, class: "border-transparent text-slate-500 hover:border-blue-500 hover:text-slate-800 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors #{current_page?(admin_businesses_path) || params[:controller] == 'admin/businesses' ? 'border-blue-500 text-slate-900' : ''}" %>
-              <%= link_to "Communications", admin_communications_path, class: "border-transparent text-slate-500 hover:border-blue-500 hover:text-slate-800 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors #{current_page?(admin_communications_path) || params[:controller] == 'admin/communications' ? 'border-blue-500 text-slate-900' : ''}" %>
+              <%= link_to admin_communications_path, class: "border-transparent text-slate-500 hover:border-blue-500 hover:text-slate-800 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors #{current_page?(admin_communications_path) || params[:controller] == 'admin/communications' ? 'border-blue-500 text-slate-900' : ''}" do %>
+                Communications
+                <span id="unread_messages_badge">
+                  <%= render partial: "admin/communications/unread_badge", locals: { count: unread_message_count } %>
+                </span>
+              <% end %>
             </div>
           </div>
           <!-- Right side user profile placeholder -->
@@ -49,6 +54,7 @@
       </div>
     </nav>
 
+    <%= turbo_stream_from "unread_messages" %>
     <!-- Main Content Area -->
     <main class="flex-1 w-full max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
       <!-- Flash Messages -->

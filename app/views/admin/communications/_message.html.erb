@@ -1,0 +1,8 @@
+<div class="flex <%= msg.direction == "outbound" ? "justify-end" : "justify-start" %>">
+  <div class="max-w-[80%] rounded-lg p-3 shadow-sm <%= msg.direction == "outbound" ? "bg-indigo-600 text-white" : "bg-white text-gray-900 border border-gray-200" %>">
+    <p class="text-sm"><%= msg.body %></p>
+    <p class="text-[10px] mt-1 opacity-70 text-right">
+      <%= msg.created_at.strftime("%I:%M %p") %>
+    </p>
+  </div>
+</div>
