@@ -27,6 +27,7 @@ class Admin::CommunicationsController < ApplicationController
       @messages = Message.where("from_number LIKE ? OR to_number LIKE ?", "%#{last_10}", "%#{last_10}")
       @messages = @messages.or(Message.where(business_id: @business.id)) if @business
       @messages = @messages.order(created_at: :asc)
+      @last_inbound_at = @messages.inbound.maximum(:created_at)
 
       # Mark inbound messages as read for this conversation
       if @business
@@ -37,19 +38,31 @@ class Admin::CommunicationsController < ApplicationController
           partial: "admin/communications/business_conversation",
           locals: { business: @business }
         )
-        Turbo::StreamsChannel.broadcast_replace_to(
+        Turbo::StreamsChannel.broadcast_update_to(
           "unread_messages",
           target: "unread_messages_badge",
           partial: "admin/communications/unread_badge",
           locals: { count: Message.inbound.unread.count }
         )
+        Turbo::StreamsChannel.broadcast_update_to(
+          "unread_messages",
+          target: "unread_inbound_count",
+          partial: "admin/dashboard/unread_inbound_count",
+          locals: { count: Message.inbound.unread.count }
+        )
       else
         Message.inbound.unread.where("from_number LIKE ? OR to_number LIKE ?", "%#{last_10}", "%#{last_10}")
                .update_all(read_at: Time.current)
-        Turbo::StreamsChannel.broadcast_replace_to(
+        Turbo::StreamsChannel.broadcast_update_to(
           "unread_messages",
           target: "unread_messages_badge",
           partial: "admin/communications/unread_badge",
+          locals: { count: Message.inbound.unread.count }
+        )
+        Turbo::StreamsChannel.broadcast_update_to(
+          "unread_messages",
+          target: "unread_inbound_count",
+          partial: "admin/dashboard/unread_inbound_count",
           locals: { count: Message.inbound.unread.count }
         )
       end

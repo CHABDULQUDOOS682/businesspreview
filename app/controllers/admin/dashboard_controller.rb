@@ -4,7 +4,7 @@ class Admin::DashboardController < ApplicationController
     @business_count = Business.count
     @preview_count  = PreviewLink.count
     @total_visits   = PreviewLink.sum(:visit_count)
-    @message_count  = Message.count
+    @unread_inbound_count = Message.inbound.unread.count
 
     @templates = PreviewLink.available_templates
 

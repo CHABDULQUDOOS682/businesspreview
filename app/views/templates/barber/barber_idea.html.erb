@@ -1,4 +1,8 @@
-<nav class="fixed w-full z-50 bg-white/90 backdrop-blur-md border-b border-stone-200">
+<nav
+  class="fixed w-full z-50 bg-white/90 backdrop-blur-md border-b border-stone-200 relative"
+  data-controller="mobile-nav"
+  data-action="keydown.escape->mobile-nav#close turbo:before-cache->mobile-nav#close"
+>
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex justify-between h-20 items-center">
       <div class="text-2xl font-bold tracking-tighter uppercase serif"><%= @business.name %></div>
@@ -11,9 +15,38 @@
         <a href="#contact" class="hover:text-amber-700 transition">Contact</a>
         <a href="<%= @business.website_url.presence || '#' %>" class="bg-stone-900 text-white px-6 py-2 hover:bg-amber-800 transition">Book Now</a>
       </div>
+      <button
+        type="button"
+        class="md:hidden inline-flex items-center justify-center rounded-md p-2 text-stone-700 hover:bg-stone-50 hover:text-stone-900 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-amber-700"
+        aria-controls="barber-idea-mobile-menu"
+        aria-expanded="false"
+        data-mobile-nav-target="button"
+        data-action="mobile-nav#toggle"
+      >
+        <span class="sr-only">Open menu</span>
+        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
     </div>
   </div>
-  </nav>
+
+  <div
+    id="barber-idea-mobile-menu"
+    class="hidden md:hidden absolute top-full inset-x-0 bg-white/95 backdrop-blur-md border-b border-stone-200"
+    data-mobile-nav-target="panel"
+  >
+    <div class="max-w-7xl mx-auto px-4 py-4 grid grid-cols-2 gap-2 text-sm font-semibold uppercase tracking-widest">
+      <a href="#history" class="rounded-md px-3 py-2 text-stone-700 hover:bg-stone-50 hover:text-stone-900 transition">History</a>
+      <a href="#services" class="rounded-md px-3 py-2 text-stone-700 hover:bg-stone-50 hover:text-stone-900 transition">Services</a>
+      <a href="#featured" class="rounded-md px-3 py-2 text-stone-700 hover:bg-stone-50 hover:text-stone-900 transition">Featured</a>
+      <a href="#gallery" class="rounded-md px-3 py-2 text-stone-700 hover:bg-stone-50 hover:text-stone-900 transition">Gallery</a>
+      <a href="#map" class="rounded-md px-3 py-2 text-stone-700 hover:bg-stone-50 hover:text-stone-900 transition">Location</a>
+      <a href="#contact" class="rounded-md px-3 py-2 text-stone-700 hover:bg-stone-50 hover:text-stone-900 transition">Contact</a>
+      <a href="<%= @business.website_url.presence || '#' %>" class="col-span-2 rounded-md bg-stone-900 px-3 py-2 text-center text-white hover:bg-amber-800 transition">Book Now</a>
+    </div>
+  </div>
+</nav>
 
 <section class="relative h-screen flex items-center justify-center bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&q=80&w=2070');">
   <div class="absolute inset-0 bg-black/60"></div>

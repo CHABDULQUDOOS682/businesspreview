@@ -1,8 +1,29 @@
 <div class="flex <%= msg.direction == "outbound" ? "justify-end" : "justify-start" %>">
-  <div class="max-w-[80%] rounded-lg p-3 shadow-sm <%= msg.direction == "outbound" ? "bg-indigo-600 text-white" : "bg-white text-gray-900 border border-gray-200" %>">
-    <p class="text-sm"><%= msg.body %></p>
-    <p class="text-[10px] mt-1 opacity-70 text-right">
-      <%= msg.created_at.strftime("%I:%M %p") %>
-    </p>
+  <div class="max-w-[90%] sm:max-w-[80%] rounded-lg p-3 shadow-sm <%= msg.direction == "outbound" ? "bg-indigo-600 text-white" : "bg-white text-gray-900 border border-gray-200" %>">
+    <p class="text-sm whitespace-pre-wrap break-words [overflow-wrap:anywhere]"><%= msg.body %></p>
+
+    <div class="mt-1 flex items-center justify-end gap-1 text-[10px] opacity-70">
+      <span><%= msg.created_at.strftime("%I:%M %p") %></span>
+
+      <% if msg.direction == "outbound" %>
+        <% conversation_key ||= begin
+             number = msg.to_number.to_s.gsub(/\s+/, "")
+             number.last(10)
+           end %>
+        <% last_inbound_at ||= Message.inbound.where("from_number LIKE ? OR to_number LIKE ?", "%#{conversation_key}", "%#{conversation_key}").maximum(:created_at) %>
+        <% seen = last_inbound_at.present? && msg.created_at < last_inbound_at %>
+
+        <span class="inline-flex items-center <%= seen ? 'text-sky-200' : 'text-white/80' %>" aria-label="<%= seen ? 'Seen' : 'Sent' %>">
+          <svg class="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path fill-rule="evenodd" d="M16.704 5.29a1 1 0 0 1 .006 1.414l-7.2 7.25a1 1 0 0 1-1.42 0l-3.3-3.32a1 1 0 1 1 1.42-1.41l2.59 2.61 6.49-6.534a1 1 0 0 1 1.414-.01Z" clip-rule="evenodd"/>
+          </svg>
+          <% if seen %>
+            <svg class="h-3.5 w-3.5 -ml-1" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" d="M16.704 5.29a1 1 0 0 1 .006 1.414l-7.2 7.25a1 1 0 0 1-1.42 0l-3.3-3.32a1 1 0 1 1 1.42-1.41l2.59 2.61 6.49-6.534a1 1 0 0 1 1.414-.01Z" clip-rule="evenodd"/>
+            </svg>
+          <% end %>
+        </span>
+      <% end %>
+    </div>
   </div>
 </div>

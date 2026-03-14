@@ -5,7 +5,11 @@
   </div>
 
   <!-- Header -->
-  <header class="bg-white shadow-sm sticky top-0 z-50">
+  <header
+    class="bg-white shadow-sm sticky top-0 z-50"
+    data-controller="mobile-nav"
+    data-action="keydown.escape->mobile-nav#close turbo:before-cache->mobile-nav#close"
+  >
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
       <div class="flex items-center gap-x-2">
         <div class="w-10 h-10 bg-green-100 text-green-600 rounded-lg flex items-center justify-center text-xl font-bold">
@@ -19,8 +23,34 @@
         <a href="#testimonials" class="text-gray-600 hover:text-gray-900 font-medium text-sm">Reviews</a>
         <a href="#location" class="text-gray-600 hover:text-gray-900 font-medium text-sm">Location</a>
       </nav>
-      <div>
+      <div class="flex items-center gap-2">
         <a href="<%= @business.website_url.presence || '#' %>" class="bg-gray-900 text-white px-5 py-2.5 rounded-md text-sm font-bold shadow-sm hover:bg-gray-800 transition-all">Book Now</a>
+        <button
+          type="button"
+          class="md:hidden inline-flex items-center justify-center rounded-md p-2 text-gray-700 hover:bg-gray-50 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-green-600"
+          aria-controls="storefront-mobile-menu"
+          aria-expanded="false"
+          data-mobile-nav-target="button"
+          data-action="mobile-nav#toggle"
+        >
+          <span class="sr-only">Open menu</span>
+          <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <div
+      id="storefront-mobile-menu"
+      class="hidden md:hidden border-t border-gray-200 bg-white"
+      data-mobile-nav-target="panel"
+    >
+      <div class="max-w-7xl mx-auto px-4 py-3 grid grid-cols-2 gap-2 text-sm font-medium">
+        <a href="#services" class="rounded-md px-3 py-2 text-gray-700 hover:bg-gray-50 hover:text-gray-900 transition">Services</a>
+        <a href="#about" class="rounded-md px-3 py-2 text-gray-700 hover:bg-gray-50 hover:text-gray-900 transition">About</a>
+        <a href="#testimonials" class="rounded-md px-3 py-2 text-gray-700 hover:bg-gray-50 hover:text-gray-900 transition">Reviews</a>
+        <a href="#location" class="rounded-md px-3 py-2 text-gray-700 hover:bg-gray-50 hover:text-gray-900 transition">Location</a>
       </div>
     </div>
   </header>

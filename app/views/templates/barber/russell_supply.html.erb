@@ -1,4 +1,8 @@
-<header class="fixed top-0 w-full z-50 bg-stone-900/80 backdrop-blur-md border-b border-white/10">
+<header
+  class="fixed top-0 w-full z-50 bg-stone-900/80 backdrop-blur-md border-b border-white/10 relative"
+  data-controller="mobile-nav"
+  data-action="keydown.escape->mobile-nav#close turbo:before-cache->mobile-nav#close"
+>
   <nav class="max-w-[1400px] mx-auto px-8 h-20 flex items-center justify-between">
     <div class="flex items-center gap-12">
       <a class="text-2xl serif tracking-[0.2em] uppercase" href="#overview"><%= (@business.website_name.presence || @business.name) %></a>
@@ -10,8 +14,34 @@
     </div>
     <div class="flex items-center gap-6">
       <a href="<%= @business.email.present? ? "mailto:#{@business.email}" : "#" %>" class="text-[10px] uppercase tracking-[0.3em] border border-white/20 px-6 py-2.5 hover:bg-white hover:text-black transition-all">Contact Us</a>
+      <button
+        type="button"
+        class="lg:hidden inline-flex items-center justify-center rounded-md p-2 text-white/80 hover:text-white hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-amber-500"
+        aria-controls="russell-mobile-menu"
+        aria-expanded="false"
+        data-mobile-nav-target="button"
+        data-action="mobile-nav#toggle"
+      >
+        <span class="sr-only">Open menu</span>
+        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
     </div>
   </nav>
+
+  <div
+    id="russell-mobile-menu"
+    class="hidden lg:hidden absolute top-full inset-x-0 bg-stone-900/95 backdrop-blur-md border-b border-white/10"
+    data-mobile-nav-target="panel"
+  >
+    <div class="max-w-[1400px] mx-auto px-8 py-4 grid grid-cols-2 gap-3">
+      <a class="rounded-md px-3 py-2 text-[10px] uppercase tracking-[0.3em] text-white/70 hover:text-amber-500 hover:bg-white/5 transition-colors" href="#overview">Home</a>
+      <a class="rounded-md px-3 py-2 text-[10px] uppercase tracking-[0.3em] text-white/70 hover:text-amber-500 hover:bg-white/5 transition-colors" href="#services">Products</a>
+      <a class="rounded-md px-3 py-2 text-[10px] uppercase tracking-[0.3em] text-white/70 hover:text-amber-500 hover:bg-white/5 transition-colors" href="#story">Our Story</a>
+      <a class="rounded-md px-3 py-2 text-[10px] uppercase tracking-[0.3em] text-white/70 hover:text-amber-500 hover:bg-white/5 transition-colors" href="#contact">Contact</a>
+    </div>
+  </div>
 </header>
 
 <main class="bg-stone-900 text-white">
