@@ -1,4 +1,8 @@
-<nav class="fixed top-0 w-full z-50 bg-black/80 backdrop-blur-md border-b border-white/10">
+<nav
+  class="fixed top-0 w-full z-50 bg-black/80 backdrop-blur-md border-b border-white/10 relative"
+  data-controller="mobile-nav"
+  data-action="keydown.escape->mobile-nav#close turbo:before-cache->mobile-nav#close"
+>
   <div class="max-w-7xl mx-auto px-5 h-16 flex items-center justify-between">
     <div class="flex items-center gap-6">
       <a href="#hero" class="text-xl font-bold tracking-wide text-white"><%= @business.name %></a>
@@ -12,9 +16,35 @@
     <div class="flex items-center gap-3">
       <a href="<%= @business.phone.present? ? "tel:#{@business.phone}" : "#" %>" class="hidden sm:inline-flex rounded-md border border-amber-500/50 px-3 py-2 text-xs font-semibold text-amber-400 hover:bg-amber-500 hover:text-black transition">Call Now</a>
       <a href="<%= @business.website_url.presence || '#booking' %>" class="inline-flex rounded-md bg-amber-600 px-4 py-2 text-xs font-semibold text-black hover:bg-amber-500 transition">Book Now</a>
+      <button
+        type="button"
+        class="md:hidden inline-flex items-center justify-center rounded-md p-2 text-white/80 hover:text-white hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-amber-500"
+        aria-controls="bbg-mobile-menu"
+        aria-expanded="false"
+        data-mobile-nav-target="button"
+        data-action="mobile-nav#toggle"
+      >
+        <span class="sr-only">Open menu</span>
+        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
     </div>
   </div>
-  </nav>
+
+  <div
+    id="bbg-mobile-menu"
+    class="hidden md:hidden absolute top-full inset-x-0 bg-black/90 backdrop-blur-md border-b border-white/10"
+    data-mobile-nav-target="panel"
+  >
+    <div class="max-w-7xl mx-auto px-5 py-4 grid grid-cols-2 gap-3 text-sm">
+      <a href="#services" class="rounded-md px-3 py-2 text-white/80 hover:text-white hover:bg-white/10 transition">Services</a>
+      <a href="#about" class="rounded-md px-3 py-2 text-white/80 hover:text-white hover:bg-white/10 transition">About</a>
+      <a href="#testimonials" class="rounded-md px-3 py-2 text-white/80 hover:text-white hover:bg-white/10 transition">Reviews</a>
+      <a href="#location" class="rounded-md px-3 py-2 text-white/80 hover:text-white hover:bg-white/10 transition">Location</a>
+    </div>
+  </div>
+</nav>
 
 <section id="hero" class="relative pt-16">
   <div class="relative h-[85vh] md:h-screen">

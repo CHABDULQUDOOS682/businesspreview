@@ -28,8 +28,10 @@
     <dd class="w-full flex-none text-3xl font-bold leading-10 tracking-tight text-blue-600"><%= @total_visits %></dd>
   </div>
   <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-2 bg-white px-4 py-10 sm:px-6 xl:px-8">
-    <dt class="text-sm font-medium leading-6 text-slate-500">Messages</dt>
-    <dd class="w-full flex-none text-3xl font-bold leading-10 tracking-tight text-green-600"><%= @message_count %></dd>
+    <dt class="text-sm font-medium leading-6 text-slate-500">Unread Messages</dt>
+    <dd id="unread_inbound_count" class="w-full flex-none text-3xl font-bold leading-10 tracking-tight text-green-600">
+      <%= render partial: "admin/dashboard/unread_inbound_count", locals: { count: @unread_inbound_count } %>
+    </dd>
   </div>
 </dl>
 

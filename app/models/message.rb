@@ -27,16 +27,23 @@ class Message < ApplicationRecord
 
     broadcast_append_to(
       "conversation:#{key}",
-      target: "messages",
+      target: "message_list",
       partial: "admin/communications/message",
       locals: { msg: self }
     )
 
     if direction == "inbound"
-      Turbo::StreamsChannel.broadcast_replace_to(
+      Turbo::StreamsChannel.broadcast_update_to(
         "unread_messages",
         target: "unread_messages_badge",
         partial: "admin/communications/unread_badge",
+        locals: { count: Message.inbound.unread.count }
+      )
+
+      Turbo::StreamsChannel.broadcast_update_to(
+        "unread_messages",
+        target: "unread_inbound_count",
+        partial: "admin/dashboard/unread_inbound_count",
         locals: { count: Message.inbound.unread.count }
       )
     end
