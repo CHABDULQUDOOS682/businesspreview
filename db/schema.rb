@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_03_12_120000) do
+ActiveRecord::Schema[8.0].define(version: 2026_03_25_090000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -32,6 +32,10 @@ ActiveRecord::Schema[8.0].define(version: 2026_03_12_120000) do
     t.integer "visit_count", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "task_source_enabled", default: false, null: false
+    t.string "task_base_url"
+    t.string "task_secret"
+    t.string "task_endpoint_path", default: "/api/developer_tasks", null: false
   end
 
   create_table "messages", force: :cascade do |t|

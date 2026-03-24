@@ -7,6 +7,7 @@ Rails.application.routes.draw do
   namespace :admin do
     get "dashboard/index"
     root "dashboard#index"
+    resources :tasks, only: [ :index, :update ]
     resources :businesses do
       collection do
         post :import

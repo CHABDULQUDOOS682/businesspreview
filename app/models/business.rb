@@ -12,6 +12,11 @@ class Business < ApplicationRecord
   scope :with_active_subscription, -> {
     where("subscription = ? OR subscription_fee IS NOT NULL", true)
   }
+  scope :task_sources, -> {
+    where(task_source_enabled: true)
+      .where.not(task_base_url: [ nil, "" ])
+      .where.not(task_secret: [ nil, "" ])
+  }
   scope :with_purchased_website, -> {
     where.not(sold_price: nil)
   }
@@ -58,5 +63,9 @@ class Business < ApplicationRecord
 
   def subscription_active?
     subscription? || subscription_fee.present?
+  end
+
+  def task_source_name
+    website_name.presence || name
   end
 end

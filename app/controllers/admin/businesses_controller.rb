@@ -113,7 +113,11 @@ class Admin::BusinessesController < ApplicationController
             :message,
             :sold_price,
             :subscription_fee,
-            :subscription
+            :subscription,
+            :task_source_enabled,
+            :task_base_url,
+            :task_secret,
+            :task_endpoint_path
           )
   end
 end

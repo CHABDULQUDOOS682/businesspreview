@@ -116,6 +116,43 @@
               <%= f.check_box :subscription, class: "rounded border-slate-300 text-blue-600 focus:ring-blue-600" %>
             </div>
           </div>
+
+          <div class="sm:col-span-6 pt-4">
+            <div class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-4">
+              <h2 class="text-base font-semibold text-slate-900">Task Source Connection</h2>
+              <p class="mt-1 text-sm text-slate-600">Enable this business as an external app source for the Tasks page.</p>
+
+              <div class="mt-4 grid grid-cols-1 gap-x-6 gap-y-6 sm:grid-cols-6">
+                <div class="sm:col-span-3">
+                  <%= f.label :task_source_enabled, "Enable task sync", class: "block text-sm font-medium leading-6 text-slate-900" %>
+                  <div class="mt-2">
+                    <%= f.check_box :task_source_enabled, class: "rounded border-slate-300 text-blue-600 focus:ring-blue-600" %>
+                  </div>
+                </div>
+
+                <div class="sm:col-span-6">
+                  <%= f.label :task_base_url, "Task App Base URL", class: "block text-sm font-medium leading-6 text-slate-900" %>
+                  <div class="mt-2">
+                    <%= f.url_field :task_base_url, class: field_class, placeholder: "http://localhost:3001 or http://localhost:3001/admin/developer_tasks" %>
+                  </div>
+                </div>
+
+                <div class="sm:col-span-3">
+                  <%= f.label :task_endpoint_path, "Task Endpoint Path", class: "block text-sm font-medium leading-6 text-slate-900" %>
+                  <div class="mt-2">
+                    <%= f.text_field :task_endpoint_path, class: field_class, placeholder: "/api/developer_tasks" %>
+                  </div>
+                </div>
+
+                <div class="sm:col-span-3">
+                  <%= f.label :task_secret, "Task API Secret", class: "block text-sm font-medium leading-6 text-slate-900" %>
+                  <div class="mt-2">
+                    <%= f.text_field :task_secret, class: field_class, placeholder: "Enter shared secret" %>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div class="mt-8 flex items-center justify-end gap-x-6 border-t border-slate-900/10 pt-6">
