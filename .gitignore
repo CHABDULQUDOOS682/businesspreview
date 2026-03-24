@@ -35,3 +35,9 @@
 
 /app/assets/builds/*
 !/app/assets/builds/.keep
+
+# OS metadata and accidental local folders
+.DS_Store
+/app/.DS_Store
+/app/assets/.DS_Store
+/html\ 

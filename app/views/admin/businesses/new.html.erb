@@ -1,4 +1,5 @@
 <div class="max-w-2xl mx-auto mt-8">
+  <% field_class = "block w-full rounded-lg border-0 px-3 py-2.5 text-slate-900 shadow-sm ring-1 ring-inset ring-slate-300 placeholder:text-slate-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6" %>
   <div class="mb-8">
     <div class="flex items-center gap-x-3">
       <%= link_to admin_businesses_path, class: "text-slate-400 hover:text-slate-500 transition-colors" do %>
@@ -18,49 +19,49 @@
           <div class="sm:col-span-4">
             <%= f.label :name, "Business Name *", class: "block text-sm font-medium leading-6 text-slate-900" %>
             <div class="mt-2 text-slate-900">
-              <%= f.text_field :name, class: "block w-full rounded-md border-0 py-1.5 text-slate-900 shadow-sm ring-1 ring-inset ring-slate-300 placeholder:text-slate-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6" %>
+              <%= f.text_field :name, class: field_class %>
             </div>
           </div>
 
           <div class="sm:col-span-3">
             <%= f.label :city, "City", class: "block text-sm font-medium leading-6 text-slate-900" %>
             <div class="mt-2">
-              <%= f.text_field :city, class: "block w-full rounded-md border-0 py-1.5 text-slate-900 shadow-sm ring-1 ring-inset ring-slate-300 placeholder:text-slate-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6" %>
+              <%= f.text_field :city, class: field_class %>
             </div>
           </div>
 
           <div class="sm:col-span-3">
             <%= f.label :country, "Country", class: "block text-sm font-medium leading-6 text-slate-900" %>
             <div class="mt-2">
-              <%= f.text_field :country, class: "block w-full rounded-md border-0 py-1.5 text-slate-900 shadow-sm ring-1 ring-inset ring-slate-300 placeholder:text-slate-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6" %>
+              <%= f.text_field :country, class: field_class %>
             </div>
           </div>
 
           <div class="sm:col-span-6">
             <%= f.label :niche, "Niche / Industry", class: "block text-sm font-medium leading-6 text-slate-900" %>
             <div class="mt-2">
-              <%= f.text_field :niche, class: "block w-full rounded-md border-0 py-1.5 text-slate-900 shadow-sm ring-1 ring-inset ring-slate-300 placeholder:text-slate-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6", placeholder: "e.g. Real Estate, Dental, HVAC" %>
+              <%= f.text_field :niche, class: field_class, placeholder: "e.g. Real Estate, Dental, HVAC" %>
             </div>
           </div>
 
           <div class="sm:col-span-3">
             <%= f.label :phone, "Phone Number", class: "block text-sm font-medium leading-6 text-slate-900" %>
             <div class="mt-2">
-              <%= f.text_field :phone, class: "block w-full rounded-md border-0 py-1.5 text-slate-900 shadow-sm ring-1 ring-inset ring-slate-300 placeholder:text-slate-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6" %>
+              <%= f.text_field :phone, class: field_class %>
             </div>
           </div>
 
           <div class="sm:col-span-3">
             <%= f.label :rating, "Google Rating", class: "block text-sm font-medium leading-6 text-slate-900" %>
             <div class="mt-2">
-              <%= f.number_field :rating, step: 0.1, class: "block w-full rounded-md border-0 py-1.5 text-slate-900 shadow-sm ring-1 ring-inset ring-slate-300 placeholder:text-slate-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6", placeholder: "e.g. 4.5" %>
+              <%= f.number_field :rating, step: 0.1, class: field_class, placeholder: "e.g. 4.5" %>
             </div>
           </div>
 
           <div class="sm:col-span-6">
             <%= f.label :website, "Current Website URL", class: "block text-sm font-medium leading-6 text-slate-900" %>
             <div class="mt-2">
-              <%= f.text_field :website, class: "block w-full rounded-md border-0 py-1.5 text-slate-900 shadow-sm ring-1 ring-inset ring-slate-300 placeholder:text-slate-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6", placeholder: "https://" %>
+              <%= f.text_field :website, class: field_class, placeholder: "https://" %>
             </div>
           </div>
         </div>

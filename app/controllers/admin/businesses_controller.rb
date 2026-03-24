@@ -2,19 +2,17 @@ require "csv"
 
 class Admin::BusinessesController < ApplicationController
   layout "admin"
+
   def index
-    @businesses = Business.all
+    @segment = Business.normalize_segment(params[:segment])
+    @segment_counts = Business.segment_counts
 
-    @businesses = @businesses.where("LOWER(name) ILIKE LOWER(?)", "%#{params[:name]}%") if params[:name].present?
-    @businesses = @businesses.where(niche: params[:niche]) if params[:niche].present?
-    @businesses = @businesses.where(city: params[:city]) if params[:city].present?
-    @businesses = @businesses.where(country: params[:country]) if params[:country].present?
+    segment_scope = Business.for_segment(@segment)
+    @businesses = apply_filters(segment_scope).order(created_at: :desc)
 
-    @businesses = @businesses.order(created_at: :desc)
-
-    @niches = Business.where.not(niche: [ nil, "" ]).distinct.pluck(:niche).sort
-    @cities = Business.where.not(city: [ nil, "" ]).distinct.pluck(:city).sort
-    @countries = Business.where.not(country: [ nil, "" ]).distinct.pluck(:country).sort
+    @niches = segment_scope.where.not(niche: [ nil, "" ]).distinct.pluck(:niche).sort
+    @cities = segment_scope.where.not(city: [ nil, "" ]).distinct.pluck(:city).sort
+    @countries = segment_scope.where.not(country: [ nil, "" ]).distinct.pluck(:country).sort
   end
 
   def import
@@ -90,6 +88,14 @@ class Admin::BusinessesController < ApplicationController
   end
 
   private
+
+  def apply_filters(scope)
+    scope = scope.where("LOWER(name) ILIKE LOWER(?)", "%#{params[:name]}%") if params[:name].present?
+    scope = scope.where(niche: params[:niche]) if params[:niche].present?
+    scope = scope.where(city: params[:city]) if params[:city].present?
+    scope = scope.where(country: params[:country]) if params[:country].present?
+    scope
+  end
 
   def business_params
     params.require(:business)

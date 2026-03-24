@@ -1,5 +1,10 @@
 <% latest_msg = business.messages.order(created_at: :desc).first %>
 <% unread_count = business.messages.inbound.unread.count %>
+<% segment_badge_classes = case business.business_segment
+  when "subscriptions" then "bg-amber-50 text-amber-700 ring-amber-600/20"
+  when "purchased" then "bg-blue-50 text-blue-700 ring-blue-600/20"
+  else "bg-emerald-50 text-emerald-700 ring-emerald-600/20"
+end %>
 <li id="<%= dom_id(business, :conversation) %>">
   <%= link_to business.phone.present? ? admin_communication_path(business.phone) : "#", class: "block hover:bg-gray-50 #{'opacity-50 cursor-not-allowed' unless business.phone.present?}" do %>
     <div class="px-4 py-4 sm:px-6">
@@ -10,6 +15,9 @@
           </p>
           <span class="inline-flex w-fit max-w-full items-center rounded-md bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-600 break-all">
             <%= business.phone.presence || "No Phone" %>
+          </span>
+          <span class="inline-flex items-center rounded-md px-2 py-0.5 text-xs font-medium ring-1 ring-inset <%= segment_badge_classes %>">
+            <%= business.business_segment_label %>
           </span>
           <% if unread_count.positive? %>
             <span class="inline-flex items-center gap-2">

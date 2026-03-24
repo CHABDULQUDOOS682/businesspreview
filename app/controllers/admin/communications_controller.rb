@@ -4,8 +4,9 @@ class Admin::CommunicationsController < ApplicationController
   def index
     # We want to show all businesses and their latest message if any
     # Plus any conversations that aren't linked to a business yet
-
-    @businesses = Business.all.order(name: :asc)
+    @segment = Business.normalize_segment(params[:segment])
+    @segment_counts = Business.segment_counts
+    @businesses = Business.for_segment(@segment).order(name: :asc)
 
     # Get latest message for each number that isn't already associated with a business
     @standalone_conversations = Message.where(business_id: nil)
