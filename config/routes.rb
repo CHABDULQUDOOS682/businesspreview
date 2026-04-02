@@ -1,6 +1,12 @@
 Rails.application.routes.draw do
   devise_for :users
-  root "admin/dashboard#index"
+  # root "admin/dashboard#index"
+  root "home_pages#index"
+  get "services", to: "home_pages#services"
+  get "process", to: "home_pages#workflow"
+  get "contact", to: "home_pages#contact"
+  get "privacy", to: "home_pages#privacy"
+
   get "landing_pages/show"
   get "/lp/:uuid", to: "landing_pages#show", as: :landing_page
 
@@ -8,6 +14,7 @@ Rails.application.routes.draw do
     get "dashboard/index"
     root "dashboard#index"
     resources :tasks, only: [ :index, :update ]
+    resources :notes, only: [ :create, :edit, :update, :destroy ]
     resources :businesses do
       collection do
         post :import

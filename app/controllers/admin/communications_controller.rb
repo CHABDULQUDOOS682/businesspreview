@@ -6,7 +6,7 @@ class Admin::CommunicationsController < ApplicationController
     # Plus any conversations that aren't linked to a business yet
     @segment = Business.normalize_segment(params[:segment])
     @segment_counts = Business.segment_counts
-    @businesses = Business.for_segment(@segment).order(name: :asc)
+    @pagy, @businesses = pagy(Business.for_segment(@segment).order(name: :asc))
 
     # Get latest message for each number that isn't already associated with a business
     @standalone_conversations = Message.where(business_id: nil)

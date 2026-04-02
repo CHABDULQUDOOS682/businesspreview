@@ -1,9 +1,9 @@
 <%= turbo_stream_from "conversation:#{@conversation_key}" if @conversation_key.present? %>
-<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 h-[calc(100vh-64px)] flex flex-col" 
+<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 h-[calc(100vh-64px)] flex flex-col"
      data-controller="twilio-call chat-scroll"
      data-action="turbo:load@window->chat-scroll#scrollToBottom turbo:render@window->chat-scroll#scrollToBottom"
      data-twilio-call-phone-number-value="<%= @number %>">
-  
+
   <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mb-3 sm:mb-4 flex-shrink-0 px-4 sm:px-6 lg:px-8">
     <div class="min-w-0">
       <h2 class="text-xl sm:text-2xl font-bold leading-tight text-gray-900 break-words">
@@ -14,7 +14,7 @@
         <span class="text-xs font-semibold px-2 py-0.5 rounded-full bg-gray-100 text-gray-600" data-twilio-call-target="status">Initializing...</span>
       </div>
     </div>
-    
+
     <div class="flex w-full sm:w-auto gap-2 sm:gap-3">
       <!-- Browser Call Button -->
       <button type="button" 
@@ -40,34 +40,46 @@
     </div>
   </div>
 
-  <div id="messages" class="flex-1 min-h-0 overflow-y-auto bg-gray-50 p-4 rounded-lg shadow-inner mb-4" data-chat-scroll-target="list">
-    <div id="message_list" class="space-y-4">
-      <%= render partial: "admin/communications/message",
-                 collection: @messages,
-                 as: :msg,
-                 locals: { conversation_key: @conversation_key, last_inbound_at: @last_inbound_at } %>
-    </div>
-    <div data-chat-scroll-target="bottom"></div>
-  </div>
+  <div class="flex-1 min-h-0 flex flex-col lg:flex-row lg:gap-6 mt-2">
+    <!-- Messages column -->
+    <div class="flex-1 flex flex-col">
+      <div id="messages" class="flex-1 min-h-0 overflow-y-auto bg-gray-50 p-4 rounded-lg shadow-inner mb-4" data-chat-scroll-target="list">
+        <div id="message_list" class="space-y-4">
+          <%= render partial: "admin/communications/message",
+                     collection: @messages,
+                     as: :msg,
+                     locals: { conversation_key: @conversation_key, last_inbound_at: @last_inbound_at } %>
+        </div>
+        <div data-chat-scroll-target="bottom"></div>
+      </div>
 
-  <div class="flex-shrink-0 sticky bottom-0 bg-slate-50/95 backdrop-blur border-t border-slate-200 px-4 sm:px-6 lg:px-8 pt-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))]">
-    <%= form_with url: admin_communications_path, method: :post, class: "relative" do |f| %>
-      <%= f.hidden_field :to_number, value: @number %>
-      <%= f.hidden_field :business_id, value: @business&.id %>
-      <div class="flex items-end gap-2">
-        <%= f.text_area :body,
-                        rows: 1,
-                        class: "block w-full rounded-2xl border border-slate-300 bg-white shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm py-3 px-4 resize-none min-h-11 max-h-36",
-                        placeholder: "Type your message..." %>
-        <button
-          type="submit"
-          class="flex-shrink-0 inline-flex h-11 w-11 items-center justify-center rounded-xl border border-transparent text-sm font-medium shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-          aria-label="Send message"
-        >
-          <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
-          </svg>
-        </button>
+      <div class="flex-shrink-0 sticky bottom-0 bg-slate-50/95 backdrop-blur border-t border-slate-200 px-4 sm:px-6 lg:px-8 pt-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))]">
+        <%= form_with url: admin_communications_path, method: :post, class: "relative" do |f| %>
+          <%= f.hidden_field :to_number, value: @number %>
+          <%= f.hidden_field :business_id, value: @business&.id %>
+          <div class="flex items-end gap-2">
+            <%= f.text_area :body,
+                            rows: 1,
+                            class: "block w-full rounded-2xl border border-slate-300 bg-white shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm py-3 px-4 resize-none min-h-11 max-h-36",
+                            placeholder: "Type your message..." %>
+            <button
+              type="submit"
+              class="flex-shrink-0 inline-flex h-11 w-11 items-center justify-center rounded-xl border border-transparent text-sm font-medium shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              aria-label="Send message"
+            >
+              <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
+              </svg>
+            </button>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <!-- Notes column -->
+    <% if @business %>
+      <div class="mt-4 lg:mt-0 lg:w-80 flex-shrink-0">
+        <%= render "admin/notes/notes_panel", business: @business %>
       </div>
     <% end %>
   </div>

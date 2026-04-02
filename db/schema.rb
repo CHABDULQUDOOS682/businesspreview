@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_03_25_090000) do
+ActiveRecord::Schema[8.0].define(version: 2026_03_30_090000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -51,6 +51,14 @@ ActiveRecord::Schema[8.0].define(version: 2026_03_25_090000) do
     t.index ["read_at"], name: "index_messages_on_read_at"
   end
 
+  create_table "notes", force: :cascade do |t|
+    t.bigint "business_id", null: false
+    t.text "body", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["business_id"], name: "index_notes_on_business_id"
+  end
+
   create_table "preview_links", force: :cascade do |t|
     t.bigint "business_id", null: false
     t.string "template"
@@ -78,5 +86,6 @@ ActiveRecord::Schema[8.0].define(version: 2026_03_25_090000) do
   end
 
   add_foreign_key "messages", "businesses"
+  add_foreign_key "notes", "businesses"
   add_foreign_key "preview_links", "businesses"
 end
