@@ -15,6 +15,7 @@ class Admin::TasksController < ApplicationController
     @tasks = @tasks.select { |task| task.source_key == @source_filter } if @source_filter.present?
     @tasks = @tasks.select { |task| task.status == @status_filter } if @status_filter.present?
     @tasks = @tasks.select { |task| task_matches_query?(task, @query) } if @query.present?
+    @pagy, @tasks = pagy_array(@tasks)
   end
 
   def update

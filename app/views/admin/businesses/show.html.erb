@@ -1,15 +1,17 @@
-<div>
-  <div class="md:flex md:items-center md:justify-between mb-8">
+<% content_for :page_header do %>
+  <div class="md:flex md:items-center md:justify-between">
     <div class="min-w-0 flex-1">
       <div class="flex items-center gap-x-3 text-sm text-slate-500 mb-1">
         <%= link_to "Businesses", admin_businesses_path, class: "hover:text-slate-700" %>
         <svg viewBox="0 0 2 2" class="h-0.5 w-0.5 fill-current"><circle cx="1" cy="1" r="1" /></svg>
         <span>Business Details</span>
       </div>
-      <h2 class="text-2xl font-bold leading-7 text-slate-900 sm:truncate sm:text-3xl sm:tracking-tight py-4"><%= @business.name %></h2>
+      <h2 class="text-2xl font-bold leading-7 text-slate-900 sm:truncate"><%= @business.name %></h2>
     </div>
   </div>
+<% end %>
 
+<div>
   <div class="grid grid-cols-1 items-start gap-x-8 gap-y-8 lg:grid-cols-3">
     <!-- Left column - Business Details -->
     <div class="lg:col-span-1 space-y-8">
@@ -144,7 +146,7 @@
       </div>
     </div>
 
-    <!-- Right column - Preview Links -->
+    <!-- Right column - Preview Links + Notes -->
     <div class="lg:col-span-2 space-y-8">
       
       <!-- Generate new link form -->
@@ -221,6 +223,9 @@
           </table>
         </div>
       </div>
+
+      <!-- Notes Panel -->
+      <%= render "admin/notes/notes_panel", business: @business %>
     </div>
   </div>
 </div>

@@ -11,17 +11,19 @@
   filter_select_class = "mt-1 block w-full rounded-lg border-0 px-3 py-2.5 text-slate-900 shadow-sm ring-1 ring-inset ring-slate-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
 %>
 
-<div class="sm:flex sm:items-start sm:justify-between">
-  <div class="sm:flex-auto">
-    <h1 class="text-2xl font-semibold leading-6 text-slate-900">Businesses</h1>
-    <p class="mt-2 text-sm text-slate-700">
-      Manage your pipeline by lifecycle stage, with neutral leads, one-time website sales, and active subscriptions in one place.
-    </p>
+<% content_for :page_header do %>
+  <div class="sm:flex sm:items-start sm:justify-between">
+    <div class="sm:flex-auto">
+      <h1 class="text-2xl font-semibold leading-6 text-slate-900">Businesses</h1>
+      <p class="mt-1 text-sm text-slate-600">
+        Manage your pipeline by lifecycle stage, with neutral leads, one-time website sales, and active subscriptions.
+      </p>
+    </div>
+    <div class="mt-3 sm:mt-0 sm:flex-none">
+      <%= link_to "Add business", new_admin_business_path, class: "block rounded-md bg-blue-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-blue-500" %>
+    </div>
   </div>
-  <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
-    <%= link_to "Add business", new_admin_business_path, class: "block rounded-md bg-blue-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600" %>
-  </div>
-</div>
+<% end %>
 
 <div class="mt-6 bg-white px-4 py-4 shadow-sm ring-1 ring-slate-900/5 sm:rounded-xl sm:px-6">
   <%= render "admin/shared/business_segment_tabs", tabs: tabs, current_segment: @segment %>
@@ -122,6 +124,11 @@
           </tbody>
         </table>
       </div>
+      <% if @pagy.pages > 1 %>
+        <div class="mt-4 flex justify-end">
+          <%== pagy_nav(@pagy) %>
+        </div>
+      <% end %>
     </div>
   </div>
 </div>

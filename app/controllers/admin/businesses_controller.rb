@@ -8,7 +8,7 @@ class Admin::BusinessesController < ApplicationController
     @segment_counts = Business.segment_counts
 
     segment_scope = Business.for_segment(@segment)
-    @businesses = apply_filters(segment_scope).order(created_at: :desc)
+    @pagy, @businesses = pagy(apply_filters(segment_scope).order(created_at: :desc))
 
     @niches = segment_scope.where.not(niche: [ nil, "" ]).distinct.pluck(:niche).sort
     @cities = segment_scope.where.not(city: [ nil, "" ]).distinct.pluck(:city).sort
