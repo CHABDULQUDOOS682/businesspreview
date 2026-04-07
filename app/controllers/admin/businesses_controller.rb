@@ -4,7 +4,7 @@ class Admin::BusinessesController < ApplicationController
   layout "admin"
 
   def index
-    @segment = Business.normalize_segment(params[:segment])
+    @segment = employee_role? ? "nurture" : Business.normalize_segment(params[:segment])
     @segment_counts = Business.segment_counts
 
     segment_scope = Business.for_segment(@segment)

@@ -23,7 +23,6 @@
 <% end %>
 
 <div class="mt-6 bg-white px-4 py-4 shadow-sm ring-1 ring-slate-900/5 sm:rounded-xl sm:px-6">
-  <%= render "admin/shared/business_segment_tabs", tabs: tabs, current_segment: @segment %>
 
   <div class="mt-5">
     <%= form_with url: admin_businesses_path, method: :get, local: true, class: "grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-5 items-end" do |f| %>
@@ -67,10 +66,8 @@
           <thead class="bg-slate-50">
             <tr>
               <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-slate-900 sm:pl-6">Business Name</th>
-              <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-slate-900">Status</th>
               <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-slate-900">City & Country</th>
               <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-slate-900">Niche</th>
-              <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-slate-900">Total Visits</th>
               <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6">
                 <span class="sr-only">View</span>
               </th>
@@ -82,23 +79,8 @@
                 <td class="py-4 pl-4 pr-3 text-sm font-medium text-slate-900 sm:pl-6">
                   <div class="max-w-xs break-words"><%= b.name %></div>
                 </td>
-                <td class="whitespace-nowrap px-3 py-4 text-sm text-slate-500">
-                  <% badge_classes = case b.business_segment
-                    when "subscriptions" then "bg-amber-50 text-amber-700 ring-amber-600/20"
-                    when "purchased" then "bg-blue-50 text-blue-700 ring-blue-600/20"
-                    else "bg-emerald-50 text-emerald-700 ring-emerald-600/20"
-                  end %>
-                  <span class="inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset <%= badge_classes %>">
-                    <%= b.business_segment_label %>
-                  </span>
-                </td>
                 <td class="px-3 py-4 text-sm text-slate-500"><%= [b.city, b.country].compact.join(", ").presence || "Unknown" %></td>
                 <td class="px-3 py-4 text-sm text-slate-500"><%= b.niche.presence || "-" %></td>
-                <td class="whitespace-nowrap px-3 py-4 text-sm text-slate-500">
-                  <span class="<%= b.visit_count.to_i > 0 ? 'inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20' : 'text-slate-500' %>">
-                    <%= b.visit_count %>
-                  </span>
-                </td>
                 <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
                   <%= link_to "View<span class='sr-only'>, #{b.name}</span>".html_safe, admin_business_path(b), class: "text-blue-600 hover:text-blue-900" %>
                 </td>

@@ -4,7 +4,7 @@ class Admin::CommunicationsController < ApplicationController
   def index
     # We want to show all businesses and their latest message if any
     # Plus any conversations that aren't linked to a business yet
-    @segment = Business.normalize_segment(params[:segment])
+    @segment = employee_role? ? "nurture" : Business.normalize_segment(params[:segment])
     @segment_counts = Business.segment_counts
     @pagy, @businesses = pagy(Business.for_segment(@segment).order(name: :asc))
 

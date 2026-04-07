@@ -62,15 +62,6 @@
   </div>
 </div>
 
-<div class="mt-6 bg-white p-4 shadow-sm ring-1 ring-slate-900/5 sm:rounded-xl sm:p-6">
-  <h2 class="text-sm font-semibold leading-6 text-slate-900 mb-2">Import businesses from CSV</h2>
-  <p class="text-xs text-slate-500 mb-4">Headers: name, city, country, niche, phone, rating, website</p>
-  <%= form_with url: import_admin_businesses_path, method: :post, local: true, html: { multipart: true }, class: "flex flex-col gap-3 lg:flex-row lg:items-center" do %>
-    <input type="file" name="file" accept=".csv,text/csv" class="block w-full rounded-lg border border-slate-300 bg-slate-50 px-3 py-2.5 text-sm text-slate-900 file:mr-4 file:rounded-md file:border-0 file:bg-blue-600 file:px-3 file:py-2 file:text-sm file:font-semibold file:text-white hover:file:bg-blue-500" />
-    <%= submit_tag "Upload CSV", class: "rounded-md bg-blue-600 px-3 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-500" %>
-  <% end %>
-</div>
-
 <div class="mt-8 flow-root">
   <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
     <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
