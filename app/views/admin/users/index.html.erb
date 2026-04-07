@@ -1,0 +1,85 @@
+<div class="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+  <div>
+    <h1 class="text-3xl font-bold tracking-tight text-slate-900">Team</h1>
+    <p class="mt-2 text-sm text-slate-600">
+      <%= current_user.role_super_admin? ? "Create and review admin and employee accounts." : "Create and review employee accounts." %>
+    </p>
+  </div>
+
+  <%= link_to "Create user", new_admin_user_path, class: "inline-flex items-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500" %>
+</div>
+
+<div class="overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-slate-900/5">
+  <table class="min-w-full divide-y divide-slate-200">
+    <thead class="bg-slate-50">
+      <tr>
+        <th class="px-4 py-3.5 text-left text-sm font-semibold text-slate-900">Email</th>
+        <th class="px-4 py-3.5 text-left text-sm font-semibold text-slate-900">Role</th>
+        <th class="px-4 py-3.5 text-left text-sm font-semibold text-slate-900">Status</th>
+        <th class="px-4 py-3.5 text-left text-sm font-semibold text-slate-900">Created</th>
+        <th class="px-4 py-3.5 text-right text-sm font-semibold text-slate-900">Actions</th>
+      </tr>
+    </thead>
+    <tbody class="divide-y divide-slate-200 bg-white">
+      <% @users.each do |user| %>
+        <tr class="hover:bg-slate-50">
+          <td class="px-4 py-4 text-sm text-slate-900">
+            <div class="flex items-center gap-2">
+              <span><%= user.email %></span>
+              <% if user == current_user %>
+                <span class="inline-flex items-center rounded-full bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-600 ring-1 ring-inset ring-slate-200">You</span>
+              <% end %>
+            </div>
+          </td>
+          <td class="px-4 py-4 text-sm text-slate-600">
+            <% badge_classes = case user.role
+              when "super_admin" then "bg-purple-50 text-purple-700 ring-purple-200"
+              when "admin" then "bg-blue-50 text-blue-700 ring-blue-200"
+              else "bg-emerald-50 text-emerald-700 ring-emerald-200"
+            end %>
+            <span class="inline-flex items-center rounded-full px-2.5 py-1 text-xs font-medium ring-1 ring-inset <%= badge_classes %>">
+              <%= user.role.humanize %>
+            </span>
+          </td>
+          <td class="px-4 py-4 text-sm text-slate-600">
+            <% status_badge_classes = user.active? ? "bg-emerald-50 text-emerald-700 ring-emerald-200" : "bg-amber-50 text-amber-700 ring-amber-200" %>
+            <span class="inline-flex items-center rounded-full px-2.5 py-1 text-xs font-medium ring-1 ring-inset <%= status_badge_classes %>">
+              <%= user.active? ? "Active" : "Inactive" %>
+            </span>
+          </td>
+          <td class="px-4 py-4 text-sm text-slate-500"><%= l(user.created_at, format: :short) %></td>
+          <td class="px-4 py-4 text-right text-sm">
+            <div class="flex justify-end gap-2">
+              <% if current_user.can_manage?(user) %>
+                <% if user.active? %>
+                  <%= button_to "Deactivate",
+                                toggle_status_admin_user_path(user),
+                                method: :patch,
+                                class: "rounded-md bg-white px-3 py-1.5 text-xs font-semibold text-slate-900 shadow-sm ring-1 ring-inset ring-slate-300 hover:bg-slate-50" %>
+                <% else %>
+                  <%= button_to "Resend invite",
+                                resend_invite_admin_user_path(user),
+                                method: :post,
+                                class: "rounded-md bg-blue-50 px-3 py-1.5 text-xs font-semibold text-blue-700 shadow-sm ring-1 ring-inset ring-blue-200 hover:bg-blue-100" %>
+                <% end %>
+                <%= button_to "Delete",
+                              admin_user_path(user),
+                              method: :delete,
+                              data: { turbo_confirm: "Delete #{user.email}?" },
+                              class: "rounded-md bg-red-50 px-3 py-1.5 text-xs font-semibold text-red-700 shadow-sm ring-1 ring-inset ring-red-200 hover:bg-red-100" %>
+              <% else %>
+                <span class="text-xs text-slate-400">No actions</span>
+              <% end %>
+            </div>
+          </td>
+        </tr>
+      <% end %>
+
+      <% if @users.empty? %>
+        <tr>
+          <td colspan="5" class="px-4 py-10 text-center text-sm text-slate-500">No users found.</td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

@@ -1,0 +1,160 @@
+<div class="rounded-2xl bg-gradient-to-r from-slate-900 via-slate-800 to-blue-900 px-5 py-6 text-white shadow-sm">
+  <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+    <div>
+      <p class="text-sm font-medium text-blue-100"><%= current_role_label %> workspace</p>
+      <h1 class="mt-2 text-3xl font-bold tracking-tight">Admin Dashboard</h1>
+      <p class="mt-2 max-w-2xl text-sm text-slate-200">Run the workspace day to day, monitor activity, and manage employees.</p>
+    </div>
+
+    <div class="rounded-2xl bg-white/10 px-4 py-4 backdrop-blur">
+      <p class="text-xs font-medium uppercase tracking-[0.18em] text-blue-100">Team Access</p>
+      <p class="mt-2 text-2xl font-semibold text-white"><%= @manageable_user_count %></p>
+      <p class="mt-1 text-sm text-slate-200">Employees you can manage</p>
+    </div>
+  </div>
+</div>
+
+<div class="mt-6 sm:flex sm:items-center sm:justify-between">
+  <div>
+    <h2 class="text-2xl font-bold tracking-tight text-slate-900">Overview</h2>
+    <p class="mt-1 text-sm text-slate-600">Key activity across outreach, conversations, prototypes, and employee access.</p>
+  </div>
+  <div class="mt-3 sm:mt-0">
+    <%= link_to new_admin_business_path, class: "inline-flex items-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500" do %>
+      <svg class="-ml-0.5 mr-1.5 h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+        <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
+      </svg>
+      Add Business
+    <% end %>
+  </div>
+</div>
+
+<dl class="mx-auto mb-10 grid grid-cols-1 gap-px overflow-hidden rounded-2xl bg-slate-900/5 shadow-sm ring-1 ring-slate-900/5 sm:grid-cols-2 lg:grid-cols-4">
+  <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-2 bg-white px-4 py-10 sm:px-6 xl:px-8">
+    <dt class="text-sm font-medium leading-6 text-slate-500">Total Businesses</dt>
+    <dd class="w-full flex-none text-3xl font-bold leading-10 tracking-tight text-slate-900"><%= @business_count %></dd>
+  </div>
+  <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-2 bg-white px-4 py-10 sm:px-6 xl:px-8">
+    <dt class="text-sm font-medium leading-6 text-slate-500">Links generated</dt>
+    <dd class="w-full flex-none text-3xl font-bold leading-10 tracking-tight text-slate-900"><%= @preview_count %></dd>
+  </div>
+  <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-2 bg-white px-4 py-10 sm:px-6 xl:px-8">
+    <dt class="text-sm font-medium leading-6 text-slate-500">Total Clicks</dt>
+    <dd class="w-full flex-none text-3xl font-bold leading-10 tracking-tight text-blue-600"><%= @total_visits %></dd>
+  </div>
+  <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-2 bg-white px-4 py-10 sm:px-6 xl:px-8">
+    <dt class="text-sm font-medium leading-6 text-slate-500">Unread Messages</dt>
+    <dd id="unread_inbound_count" class="w-full flex-none text-3xl font-bold leading-10 tracking-tight text-green-600">
+      <%= render partial: "admin/dashboard/unread_inbound_count", locals: { count: @unread_inbound_count } %>
+    </dd>
+  </div>
+</dl>
+
+<dl class="mx-auto mb-10 grid grid-cols-1 gap-px overflow-hidden rounded-2xl bg-slate-900/5 shadow-sm ring-1 ring-slate-900/5 sm:grid-cols-2">
+  <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-2 bg-white px-4 py-8 sm:px-6">
+    <dt class="text-sm font-medium leading-6 text-slate-500">Employees</dt>
+    <dd class="w-full flex-none text-3xl font-bold leading-10 tracking-tight text-emerald-600"><%= @employee_count %></dd>
+  </div>
+</dl>
+
+<div class="mb-8 bg-white shadow-sm ring-1 ring-slate-900/5 sm:rounded-xl">
+  <div class="border-b border-slate-200 px-4 py-5 sm:px-6">
+    <h3 class="text-base font-semibold leading-6 text-slate-900">Available Templates</h3>
+  </div>
+  <div class="max-h-48 overflow-y-auto px-4 py-5 sm:p-6">
+    <div class="flex flex-wrap gap-2">
+      <% @templates.each do |template| %>
+        <%= link_to admin_template_preview_path(template), target: "_blank", class: "inline-flex items-center gap-x-1.5 rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10 hover:bg-blue-100 transition-colors" do %>
+          <svg class="h-1.5 w-1.5 fill-blue-500" viewBox="0 0 6 6" aria-hidden="true"><circle cx="3" cy="3" r="3" /></svg>
+          <%= template.titleize %>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<div class="grid grid-cols-1 gap-8 lg:grid-cols-2">
+  <div class="bg-white shadow-sm ring-1 ring-slate-900/5 sm:rounded-xl">
+    <div class="border-b border-slate-200 px-4 py-5 sm:px-6 flex justify-between items-center">
+      <h3 class="text-base font-semibold leading-6 text-slate-900">Recent Engagement</h3>
+    </div>
+    <ul role="list" class="divide-y divide-slate-100">
+      <% if @recent_clicks.any? %>
+        <% @recent_clicks.each do |link| %>
+          <li class="flex items-center justify-between gap-x-6 px-4 py-5 sm:px-6 hover:bg-slate-50 transition-colors">
+            <div class="min-w-0 flex-1">
+              <div class="mb-1 flex items-start gap-x-3">
+                <p class="text-sm font-semibold leading-6 text-slate-900"><%= link.business.name %></p>
+                <p class="mt-0.5 rounded-md bg-green-50 px-1.5 py-0.5 text-xs font-medium whitespace-nowrap text-green-700 ring-1 ring-inset ring-green-600/20">Clicked on <%= link.template %></p>
+              </div>
+              <p class="text-xs leading-5 text-slate-500"><%= time_ago_in_words(link.clicked_at) %> ago</p>
+            </div>
+            <div class="flex flex-none items-center gap-x-4">
+              <%= link_to "View", admin_business_path(link.business), class: "rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-slate-900 shadow-sm ring-1 ring-inset ring-slate-300 hover:bg-slate-50" %>
+            </div>
+          </li>
+        <% end %>
+      <% else %>
+        <li class="px-4 py-8 text-center text-sm text-slate-500">No clicks tracked yet. Send out some links!</li>
+      <% end %>
+    </ul>
+  </div>
+
+  <div class="bg-white shadow-sm ring-1 ring-slate-900/5 sm:rounded-xl">
+    <div class="border-b border-slate-200 px-4 py-5 sm:px-6 flex justify-between items-center">
+      <h3 class="text-base font-semibold leading-6 text-slate-900">Recent Businesses</h3>
+      <%= link_to "View all", admin_businesses_path, class: "text-sm font-semibold text-blue-600 hover:text-blue-500" %>
+    </div>
+    <ul role="list" class="divide-y divide-slate-100">
+      <% if @recent_businesses.any? %>
+        <% @recent_businesses.each do |business| %>
+          <li class="flex items-center justify-between gap-x-6 px-4 py-5 sm:px-6 hover:bg-slate-50 transition-colors">
+            <div class="min-w-0 relative flex-1">
+              <p class="mb-1 text-sm font-semibold leading-6 text-slate-900">
+                <%= link_to business.name, admin_business_path(business) %>
+              </p>
+              <div class="flex items-center gap-x-2 text-xs leading-5 text-slate-500">
+                <p class="truncate"><%= business.niche.presence || "No niche" %></p>
+                <% if business.city.present? %>
+                  <svg viewBox="0 0 2 2" class="h-0.5 w-0.5 fill-current"><circle cx="1" cy="1" r="1" /></svg>
+                  <p class="truncate"><%= business.city %></p>
+                <% end %>
+              </div>
+            </div>
+          </li>
+        <% end %>
+      <% else %>
+        <li class="px-4 py-8 text-center text-sm text-slate-500">No businesses added yet.</li>
+      <% end %>
+    </ul>
+  </div>
+</div>
+
+<div class="mt-8 bg-white shadow-sm ring-1 ring-slate-900/5 sm:rounded-xl">
+  <div class="border-b border-slate-200 px-4 py-5 sm:px-6 flex items-center justify-between">
+    <h3 class="text-base font-semibold leading-6 text-slate-900">Recent Team Accounts</h3>
+    <%= link_to "Manage users", admin_users_path, class: "text-sm font-semibold text-blue-600 hover:text-blue-500" %>
+  </div>
+  <ul role="list" class="divide-y divide-slate-100">
+    <% if @recent_users.any? %>
+      <% @recent_users.each do |user| %>
+        <li class="flex items-center justify-between gap-x-6 px-4 py-5 sm:px-6 hover:bg-slate-50 transition-colors">
+          <div class="min-w-0 flex-1">
+            <p class="text-sm font-semibold leading-6 text-slate-900"><%= user.email %></p>
+            <p class="mt-1 text-xs text-slate-500">Created <%= time_ago_in_words(user.created_at) %> ago</p>
+          </div>
+          <% badge_classes = case user.role
+            when "super_admin" then "bg-purple-50 text-purple-700 ring-purple-200"
+            when "admin" then "bg-blue-50 text-blue-700 ring-blue-200"
+            else "bg-emerald-50 text-emerald-700 ring-emerald-200"
+          end %>
+          <span class="inline-flex items-center rounded-full px-2.5 py-1 text-xs font-medium ring-1 ring-inset <%= badge_classes %>">
+            <%= user.role.humanize %>
+          </span>
+        </li>
+      <% end %>
+    <% else %>
+      <li class="px-4 py-8 text-center text-sm text-slate-500">No team accounts created yet.</li>
+    <% end %>
+  </ul>
+</div>

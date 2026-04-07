@@ -1,0 +1,29 @@
+<% field_class = "mt-1 block w-full rounded-lg border-0 px-3 py-2.5 text-slate-900 shadow-sm ring-1 ring-inset ring-slate-300 placeholder:text-slate-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6" %>
+
+<%= form_with model: @user, url: admin_users_path, local: true, class: "space-y-6" do |f| %>
+  <%= render "devise/shared/error_messages", resource: @user %>
+
+  <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+    <div class="sm:col-span-2">
+      <%= f.label :email, class: "block text-sm font-medium leading-6 text-slate-900" %>
+      <%= f.email_field :email, autofocus: true, class: field_class, placeholder: "name@example.com" %>
+    </div>
+
+    <div class="sm:col-span-2">
+      <%= f.label :role, class: "block text-sm font-medium leading-6 text-slate-900" %>
+      <%= f.select :role,
+                   options_for_select(current_user.manageable_roles.map { |role| [ role.humanize, role ] }, @user.role),
+                   {},
+                   class: field_class %>
+    </div>
+  </div>
+
+  <div class="rounded-xl border border-blue-100 bg-blue-50 px-4 py-4 text-sm text-blue-900">
+    The user will receive an email with a secure link to set their password. Their account stays inactive until they finish password setup.
+  </div>
+
+  <div class="flex items-center justify-end gap-3 border-t border-slate-200 pt-6">
+    <%= link_to "Cancel", admin_users_path, class: "rounded-md bg-white px-3 py-2 text-sm font-semibold text-slate-900 shadow-sm ring-1 ring-inset ring-slate-300 hover:bg-slate-50" %>
+    <%= f.submit "Send invite", class: "rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500" %>
+  </div>
+<% end %>

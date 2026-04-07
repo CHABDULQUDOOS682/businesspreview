@@ -1,0 +1,224 @@
+<% content_for :page_header do %>
+  <div class="md:flex md:items-center md:justify-between">
+    <div class="min-w-0 flex-1">
+      <div class="flex items-center gap-x-3 text-sm text-slate-500 mb-1">
+        <%= link_to "Businesses", admin_businesses_path, class: "hover:text-slate-700" %>
+        <svg viewBox="0 0 2 2" class="h-0.5 w-0.5 fill-current"><circle cx="1" cy="1" r="1" /></svg>
+        <span>Business Details</span>
+      </div>
+      <h2 class="text-2xl font-bold leading-7 text-slate-900 sm:truncate"><%= @business.name %></h2>
+    </div>
+  </div>
+<% end %>
+
+<div>
+  <div class="grid grid-cols-1 items-start gap-x-8 gap-y-8 lg:grid-cols-3">
+    <div class="lg:col-span-1 space-y-8">
+      <div class="bg-white shadow-sm ring-1 ring-slate-900/5 sm:rounded-xl p-6">
+        <dt class="text-sm font-medium leading-6 text-slate-500">Total Pipeline Visits</dt>
+        <dd class="mt-2 text-3xl font-bold tracking-tight text-blue-600"><%= @business.visit_count %></dd>
+      </div>
+
+      <div class="bg-white px-4 py-5 shadow-sm ring-1 ring-slate-900/5 sm:rounded-xl sm:px-6">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-base font-semibold leading-6 text-slate-900">Profile</h3>
+          <div class="flex gap-x-2">
+            <% if @business.phone.present? %>
+              <%= link_to admin_communication_path(@business.phone), class: "rounded-md bg-green-600 px-3 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-green-500" do %>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 inline-block mr-1">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 8.25h9m-9 3h9m-9 3h9m-6.75-12.75H18a2.25 2.25 0 0 1 2.25 2.25v9a2.25 2.25 0 0 1-2.25 2.25H6.75A2.25 2.25 0 0 1 4.5 15.75v-9a2.25 2.25 0 0 1 2.25-2.25h1.5m.75-3l3 3m0 0l3-3m-3 3v7.5" />
+                </svg>
+                Chat
+              <% end %>
+            <% end %>
+            <%= link_to "Edit", edit_admin_business_path(@business), class: "rounded-md bg-blue-600 px-3 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-500" %>
+          </div>
+        </div>
+        <dl class="space-y-4 text-sm leading-6">
+          <div class="flex justify-between gap-x-4 border-b border-slate-100 pb-4">
+            <dt class="text-slate-500">Industry / Niche</dt>
+            <dd class="text-slate-900 font-medium"><%= @business.niche.presence || "-" %></dd>
+          </div>
+          <div class="flex justify-between gap-x-4 border-b border-slate-100 pb-4">
+            <dt class="text-slate-500">Location</dt>
+            <dd class="text-slate-900 font-medium"><%= [@business.city, @business.country].compact.join(", ").presence || "-" %></dd>
+          </div>
+          <div class="flex justify-between gap-x-4 border-b border-slate-100 pb-4">
+            <dt class="text-slate-500">Phone</dt>
+            <dd class="text-slate-900 font-medium"><%= @business.phone.presence || "-" %></dd>
+          </div>
+          <div class="flex justify-between gap-x-4 border-b border-slate-100 pb-4">
+            <dt class="text-slate-500">Google Rating</dt>
+            <dd class="text-slate-900 font-medium"><%= @business.rating.presence || "-" %></dd>
+          </div>
+          <div class="flex justify-between gap-x-4 border-b border-slate-100 pb-4">
+            <dt class="text-slate-500">Owner Name</dt>
+            <dd class="text-slate-900 font-medium"><%= @business.try(:owner_name).presence || "-" %></dd>
+          </div>
+          <div class="flex justify-between gap-x-4 border-b border-slate-100 pb-4">
+            <dt class="text-slate-500">Email</dt>
+            <dd class="text-slate-900 font-medium">
+              <% if @business.try(:email).present? %>
+                <%= mail_to @business.email, @business.email, class: "text-blue-600 hover:text-blue-500" %>
+              <% else %>
+                -
+              <% end %>
+            </dd>
+          </div>
+          <div class="flex justify-between gap-x-4 border-b border-slate-100 pb-4">
+            <dt class="text-slate-500">Website Name</dt>
+            <dd class="text-slate-900 font-medium"><%= @business.try(:website_name).presence || "-" %></dd>
+          </div>
+          <div class="flex justify-between gap-x-4 border-b border-slate-100 pb-4">
+            <dt class="text-slate-500">Website URL</dt>
+            <dd class="text-slate-900 font-medium">
+              <% if @business.try(:website_url).present? %>
+                <%= link_to "Visit Site", @business.website_url, target: "_blank", class: "text-blue-600 hover:text-blue-500" %>
+              <% else %>
+                -
+              <% end %>
+            </dd>
+          </div>
+          <div class="flex justify-between gap-x-4 border-b border-slate-100 pb-4">
+            <dt class="text-slate-500">Message</dt>
+            <dd class="text-slate-900 font-medium"><%= @business.try(:message).presence || "-" %></dd>
+          </div>
+          <div class="flex justify-between gap-x-4 border-b border-slate-100 pb-4">
+            <dt class="text-slate-500">Sold Price</dt>
+            <dd class="text-slate-900 font-medium">
+              <% if @business.try(:sold_price).present? %>
+                <%= number_to_currency(@business.sold_price) %>
+              <% else %>
+                -
+              <% end %>
+            </dd>
+          </div>
+          <div class="flex justify-between gap-x-4 border-b border-slate-100 pb-4">
+            <dt class="text-slate-500">Subscription Fee</dt>
+            <dd class="text-slate-900 font-medium">
+              <% if @business.try(:subscription_fee).present? %>
+                <%= number_to_currency(@business.subscription_fee) %>
+              <% else %>
+                -
+              <% end %>
+            </dd>
+          </div>
+          <div class="flex justify-between gap-x-4">
+            <dt class="text-slate-500">Subscription</dt>
+            <dd class="text-slate-900 font-medium">
+              <% if @business.try(:subscription).nil? %>
+                -
+              <% else %>
+                <%= @business.subscription ? "Yes" : "No" %>
+              <% end %>
+            </dd>
+          </div>
+        </dl>
+      </div>
+
+      <div class="bg-white px-4 py-5 shadow-sm ring-1 ring-slate-900/5 sm:rounded-xl sm:px-6">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-base font-semibold leading-6 text-slate-900">Task Source Connection</h3>
+          <span class="inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset <%= @business.task_source_enabled? ? 'bg-emerald-50 text-emerald-700 ring-emerald-200' : 'bg-slate-100 text-slate-600 ring-slate-200' %>">
+            <%= @business.task_source_enabled? ? "Enabled" : "Disabled" %>
+          </span>
+        </div>
+        <dl class="space-y-4 text-sm leading-6">
+          <div class="flex justify-between gap-x-4 border-b border-slate-100 pb-4">
+            <dt class="text-slate-500">Task App Name</dt>
+            <dd class="text-slate-900 font-medium"><%= @business.task_source_name.presence || "-" %></dd>
+          </div>
+          <div class="flex justify-between gap-x-4 border-b border-slate-100 pb-4">
+            <dt class="text-slate-500">Task Base URL</dt>
+            <dd class="text-slate-900 font-medium break-all"><%= @business.task_base_url.presence || "-" %></dd>
+          </div>
+          <div class="flex justify-between gap-x-4 border-b border-slate-100 pb-4">
+            <dt class="text-slate-500">Task Endpoint Path</dt>
+            <dd class="text-slate-900 font-medium"><%= @business.task_endpoint_path.presence || "/api/developer_tasks" %></dd>
+          </div>
+          <div class="flex justify-between gap-x-4">
+            <dt class="text-slate-500">Task Secret</dt>
+            <dd class="text-slate-900 font-medium"><%= @business.task_secret.present? ? "Configured" : "-" %></dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+
+    <div class="lg:col-span-2 space-y-8">
+      <div class="bg-white shadow-sm ring-1 ring-slate-900/5 sm:rounded-xl">
+        <div class="border-b border-slate-200 px-4 py-5 sm:px-6">
+          <h3 class="text-base font-semibold leading-6 text-slate-900">Generate Prototype Link</h3>
+          <p class="mt-1 text-sm text-slate-500">Create a new customized trackable landing page using any of the available templates.</p>
+        </div>
+        <div class="px-4 py-5 sm:p-6 bg-slate-50/50 rounded-b-xl border-t border-slate-100">
+          <div class="flex flex-wrap gap-3">
+            <% @templates.each do |template| %>
+              <%= button_to admin_business_preview_links_path(@business, template: template), method: :post, class: "group relative inline-flex items-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-slate-900 shadow-sm ring-1 ring-inset ring-slate-300 hover:bg-slate-50 transition-colors" do %>
+                <svg class="h-4 w-4 text-blue-500 group-hover:text-blue-600" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                </svg>
+                Generate <%= template.titleize %>
+              <% end %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white shadow-sm ring-1 ring-slate-900/5 sm:rounded-xl overflow-hidden">
+        <div class="border-b border-slate-200 px-4 py-5 sm:px-6 flex items-center justify-between">
+          <h3 class="text-base font-semibold leading-6 text-slate-900">Active Prototype Links</h3>
+          <span class="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10"><%= @business.preview_links.count %> total</span>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="min-w-full divide-y divide-slate-300">
+            <thead class="bg-slate-50">
+              <tr>
+                <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-slate-900 sm:pl-6">Template</th>
+                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-slate-900">Engagement</th>
+                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-slate-900">Link URL</th>
+                <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6">
+                  <span class="sr-only">Actions</span>
+                </th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-200 bg-white">
+              <% @business.preview_links.each do |link| %>
+                <tr class="hover:bg-slate-50">
+                  <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-slate-900 sm:pl-6">
+                    <%= link.template.titleize %>
+                  </td>
+                  <td class="whitespace-nowrap px-3 py-4 text-sm text-slate-500">
+                    <div class="flex items-center gap-x-2">
+                      <span class="<%= link.visit_count.to_i > 0 ? 'inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20' : 'text-slate-500' %>">
+                        <%= link.visit_count %> visits
+                      </span>
+                      <% if link.clicked_at.present? %>
+                        <span class="text-xs text-slate-400" title="<%= link.clicked_at %>">Latest: <%= time_ago_in_words(link.clicked_at) %> ago</span>
+                      <% end %>
+                    </div>
+                  </td>
+                  <td class="whitespace-nowrap px-3 py-4 text-sm text-slate-500">
+                    <div class="flex items-center gap-x-2">
+                      <%= link_to landing_page_url(link.uuid), landing_page_url(link.uuid), target: "_blank", class: "text-blue-600 hover:text-blue-500 hover:underline truncate max-w-[200px] inline-block" %>
+                    </div>
+                  </td>
+                  <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
+                    <%= button_to "Delete", admin_business_preview_link_path(@business, link), method: :delete, data: { turbo_confirm: "Are you sure?" }, class: "text-red-600 hover:text-red-900 bg-transparent border-0 p-0 text-sm font-medium cursor-pointer" %>
+                  </td>
+                </tr>
+              <% end %>
+              <% if @business.preview_links.empty? %>
+                <tr>
+                  <td colspan="4" class="px-3 py-8 text-center text-sm text-slate-500">No prototype links generated yet. Generate one to start tracking.</td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <%= render "admin/notes/notes_panel", business: @business %>
+    </div>
+  </div>
+</div>

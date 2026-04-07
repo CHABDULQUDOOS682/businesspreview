@@ -13,7 +13,7 @@
   </head>
 
   <body class="h-full font-sans text-slate-900 antialiased">
-    <div class="h-screen flex bg-slate-50 overflow-hidden">
+    <div class="flex h-screen overflow-hidden bg-slate-50" data-controller="mobile-nav" data-action="keydown.escape->mobile-nav#close turbo:before-cache->mobile-nav#close">
       <!-- Sidebar -->
       <aside class="hidden md:flex md:w-64 md:flex-col border-r border-slate-200 bg-white overflow-y-auto">
         <div class="flex items-center gap-3 px-4 py-4 border-b border-slate-200">
@@ -25,56 +25,16 @@
           <% end %>
         </div>
 
-        <nav class="flex-1 px-3 py-4 space-y-1 text-sm">
-          <%= link_to admin_root_path,
-                      class: "group flex items-center gap-2 rounded-md px-2.5 py-2 font-medium #{current_page?(admin_root_path) ? 'bg-slate-900 text-white' : 'text-slate-700 hover:bg-slate-100 hover:text-slate-900'}" do %>
-            <span class="inline-flex h-6 w-6 items-center justify-center rounded-md bg-slate-900/5 text-slate-500 group-hover:text-slate-700">
-              <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M3 13h8V3H3v10Zm10 8h8V11h-8v10Z" stroke-linecap="round" stroke-linejoin="round" />
-              </svg>
-            </span>
-            <span>Dashboard</span>
-          <% end %>
-
-          <%= link_to admin_businesses_path,
-                      class: "group flex items-center gap-2 rounded-md px-2.5 py-2 font-medium #{current_page?(admin_businesses_path) || params[:controller] == 'admin/businesses' ? 'bg-slate-900 text-white' : 'text-slate-700 hover:bg-slate-100 hover:text-slate-900'}" do %>
-            <span class="inline-flex h-6 w-6 items-center justify-center rounded-md bg-slate-900/5 text-slate-500 group-hover:text-slate-700">
-              <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M3 21V8l9-5 9 5v13" stroke-linecap="round" stroke-linejoin="round" />
-              </svg>
-            </span>
-            <span>Businesses</span>
-          <% end %>
-
-          <%= link_to admin_communications_path,
-                      class: "group flex items-center justify-between gap-2 rounded-md px-2.5 py-2 font-medium #{current_page?(admin_communications_path) || params[:controller] == 'admin/communications' ? 'bg-slate-900 text-white' : 'text-slate-700 hover:bg-slate-100 hover:text-slate-900'}" do %>
-            <span class="flex items-center gap-2">
-              <span class="inline-flex h-6 w-6 items-center justify-center rounded-md bg-slate-900/5 text-slate-500 group-hover:text-slate-700">
-                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M4 5h16v10H5.17L4 16.17V5Z" stroke-linecap="round" stroke-linejoin="round" />
-                </svg>
-              </span>
-              <span>Communications</span>
-            </span>
-            <span id="unread_messages_badge" class="ml-2">
-              <%= render partial: "admin/communications/unread_badge", locals: { count: unread_message_count } %>
-            </span>
-          <% end %>
-
-          <%= link_to admin_tasks_path,
-                      class: "group flex items-center gap-2 rounded-md px-2.5 py-2 font-medium #{current_page?(admin_tasks_path) || params[:controller] == 'admin/tasks' ? 'bg-slate-900 text-white' : 'text-slate-700 hover:bg-slate-100 hover:text-slate-900'}" do %>
-            <span class="inline-flex h-6 w-6 items-center justify-center rounded-md bg-slate-900/5 text-slate-500 group-hover:text-slate-700">
-              <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M9 11l3 3L22 4M4 7h4m-4 4h4m-4 4h4" stroke-linecap="round" stroke-linejoin="round" />
-              </svg>
-            </span>
-            <span>Tasks</span>
-          <% end %>
-        </nav>
+        <%= render admin_sidebar_partial %>
 
         <div class="border-t border-slate-200 px-4 py-4 text-xs text-slate-500">
           <% if user_signed_in? %>
             <div class="mb-2 text-sm font-medium text-slate-700 truncate"><%= current_user.email %></div>
+            <div class="mb-3">
+              <span class="inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold ring-1 ring-inset <%= admin_sidebar_role_badge_classes %>">
+                <%= current_role_label %>
+              </span>
+            </div>
             <%= button_to "Sign out",
                           destroy_user_session_path,
                           method: :delete,
@@ -87,7 +47,7 @@
         </div>
       </aside>
 
-      <!-- Mobile top bar (simple) -->
+      <!-- Mobile top bar -->
       <div class="md:hidden fixed inset-x-0 top-0 z-40 bg-white border-b border-slate-200">
         <div class="flex items-center justify-between px-4 py-3">
           <%= link_to admin_root_path, class: "flex items-center gap-2" do %>
@@ -96,6 +56,35 @@
             </div>
             <span class="font-semibold text-sm text-slate-800">PaaS Engine</span>
           <% end %>
+          <button
+            type="button"
+            class="inline-flex items-center justify-center rounded-md p-2 text-slate-700 hover:bg-slate-100 hover:text-slate-900"
+            data-mobile-nav-target="button"
+            data-action="mobile-nav#toggle"
+            aria-controls="admin-mobile-menu"
+            aria-expanded="false">
+            <span class="sr-only">Open admin menu</span>
+            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 7h16M4 12h16M4 17h16" />
+            </svg>
+          </button>
+        </div>
+        <div id="admin-mobile-menu" class="hidden border-t border-slate-200 bg-white shadow-lg" data-mobile-nav-target="panel">
+          <%= render admin_sidebar_partial, mobile: true %>
+          <div class="border-t border-slate-200 px-4 py-4 text-sm text-slate-600">
+            <% if user_signed_in? %>
+              <div class="mb-2 truncate font-medium text-slate-800"><%= current_user.email %></div>
+              <div class="mb-3">
+                <span class="inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold ring-1 ring-inset <%= admin_sidebar_role_badge_classes %>">
+                  <%= current_role_label %>
+                </span>
+              </div>
+              <%= button_to "Sign out",
+                            destroy_user_session_path,
+                            method: :delete,
+                            class: "w-full rounded-md bg-white px-3 py-2 text-sm font-semibold text-slate-900 shadow-sm ring-1 ring-inset ring-slate-300 hover:bg-slate-50" %>
+            <% end %>
+          </div>
         </div>
       </div>
 
