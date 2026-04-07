@@ -1,2 +1,391 @@
-this is abc page...
-ss
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Barbershop Hero</title>
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+
+</head>
+<body class="font-[Montserrat]">
+
+
+<section class="bg-blue-500">
+
+  <!-- Header -->
+  <header class="bg-[#12110DF2] text-white border border-gray-800 shadow-md">
+    <div class="max-w-9xl mx-auto px-6 md:px-12 py-4 flex items-center justify-between ">
+
+      <!-- Logo -->
+      <div class="text-xl font-bold">
+        MyLogo
+      </div>
+
+      <!-- Desktop Menu -->
+      <nav class="hidden md:flex items-center gap-14">
+        <a href="#" class="hover:text-gray-300">Home</a>
+        <a href="#" class="hover:text-gray-300">About</a>
+        <a href="#" class="hover:text-gray-300">Services</a>
+        <a href="#" class="hover:text-gray-300">Contact</a>
+      </nav>
+
+      <!-- Button -->
+      <div class="hidden md:block">
+        <button class="bg-yellow-400 text-black px-4 py-2 rounded-lg hover:bg-gray-200 transition">
+          Book Appointment
+        </button>
+      </div>
+
+      <!-- Mobile Menu Button -->
+      <button id="menuBtn" class="md:hidden text-2xl transition-all duration-300">
+        <i id="menuIcon" class="fa-solid fa-bars"></i>
+      </button>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" 
+         class="max-h-0 overflow-hidden md:hidden px-4 transition-all duration-500 ease-in-out border-t border-gray-800">
+      
+      <nav class="flex flex-col gap-4 py-4">
+        <a href="#" class="hover:text-gray-300">Home</a>
+        <a href="#" class="hover:text-gray-300">About</a>
+        <a href="#" class="hover:text-gray-300">Services</a>
+        <a href="#" class="hover:text-gray-300">Contact</a>
+
+        <button class="bg-white text-black px-4 py-2 rounded-lg hover:bg-gray-200 transition w-full">
+          Book Appointment
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Font Awesome CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <script>
+    const btn = document.getElementById("menuBtn");
+    const menu = document.getElementById("mobileMenu");
+    const icon = document.getElementById("menuIcon");
+
+    let isOpen = false;
+
+    btn.addEventListener("click", () => {
+      isOpen = !isOpen;
+
+      if (isOpen) {
+        menu.style.maxHeight = menu.scrollHeight + "px";
+
+        // Icon change + animation
+        icon.classList.remove("fa-bars");
+        icon.classList.add("fa-xmark");
+        btn.classList.add("rotate-90", "scale-110");
+
+      } else {
+        menu.style.maxHeight = "0px";
+
+        icon.classList.remove("fa-xmark");
+        icon.classList.add("fa-bars");
+        btn.classList.remove("rotate-90", "scale-110");
+      }
+    });
+  </script>
+
+</section>
+
+  <!-- Hero Section -->
+  <section class="min-h-screen flex items-center bg-black">
+  <div class="max-w-7xl mx-auto px-6 md:px-12 py-12 grid lg:grid-cols-2 gap-10 items-center">
+
+    <!-- Image (comes first on mobile) -->
+    <div class="relative order-1 lg:order-2">
+      <div class="bg-gray-900 rounded-2xl overflow-hidden shadow-2xl">
+        <img 
+          src="https://images.unsplash.com/photo-1521119989659-a83eee488004?q=80&w=800" 
+          alt="Barber" 
+          class="w-full h-[300px] sm:h-[400px] lg:h-full object-cover"
+        />
+      </div>
+
+      <!-- Badge -->
+      <div class="absolute bottom-4 left-4 bg-gray-900/90 backdrop-blur px-4 py-3 rounded-xl shadow-lg">
+        <p class="text-yellow-400 font-bold text-lg">15+</p>
+        <p class="text-xs text-gray-400">Master Barbers</p>
+      </div>
+    </div>
+
+    <!-- Content -->
+    <div class="order-2 lg:order-1 text-center lg:text-left">
+      
+      <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight text-white mt-6 lg:mt-0">
+        Redefine <br />
+        <span class="text-yellow-400">The Look.</span>
+      </h1>
+
+      <p class="text-gray-400 mt-6 max-w-md mx-auto lg:mx-0">
+        Where traditional craftsmanship meets urban sophistication. Experience a new tier of luxury grooming tailored for the modern gentleman.
+      </p>
+
+      <div class="mt-8 flex gap-4 flex-wrap justify-center lg:justify-start">
+        <button class="bg-yellow-400 text-black px-6 py-3 rounded-lg font-semibold hover:bg-yellow-300 transition">
+          Book Now
+        </button>
+        <button class="bg-gray-800 text-white px-6 py-3 rounded-lg font-semibold hover:bg-gray-700 transition">
+          View Services
+        </button>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+
+
+
+
+
+  <!-- Services Section -->
+  <section class="bg-black text-white py-16">
+    <div class="max-w-7xl mx-auto px-6 md:px-12">
+      <h2 class="text-2xl sm:text-3xl font-bold text-center mb-12">
+        Curated Services
+      </h2>
+
+      <!-- Service Item -->
+      <div class="space-y-8">
+
+        <div class="border-b border-gray-800 pb-6 flex justify-between items-start gap-4">
+          <div>
+            <h3 class="font-semibold text-lg">The Signature Cut</h3>
+            <p class="text-gray-500 text-base">Tailored cuts, clippers, precision cut, hot towel finish.</p>
+          </div>
+          <span class="text-yellow-400 font-semibold text-base">$65</span>
+        </div>
+
+        <div class="border-b border-gray-800 pb-6 flex justify-between items-start gap-4">
+          <div>
+            <h3 class="font-semibold text-lg">Beard Sculpting</h3>
+            <p class="text-gray-500 text-base">Edge-up, conditioning, and straight razor line.</p>
+          </div>
+          <span class="text-yellow-400 font-semibold text-base">$45</span>
+        </div>
+
+        <div class="border-b border-gray-800 pb-6 flex justify-between items-start gap-4">
+          <div>
+            <h3 class="font-semibold text-lg">Royal Shave</h3>
+            <p class="text-gray-500 text-base">Multi-step hot lather, essential oils, ultra-close shave.</p>
+          </div>
+          <span class="text-yellow-400 font-semibold text-base">$55</span>
+        </div>
+
+        <div class="flex justify-between items-start gap-4">
+          <div>
+            <h3 class="font-semibold text-lg">The Full Experience</h3>
+            <p class="text-gray-500 text-base">Signature cut + Beard sculpt + Facial refresh.</p>
+          </div>
+          <span class="text-yellow-400 text-base font-semibold">$110</span>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+
+  <!-- Gallery Section -->
+<section class="bg-[#0f0f0f] ">
+
+  <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-4">
+
+    <!-- LEFT SIDE (1 IMAGE) -->
+    <div class="rounded-xl overflow-hidden h-[400px] md:h-auto">
+      <img 
+        src="https://images.unsplash.com/photo-1621605815971-fbc98d665033"
+        class="w-full h-full object-cover"
+        alt=""
+      />
+    </div>
+
+    <!-- RIGHT SIDE -->
+    <div class="flex flex-col gap-4">
+
+      <!-- TOP (2 IMAGES SIDE BY SIDE) -->
+      <div class="grid grid-cols-2 gap-4">
+
+        <div class="rounded-xl overflow-hidden h-[190px]">
+          <img 
+            src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438"
+            class="w-full h-full object-cover"
+            alt=""
+          />
+        </div>
+
+        <div class="rounded-xl overflow-hidden h-[190px]">
+          <img 
+            src="https://images.unsplash.com/photo-1599351431202-1e0f0137899a"
+            class="w-full h-full object-cover"
+            alt=""
+          />
+        </div>
+
+      </div>
+
+      <!-- BOTTOM (1 IMAGE) -->
+      <div class="rounded-xl overflow-hidden h-[190px] relative">
+        <img 
+          src="https://images.unsplash.com/photo-1615874959474-d609969a20ed"
+          class="w-full h-full object-cover"
+          alt=""
+        />
+
+        <!-- OPTIONAL TEXT -->
+        <div class="absolute inset-0 flex items-center justify-center bg-black/30">
+          <h2 class="text-white tracking-widest text-lg font-semibold">
+            CRAFTSMANSHIP
+          </h2>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+  <!-- Testimonials Section -->
+  <section class="bg-black text-white py-[80px] ">
+    <div class="max-w-7xl mx-auto px-6 md:px-12 grid lg:grid-cols-3 gap-8 items-start">
+
+      <!-- Heading -->
+      <div>
+        <h2 class="text-2xl font-bold">
+          Word of the <br />
+          <span class="text-yellow-400">Street.</span>
+        </h2>
+        <p class="text-gray-500 mt-4 text-sm">
+          Our clients don’t just come for a haircut; they come for the ritual. See why we’re truly a highest-rated barbershop.
+        </p>
+        <div class="text-yellow-400 mt-4  text-xl">★★★★★</div>
+      </div>
+
+      <!-- Testimonial Card 1 -->
+      <div class="bg-[#111] p-6 rounded-2xl border border-gray-800">
+        <p class="text-gray-300 text-sm">
+          “The attention to detail here is unmatched. It’s not just a cut; it’s a precision engineering job. Worth every penny.”
+        </p>
+        <div class="flex items-center gap-3 mt-6">
+          <div class="w-10 h-10 rounded-full bg-yellow-400 flex items-center justify-center text-black text-sm font-bold">JD</div>
+          <div>
+            <p class="text-sm font-semibold">James Carter</p>
+            <p class="text-xs text-gray-500">Tech Consultant</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Testimonial Card 2 -->
+      <div class="bg-[#111] p-6 rounded-2xl border border-gray-800">
+        <p class="text-gray-300 text-sm">
+          “Finally a place that understands urban styles without sacrificing the luxury feel. The service is exceptional.”
+        </p>
+        <div class="flex items-center gap-3 mt-6">
+          <div class="w-10 h-10 rounded-full bg-yellow-400 flex items-center justify-center text-black text-sm font-bold">MC</div>
+          <div>
+            <p class="text-sm font-semibold">Marcus King</p>
+            <p class="text-xs text-gray-500">Creative Director</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+    <!-- Yellow Strip -->
+  <div class="bg-yellow-400 text-black text-sm">
+    <div class="max-w-7xl mx-auto px-6 md:px-12 py-4 flex flex-col sm:flex-row justify-between items-center gap-3">
+      <p class="font-medium">LUXE & CO. <span class="ml-2 text-xs">WAIT TIME: ~15 MINS</span></p>
+      <div class="flex items-center gap-4">
+        <span class="hidden sm:inline">Ready for a transformation?</span>
+        <button class="bg-black text-white px-4 py-3 rounded-lg  font-semibold rounded-lg hover:bg-gray-900 transition">
+          BOOK YOUR SPOT
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <section class="bg-black text-gray-300">
+
+  <footer class="bg-[#0d0d0d] px-6 md:px-12 lg:px-10 py-[80px]">
+    <div class="max-w-7xl mx-auto grid gap-10 md:grid-cols-2 lg:grid-cols-4">
+
+      <!-- Brand -->
+      <div>
+        <h2 class="text-white text-xl font-semibold tracking-wide flex items-center gap-2">
+          ✂ <span>LUXE & CO.</span>
+        </h2>
+        <p class="mt-4 text-sm text-gray-400">
+          Premium grooming for the modern gentleman. Elevating style since 2018.
+        </p>
+
+     
+      </div>
+
+      <!-- Hours -->
+      <div>
+        <h3 class="text-white font-semibold mb-4">HOURS</h3>
+        <ul class="space-y-2 text-sm">
+          <li class="flex justify-between text-white" >
+            <span>Mon - Fri</span>
+            <span>09:00 - 20:00</span>
+          </li>
+          <li class="flex justify-between text-white">
+            <span>Saturday</span>
+            <span>10:00 - 18:00</span>
+          </li>
+          <li class="flex justify-between text-white">
+            <span>Sunday</span>
+            <span>Closed</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Contact -->
+      <div>
+        <h3 class="text-white font-semibold mb-4">CONTACT</h3>
+        <ul class="space-y-3 text-sm">
+          <li class="flex items-center gap-2 text-white">
+            <i class="fa-solid fa-location-dot text-yellow-400"></i> 123 Elite Way, Downtown
+          </li>
+          <li class="flex items-center gap-2 text-white">
+            <i class="fa-solid fa-phone text-yellow-400"></i> +1 (555) 982-LUXE
+          </li>
+          <li class="flex items-center gap-2 text-white">
+            <i class="fa-regular fa-envelope text-yellow-400 "></i> hello@luxeberber.co
+          </li>
+        </ul>
+      </div>
+
+      <!-- Location -->
+   <div>
+  <h3 class="text-white font-semibold mb-4">LOCATION</h3>
+
+  <div class="w-full h-32 rounded-lg overflow-hidden">
+    <iframe
+      class="w-full h-full border-0"
+      src="https://www.google.com/maps?q=123+Elite+Way+Downtown&output=embed"
+      loading="lazy"
+      referrerpolicy="no-referrer-when-downgrade">
+    </iframe>
+  </div>
+
+</div>
+
+    </div>
+  </footer>
+
+</section>
+</body>
+</html>
+
