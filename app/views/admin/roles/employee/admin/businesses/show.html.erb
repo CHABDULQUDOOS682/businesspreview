@@ -1,0 +1,89 @@
+<% content_for :page_header do %>
+  <div class="md:flex md:items-center md:justify-between">
+    <div class="min-w-0 flex-1">
+      <div class="flex items-center gap-x-3 text-sm text-slate-500 mb-1">
+        <%= link_to "Businesses", admin_businesses_path, class: "hover:text-slate-700" %>
+        <svg viewBox="0 0 2 2" class="h-0.5 w-0.5 fill-current"><circle cx="1" cy="1" r="1" /></svg>
+        <span>Business Details</span>
+      </div>
+      <h2 class="text-2xl font-bold leading-7 text-slate-900 sm:truncate"><%= @business.name %></h2>
+    </div>
+              <div class="flex gap-x-2">
+            <% if @business.phone.present? %>
+              <%= link_to admin_communication_path(@business.phone), class: "rounded-md bg-green-600 px-3 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-green-500" do %>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 inline-block mr-1">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 8.25h9m-9 3h9m-9 3h9m-6.75-12.75H18a2.25 2.25 0 0 1 2.25 2.25v9a2.25 2.25 0 0 1-2.25 2.25H6.75A2.25 2.25 0 0 1 4.5 15.75v-9a2.25 2.25 0 0 1 2.25-2.25h1.5m.75-3l3 3m0 0l3-3m-3 3v7.5" />
+                </svg>
+                Chat
+              <% end %>
+            <% end %>
+          </div>
+  </div>
+<% end %>
+
+<div>
+  <div class="grid grid-cols-1 items-start gap-x-8 gap-y-8 lg:grid-cols-3">
+    <div class="lg:col-span-1 space-y-8">
+
+      <div class="bg-white px-4 py-5 shadow-sm ring-1 ring-slate-900/5 sm:rounded-xl sm:px-6">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-base font-semibold leading-6 text-slate-900">Profile</h3>
+        </div>
+        <dl class="space-y-4 text-sm leading-6">
+          <div class="flex justify-between gap-x-4 border-b border-slate-100 pb-4">
+            <dt class="text-slate-500">Industry / Niche</dt>
+            <dd class="text-slate-900 font-medium"><%= @business.niche.presence || "-" %></dd>
+          </div>
+          <div class="flex justify-between gap-x-4 border-b border-slate-100 pb-4">
+            <dt class="text-slate-500">Location</dt>
+            <dd class="text-slate-900 font-medium"><%= [@business.city, @business.country].compact.join(", ").presence || "-" %></dd>
+          </div>
+          <div class="flex justify-between gap-x-4 border-b border-slate-100 pb-4">
+            <dt class="text-slate-500">Phone</dt>
+            <dd class="text-slate-900 font-medium"><%= @business.phone.presence || "-" %></dd>
+          </div>
+          <div class="flex justify-between gap-x-4 border-b border-slate-100 pb-4">
+            <dt class="text-slate-500">Google Rating</dt>
+            <dd class="text-slate-900 font-medium"><%= @business.rating.presence || "-" %></dd>
+          </div>
+          <div class="flex justify-between gap-x-4 border-b border-slate-100 pb-4">
+            <dt class="text-slate-500">Owner Name</dt>
+            <dd class="text-slate-900 font-medium"><%= @business.try(:owner_name).presence || "-" %></dd>
+          </div>
+          <div class="flex justify-between gap-x-4 border-b border-slate-100 pb-4">
+            <dt class="text-slate-500">Email</dt>
+            <dd class="text-slate-900 font-medium">
+              <% if @business.try(:email).present? %>
+                <%= mail_to @business.email, @business.email, class: "text-blue-600 hover:text-blue-500" %>
+              <% else %>
+                -
+              <% end %>
+            </dd>
+          </div>
+          <div class="flex justify-between gap-x-4 border-b border-slate-100 pb-4">
+            <dt class="text-slate-500">Website Name</dt>
+            <dd class="text-slate-900 font-medium"><%= @business.try(:website_name).presence || "-" %></dd>
+          </div>
+          <div class="flex justify-between gap-x-4 border-b border-slate-100 pb-4">
+            <dt class="text-slate-500">Website URL</dt>
+            <dd class="text-slate-900 font-medium">
+              <% if @business.try(:website_url).present? %>
+                <%= link_to "Visit Site", @business.website_url, target: "_blank", class: "text-blue-600 hover:text-blue-500" %>
+              <% else %>
+                -
+              <% end %>
+            </dd>
+          </div>
+          <div class="flex justify-between gap-x-4 border-b border-slate-100 pb-4">
+            <dt class="text-slate-500">Message</dt>
+            <dd class="text-slate-900 font-medium"><%= @business.try(:message).presence || "-" %></dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+
+    <div class="lg:col-span-2 space-y-8">
+      <%= render "admin/notes/notes_panel", business: @business %>
+    </div>
+  </div>
+</div>

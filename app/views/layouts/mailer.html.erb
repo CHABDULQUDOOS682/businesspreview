@@ -3,11 +3,137 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <style>
-      /* Email styles need to be inline */
+      body {
+        margin: 0;
+        padding: 0;
+        background: #eef2ff;
+        font-family: Arial, Helvetica, sans-serif;
+        color: #0f172a;
+      }
+
+      .email-shell {
+        width: 100%;
+        padding: 32px 16px;
+        box-sizing: border-box;
+      }
+
+      .email-card {
+        max-width: 640px;
+        margin: 0 auto;
+        background: #ffffff;
+        border-radius: 24px;
+        overflow: hidden;
+        border: 1px solid #dbeafe;
+        box-shadow: 0 18px 45px rgba(15, 23, 42, 0.08);
+      }
+
+      .email-hero {
+        background: linear-gradient(135deg, #0f172a 0%, #1d4ed8 100%);
+        padding: 28px 32px;
+        color: #ffffff;
+      }
+
+      .brand-row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .brand-badge {
+        width: 40px;
+        height: 40px;
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.16);
+        text-align: center;
+        line-height: 40px;
+        font-size: 22px;
+        font-weight: bold;
+      }
+
+      .brand-name {
+        font-size: 24px;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+      }
+
+      .hero-copy {
+        margin-top: 18px;
+        font-size: 15px;
+        line-height: 1.7;
+        color: rgba(255, 255, 255, 0.86);
+      }
+
+      .email-body {
+        padding: 32px;
+      }
+
+      .email-body h1 {
+        margin: 0 0 14px;
+        font-size: 28px;
+        line-height: 1.2;
+        color: #0f172a;
+      }
+
+      .email-body p {
+        margin: 0 0 16px;
+        font-size: 15px;
+        line-height: 1.7;
+        color: #475569;
+      }
+
+      .cta-button {
+        display: inline-block;
+        padding: 14px 22px;
+        border-radius: 14px;
+        background: #2563eb;
+        color: #ffffff !important;
+        text-decoration: none;
+        font-weight: 700;
+        margin: 12px 0 18px;
+      }
+
+      .info-box {
+        margin-top: 18px;
+        padding: 18px 20px;
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 16px;
+      }
+
+      .footer {
+        padding: 0 32px 32px;
+        font-size: 13px;
+        line-height: 1.7;
+        color: #64748b;
+      }
+
+      .footer a {
+        color: #2563eb;
+      }
     </style>
   </head>
 
   <body>
-    <%= yield %>
+    <div class="email-shell">
+      <div class="email-card">
+        <div class="email-hero">
+          <div class="brand-row">
+            <div class="brand-badge">+</div>
+            <div class="brand-name">PaaS Engine</div>
+          </div>
+          <div class="hero-copy">
+            Build, manage, and track your outreach workspace from one dashboard.
+          </div>
+        </div>
+
+        <div class="email-body">
+          <%= yield %>
+        </div>
+
+        <div class="footer">
+          This email was sent by PaaS Engine. If you did not expect it, you can safely ignore it.
+        </div>
+      </div>
+    </div>
   </body>
 </html>

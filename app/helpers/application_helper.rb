@@ -10,4 +10,11 @@ module ApplicationHelper
 
     link_to name, path, class: classes
   end
+
+  def visible_business_segment_tabs(tabs)
+    tabs = Array(tabs)
+    return tabs unless employee_role?
+
+    tabs.select { |tab| tab[:key].to_s == "nurture" }
+  end
 end

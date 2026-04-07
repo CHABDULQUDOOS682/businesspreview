@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  devise_for :users
+  devise_for :users, skip: [ :registrations ], controllers: { passwords: "users/passwords" }
   # root "admin/dashboard#index"
   root "home_pages#index"
   get "services", to: "home_pages#services"
@@ -14,6 +14,12 @@ Rails.application.routes.draw do
     get "dashboard/index"
     root "dashboard#index"
     resources :tasks, only: [ :index, :update ]
+    resources :users, only: [ :index, :new, :create, :destroy ] do
+      member do
+        patch :toggle_status
+        post :resend_invite
+      end
+    end
     resources :notes, only: [ :create, :edit, :update, :destroy ]
     resources :businesses do
       collection do

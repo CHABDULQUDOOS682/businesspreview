@@ -1,0 +1,165 @@
+<div class="max-w-3xl mx-auto mt-8">
+  <% field_class = "block w-full rounded-lg border-0 px-3 py-2.5 text-slate-900 shadow-sm ring-1 ring-inset ring-slate-300 placeholder:text-slate-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6" %>
+  <div class="mb-8">
+    <div class="flex items-center justify-between">
+      <div class="flex items-center gap-x-3">
+        <%= link_to admin_business_path(@business), class: "text-slate-400 hover:text-slate-500 transition-colors" do %>
+          <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+          </svg>
+        <% end %>
+        <h1 class="text-2xl font-bold tracking-tight text-slate-900">Edit Business</h1>
+      </div>
+      <%= link_to "Cancel", admin_business_path(@business), class: "text-sm font-semibold leading-6 text-slate-900 hover:text-slate-600" %>
+    </div>
+    <p class="mt-2 text-sm text-slate-600 ml-9">Update the business profile fields below.</p>
+  </div>
+
+  <div class="bg-white shadow-sm ring-1 ring-slate-900/5 sm:rounded-xl overflow-hidden">
+    <div class="px-4 py-6 sm:p-8">
+      <%= form_with model: @business, url: admin_business_path(@business), method: :patch, local: true, class: "space-y-6" do |f| %>
+        <div class="grid grid-cols-1 gap-x-6 gap-y-6 sm:grid-cols-6">
+          <div class="sm:col-span-4">
+            <%= f.label :name, "Business Name *", class: "block text-sm font-medium leading-6 text-slate-900" %>
+            <div class="mt-2">
+              <%= f.text_field :name, class: field_class %>
+            </div>
+          </div>
+
+          <div class="sm:col-span-3">
+            <%= f.label :owner_name, "Owner Name", class: "block text-sm font-medium leading-6 text-slate-900" %>
+            <div class="mt-2">
+              <%= f.text_field :owner_name, class: field_class %>
+            </div>
+          </div>
+
+          <div class="sm:col-span-3">
+            <%= f.label :city, "City", class: "block text-sm font-medium leading-6 text-slate-900" %>
+            <div class="mt-2">
+              <%= f.text_field :city, class: field_class %>
+            </div>
+          </div>
+
+          <div class="sm:col-span-3">
+            <%= f.label :country, "Country", class: "block text-sm font-medium leading-6 text-slate-900" %>
+            <div class="mt-2">
+              <%= f.text_field :country, class: field_class %>
+            </div>
+          </div>
+
+          <div class="sm:col-span-6">
+            <%= f.label :niche, "Niche / Industry", class: "block text-sm font-medium leading-6 text-slate-900" %>
+            <div class="mt-2">
+              <%= f.text_field :niche, class: field_class %>
+            </div>
+          </div>
+
+          <div class="sm:col-span-3">
+            <%= f.label :phone, "Phone Number", class: "block text-sm font-medium leading-6 text-slate-900" %>
+            <div class="mt-2">
+              <%= f.text_field :phone, class: field_class %>
+            </div>
+          </div>
+
+          <div class="sm:col-span-3">
+            <%= f.label :email, "Email", class: "block text-sm font-medium leading-6 text-slate-900" %>
+            <div class="mt-2">
+              <%= f.email_field :email, class: field_class %>
+            </div>
+          </div>
+
+          <div class="sm:col-span-3">
+            <%= f.label :website_name, "Website Name", class: "block text-sm font-medium leading-6 text-slate-900" %>
+            <div class="mt-2">
+              <%= f.text_field :website_name, class: field_class %>
+            </div>
+          </div>
+
+          <div class="sm:col-span-3">
+            <%= f.label :website_url, "Website URL", class: "block text-sm font-medium leading-6 text-slate-900" %>
+            <div class="mt-2">
+              <%= f.url_field :website_url, class: field_class, placeholder: "https://" %>
+            </div>
+          </div>
+
+          <div class="sm:col-span-3">
+            <%= f.label :rating, "Google Rating", class: "block text-sm font-medium leading-6 text-slate-900" %>
+            <div class="mt-2">
+              <%= f.number_field :rating, step: 0.1, class: field_class %>
+            </div>
+          </div>
+
+          <div class="sm:col-span-6">
+            <%= f.label :message, "Message", class: "block text-sm font-medium leading-6 text-slate-900" %>
+            <div class="mt-2">
+              <%= f.text_area :message, rows: 4, class: field_class %>
+            </div>
+          </div>
+
+          <div class="sm:col-span-3">
+            <%= f.label :sold_price, "Sold Price", class: "block text-sm font-medium leading-6 text-slate-900" %>
+            <div class="mt-2">
+              <%= f.number_field :sold_price, step: 0.01, class: field_class %>
+            </div>
+          </div>
+
+          <div class="sm:col-span-3">
+            <%= f.label :subscription_fee, "Subscription Fee", class: "block text-sm font-medium leading-6 text-slate-900" %>
+            <div class="mt-2">
+              <%= f.number_field :subscription_fee, step: 0.01, class: field_class %>
+            </div>
+          </div>
+
+          <div class="sm:col-span-3">
+            <%= f.label :subscription, "Subscription Active", class: "block text-sm font-medium leading-6 text-slate-900" %>
+            <div class="mt-2">
+              <%= f.check_box :subscription, class: "rounded border-slate-300 text-blue-600 focus:ring-blue-600" %>
+            </div>
+          </div>
+
+          <div class="sm:col-span-6 pt-4">
+            <div class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-4">
+              <h2 class="text-base font-semibold text-slate-900">Task Source Connection</h2>
+              <p class="mt-1 text-sm text-slate-600">Enable this business as an external app source for the Tasks page.</p>
+
+              <div class="mt-4 grid grid-cols-1 gap-x-6 gap-y-6 sm:grid-cols-6">
+                <div class="sm:col-span-3">
+                  <%= f.label :task_source_enabled, "Enable task sync", class: "block text-sm font-medium leading-6 text-slate-900" %>
+                  <div class="mt-2">
+                    <%= f.check_box :task_source_enabled, class: "rounded border-slate-300 text-blue-600 focus:ring-blue-600" %>
+                  </div>
+                </div>
+
+                <div class="sm:col-span-6">
+                  <%= f.label :task_base_url, "Task App Base URL", class: "block text-sm font-medium leading-6 text-slate-900" %>
+                  <div class="mt-2">
+                    <%= f.url_field :task_base_url, class: field_class, placeholder: "http://localhost:3001 or http://localhost:3001/admin/developer_tasks" %>
+                  </div>
+                </div>
+
+                <div class="sm:col-span-3">
+                  <%= f.label :task_endpoint_path, "Task Endpoint Path", class: "block text-sm font-medium leading-6 text-slate-900" %>
+                  <div class="mt-2">
+                    <%= f.text_field :task_endpoint_path, class: field_class, placeholder: "/api/developer_tasks" %>
+                  </div>
+                </div>
+
+                <div class="sm:col-span-3">
+                  <%= f.label :task_secret, "Task API Secret", class: "block text-sm font-medium leading-6 text-slate-900" %>
+                  <div class="mt-2">
+                    <%= f.text_field :task_secret, class: field_class, placeholder: "Enter shared secret" %>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-8 flex items-center justify-end gap-x-6 border-t border-slate-900/10 pt-6">
+          <%= link_to "Cancel", admin_business_path(@business), class: "text-sm font-semibold leading-6 text-slate-900 hover:text-slate-600" %>
+          <%= f.submit "Save Changes", class: "rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
