@@ -50,4 +50,5 @@ Rails.application.routes.draw do
 
   # Routes for frontend
   get "design_1", to: "frontend#design_1", as: :design_1
+  get "abc", to: "frontend#abc", as: :abc
 end
