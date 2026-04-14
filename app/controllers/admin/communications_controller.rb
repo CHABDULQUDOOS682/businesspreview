@@ -25,8 +25,14 @@ class Admin::CommunicationsController < ApplicationController
     @conversation_key = last_10
     if last_10.present?
       # Match by business ID or by phone number patterns
-      @messages = Message.where("from_number LIKE ? OR to_number LIKE ?", "%#{last_10}", "%#{last_10}")
-      @messages = @messages.or(Message.where(business_id: @business.id)) if @business
+      # Use an array of IDs to keep the query simple and index-friendly
+      conditions = ["from_number LIKE :l10 OR to_number LIKE :l10", { l10: "%#{last_10}" }]
+      if @business
+        @messages = Message.where("#{conditions[0]} OR business_id = :b_id", 
+                                  l10: "%#{last_10}", b_id: @business.id)
+      else
+        @messages = Message.where(conditions[0], conditions[1])
+      end
       @messages = @messages.order(created_at: :asc)
       @last_inbound_at = @messages.inbound.maximum(:created_at)
 
