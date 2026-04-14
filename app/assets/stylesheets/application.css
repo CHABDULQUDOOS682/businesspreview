@@ -1,5 +1,3 @@
-@import "tailwindcss";
-
 /*
  * This is a manifest file that'll be compiled into application.css.
  *
@@ -10,26 +8,3 @@
  *
  * Consider organizing styles into separate files for maintainability.
  */
-
-/*
- * Responsive typography tweak for mobile/tablet.
- *
- * This app uses Tailwind (v4-style) CSS variables for text sizes (e.g. `text-sm`
- * maps to `--text-sm`). Overriding just the `--text-*` variables keeps spacing
- * scale intact (Tailwind spacing is driven by separate variables).
- */
-@media (max-width: 1023px) {
-  :root {
-    /* Make small labels/buttons/readouts easier to read on tablets + smaller. */
-    --text-xs: 0.8125rem; /* 13px */
-    --text-sm: 0.9375rem; /* 15px */
-  }
-}
-
-@media (max-width: 639px) {
-  :root {
-    /* A bit more breathing room on phones. */
-    --text-xs: 0.875rem; /* 14px */
-    --text-sm: 1rem; /* 16px */
-  }
-}
