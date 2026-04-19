@@ -1,0 +1,43 @@
+.btn-base {
+  @apply inline-flex items-center justify-center rounded-xl font-medium transition-all duration-150 active:scale-[0.97];
+}
+
+.btn-sand {
+  @apply bg-sand-900 text-sand-50 hover:bg-sand-800;
+}
+
+.btn-accent-green {
+  @apply bg-accent-green text-white hover:brightness-95;
+}
+
+.btn-accent-blue {
+  @apply bg-accent-blue text-white hover:brightness-95;
+}
+
+.btn-accent-amber {
+  @apply bg-accent-amber text-white hover:brightness-95;
+}
+
+.btn-accent-orange {
+  @apply bg-accent-orange text-white hover:brightness-95;
+}
+
+.btn-accent-lime {
+  @apply bg-accent-lime text-white hover:brightness-95;
+}
+
+.btn-accent-pink {
+  @apply bg-accent-pink text-white hover:brightness-95;
+}
+
+.btn-accent-red {
+  @apply bg-accent-red text-white hover:brightness-95;
+}
+
+.btn-accent-purple {
+  @apply bg-accent-purple text-white hover:brightness-95;
+}
+
+.btn-accent-indigo {
+  @apply bg-accent-indigo text-white hover:brightness-95;
+}

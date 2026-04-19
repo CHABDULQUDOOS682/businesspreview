@@ -1,103 +1,111 @@
-<div class="rounded-2xl bg-gradient-to-r from-slate-900 via-slate-800 to-blue-900 px-5 mb-8 py-6 text-white shadow-sm">
-  <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-    <div>
-      <p class="text-sm font-medium text-blue-100"><%= current_role_label %> workspace</p>
-      <h1 class="mt-2 text-3xl font-bold tracking-tight">Employee Dashboard</h1>
-      <p class="mt-2 max-w-2xl text-sm text-slate-200">Stay on top of the pipeline, communications, tasks, and recent engagement.</p>
+<section class="portal-panel overflow-hidden bg-gradient-to-br from-white via-sand-50 to-accent-green-bg p-6 md:p-8">
+  <div class="flex flex-col gap-4">
+    <div class="max-w-3xl">
+      <p class="portal-kicker"><%= current_role_label %> workspace</p>
+      <h1 class="portal-display-title mt-3">Employee Dashboard</h1>
+      <p class="portal-muted mt-3 max-w-2xl text-sm md:text-base">
+        Stay on top of the pipeline, communications, tasks, and recent engagement in a calm, focused workspace.
+      </p>
     </div>
   </div>
-</div>
+</section>
 
-<dl class="mx-auto mb-10 grid grid-cols-1 gap-px overflow-hidden rounded-2xl bg-slate-900/5 shadow-sm ring-1 ring-slate-900/5 sm:grid-cols-2 lg:grid-cols-4">
-  <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-2 bg-white px-4 py-10 sm:px-6 xl:px-8">
-    <dt class="text-sm font-medium leading-6 text-slate-500">Total Businesses</dt>
-    <dd class="w-full flex-none text-3xl font-bold leading-10 tracking-tight text-slate-900"><%= @business_count %></dd>
+<section class="mt-8">
+  <div class="mb-4">
+    <p class="portal-kicker">Overview</p>
+    <h2 class="portal-page-title mt-2">Day-to-day metrics</h2>
+    <p class="portal-muted mt-2 text-sm">The core numbers you need to respond quickly and keep opportunities moving.</p>
   </div>
-  <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-2 bg-white px-4 py-10 sm:px-6 xl:px-8">
-    <dt class="text-sm font-medium leading-6 text-slate-500">Links generated</dt>
-    <dd class="w-full flex-none text-3xl font-bold leading-10 tracking-tight text-slate-900"><%= @preview_count %></dd>
-  </div>
-  <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-2 bg-white px-4 py-10 sm:px-6 xl:px-8">
-    <dt class="text-sm font-medium leading-6 text-slate-500">Total Clicks</dt>
-    <dd class="w-full flex-none text-3xl font-bold leading-10 tracking-tight text-blue-600"><%= @total_visits %></dd>
-  </div>
-  <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-2 bg-white px-4 py-10 sm:px-6 xl:px-8">
-    <dt class="text-sm font-medium leading-6 text-slate-500">Unread Messages</dt>
-    <dd id="unread_inbound_count" class="w-full flex-none text-3xl font-bold leading-10 tracking-tight text-green-600">
-      <%= render partial: "admin/dashboard/unread_inbound_count", locals: { count: @unread_inbound_count } %>
-    </dd>
-  </div>
-</dl>
 
-<div class="mb-8 bg-white shadow-sm ring-1 ring-slate-900/5 sm:rounded-xl">
-  <div class="border-b border-slate-200 px-4 py-5 sm:px-6">
-    <h3 class="text-base font-semibold leading-6 text-slate-900">Available Templates</h3>
+  <dl class="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
+    <div class="portal-stat-card">
+      <dt class="text-sm font-medium text-sand-500">Total Businesses</dt>
+      <dd class="mt-4 text-4xl font-semibold tracking-tight text-sand-900"><%= @business_count %></dd>
+    </div>
+    <div class="portal-stat-card">
+      <dt class="text-sm font-medium text-sand-500">Links generated</dt>
+      <dd class="mt-4 text-4xl font-semibold tracking-tight text-accent-indigo"><%= @preview_count %></dd>
+    </div>
+    <div class="portal-stat-card">
+      <dt class="text-sm font-medium text-sand-500">Total Clicks</dt>
+      <dd class="mt-4 text-4xl font-semibold tracking-tight text-accent-blue"><%= @total_visits %></dd>
+    </div>
+    <div class="portal-stat-card">
+      <dt class="text-sm font-medium text-sand-500">Unread Messages</dt>
+      <dd id="unread_inbound_count" class="mt-4 text-4xl font-semibold tracking-tight text-accent-green">
+        <%= render partial: "admin/dashboard/unread_inbound_count", locals: { count: @unread_inbound_count } %>
+      </dd>
+    </div>
+  </dl>
+</section>
+
+<section class="portal-panel mt-8">
+  <div class="border-b border-sand-200 px-5 py-4 md:px-6">
+    <h3 class="text-base font-semibold text-sand-900">Available Templates</h3>
   </div>
-  <div class="max-h-48 overflow-y-auto px-4 py-5 sm:p-6">
+  <div class="max-h-52 overflow-y-auto px-5 py-5 md:px-6">
     <div class="flex flex-wrap gap-2">
       <% @templates.each do |template| %>
-        <%= link_to admin_template_preview_path(template), target: "_blank", class: "inline-flex items-center gap-x-1.5 rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10 hover:bg-blue-100 transition-colors" do %>
-          <svg class="h-1.5 w-1.5 fill-blue-500" viewBox="0 0 6 6" aria-hidden="true"><circle cx="3" cy="3" r="3" /></svg>
+        <%= link_to admin_template_preview_path(template), target: "_blank", class: "inline-flex items-center gap-2 rounded-full border border-sand-200 bg-sand-50 px-3 py-1.5 text-xs font-medium text-sand-700 transition hover:border-accent-green hover:text-accent-green" do %>
+          <span class="h-1.5 w-1.5 rounded-full bg-accent-green"></span>
           <%= template.titleize %>
         <% end %>
       <% end %>
     </div>
   </div>
-</div>
+</section>
 
-<div class="grid grid-cols-1 gap-8 lg:grid-cols-2">
-  <div class="bg-white shadow-sm ring-1 ring-slate-900/5 sm:rounded-xl">
-    <div class="border-b border-slate-200 px-4 py-5 sm:px-6 flex justify-between items-center">
-      <h3 class="text-base font-semibold leading-6 text-slate-900">Recent Engagement</h3>
+<section class="mt-8 grid grid-cols-1 gap-6 xl:grid-cols-2">
+  <div class="portal-panel overflow-hidden">
+    <div class="flex items-center justify-between border-b border-sand-200 px-5 py-4 md:px-6">
+      <h3 class="text-base font-semibold text-sand-900">Recent Engagement</h3>
     </div>
-    <ul role="list" class="divide-y divide-slate-100">
+    <ul role="list" class="divide-y divide-sand-200">
       <% if @recent_clicks.any? %>
         <% @recent_clicks.each do |link| %>
-          <li class="flex items-center justify-between gap-x-6 px-4 py-5 sm:px-6 hover:bg-slate-50 transition-colors">
+          <li class="flex items-center justify-between gap-4 px-5 py-5 transition hover:bg-sand-50 md:px-6">
             <div class="min-w-0 flex-1">
-              <div class="mb-1 flex items-start gap-x-3">
-                <p class="text-sm font-semibold leading-6 text-slate-900"><%= link.business.name %></p>
-                <p class="mt-0.5 rounded-md bg-green-50 px-1.5 py-0.5 text-xs font-medium whitespace-nowrap text-green-700 ring-1 ring-inset ring-green-600/20">Clicked on <%= link.template %></p>
+              <div class="mb-2 flex flex-wrap items-center gap-2">
+                <p class="text-sm font-semibold text-sand-900"><%= link.business.name %></p>
+                <span class="inline-flex items-center rounded-full bg-accent-green-bg px-2.5 py-1 text-xs font-medium text-accent-green">Clicked on <%= link.template %></span>
               </div>
-              <p class="text-xs leading-5 text-slate-500"><%= time_ago_in_words(link.clicked_at) %> ago</p>
+              <p class="text-xs text-sand-500"><%= time_ago_in_words(link.clicked_at) %> ago</p>
             </div>
-            <div class="flex flex-none items-center gap-x-4">
-              <%= link_to "View", admin_business_path(link.business), class: "rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-slate-900 shadow-sm ring-1 ring-inset ring-slate-300 hover:bg-slate-50" %>
-            </div>
+            <%= link_to "View", admin_business_path(link.business), class: "btn-base btn-sand px-3 py-2 text-sm shadow-sm" %>
           </li>
         <% end %>
       <% else %>
-        <li class="px-4 py-8 text-center text-sm text-slate-500">No clicks tracked yet. Send out some links!</li>
+        <li class="px-5 py-10 text-center text-sm text-sand-500 md:px-6">No clicks tracked yet. Send out some links to start filling this feed.</li>
       <% end %>
     </ul>
   </div>
 
-  <div class="bg-white shadow-sm ring-1 ring-slate-900/5 sm:rounded-xl">
-    <div class="border-b border-slate-200 px-4 py-5 sm:px-6 flex justify-between items-center">
-      <h3 class="text-base font-semibold leading-6 text-slate-900">Recent Businesses</h3>
-      <%= link_to "View all", admin_businesses_path, class: "text-sm font-semibold text-blue-600 hover:text-blue-500" %>
+  <div class="portal-panel overflow-hidden">
+    <div class="flex items-center justify-between border-b border-sand-200 px-5 py-4 md:px-6">
+      <h3 class="text-base font-semibold text-sand-900">Recent Businesses</h3>
+      <%= link_to "View all", admin_businesses_path, class: "text-sm font-semibold text-accent-green hover:text-accent-indigo" %>
     </div>
-    <ul role="list" class="divide-y divide-slate-100">
+    <ul role="list" class="divide-y divide-sand-200">
       <% if @recent_businesses.any? %>
         <% @recent_businesses.each do |business| %>
-          <li class="flex items-center justify-between gap-x-6 px-4 py-5 sm:px-6 hover:bg-slate-50 transition-colors">
-            <div class="min-w-0 relative flex-1">
-              <p class="mb-1 text-sm font-semibold leading-6 text-slate-900">
+          <li class="flex items-center justify-between gap-4 px-5 py-5 transition hover:bg-sand-50 md:px-6">
+            <div class="min-w-0 flex-1">
+              <p class="text-sm font-semibold text-sand-900">
                 <%= link_to business.name, admin_business_path(business) %>
               </p>
-              <div class="flex items-center gap-x-2 text-xs leading-5 text-slate-500">
-                <p class="truncate"><%= business.niche.presence || "No niche" %></p>
+              <div class="mt-1 flex flex-wrap items-center gap-2 text-xs text-sand-500">
+                <span><%= business.niche.presence || "No niche" %></span>
                 <% if business.city.present? %>
-                  <svg viewBox="0 0 2 2" class="h-0.5 w-0.5 fill-current"><circle cx="1" cy="1" r="1" /></svg>
-                  <p class="truncate"><%= business.city %></p>
+                  <span class="h-1 w-1 rounded-full bg-sand-300"></span>
+                  <span><%= business.city %></span>
                 <% end %>
               </div>
             </div>
           </li>
         <% end %>
       <% else %>
-        <li class="px-4 py-8 text-center text-sm text-slate-500">No businesses added yet.</li>
+        <li class="px-5 py-10 text-center text-sm text-sand-500 md:px-6">No businesses added yet.</li>
       <% end %>
     </ul>
   </div>
-</div>
+</section>

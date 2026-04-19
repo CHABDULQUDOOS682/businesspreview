@@ -1,14 +1,14 @@
-<div class="border-b border-slate-200">
+<div class="border-b border-sand-200">
   <nav class="-mb-px flex flex-wrap gap-2 sm:gap-6" aria-label="Business segments">
     <% visible_business_segment_tabs(tabs).each do |tab| %>
       <% active = current_segment == tab[:key] %>
       <%= link_to tab[:path],
                   class: [
                     "inline-flex items-center gap-2 border-b-2 px-1 py-3 text-sm font-semibold transition-colors",
-                    active ? "border-blue-600 text-blue-600" : "border-transparent text-slate-500 hover:border-slate-300 hover:text-slate-700"
+                    active ? "border-accent-indigo text-accent-indigo" : "border-transparent text-sand-500 hover:border-sand-300 hover:text-sand-700"
                   ].join(" ") do %>
         <span><%= tab[:label] %></span>
-        <span class="<%= active ? 'bg-blue-50 text-blue-700 ring-blue-200' : 'bg-slate-100 text-slate-600 ring-slate-200' %> inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ring-1 ring-inset">
+        <span class="<%= active ? 'bg-accent-indigo-bg text-accent-indigo ring-sand-200' : 'bg-sand-100 text-sand-600 ring-sand-200' %> inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ring-1 ring-inset">
           <%= tab[:count] %>
         </span>
       <% end %>

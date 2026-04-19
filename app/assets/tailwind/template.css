@@ -1,0 +1,12 @@
+.template--layout {
+  @apply p-4 md:p-6;
+}
+
+.vertical-tabs .horizontal-tabs .template--layout,
+.horizontal-tabs .template--layout {
+  @apply p-0;
+}
+
+.vertical-tabs .template--layout .template--layout {
+  @apply p-0;
+}

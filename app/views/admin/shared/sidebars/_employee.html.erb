@@ -1,5 +1,5 @@
 <% mobile = local_assigns.fetch(:mobile, false) %>
-<nav class="<%= mobile ? 'space-y-1 px-2 pb-3 pt-2' : 'flex-1 space-y-1 px-3 py-4 text-sm' %>">
+<nav class="<%= mobile ? 'space-y-1 px-3 py-3' : 'sidebar-items-section-container' %>">
   <%= admin_sidebar_nav_link "Dashboard", admin_root_path, controller: "admin/dashboard", icon: :dashboard, mobile: mobile %>
   <%= admin_sidebar_nav_link "Businesses", admin_businesses_path, controller: "admin/businesses", icon: :businesses, mobile: mobile %>
   <%= admin_sidebar_nav_link "Communications", admin_communications_path, controller: "admin/communications", icon: :communications, mobile: mobile, badge: admin_sidebar_unread_badge(mobile: mobile) %>
