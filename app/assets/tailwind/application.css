@@ -1,25 +1,83 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: "Instrument Sans", "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Fraunces", ui-serif, Georgia, serif;
+
+  --color-sand-50: #FAFAF8;
+  --color-sand-100: #F5F4F0;
+  --color-sand-200: #EEECE8;
+  --color-sand-300: #E0DDD8;
+  --color-sand-400: #C4C0B8;
+  --color-sand-500: #A09C94;
+  --color-sand-600: #777370;
+  --color-sand-700: #555250;
+  --color-sand-800: #333130;
+  --color-sand-900: #1A1918;
+
+  --color-brand-50: #EEF6FF;
+  --color-brand-100: #D9EBFF;
+  --color-brand-200: #BCDCFF;
+  --color-brand-300: #8EC8FF;
+  --color-brand-400: #58A8FF;
+  --color-brand-500: #3B8DF0;
+  --color-brand-600: #2570CC;
+  --color-brand-700: #1D5BA5;
+  --color-brand-800: #1C4D88;
+  --color-brand-900: #1C416F;
+
+  --color-status-current: #1D9E75;
+  --color-status-current-bg: #E1F5EE;
+  --color-status-discharged: #A09C94;
+  --color-status-discharged-bg: #F5F4F0;
+  --color-status-pending: #F5A623;
+  --color-status-pending-bg: #FFF8E8;
+  --color-status-danger: #E24B4A;
+  --color-status-danger-bg: #FCEBEB;
+
+  --color-accent-green: #1D9E75;
+  --color-accent-green-bg: #E1F5EE;
+  --color-accent-blue: #3B8DF0;
+  --color-accent-blue-bg: #EEF6FF;
+  --color-accent-amber: #F5A623;
+  --color-accent-amber-bg: #FFF8E8;
+  --color-accent-orange: #E8723A;
+  --color-accent-orange-bg: #FEF0E8;
+  --color-accent-lime: #7BBD3A;
+  --color-accent-lime-bg: #F0F8E4;
+  --color-accent-pink: #D4537E;
+  --color-accent-pink-bg: #FBEAF0;
+  --color-accent-red: #E24B4A;
+  --color-accent-red-bg: #FCEBEB;
+  --color-accent-purple: #7F77DD;
+  --color-accent-purple-bg: #EEEDFE;
+  --color-accent-indigo: #534AB7;
+  --color-accent-indigo-bg: #EAE9F9;
 }
+
+@import "./buttons.css";
+@import "./template.css";
+@import "./sidebar.css";
+@import "./portal.css";
 
 body {
   font-family: var(--font-sans);
 }
 
-/* Responsive typography tweak for mobile/tablet. */
+.bg-background {
+  @apply bg-sand-100;
+}
+
 @media (max-width: 1023px) {
   :root {
-    --text-xs: 0.8125rem; /* 13px */
-    --text-sm: 0.9375rem; /* 15px */
+    --text-xs: 0.8125rem;
+    --text-sm: 0.9375rem;
   }
 }
 
 @media (max-width: 639px) {
   :root {
-    --text-xs: 0.875rem; /* 14px */
-    --text-sm: 1rem; /* 16px */
+    --text-xs: 0.875rem;
+    --text-sm: 1rem;
   }
 }
-  

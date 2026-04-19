@@ -1,10 +1,10 @@
 <%= turbo_stream_from "conversation:#{@conversation_key}" if @conversation_key.present? %>
-<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 h-[calc(100vh-64px)] flex flex-col"
+<div class="flex h-full min-h-[42rem] flex-col"
      data-controller="twilio-call chat-scroll"
      data-action="turbo:load@window->chat-scroll#scrollToBottom turbo:render@window->chat-scroll#scrollToBottom"
      data-twilio-call-phone-number-value="<%= @number %>">
 
-  <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mb-3 sm:mb-4 flex-shrink-0 px-4 sm:px-6 lg:px-8">
+  <div class="mb-4 flex flex-shrink-0 flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
     <div class="min-w-0">
       <h2 class="text-xl sm:text-2xl font-bold leading-tight text-gray-900 break-words">
         <%= @business&.name || @number %>
@@ -40,10 +40,10 @@
     </div>
   </div>
 
-  <div class="flex-1 min-h-0 flex flex-col lg:flex-row lg:gap-6 mt-2">
+  <div class="mt-2 flex min-h-0 flex-1 flex-col lg:flex-row lg:gap-6">
     <!-- Messages column -->
     <div class="flex-1 flex flex-col">
-      <div id="messages" class="flex-1 min-h-0 overflow-y-auto bg-gray-50 p-4 rounded-lg shadow-inner mb-4" data-chat-scroll-target="list">
+      <div id="messages" class="mb-4 flex-1 min-h-0 overflow-y-auto rounded-[24px] border border-sand-200 bg-sand-50/80 p-4 shadow-inner" data-chat-scroll-target="list">
         <div id="message_list" class="space-y-4">
           <%= render partial: "admin/communications/message",
                      collection: @messages,
@@ -53,7 +53,7 @@
         <div data-chat-scroll-target="bottom"></div>
       </div>
 
-      <div class="flex-shrink-0 sticky bottom-0 bg-slate-50/95 backdrop-blur border-t border-slate-200 px-4 sm:px-6 lg:px-8 pt-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))]">
+      <div class="sticky bottom-0 flex-shrink-0 border-t border-sand-200 bg-white/95 pt-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))] backdrop-blur">
         <%= form_with url: admin_communications_path, method: :post, class: "relative" do |f| %>
           <%= f.hidden_field :to_number, value: @number %>
           <%= f.hidden_field :business_id, value: @business&.id %>

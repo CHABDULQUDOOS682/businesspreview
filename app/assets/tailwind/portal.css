@@ -1,0 +1,47 @@
+.portal-shell {
+  @apply min-h-screen bg-sand-100;
+}
+
+.portal-topbar {
+  @apply border-b border-sand-200 bg-white/95 backdrop-blur;
+}
+
+.portal-scroll-frame {
+  @apply grow min-h-0 overflow-hidden rounded-[28px] border border-sand-200 bg-white shadow-[0_10px_30px_rgba(26,25,24,0.05)];
+}
+
+.portal-scroll-body {
+  @apply h-full min-h-0 overflow-y-auto;
+}
+
+.portal-panel {
+  @apply rounded-[24px] border border-sand-200 bg-white shadow-[0_8px_24px_rgba(26,25,24,0.04)];
+}
+
+.portal-stat-card {
+  @apply rounded-[22px] border border-sand-200 bg-white p-5 shadow-[0_8px_18px_rgba(26,25,24,0.03)];
+}
+
+.portal-kicker {
+  @apply text-xs font-semibold uppercase tracking-[0.24em] text-sand-500;
+}
+
+.portal-display-title {
+  @apply font-display text-3xl tracking-tight text-sand-900 md:text-4xl;
+}
+
+.portal-page-title {
+  @apply font-display text-2xl tracking-tight text-sand-900;
+}
+
+.portal-muted {
+  @apply text-sand-600;
+}
+
+.portal-flash-notice {
+  @apply mb-4 rounded-[20px] border border-status-current bg-status-current-bg px-4 py-3 text-sm font-medium text-status-current;
+}
+
+.portal-flash-alert {
+  @apply mb-4 rounded-[20px] border border-status-danger bg-status-danger-bg px-4 py-3 text-sm font-medium text-status-danger;
+}

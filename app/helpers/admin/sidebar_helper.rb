@@ -1,4 +1,12 @@
 module Admin::SidebarHelper
+  NAV_ACCENTS = {
+    dashboard: :indigo,
+    businesses: :orange,
+    communications: :green,
+    tasks: :blue,
+    users: :purple
+  }.freeze
+
   def admin_sidebar_partial
     role = current_user&.role.to_s
     role = "employee" unless %w[super_admin admin employee].include?(role)
@@ -16,49 +24,72 @@ module Admin::SidebarHelper
   def admin_sidebar_role_badge_classes(role = current_user&.role)
     case role.to_s
     when "super_admin"
-      "bg-purple-50 text-purple-700 ring-purple-200"
+      "bg-accent-purple-bg text-accent-purple ring-sand-200"
     when "admin"
-      "bg-blue-50 text-blue-700 ring-blue-200"
+      "bg-accent-blue-bg text-accent-blue ring-sand-200"
     else
-      "bg-emerald-50 text-emerald-700 ring-emerald-200"
+      "bg-accent-green-bg text-accent-green ring-sand-200"
     end
   end
 
   def admin_sidebar_nav_link(label, path, controller:, icon:, mobile: false, badge: nil)
     active = admin_sidebar_link_active?(path: path, controller: controller)
-    wrapper_classes =
-      if mobile
-        [
-          "group flex items-center justify-between gap-3 rounded-md px-3 py-2 text-base font-medium",
-          active ? "bg-slate-900 text-white" : "text-slate-700 hover:bg-slate-100 hover:text-slate-900"
-        ].join(" ")
-      else
-        [
-          "group flex items-center justify-between gap-2 rounded-md px-2.5 py-2 font-medium",
-          active ? "bg-slate-900 text-white" : "text-slate-700 hover:bg-slate-100 hover:text-slate-900"
-        ].join(" ")
-      end
+    accent = admin_sidebar_accent(icon)
+    icon_classes = mobile ? "h-5 w-5" : "h-[1.05rem] w-[1.05rem]"
 
-    icon_container_classes =
-      [
-        mobile ? "inline-flex h-8 w-8 items-center justify-center rounded-md" : "inline-flex h-6 w-6 items-center justify-center rounded-md",
-        active ? "bg-white/10 text-white" : "bg-slate-900/5 text-slate-500 group-hover:text-slate-700"
+    if mobile
+      wrapper_classes = [
+        "nav-item justify-between",
+        (active ? "#{admin_sidebar_current_bg_class(accent)} active" : nil)
+      ].compact.join(" ")
+
+      icon_container_classes = [
+        "sidebar-item-icon",
+        active ? "text-white" : "bg-sand-100 text-sand-500"
       ].join(" ")
 
-    icon_classes = mobile ? "h-5 w-5" : "h-4 w-4"
+      label_classes = [
+        "sidebar-item-label",
+        active ? "text-white" : "text-sand-700"
+      ].join(" ")
 
-    link_to path, class: wrapper_classes do
+      return link_to path, class: wrapper_classes do
+        safe_join(
+          [
+            content_tag(:span, class: "flex min-w-0 items-center gap-3") do
+              safe_join(
+                [
+                  content_tag(:span, admin_sidebar_icon(icon, classes: icon_classes), class: icon_container_classes),
+                  content_tag(:span, label, class: label_classes)
+                ]
+              )
+            end,
+            badge.presence
+          ].compact
+        )
+      end
+    end
+
+    wrapper_classes = [
+      "sidebar-item",
+      (active ? "sidebar-item--current #{admin_sidebar_current_bg_class(accent)}" : nil)
+    ].compact.join(" ")
+
+    link_to path,
+            class: wrapper_classes,
+            data: active ? {} : { accent_bg: admin_sidebar_hover_bg_class(accent), accent_text: admin_sidebar_hover_text_class(accent) } do
       safe_join(
         [
-          content_tag(:span, class: "flex items-center gap-#{mobile ? 3 : 2}") do
-            safe_join(
-              [
-                content_tag(:span, admin_sidebar_icon(icon, classes: icon_classes), class: icon_container_classes),
-                content_tag(:span, label)
-              ]
-            )
-          end,
-          badge.presence
+          content_tag(
+            :span,
+            admin_sidebar_icon(icon, classes: icon_classes),
+            class: [
+              "sidebar-item-icon",
+              active ? "text-white" : "text-sand-500"
+            ].join(" ")
+          ),
+          content_tag(:span, label, class: "sidebar-item-label"),
+          badge.present? ? content_tag(:span, badge, class: "sidebar-item-badge") : nil
         ].compact
       )
     end
@@ -96,5 +127,44 @@ module Admin::SidebarHelper
         #{path}
       </svg>
     HTML
+  end
+
+  private
+
+  def admin_sidebar_accent(icon)
+    NAV_ACCENTS.fetch(icon.to_sym, :sand)
+  end
+
+  def admin_sidebar_current_bg_class(accent)
+    case accent
+    when :indigo then "bg-accent-indigo"
+    when :orange then "bg-accent-orange"
+    when :green then "bg-accent-green"
+    when :blue then "bg-accent-blue"
+    when :purple then "bg-accent-purple"
+    else "bg-sand-900"
+    end
+  end
+
+  def admin_sidebar_hover_bg_class(accent)
+    case accent
+    when :indigo then "bg-accent-indigo-bg"
+    when :orange then "bg-accent-orange-bg"
+    when :green then "bg-accent-green-bg"
+    when :blue then "bg-accent-blue-bg"
+    when :purple then "bg-accent-purple-bg"
+    else "bg-sand-200"
+    end
+  end
+
+  def admin_sidebar_hover_text_class(accent)
+    case accent
+    when :indigo then "text-accent-indigo"
+    when :orange then "text-accent-orange"
+    when :green then "text-accent-green"
+    when :blue then "text-accent-blue"
+    when :purple then "text-accent-purple"
+    else "text-sand-900"
+    end
   end
 end

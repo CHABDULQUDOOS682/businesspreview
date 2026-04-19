@@ -1,0 +1,117 @@
+.sidebar-container {
+  @apply fixed inset-y-0 left-0 z-40 hidden flex-col overflow-hidden bg-white px-3 pb-3 pt-2 transition-all duration-300 ease-in-out md:flex;
+}
+
+.sidebar-container--collapsed {
+  width: 4rem;
+}
+
+.sidebar-container--expanded {
+  @apply border-r border-sand-200 bg-white;
+  width: 14rem;
+}
+
+.sidebar-logo-container {
+  @apply flex items-center overflow-hidden pb-3 pt-2;
+  min-width: 12rem;
+}
+
+.sidebar-logo-link {
+  @apply flex items-center gap-3 transition-opacity hover:opacity-90;
+}
+
+.sidebar-brand-mark {
+  @apply flex h-10 w-10 shrink-0 items-center justify-center rounded-[14px] bg-accent-indigo text-white shadow-sm;
+}
+
+.sidebar-items-container {
+  @apply flex grow flex-col justify-between pt-2;
+}
+
+.sidebar-items-section-container {
+  @apply flex w-full flex-col gap-1;
+}
+
+.sidebar-item {
+  @apply flex w-full items-center gap-0 whitespace-nowrap rounded-[10px] py-2 transition-all duration-150;
+}
+
+.sidebar-item-icon {
+  @apply flex h-10 w-10 shrink-0 items-center justify-center rounded-[10px] text-sm transition-colors duration-150;
+}
+
+.sidebar-item-label {
+  @apply truncate text-sm font-medium tracking-tight transition-colors duration-150;
+}
+
+.sidebar-item-badge {
+  @apply ml-auto flex items-center;
+}
+
+.sidebar-container--expanded .sidebar-item:not(.sidebar-item--current) {
+  @apply text-sand-600;
+}
+
+.sidebar-container--expanded .sidebar-item--current {
+  @apply text-white;
+}
+
+.sidebar-container--expanded .sidebar-item--current .sidebar-item-label {
+  @apply text-white;
+}
+
+.sidebar-container--collapsed .sidebar-item:not(.sidebar-item--current) {
+  @apply text-sand-500;
+}
+
+.sidebar-container--collapsed .sidebar-item--current {
+  @apply text-white;
+}
+
+.sidebar-container--collapsed .sidebar-logo-container {
+  @apply justify-center;
+  min-width: auto;
+}
+
+.sidebar-container--collapsed .sidebar-logo-link {
+  @apply w-full justify-center gap-0;
+}
+
+.sidebar-container--collapsed .sidebar-item {
+  @apply justify-center;
+}
+
+.sidebar-container--collapsed .sidebar-item-label,
+.sidebar-container--collapsed .sidebar-item-badge,
+.sidebar-container--collapsed .sidebar-account-copy {
+  @apply hidden;
+}
+
+.sidebar-container--collapsed .sidebar-account-card {
+  @apply flex items-center justify-center border-transparent bg-transparent p-0 shadow-none;
+}
+
+.sidebar-container--collapsed .sidebar-account-role,
+.sidebar-container--collapsed .sidebar-account-actions {
+  @apply hidden;
+}
+
+.sidebar-account-compact {
+  @apply hidden;
+}
+
+.sidebar-container--collapsed .sidebar-account-compact {
+  @apply inline-flex h-10 w-10 items-center justify-center rounded-[12px] border border-sand-200 bg-sand-50 text-sand-600 shadow-sm transition hover:bg-sand-100 hover:text-sand-900;
+}
+
+.nav-item {
+  @apply flex items-center gap-[10px] rounded-[10px] px-[14px] py-[9px] text-sm font-medium text-sand-600 transition-all duration-150;
+}
+
+.nav-item:hover {
+  @apply bg-sand-200 text-sand-700;
+}
+
+.nav-item.active {
+  @apply text-white;
+}
