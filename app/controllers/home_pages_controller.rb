@@ -13,6 +13,12 @@ class HomePagesController < ApplicationController
         render :process
     end
 
+    def pricing
+    end
+
+    def portfolio
+    end
+
     def contact
     end
 

@@ -1,0 +1,113 @@
+<!-- Hero Section -->
+<section class="py-12 md:py-20 lg:py-32 px-4 md:px-0">
+  <div class="max-w-4xl text-center md:text-left">
+    <p class="text-[10px] md:text-sm font-black uppercase tracking-[0.3em] text-chartreuse mb-6">Recent Deployments</p>
+    <h1 class="text-4xl sm:text-5xl md:text-6xl font-black text-white italic uppercase tracking-tighter leading-[1.1] md:leading-tight">The Digital <span class="text-transparent bg-clip-text bg-gradient-to-r from-chartreuse to-white">Backbone.</span></h1>
+    <p class="mt-6 text-lg md:text-xl leading-relaxed text-slate-400 font-medium italic">Explore the systems we've built for businesses ready to dominate their local markets.</p>
+  </div>
+</section>
+
+<!-- Portfolio Grid -->
+<section class="grid gap-8 md:gap-12 pb-20 md:pb-32 px-4 md:px-0">
+  <% [
+    { 
+      name: "The Modern Barber", 
+      desc: "A high-performance booking system that reduced manual admin by 60%.", 
+      features: ["Real-time scheduling", "SMS notifications", "Staff commissions", "Client history"],
+      icon: "scissors",
+      tag: "Booking System"
+    },
+    { 
+      name: "Iron & Steel Gym", 
+      desc: "Full membership management with automated recurring payments.", 
+      features: ["Stripe integration", "Class attendance", "Member portal", "Trainer dashboards"],
+      icon: "dumbbell",
+      tag: "Business Web App"
+    },
+    { 
+      name: "Elite Dental Clinic", 
+      desc: "HIPAA-compliant patient portal and appointment management.", 
+      features: ["Patient records", "Online intake forms", "Email reminders", "Billing integration"],
+      icon: "hospital",
+      tag: "Healthcare System"
+    },
+    { 
+      name: "Gourmet Garden", 
+      desc: "Multi-location restaurant menu and reservation system.", 
+      features: ["Interactive menu", "Table management", "Private event bookings", "SEO Menu structure"],
+      icon: "utensils",
+      tag: "Restaurant Tech"
+    }
+  ].each do |project| %>
+    <div class="glassy rounded-[2rem] md:rounded-[3rem] overflow-hidden group border border-white/5 hover:border-chartreuse/20 transition-all duration-700">
+      <div class="grid lg:grid-cols-2 gap-0 items-center">
+        <!-- Visual Column -->
+        <div class="bg-gradient-to-br from-gun-metal to-black aspect-video relative flex items-center justify-center group-hover:scale-105 transition duration-700">
+          <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-20"></div>
+          <i class="fa-solid fa-<%= project[:icon] %> text-6xl md:text-8xl text-chartreuse opacity-20 group-hover:opacity-40 transition"></i>
+          
+          <div class="absolute top-6 md:top-10 right-6 md:right-10 glassy px-3 md:px-4 py-1.5 md:py-2 rounded-full border border-chartreuse/20 shadow-xl">
+             <p class="text-[8px] md:text-[10px] font-black text-chartreuse uppercase tracking-widest text-center"><%= project[:tag] %></p>
+          </div>
+
+          <div class="absolute bottom-6 md:bottom-10 left-6 md:left-10 glassy p-4 md:p-6 rounded-xl md:rounded-2xl border border-white/10 max-w-[200px] md:max-w-xs shadow-2xl hidden sm:block">
+             <p class="text-xs md:text-base text-white font-black uppercase italic tracking-tight"><%= project[:name] %></p>
+             <p class="text-[8px] md:text-xs text-slate-400 mt-2 italic"><%= project[:desc] %></p>
+          </div>
+        </div>
+        <!-- Content Column -->
+        <div class="p-8 md:p-12 lg:p-20 space-y-6 md:space-y-8">
+           <div class="sm:hidden space-y-2">
+              <p class="text-[10px] font-black text-chartreuse uppercase tracking-widest"><%= project[:tag] %></p>
+              <h3 class="text-2xl font-black text-white uppercase italic tracking-tighter"><%= project[:name] %></h3>
+              <p class="text-xs text-slate-400 italic"><%= project[:desc] %></p>
+           </div>
+           <h3 class="hidden sm:block text-2xl md:text-3xl font-black text-white uppercase italic tracking-tighter"><%= project[:name] %></h3>
+           <div class="space-y-4">
+              <p class="text-[10px] md:text-xs font-black uppercase tracking-widest text-chartreuse">Engineered Solutions:</p>
+              <ul class="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
+                <% project[:features].each do |feat| %>
+                  <li class="flex items-center gap-3 text-[10px] md:text-sm font-bold text-slate-400 uppercase tracking-widest">
+                    <div class="h-1 w-1 bg-chartreuse rounded-full"></div> <%= feat %>
+                  </li>
+                <% end %>
+              </ul>
+           </div>
+           <%= link_to contact_path, class: "inline-flex items-center gap-4 text-white font-black uppercase tracking-widest group/btn text-xs md:text-base" do %>
+             <span class="underline decoration-chartreuse decoration-4 underline-offset-8">Discuss a Project</span>
+             <i class="fa-solid fa-arrow-right text-chartreuse group-hover/btn:translate-x-2 transition"></i>
+           <% end %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</section>
+
+<!-- Why These Matter -->
+<section class="py-32 bg-black/40 -mx-6 px-6">
+  <div class="max-w-7xl mx-auto">
+    <div class="mb-20 text-center">
+      <h2 class="text-4xl font-black text-white italic uppercase tracking-tight">Why These Matter.</h2>
+    </div>
+    <div class="grid md:grid-cols-3 gap-8 text-center">
+      <% [
+        { t: "Increase customer bookings", d: "Smooth UX leads to more successful conversions." },
+        { t: "Improve business operations", d: "Clean dashboards mean less manual admin work." },
+        { t: "Build online trust", d: "Pro-level design builds instant credibility with local clients." }
+      ].each do |item| %>
+        <div class="space-y-4 p-8">
+           <p class="text-xl font-black text-white uppercase italic"><%= item[:t] %></p>
+           <p class="text-slate-500 font-medium italic"><%= item[:d] %></p>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</section>
+
+<!-- Final CTA -->
+<section class="py-24 text-center">
+  <h2 class="text-4xl font-black text-white italic uppercase mb-10">Want a system like this for your business?</h2>
+  <%= link_to contact_path, class: "px-12 py-6 bg-chartreuse rounded-full text-gun-metal font-black uppercase tracking-widest shadow-[0_0_30px_rgba(225,255,81,0.4)] hover:bg-white transition" do %>
+    👉 Contact Us
+  <% end %>
+</section>

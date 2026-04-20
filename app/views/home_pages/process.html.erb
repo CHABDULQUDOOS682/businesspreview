@@ -1,75 +1,75 @@
-<section class="pb-16 pt-8">
-  <div class="max-w-4xl">
-    <p class="text-sm font-bold uppercase tracking-[0.3em] text-sky-700">Process</p>
-    <h1 class="mt-4 text-5xl font-black tracking-tight text-slate-950">A simple delivery process that keeps momentum high and surprises low.</h1>
-    <p class="mt-6 text-lg leading-8 text-slate-600">Each phase is designed to help SaaS teams make good decisions quickly, with visible progress and a clean handoff into launch.</p>
+<!-- Hero Section -->
+<section class="py-12 md:py-20 lg:py-32 px-4 md:px-0">
+  <div class="max-w-4xl text-center md:text-left">
+    <p class="text-[10px] md:text-sm font-black uppercase tracking-[0.3em] text-chartreuse mb-6">The Veloq Method</p>
+    <h1 class="text-4xl sm:text-5xl md:text-6xl font-black text-white italic uppercase tracking-tighter leading-[1.1] md:leading-tight">High-Velocity <span class="text-transparent bg-clip-text bg-gradient-to-r from-chartreuse to-white">Delivery.</span></h1>
+    <p class="mt-6 text-lg md:text-xl leading-relaxed text-slate-400 font-medium italic">A streamlined engineering process designed to take your local business from zero to launch in record time.</p>
   </div>
 </section>
 
-<section class="space-y-6 pb-16">
-  <div class="grid gap-6 lg:grid-cols-[0.7fr_1.3fr]">
-    <div class="rounded-[2rem] border border-white/70 bg-slate-950 p-8 text-white shadow-xl shadow-slate-300/30">
-      <p class="text-sm font-bold uppercase tracking-[0.25em] text-sky-300">Week 1</p>
-      <h2 class="mt-4 text-3xl font-black">Discovery</h2>
-    </div>
-    <div class="rounded-[2rem] border border-white/70 bg-white/75 p-8 shadow-lg shadow-slate-200/70">
-      <p class="text-slate-600">We review the offer, current site gaps, audience needs, and project constraints so the rest of the work solves the right problem.</p>
-    </div>
-  </div>
-  <div class="grid gap-6 lg:grid-cols-[0.7fr_1.3fr]">
-    <div class="rounded-[2rem] border border-white/70 bg-gradient-to-br from-sky-400 to-cyan-300 p-8 shadow-lg shadow-cyan-100/70">
-      <p class="text-sm font-bold uppercase tracking-[0.25em] text-slate-950">Week 2</p>
-      <h2 class="mt-4 text-3xl font-black text-slate-950">Messaging</h2>
-    </div>
-    <div class="rounded-[2rem] border border-white/70 bg-white/75 p-8 shadow-lg shadow-slate-200/70">
-      <p class="text-slate-600">We turn insights into page narratives, positioning statements, and CTA logic that support organic discovery and buyer clarity.</p>
-    </div>
-  </div>
-  <div class="grid gap-6 lg:grid-cols-[0.7fr_1.3fr]">
-    <div class="rounded-[2rem] border border-white/70 bg-gradient-to-br from-amber-200 to-orange-100 p-8 shadow-lg shadow-amber-100/80">
-      <p class="text-sm font-bold uppercase tracking-[0.25em] text-orange-900">Weeks 3-4</p>
-      <h2 class="mt-4 text-3xl font-black text-slate-950">Design</h2>
-    </div>
-    <div class="rounded-[2rem] border border-white/70 bg-white/75 p-8 shadow-lg shadow-slate-200/70">
-      <p class="text-slate-600">We craft the visual direction and responsive layouts, keeping readability, accessibility, and trust-building front and center.</p>
-    </div>
-  </div>
-  <div class="grid gap-6 lg:grid-cols-[0.7fr_1.3fr]">
-    <div class="rounded-[2rem] border border-white/70 bg-white/85 p-8 shadow-lg shadow-slate-200/70">
-      <p class="text-sm font-bold uppercase tracking-[0.25em] text-sky-700">Weeks 5-6</p>
-      <h2 class="mt-4 text-3xl font-black text-slate-950">Build and launch</h2>
-    </div>
-    <div class="rounded-[2rem] border border-white/70 bg-slate-950 p-8 text-white shadow-xl shadow-slate-300/30">
-      <p class="text-slate-300">We implement the pages, connect editable SEO fields in the dashboard, run final QA, and prepare launch-ready assets with a clean wrap-up.</p>
-    </div>
+<!-- Timeline Section -->
+<section class="relative pb-20 md:pb-32 px-4 md:px-0">
+  <div class="absolute left-1/2 top-0 bottom-0 w-px bg-white/5 -translate-x-1/2 hidden lg:block"></div>
+  
+  <div class="space-y-8 md:space-y-12">
+    <% [
+      { week: "Phase 01", title: "Discovery & Blueprint", desc: "We map out your business goals, target audience, and system requirements.", icon: "magnifying-glass-chart" },
+      { week: "Phase 02", title: "High-Energy Design", desc: "We craft the visual identity and user interface that will WOW your customers.", icon: "palette" },
+      { week: "Phase 03", title: "System Engineering", desc: "Our team builds the custom booking systems and dashboards that power your growth.", icon: "code" },
+      { week: "Phase 04", title: "Launch & Propulsion", desc: "Final QA, SEO optimization, and hitting the 'Go' button on your new digital empire.", icon: "rocket" }
+    ].each_with_index do |phase, idx| %>
+      <div class="relative grid lg:grid-cols-2 gap-8 items-center">
+        <!-- Week Marker for Desktop -->
+        <div class="absolute left-1/2 -translate-x-1/2 w-4 h-4 bg-chartreuse rounded-full border-4 border-gun-metal hidden lg:block"></div>
+        
+        <div class="<%= idx.even? ? 'lg:pr-20' : 'lg:order-2 lg:pl-20' %>">
+           <div class="glassy p-6 md:p-10 rounded-[1.8rem] md:rounded-[2.5rem] border border-white/5 hover:border-chartreuse/30 transition group">
+              <div class="flex items-center gap-4 mb-6">
+                <div class="h-10 w-10 md:h-12 md:w-12 bg-gun-metal rounded-2xl flex items-center justify-center text-chartreuse group-hover:scale-110 transition">
+                   <i class="fa-solid fa-<%= phase[:icon] %> text-lg md:text-xl"></i>
+                </div>
+                <span class="text-[10px] md:text-xs font-black uppercase tracking-[0.3em] text-chartreuse"><%= phase[:week] %></span>
+              </div>
+              <h3 class="text-xl md:text-3xl font-black text-white uppercase italic tracking-tight mb-4"><%= phase[:title] %></h3>
+              <p class="text-sm md:text-base text-slate-400 font-medium italic"><%= phase[:desc] %></p>
+           </div>
+        </div>
+        
+        <div class="<%= idx.even? ? 'hidden lg:block' : 'lg:order-1 hidden lg:block' %>">
+          <!-- Visual Placeholder or Empty Space for balanced layout -->
+        </div>
+      </div>
+    <% end %>
   </div>
 </section>
 
-<section class="pb-8">
-  <div class="rounded-[2.5rem] border border-white/70 bg-white/75 p-8 shadow-lg shadow-slate-200/70 lg:p-10">
-    <div class="grid gap-6 lg:grid-cols-2">
-      <div>
-        <p class="text-sm font-bold uppercase tracking-[0.25em] text-sky-700">What you can expect</p>
-        <h2 class="mt-4 text-3xl font-black text-slate-950">Transparent communication, structured reviews, and no mystery around what is happening next.</h2>
-      </div>
-      <div class="grid gap-4 sm:grid-cols-2">
-        <div class="rounded-[1.5rem] border border-slate-200 p-5">
-          <p class="text-lg font-bold text-slate-950">Weekly updates</p>
-          <p class="mt-2 text-sm text-slate-600">Concise progress checkpoints with clear asks.</p>
-        </div>
-        <div class="rounded-[1.5rem] border border-slate-200 p-5">
-          <p class="text-lg font-bold text-slate-950">Review-ready deliverables</p>
-          <p class="mt-2 text-sm text-slate-600">Materials shaped for fast stakeholder feedback.</p>
-        </div>
-        <div class="rounded-[1.5rem] border border-slate-200 p-5">
-          <p class="text-lg font-bold text-slate-950">Search-friendly structure</p>
-          <p class="mt-2 text-sm text-slate-600">Semantic content architecture with editable metadata.</p>
-        </div>
-        <div class="rounded-[1.5rem] border border-slate-200 p-5">
-          <p class="text-lg font-bold text-slate-950">Simple handoff</p>
-          <p class="mt-2 text-sm text-slate-600">A dashboard your team can actually maintain.</p>
-        </div>
-      </div>
-    </div>
+<!-- Expectations Section -->
+<section class="py-20 md:py-32 bg-black/20 -mx-4 md:-mx-6 px-4 md:px-6">
+  <div class="text-center mb-12 md:mb-20">
+    <h2 class="text-[10px] md:text-xs font-black uppercase tracking-[0.5em] text-chartreuse mb-4">The Veloq Guarantee</h2>
+    <p class="text-3xl md:text-4xl font-black text-white italic uppercase tracking-tight">What to Expect.</p>
   </div>
+  
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
+    <% [
+      { t: "Daily Updates", d: "Zero mystery. You'll know exactly where we are every day.", icon: "calendar-day" },
+      { t: "Iterative Feedback", d: "We build with you, not just for you.", icon: "comments" },
+      { t: "Built-in SEO", d: "Visibility is engineered into every line of code.", icon: "magnifying-glass" },
+      { t: "Clean Handoff", d: "A system your team can actually manage and scale.", icon: "handshake" }
+    ].each do |item| %>
+      <div class="glassy p-6 md:p-8 rounded-2xl md:rounded-3xl text-center">
+        <div class="text-2xl md:text-3xl text-chartreuse/40 mb-6"><i class="fa-solid fa-<%= item[:icon] %>"></i></div>
+        <h4 class="text-lg md:text-xl font-black text-white uppercase italic mb-4"><%= item[:t] %></h4>
+        <p class="text-xs md:text-sm text-slate-500 font-medium italic"><%= item[:d] %></p>
+      </div>
+    <% end %>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="py-20 md:py-32 text-center px-4">
+  <h2 class="text-3xl md:text-4xl font-black text-white italic uppercase mb-10">Ready to start your launch sequence?</h2>
+  <%= link_to contact_path, class: "inline-block w-full sm:w-auto px-12 py-6 bg-chartreuse rounded-full text-gun-metal font-black uppercase tracking-widest shadow-[0_0_30px_rgba(225,255,81,0.4)] hover:bg-white transition" do %>
+    👉 Get Started Today
+  <% end %>
 </section>

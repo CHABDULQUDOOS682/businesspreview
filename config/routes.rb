@@ -3,7 +3,10 @@ Rails.application.routes.draw do
   # root "admin/dashboard#index"
   root "home_pages#index"
   get "services", to: "home_pages#services"
+  get "about", to: "home_pages#about"
   get "process", to: "home_pages#workflow"
+  get "pricing", to: "home_pages#pricing"
+  get "portfolio", to: "home_pages#portfolio"
   get "contact", to: "home_pages#contact"
   get "privacy", to: "home_pages#privacy"
 
