@@ -20,54 +20,78 @@
 
     <%# Includes all stylesheet files in app/assets/stylesheets %>
     <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "app", "data-turbo-track": "reload" %>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <%= javascript_importmap_tags %>
   </head>
 
-  <body class="min-h-screen bg-slate-100 text-slate-950 selection:bg-sky-200 selection:text-sky-900 [&_p]:hover:text-slate-800 [&_p]:transition-colors [&_h1]:cursor-default [&_h2]:cursor-default [&_h3]:cursor-default">
+  <body class="min-h-screen bg-gun-metal text-white selection:bg-chartreuse selection:text-gun-metal font-sans antialiased">
     <div class="relative overflow-hidden min-h-screen flex flex-col">
-      <!-- Premium Grid & Mesh Gradient Background (Darker Base) -->
-      <div class="absolute inset-0 -z-10 h-full w-full bg-[linear-gradient(to_right,#80808015_1px,transparent_1px),linear-gradient(to_bottom,#80808015_1px,transparent_1px)] bg-[size:24px_24px]">
-        <div class="absolute left-0 right-0 top-0 -z-10 m-auto h-[400px] w-[600px] rounded-full bg-sky-400 opacity-20 blur-[120px]"></div>
-        <div class="absolute -left-40 top-20 -z-10 h-[300px] w-[500px] rounded-full bg-indigo-500 opacity-10 blur-[100px]"></div>
-        <div class="absolute -right-40 top-40 -z-10 h-[300px] w-[500px] rounded-full bg-blue-500 opacity-10 blur-[100px]"></div>
+      <!-- Gradient Background Accents -->
+      <div class="absolute inset-0 -z-10 h-full w-full">
+        <div class="absolute left-0 right-0 top-0 -z-10 m-auto h-[500px] w-[600px] rounded-full bg-chartreuse opacity-5 blur-[120px]"></div>
+        <div class="absolute -left-40 top-20 -z-10 h-[400px] w-[500px] rounded-full bg-chartreuse opacity-10 blur-[100px]"></div>
       </div>
-      <header class="mx-auto flex w-full max-w-7xl items-center justify-between px-6 py-6 lg:px-10">
-        <%= link_to root_path, class: "flex items-center gap-3" do %>
-          <span class="flex h-11 w-11 items-center justify-center rounded-2xl bg-slate-950 text-sm font-black tracking-[0.35em] text-white">SA</span>
-          <div>
-            <p class="text-sm font-semibold uppercase tracking-[0.3em] text-sky-600">LaunchReady</p>
-            <p class="text-xs text-slate-500">SaaS agency websites built to convert</p>
-          </div>
-        <% end %>
 
-        <nav class="hidden items-center gap-2 rounded-full border border-white/60 bg-white/60 p-2 shadow-lg shadow-slate-200/70 backdrop-blur md:flex">
-          <%= nav_link_to "Home", root_path %>
-          <%= nav_link_to "Services", services_path %>
-          <%= nav_link_to "Process", process_path %>
-          <%= nav_link_to "Contact", contact_path %>
+      <header class="fixed top-0 z-50 w-full px-4 py-4" data-controller="mobile-nav">
+        <nav class="mx-auto flex max-w-7xl items-center justify-between glassy-dark rounded-2xl px-6 py-3 border border-white/10 relative">
+          <%= link_to root_path, class: "flex items-center gap-3 group z-20" do %>
+            <%= image_tag "veloqtech_logo.svg", class: "h-8 md:h-10 w-auto transition group-hover:scale-105", alt: "VeloqTech" %>
+            <span class="text-lg md:text-xl font-black uppercase tracking-tighter text-white">VeloqTech</span>
+          <% end %>
+
+          <!-- Mobile Menu Button -->
+          <button 
+            class="md:hidden text-white p-2 z-20 focus:outline-none" 
+            data-action="click->mobile-nav#toggle"
+            data-mobile-nav-target="button"
+          >
+            <i class="fa-solid fa-bars text-2xl"></i>
+          </button>
+
+          <!-- Desktop Navigation -->
+          <div class="hidden md:flex items-center gap-8">
+            <%= link_to "Home", root_path, class: "text-sm font-bold uppercase tracking-widest transition #{current_page?(root_path) ? 'text-chartreuse' : 'text-slate-300 hover:text-chartreuse'}" %>
+            <%= link_to "Services", services_path, class: "text-sm font-bold uppercase tracking-widest transition #{current_page?(services_path) ? 'text-chartreuse' : 'text-slate-300 hover:text-chartreuse'}" %>
+            <%= link_to "Portfolio", portfolio_path, class: "text-sm font-bold uppercase tracking-widest transition #{current_page?(portfolio_path) ? 'text-chartreuse' : 'text-slate-300 hover:text-chartreuse'}" %>
+            <%= link_to "Pricing", pricing_path, class: "text-sm font-bold uppercase tracking-widest transition #{current_page?(pricing_path) ? 'text-chartreuse' : 'text-slate-300 hover:text-chartreuse'}" %>
+            <%= link_to "Process", process_path, class: "text-sm font-bold uppercase tracking-widest transition #{current_page?(process_path) ? 'text-chartreuse' : 'text-slate-300 hover:text-chartreuse'}" %>
+            <%= link_to "Contact", contact_path, class: "rounded-full px-6 py-2.5 text-xs font-black uppercase tracking-widest transition #{current_page?(contact_path) ? 'bg-white text-gun-metal' : 'bg-chartreuse text-gun-metal hover:bg-white'}" %>
+          </div>
+
+          <!-- Mobile Navigation Panel -->
+          <div 
+            class="hidden absolute top-full left-0 right-0 mt-2 glassy-dark rounded-2xl p-6 border border-white/10 flex flex-col gap-6 md:hidden z-10"
+            data-mobile-nav-target="panel"
+          >
+            <%= link_to "Home", root_path, class: "text-sm font-bold uppercase tracking-widest #{current_page?(root_path) ? 'text-chartreuse' : 'text-slate-300'}" %>
+            <%= link_to "Services", services_path, class: "text-sm font-bold uppercase tracking-widest #{current_page?(services_path) ? 'text-chartreuse' : 'text-slate-300'}" %>
+            <%= link_to "Portfolio", portfolio_path, class: "text-sm font-bold uppercase tracking-widest #{current_page?(portfolio_path) ? 'text-chartreuse' : 'text-slate-300'}" %>
+            <%= link_to "Pricing", pricing_path, class: "text-sm font-bold uppercase tracking-widest #{current_page?(pricing_path) ? 'text-chartreuse' : 'text-slate-300'}" %>
+            <%= link_to "Process", process_path, class: "text-sm font-bold uppercase tracking-widest #{current_page?(process_path) ? 'text-chartreuse' : 'text-slate-300'}" %>
+            <%= link_to "Contact", contact_path, class: "rounded-full px-6 py-3 text-center text-xs font-black uppercase tracking-widest bg-chartreuse text-gun-metal" %>
+          </div>
         </nav>
       </header>
 
-      <% flash.each do |type, message| %>
-        <% tone = type.to_s == "notice" ? "border-emerald-200 bg-emerald-50 text-emerald-900" : "border-rose-200 bg-rose-50 text-rose-900" %>
-        <div class="mx-auto mb-4 w-full max-w-5xl px-6 lg:px-10">
-          <div class="rounded-2xl border px-4 py-3 text-sm font-medium <%= tone %>"><%= message %></div>
-        </div>
-      <% end %>
-
-      <main class="mx-auto w-full max-w-7xl px-6 pb-16 lg:px-10">
+      <main class="mx-auto w-full max-w-7xl px-4 md:px-6 pt-32 pb-16">
         <%= yield %>
       </main>
 
-      <footer class="border-t border-white/70 bg-white/60 backdrop-blur">
-        <div class="mx-auto flex w-full max-w-7xl flex-col gap-6 px-6 py-8 text-sm text-slate-600 lg:flex-row lg:items-center lg:justify-between lg:px-10">
-          <div>
-            <p class="font-semibold text-slate-900">LaunchReady designs honest, conversion-focused websites for SaaS teams.</p>
-            <p class="mt-1 max-w-2xl">We avoid misleading claims, keep calls to action clear, and structure content to support accessibility, transparency, and search-friendly best practices.</p>
+      <footer class="mt-auto bg-black/40 backdrop-blur-md border-t border-white/5 py-12">
+        <div class="mx-auto max-w-7xl px-6 flex flex-col items-center gap-10 md:flex-row md:justify-between">
+          <div class="flex flex-col items-center md:items-start gap-4">
+            <div class="flex items-center gap-3">
+              <%= image_tag "veloqtech_logo.svg", class: "h-8 w-auto opacity-80", alt: "VeloqTech" %>
+              <span class="text-xl font-black uppercase tracking-tighter text-white opacity-80">VeloqTech</span>
+            </div>
+            <p class="text-[10px] md:text-sm font-bold uppercase tracking-widest text-slate-500">© <%= Time.now.year %> VeloqTech. Build better.</p>
           </div>
-          <div class="flex flex-wrap items-center gap-4">
-            <%= link_to "Privacy", privacy_path, class: "transition hover:text-slate-950" %>
-            <a href="mailto:hello@previewapp.example" class="transition hover:text-slate-950">hello@previewapp.example</a>
+          <div class="flex flex-wrap justify-center gap-x-8 gap-y-4">
+            <%= link_to "About", about_path, class: "text-[10px] md:text-xs font-bold uppercase tracking-widest text-slate-500 hover:text-chartreuse transition" %>
+            <%= link_to "Privacy", privacy_path, class: "text-[10px] md:text-xs font-bold uppercase tracking-widest text-slate-500 hover:text-chartreuse transition" %>
+            <a href="#" class="text-[10px] md:text-xs font-bold uppercase tracking-widest text-slate-500 hover:text-chartreuse transition">Instagram</a>
+            <a href="#" class="text-[10px] md:text-xs font-bold uppercase tracking-widest text-slate-500 hover:text-chartreuse transition">LinkedIn</a>
           </div>
         </div>
       </footer>
