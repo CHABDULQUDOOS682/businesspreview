@@ -1,63 +1,74 @@
-<!-- Hero Section -->
-<section class="py-12 md:py-20 lg:py-32 px-4 md:px-0">
-  <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-    <div class="space-y-6 md:space-y-8 text-center lg:text-left">
-      <p class="text-[10px] md:text-sm font-black uppercase tracking-[0.3em] text-chartreuse">The Team Behind the Tech</p>
-      <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-white italic uppercase tracking-tighter leading-[1.1] md:leading-[0.9]">We Are <span class="text-transparent bg-clip-text bg-gradient-to-r from-chartreuse to-white">VeloqTech.</span></h1>
-      <p class="text-lg md:text-xl text-slate-400 font-medium italic leading-relaxed">
-        VeloqTech is a high-velocity digital agency focused on building the digital backbone for local businesses. We believe every barber, gym, and clinic deserves a system that works as hard as they do.
+<% content_for :title, "About | VeloqTech" %>
+
+<%= render "page_header",
+  eyebrow: "About VeloqTech",
+  title_html: 'A focused studio for <span class="home-display-accent">growth-minded local brands</span>'.html_safe,
+  subtitle: "We work with service businesses that are ready to move beyond outdated websites, scattered tools, and confusing customer journeys." %>
+
+<section class="py-20">
+  <div class="grid gap-6 lg:grid-cols-5">
+    <div class="home-glass home-card-3d rounded-[32px] p-10 lg:col-span-3" data-controller="tilt-card" data-action="mousemove->tilt-card#move mouseleave->tilt-card#leave">
+      <p class="text-xs font-bold uppercase tracking-[0.2em] text-[#081849]/58">Our point of view</p>
+      <h2 class="mt-4 text-4xl font-extrabold text-[#081849]">Good design should make the business easier to run.</h2>
+      <p class="mt-5 text-lg leading-relaxed text-[#081849]/68">
+        That means the homepage needs to clarify the offer, service pages need to guide decision-making, and the systems behind the site need to support how your team actually works.
       </p>
-      <div class="flex justify-center lg:justify-start gap-4">
-         <div class="h-px w-12 md:w-20 bg-chartreuse self-center"></div>
-         <p class="text-[10px] md:text-xs font-black uppercase tracking-widest text-slate-500 italic">Est. 2024 • Engineered in the USA</p>
-      </div>
+      <p class="mt-4 text-lg leading-relaxed text-[#081849]/68">
+        We build with the realities of local service businesses in mind: mobile visitors, fast trust decisions, booked-call friction, and the need for handoff clarity after launch.
+      </p>
     </div>
-    <div class="relative mt-12 lg:mt-0">
-      <div class="glassy p-3 md:p-4 rounded-[2rem] md:rounded-[3rem] border border-white/10 rotate-2 hover:rotate-0 transition duration-700">
-         <div class="bg-gun-metal rounded-[1.8rem] md:rounded-[2.5rem] p-8 md:p-12 aspect-square flex flex-col justify-center items-center text-center space-y-6">
-            <div class="h-16 w-16 md:h-24 md:w-24 bg-chartreuse rounded-full flex items-center justify-center text-gun-metal">
-               <i class="fa-solid fa-code text-3xl md:text-4xl"></i>
-            </div>
-            <h3 class="text-2xl md:text-3xl font-black text-white uppercase italic">Built for Growth.</h3>
-            <p class="text-sm md:text-base text-slate-400 italic">We don't just build websites; we build business tools that automate your success.</p>
-         </div>
+
+    <div class="space-y-6 lg:col-span-2">
+      <div class="home-card-3d overflow-hidden rounded-[28px] bg-gradient-to-br from-[#123b56] to-[#11255f] p-8 text-[#ECDFD2] shadow-[0_24px_55px_-25px_rgba(8,24,73,0.55)]" data-controller="tilt-card" data-action="mousemove->tilt-card#move mouseleave->tilt-card#leave">
+        <p class="text-xs font-bold uppercase tracking-[0.2em] text-[#ECDFD2]/65">Why clients hire us</p>
+        <h3 class="mt-3 text-3xl font-extrabold">Clarity, speed, and systems.</h3>
+        <p class="mt-3 text-sm leading-relaxed text-[#ECDFD2]/78">You get a partner who thinks about the offer, the page structure, and the back-end workflow at the same time.</p>
+      </div>
+      <div class="home-glass home-card-3d rounded-[28px] p-8" data-controller="tilt-card" data-action="mousemove->tilt-card#move mouseleave->tilt-card#leave">
+        <p class="text-xs font-bold uppercase tracking-[0.2em] text-[#081849]/58">Best fit</p>
+        <p class="mt-3 text-lg font-semibold text-[#081849]">Barbers, clinics, studios, local agencies, and service-led teams that want a more intentional digital presence.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- Values Section -->
-<section class="py-20 md:py-32 bg-black/40 -mx-4 md:-mx-6 px-4 md:px-6">
-  <div class="max-w-7xl mx-auto">
-    <div class="mb-12 md:mb-20 text-center">
-       <h2 class="text-[10px] md:text-xs font-black uppercase tracking-[0.5em] text-chartreuse mb-4">Our Core Values</h2>
-       <p class="text-3xl md:text-4xl font-black text-white italic uppercase tracking-tight">The Veloq Code.</p>
+<section class="relative overflow-hidden border-y border-[#081849]/8 bg-[#CCCACC]/45 py-24">
+  <div class="home-grid-bg absolute inset-0 opacity-30"></div>
+  <div class="relative">
+    <div class="mx-auto max-w-3xl text-center">
+      <p class="text-xs font-bold uppercase tracking-[0.2em] text-[#081849]/58">Our values</p>
+      <h2 class="mt-3 text-4xl font-extrabold text-[#081849] md:text-5xl">The way we work</h2>
     </div>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
+
+    <div class="mt-16 grid gap-6 md:grid-cols-3">
       <% [
-        { t: "Speed & Precision", d: "High-velocity delivery without sacrificing the technical details.", icon: "bolt" },
-        { t: "Local First", d: "We focus on the businesses that power our communities.", icon: "location-dot" },
-        { t: "Radical Transparency", d: "Clear communication, honest pricing, and real results.", icon: "eye" }
+        { icon: "fa-bolt", title: "Fast but thoughtful", text: "We move quickly, but we still design around the business goal and the customer journey." },
+        { icon: "fa-eye", title: "Clear communication", text: "We keep the process visible, explain tradeoffs, and avoid burying clients in vague updates." },
+        { icon: "fa-location-dot", title: "Local-first thinking", text: "We care about how real local buyers browse, compare, and commit on mobile." }
       ].each do |value| %>
-        <div class="glassy p-8 md:p-10 rounded-2xl md:rounded-3xl border border-white/5 space-y-6 group hover:border-chartreuse/40 transition">
-          <div class="h-10 w-10 md:h-12 md:w-12 bg-gun-metal rounded-xl flex items-center justify-center text-chartreuse group-hover:scale-110 transition">
-             <i class="fa-solid fa-<%= value[:icon] %> text-lg md:text-xl"></i>
-          </div>
-          <h4 class="text-xl md:text-2xl font-black text-white uppercase italic"><%= value[:t] %></h4>
-          <p class="text-sm md:text-base text-slate-400 font-medium italic"><%= value[:d] %></p>
+        <div class="home-glass home-card-3d rounded-[28px] p-8" data-controller="tilt-card" data-action="mousemove->tilt-card#move mouseleave->tilt-card#leave">
+          <i class="fa-solid <%= value[:icon] %> text-2xl text-[#5F3475]"></i>
+          <h3 class="mt-5 text-2xl font-bold text-[#081849]"><%= value[:title] %></h3>
+          <p class="mt-3 text-sm leading-relaxed text-[#081849]/66"><%= value[:text] %></p>
         </div>
       <% end %>
     </div>
   </div>
 </section>
 
-<!-- Team CTA -->
-<section class="py-20 md:py-32 text-center px-4">
-  <div class="max-w-3xl mx-auto space-y-8">
-     <h2 class="text-3xl md:text-4xl font-black text-white italic uppercase tracking-tight">Want to know more about how we can help your business?</h2>
-     <p class="text-lg md:text-xl text-slate-400 italic">Let's hop on a call and map out your next move.</p>
-     <%= link_to contact_path, class: "inline-block w-full sm:w-auto px-12 py-6 bg-chartreuse rounded-full text-gun-metal font-black uppercase tracking-widest transition hover:bg-white" do %>
-       Get in Touch
-     <% end %>
+<section class="py-24">
+  <div class="grid gap-6 md:grid-cols-4">
+    <% [["Strategy", "Offer clarity before pixels"], ["Design", "Interfaces that guide action"], ["Build", "Clean, launch-ready implementation"], ["Support", "A steady hand after launch"]].each do |title, text| %>
+      <div class="home-glass home-card-3d rounded-[28px] p-6 text-center" data-controller="tilt-card" data-action="mousemove->tilt-card#move mouseleave->tilt-card#leave">
+        <p class="text-2xl font-extrabold text-[#081849]"><%= title %></p>
+        <p class="mt-2 text-sm text-[#081849]/66"><%= text %></p>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="mt-16 text-center">
+    <%= link_to contact_path, class: "home-button-primary" do %>
+      Let’s Talk About Your Project
+    <% end %>
   </div>
 </section>

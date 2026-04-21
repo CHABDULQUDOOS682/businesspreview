@@ -1,213 +1,257 @@
-<!-- Hero Section -->
-<section class="relative py-12 md:py-20 lg:py-32 overflow-hidden -mx-4 md:-mx-6 px-4 md:px-6">
-  <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-    <div class="space-y-6 md:space-y-8 relative z-10 text-center lg:text-left">
-      <div class="inline-flex rounded-full px-4 py-2 bg-chartreuse/10 border border-chartreuse/20 text-chartreuse text-[10px] md:text-xs font-black uppercase tracking-widest animate-pulse">
-        Now Serving Local Businesses
+<% content_for :title, "VeloqTech | Websites and systems that convert" %>
+
+<section class="relative min-h-[90vh] overflow-hidden" data-controller="home-scene" data-action="mousemove->home-scene#move mouseleave->home-scene#leave">
+  <div class="home-hero-scene pointer-events-none absolute inset-0 overflow-hidden">
+    <div class="home-grid-animated absolute inset-0 opacity-40"></div>
+
+    <div class="animate-glow absolute -right-32 -top-32 h-[36rem] w-[36rem] rounded-full bg-[#213885]/15 blur-[120px] home-hero-parallax-reverse"></div>
+    <div class="animate-glow absolute -bottom-28 -left-28 h-[30rem] w-[30rem] rounded-full bg-[#893172]/10 blur-[120px] home-hero-parallax" style="animation-delay: 2s;"></div>
+
+    <div class="absolute left-[8%] top-[15%] animate-float-slow home-hero-parallax">
+      <div class="perspective-1000">
+        <div class="preserve-3d animate-spin-slower relative h-20 w-20">
+          <div class="absolute inset-0 border border-[#213885]/35 bg-[#5F3475]/18 backdrop-blur-[2px]" style="transform: translateZ(40px);"></div>
+          <div class="absolute inset-0 border border-[#213885]/28 bg-[#5F3475]/10 backdrop-blur-[2px]" style="transform: rotateY(180deg) translateZ(40px);"></div>
+          <div class="absolute inset-0 border border-[#213885]/30 bg-[#5F3475]/14 backdrop-blur-[2px]" style="transform: rotateY(90deg) translateZ(40px);"></div>
+          <div class="absolute inset-0 border border-[#213885]/20 bg-[#5F3475]/8 backdrop-blur-[2px]" style="transform: rotateY(-90deg) translateZ(40px);"></div>
+          <div class="absolute inset-0 border border-[#213885]/30 bg-[#5F3475]/16 backdrop-blur-[2px]" style="transform: rotateX(90deg) translateZ(40px);"></div>
+          <div class="absolute inset-0 border border-[#213885]/15 bg-[#5F3475]/6 backdrop-blur-[2px]" style="transform: rotateX(-90deg) translateZ(40px);"></div>
+        </div>
       </div>
-      <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black leading-[1.1] lg:leading-[0.9] tracking-tighter text-white uppercase italic">
-        Build a Website That Brings You <span class="text-transparent bg-clip-text bg-gradient-to-r from-chartreuse to-white">Real Customers</span> — Not Just Traffic.
+    </div>
+
+    <svg class="absolute right-[12%] top-[23%] h-[7.5rem] w-[7.5rem] animate-float-medium home-hero-parallax-reverse home-hero-svg" viewBox="0 0 120 120" fill="none" style="animation-delay: 1s;">
+      <defs>
+        <radialGradient id="home-torus-gradient" cx="0.3" cy="0.3">
+          <stop offset="0%" stop-color="#5F3475" stop-opacity="0.6" />
+          <stop offset="100%" stop-color="#5F3475" stop-opacity="0.05" />
+        </radialGradient>
+      </defs>
+      <ellipse cx="60" cy="60" rx="50" ry="20" stroke="url(#home-torus-gradient)" stroke-width="3" />
+      <ellipse cx="60" cy="60" rx="50" ry="20" stroke="#5F3475" stroke-width="1" opacity="0.4" transform="rotate(30 60 60)" />
+      <ellipse cx="60" cy="60" rx="50" ry="20" stroke="#5F3475" stroke-width="1" opacity="0.3" transform="rotate(60 60 60)" />
+      <ellipse cx="60" cy="60" rx="50" ry="20" stroke="#5F3475" stroke-width="1" opacity="0.2" transform="rotate(90 60 60)" />
+      <ellipse cx="60" cy="60" rx="50" ry="20" stroke="#5F3475" stroke-width="1" opacity="0.3" transform="rotate(120 60 60)" />
+      <ellipse cx="60" cy="60" rx="50" ry="20" stroke="#5F3475" stroke-width="1" opacity="0.4" transform="rotate(150 60 60)" />
+    </svg>
+
+    <svg class="absolute left-[13%] bottom-[18%] h-[5.75rem] w-[5.75rem] animate-float-slow home-hero-parallax home-hero-svg" viewBox="0 0 100 100" fill="none" style="animation-delay: 2s;">
+      <defs>
+        <linearGradient id="home-pyramid-a" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#5F3475" stop-opacity="0.4" />
+          <stop offset="100%" stop-color="#5F3475" stop-opacity="0.1" />
+        </linearGradient>
+        <linearGradient id="home-pyramid-b" x1="0" y1="1" x2="1" y2="0">
+          <stop offset="0%" stop-color="#5F3475" stop-opacity="0.25" />
+          <stop offset="100%" stop-color="#5F3475" stop-opacity="0.05" />
+        </linearGradient>
+      </defs>
+      <polygon points="50,10 90,80 50,65" fill="url(#home-pyramid-a)" stroke="#5F3475" stroke-width="1.5" opacity="0.7" />
+      <polygon points="50,10 10,80 50,65" fill="url(#home-pyramid-b)" stroke="#5F3475" stroke-width="1.5" opacity="0.6" />
+      <polygon points="50,65 10,80 90,80" fill="rgba(95,52,117,0.08)" stroke="#5F3475" stroke-width="1" opacity="0.4" />
+    </svg>
+
+    <svg class="absolute right-[18%] bottom-[14%] h-[4.5rem] w-[4.5rem] animate-float-medium home-hero-parallax-reverse home-hero-svg" viewBox="0 0 80 80" fill="none" style="animation-delay: 0.5s;">
+      <defs>
+        <radialGradient id="home-sphere-gradient" cx="0.35" cy="0.35">
+          <stop offset="0%" stop-color="#5F3475" stop-opacity="0.9" />
+          <stop offset="60%" stop-color="#5F3475" stop-opacity="0.2" />
+          <stop offset="100%" stop-color="#081849" stop-opacity="0.6" />
+        </radialGradient>
+      </defs>
+      <circle cx="40" cy="40" r="35" fill="url(#home-sphere-gradient)" stroke="#5F3475" stroke-width="1" opacity="0.5" />
+      <ellipse cx="40" cy="40" rx="35" ry="10" stroke="#5F3475" stroke-width="0.5" opacity="0.4" />
+      <ellipse cx="40" cy="40" rx="10" ry="35" stroke="#5F3475" stroke-width="0.5" opacity="0.4" />
+    </svg>
+
+    <svg class="absolute left-[45%] top-[54%] h-[8.75rem] w-[8.75rem] animate-float-slow home-hero-parallax home-hero-svg" viewBox="0 0 140 140" fill="none" style="animation-delay: 1.5s;">
+      <circle cx="70" cy="70" r="60" stroke="#5F3475" stroke-width="1" stroke-dasharray="4 8" opacity="0.35" />
+      <circle cx="70" cy="70" r="50" stroke="#5F3475" stroke-width="1" opacity="0.22" />
+      <circle cx="70" cy="70" r="40" stroke="#5F3475" stroke-width="0.5" stroke-dasharray="2 6" opacity="0.45" />
+    </svg>
+  </div>
+
+  <div class="relative mx-auto max-w-7xl px-2 py-10 md:px-0 md:py-16">
+    <div class="mx-auto max-w-5xl text-center">
+      <span class="home-pill">
+        <span class="home-pill-dot"></span>
+        Digital Agency · Est. 2019
+      </span>
+
+      <h1 class="home-hero-heading text-glow mt-8 text-5xl font-extrabold leading-[1.02] tracking-tight text-[#081849] md:text-8xl">
+        Brands that
+        <span class="relative inline-block">
+          <span class="relative z-10 bg-gradient-to-br from-[#5F3475] to-[#893172] bg-clip-text text-transparent">
+            scale.
+          </span>
+          <svg class="absolute -bottom-2 left-0 w-full" height="14" viewBox="0 0 200 14" preserveAspectRatio="none">
+            <path d="M2 8 Q50 2 100 7 T198 6" stroke="#893172" stroke-width="3" fill="none" stroke-linecap="round" />
+          </svg>
+        </span>
+        <br>
+        Sites that <span class="bg-gradient-to-br from-[#081849] to-[#081849]/40 bg-clip-text text-transparent">convert.</span>
       </h1>
-      <p class="text-lg md:text-xl text-slate-400 max-w-xl mx-auto lg:mx-0 leading-relaxed font-medium italic">
-        VeloqTech creates high-converting websites and business systems for local businesses that want more bookings, calls, and sales.
+
+      <p class="mx-auto mt-8 max-w-2xl text-lg leading-relaxed text-[#081849]/70 md:text-xl">
+        VeloqTech is a full-service digital agency helping ambitious companies launch, grow, and dominate their markets through strategic design, engineering, and growth marketing.
       </p>
-      <div class="flex flex-col sm:flex-row justify-center lg:justify-start gap-4 pt-4">
-        <%= link_to contact_path, class: "px-8 py-5 bg-chartreuse rounded-2xl text-gun-metal font-black uppercase tracking-widest shadow-[0_0_20px_rgba(225,255,81,0.3)] transition hover:-translate-y-1 hover:bg-white text-center" do %>
-          Get a Free Consultation
+
+      <div class="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
+        <%= link_to services_path, class: "home-button-primary" do %>
+          Explore Services
         <% end %>
-        <a href="https://wa.me/yournumber" class="px-8 py-5 glassy rounded-2xl text-white font-black uppercase tracking-widest flex items-center justify-center gap-3 hover:bg-white/10 transition">
-          <i class="fa-brands fa-whatsapp text-chartreuse text-xl"></i>
-          WhatsApp Us
-        </a>
+        <%= link_to portfolio_path, class: "home-button-secondary" do %>
+          View Our Work →
+        <% end %>
       </div>
     </div>
-    <div class="relative mt-12 lg:mt-0">
-      <div class="absolute -inset-1 bg-gradient-to-r from-chartreuse to-gun-metal rounded-3xl blur opacity-20"></div>
-      <div class="relative glassy-dark rounded-3xl p-4 md:p-8 border border-white/10">
-        <!-- Abstract Glassy System Visual -->
-        <div class="aspect-video bg-gradient-to-br from-gun-metal to-black rounded-2xl overflow-hidden relative group">
-          <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-20"></div>
-          <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 md:w-40 h-32 md:h-40 bg-chartreuse/20 rounded-full blur-3xl animate-pulse"></div>
-          <div class="absolute inset-0 flex items-center justify-center">
-             <i class="fa-solid fa-rocket text-5xl md:text-7xl text-chartreuse opacity-40 group-hover:scale-110 transition-transform"></i>
-          </div>
-          <div class="absolute bottom-4 md:bottom-6 left-4 md:left-6 right-4 md:right-6 glassy p-3 md:p-4 rounded-xl border border-white/10">
-            <p class="text-[8px] md:text-[10px] font-black uppercase tracking-widest text-chartreuse">System Status: Orbital</p>
-            <p class="text-[10px] md:text-xs font-bold text-white mt-1">Accelerating Bookings +400%</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
 
-<!-- Problem Section -->
-<section class="py-20 md:py-24 bg-black/40 -mx-4 md:-mx-6 px-4 md:px-6">
-  <div class="max-w-4xl mx-auto text-center mb-12 md:mb-16">
-    <h2 class="text-[10px] md:text-sm font-black uppercase tracking-[0.4em] text-slate-500 mb-4">The Challenge</h2>
-    <p class="text-3xl md:text-4xl font-black text-white italic uppercase tracking-tight">Most local businesses struggle with:</p>
-  </div>
-  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-    <% [
-      "No online presence that actually brings customers",
-      "Poor-quality or outdated websites",
-      "Relying only on Instagram or referrals",
-      "Losing clients to competitors with better systems"
-    ].each do |problem| %>
-      <div class="glassy p-6 md:p-8 rounded-3xl border border-white/5 hover:border-chartreuse/30 transition">
-        <div class="h-10 w-10 bg-gun-metal rounded-full flex items-center justify-center text-chartreuse mb-6">
-          <i class="fa-solid fa-xmark"></i>
-        </div>
-        <p class="text-xs md:text-sm font-bold text-slate-300 leading-relaxed uppercase tracking-wide"><%= problem %></p>
-      </div>
-    <% end %>
-  </div>
-</section>
-
-<!-- Solution Section -->
-<section class="py-20 md:py-32 -mx-4 md:-mx-6 px-4 md:px-6">
-  <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-    <div class="relative order-2 lg:order-1">
-      <div class="glassy-dark rounded-[2rem] md:rounded-[3rem] p-3 md:p-4 border border-white/10">
-        <div class="bg-gun-metal rounded-[1.8rem] md:rounded-[2.5rem] p-6 md:p-10 space-y-6 md:space-y-8">
-          <div class="flex items-center gap-4 border-b border-white/5 pb-6">
-            <div class="h-10 w-10 md:h-12 md:w-12 rounded-2xl bg-chartreuse flex items-center justify-center text-gun-metal font-black">VT</div>
-            <p class="text-lg md:text-xl font-black text-white uppercase italic">We fix that.</p>
-          </div>
-          <ul class="space-y-4 md:space-y-6">
-            <% [
-              { title: "Modern websites that convert", icon: "check" },
-              { title: "Booking systems for services", icon: "calendar-check" },
-              { title: "Custom dashboards to manage ops", icon: "chart-line" },
-              { title: "Fast, mobile-first websites", icon: "mobile-screen" }
-            ].each do |sol| %>
-              <li class="flex items-start gap-4 group">
-                <div class="mt-1 h-5 w-5 md:h-6 md:w-6 rounded-full border border-chartreuse flex items-center justify-center text-[8px] md:text-[10px] text-chartreuse group-hover:bg-chartreuse group-hover:text-gun-metal transition">
-                   <i class="fa-solid fa-<%= sol[:icon] %>"></i>
-                </div>
-                <p class="text-base md:text-lg font-bold text-slate-300 italic group-hover:text-white transition"><%= sol[:title] %></p>
-              </li>
-            <% end %>
-          </ul>
-        </div>
-      </div>
-    </div>
-    <div class="space-y-6 md:space-y-8 order-1 lg:order-2 text-center lg:text-left">
-      <h2 class="text-[10px] md:text-xs font-black uppercase tracking-[0.5em] text-chartreuse">Our Solution</h2>
-      <p class="text-4xl md:text-5xl font-black text-white italic uppercase leading-[1.1] md:leading-none">High-Energy Tools Built for <span class="text-chartreuse">Real Growth.</span></p>
-      <p class="text-lg md:text-xl text-slate-400 font-medium italic">At VeloqTech, we don't just design — we engineer the digital backbone of your local empire.</p>
-      <%= link_to services_path, class: "inline-block px-8 py-4 border-2 border-chartreuse text-chartreuse font-black uppercase tracking-widest rounded-full hover:bg-chartreuse hover:text-gun-metal transition shadow-[0_0_15px_rgba(225,255,81,0.2)]" do %>
-        Explore Our Ecosystem
-      <% end %>
-    </div>
-  </div>
-</section>
-
-<!-- Industries We Serve -->
-<section class="py-20 md:py-32 bg-black/20 -mx-4 md:-mx-6 px-4 md:px-6">
-  <div class="text-center mb-12 md:mb-20">
-    <h2 class="text-3xl md:text-4xl font-black text-white italic uppercase tracking-tight">Industries We Serve.</h2>
-  </div>
-  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-    <% [
-      { name: "Barbers & Salons", icon: "scissors" },
-      { name: "Restaurants & Cafes", icon: "utensils" },
-      { name: "Gyms & Fitness Studios", icon: "dumbbell" },
-      { name: "Clinics & Health", icon: "hospital" },
-      { name: "Real Estate Agents", icon: "house-chimney" },
-      { name: "Local Services", icon: "screwdriver-wrench" }
-    ].each do |ind| %>
-      <div class="glassy p-8 md:p-10 rounded-[1.5rem] md:rounded-[2rem] text-center group hover:-translate-y-2 transition duration-500">
-        <div class="text-4xl md:text-5xl text-chartreuse opacity-40 mb-4 md:mb-6 group-hover:opacity-100 group-hover:scale-110 transition duration-500">
-          <i class="fa-solid fa-<%= ind[:icon] %>"></i>
-        </div>
-        <p class="text-lg md:text-xl font-black text-white hover:text-chartreuse transition"><%= ind[:name] %></p>
-      </div>
-    <% end %>
-  </div>
-</section>
-
-<!-- What Makes Us Different -->
-<!-- Trust / Stats Section -->
-<section class="py-24 bg-chartreuse/5 -mx-6 px-6 border-y border-chartreuse/10">
-  <div class="max-w-7xl mx-auto grid md:grid-cols-4 gap-12 text-center">
-    <% [
-      { n: "50+", t: "Businesses Served", icon: "briefcase" },
-      { n: "400%", t: "Avg Booking Increase", icon: "chart-line" },
-      { n: "24/7", t: "Automated Systems", icon: "clock" },
-      { n: "100%", t: "Custom Engineering", icon: "gear" }
-    ].each do |stat| %>
-      <div class="space-y-2">
-        <p class="text-5xl font-black text-chartreuse italic uppercase tracking-tighter"><%= stat[:n] %></p>
-        <p class="text-sm font-bold text-slate-400 uppercase tracking-widest"><%= stat[:t] %></p>
-      </div>
-    <% end %>
-  </div>
-</section>
-
-<!-- FAQ Section -->
-<section class="py-32 -mx-6 px-6">
-  <div class="max-w-4xl mx-auto">
-    <div class="text-center mb-16">
-      <h2 class="text-xs font-black uppercase tracking-[0.5em] text-chartreuse mb-4">Common Questions</h2>
-      <p class="text-4xl font-black text-white italic uppercase tracking-tight">Everything you need to know.</p>
-    </div>
-    <div class="space-y-6">
+    <div class="perspective-1000 relative mt-24 grid gap-4 md:grid-cols-4">
       <% [
-        { q: "How long does a typical build take?", a: "Most websites are launched in 4-6 weeks. Custom business systems can take 8-12 weeks depending on complexity." },
-        { q: "Do I own the code and the website?", a: "Yes, 100%. Once the project is complete and paid for, you own all assets and code." },
-        { q: "Can you integrate with my existing tools?", a: "Absolutely. We specialize in connecting systems like Stripe, Twilio, and various CRM platforms." },
-        { q: "What happens after the launch?", a: "We offer maintenance packages and ongoing support to ensure your system continues to run at peak performance." }
-      ].each do |faq| %>
-        <div class="glassy p-8 rounded-3xl border border-white/5">
-          <p class="text-xl font-black text-white uppercase italic mb-4"><%= faq[:q] %></p>
-          <p class="text-slate-400 font-medium italic"><%= faq[:a] %></p>
+        { number: "250+", label: "Projects delivered" },
+        { number: "98%", label: "Client retention" },
+        { number: "40+", label: "Team experts" },
+        { number: "12", label: "Industry awards" }
+      ].each_with_index do |stat, index| %>
+        <div class="glass card-3d home-floating-shadow relative rounded-2xl p-6 text-center animate-fade-up" data-controller="tilt-card" data-action="mousemove->tilt-card#move mouseleave->tilt-card#leave" style="animation-delay: <%= 0.1 + (index * 0.08) %>s;">
+          <div class="absolute inset-x-6 top-0 h-px bg-gradient-to-r from-transparent via-[#5F3475]/50 to-transparent"></div>
+          <p class="bg-gradient-to-br from-[#213885] to-[#893172] bg-clip-text text-4xl font-extrabold text-transparent md:text-5xl"><%= stat[:number] %></p>
+          <p class="mt-2 text-xs uppercase tracking-[0.18em] text-[#081849]/58"><%= stat[:label] %></p>
         </div>
       <% end %>
     </div>
   </div>
 </section>
 
-<section class="py-32 -mx-6 px-6">
-  <div class="max-w-7xl mx-auto rounded-[3rem] bg-gradient-to-br from-gun-metal to-black p-12 lg:p-20 border border-white/5 relative overflow-hidden">
-    <!-- Ambient Glow -->
-    <div class="absolute -top-1/2 -right-1/2 w-full h-full bg-chartreuse/10 blur-[150px] -z-10"></div>
-    
-    <h2 class="text-xs font-black uppercase tracking-[0.5em] text-chartreuse mb-8">The Veloq Edge</h2>
-    <div class="grid md:grid-cols-2 gap-12">
-      <div class="space-y-12">
-        <p class="text-5xl font-black text-white italic uppercase tracking-tighter leading-none">What Makes Us <span class="text-chartreuse">Different.</span></p>
-        <div class="space-y-8">
-          <% [
-            { t: "Focus on results, not just design", d: "We build for lead gen and conversions." },
-            { t: "Built for real business growth", d: "Scalable systems that work while you sleep." },
-            { t: "Custom systems (not generic templates)", d: "Unique builds for unique businesses." },
-            { t: "Mobile-first and SEO optimized", d: "Dominate local search instantly." }
-          ].each do |diff| %>
-            <div>
-              <p class="text-xl font-black text-white uppercase italic tracking-tight"><%= diff[:t] %></p>
-              <p class="text-slate-400 mt-2"><%= diff[:d] %></p>
+<section class="relative border-y border-[#081849]/5 bg-[#CCCACC]/50 py-24">
+  <div class="home-grid-bg absolute inset-0 opacity-30"></div>
+  <div class="relative mx-auto max-w-7xl px-2 md:px-0">
+    <div class="mx-auto max-w-3xl text-center">
+      <p class="text-xs font-bold uppercase tracking-[0.2em] text-[#081849]/58">What we build</p>
+      <h2 class="mt-3 text-4xl font-extrabold text-[#081849] md:text-5xl">A complete growth stack for service businesses</h2>
+      <p class="mt-4 text-lg text-[#081849]/70">From your first impression to your follow-up systems, we design the touchpoints that turn interest into booked business.</p>
+    </div>
+
+    <div class="perspective-1000 mt-16 grid gap-6 md:grid-cols-3">
+      <% [
+        {
+          icon: "fa-layer-group",
+          title: "Brand & positioning",
+          description: "Messaging, offer clarity, and visual direction that helps local customers trust you fast.",
+          points: [ "Offer strategy", "Messaging system", "Visual direction", "Launch roadmap" ]
+        },
+        {
+          icon: "fa-code",
+          title: "Websites & funnels",
+          description: "High-converting marketing sites, service pages, and landing flows built for speed and mobile.",
+          points: [ "Marketing websites", "Landing pages", "Lead forms", "Analytics setup" ]
+        },
+        {
+          icon: "fa-gears",
+          title: "Systems & automation",
+          description: "Booking flows, follow-up touchpoints, and internal tooling that remove manual bottlenecks.",
+          points: [ "Booking logic", "CRM workflows", "Reminders", "Ops dashboards" ]
+        }
+      ].each_with_index do |service, index| %>
+        <div class="glass card-3d group relative overflow-hidden rounded-2xl p-8 animate-fade-up" data-controller="tilt-card" data-action="mousemove->tilt-card#move mouseleave->tilt-card#leave" style="animation-delay: <%= index * 0.08 %>s;">
+          <div class="absolute -right-12 -top-12 h-32 w-32 rounded-full bg-[#213885]/0 blur-2xl transition group-hover:bg-[#213885]/30"></div>
+          <div class="relative">
+            <div class="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-[#213885]/20 to-[#213885]/5 ring-1 ring-[#213885]/30">
+            <i class="fa-solid <%= service[:icon] %> text-xl text-[#5F3475]"></i>
             </div>
-          <% end %>
+            <h3 class="mt-5 text-2xl font-bold text-[#081849]"><%= service[:title] %></h3>
+            <p class="mt-3 text-sm leading-relaxed text-[#081849]/65"><%= service[:description] %></p>
+            <ul class="mt-5 space-y-2">
+              <% service[:points].each do |point| %>
+                <li class="flex items-center gap-2 text-sm text-[#081849]/72">
+                  <span class="h-1.5 w-1.5 rounded-full bg-[#213885]"></span>
+                  <%= point %>
+                </li>
+              <% end %>
+            </ul>
+          </div>
         </div>
-      </div>
-      <div class="flex flex-col justify-center space-y-10">
-        <div class="glassy p-10 rounded-3xl border border-chartreuse/20">
-          <h3 class="text-3xl font-black text-white italic uppercase mb-6">Portfolio Preview</h3>
-          <p class="text-slate-400 mb-10 leading-relaxed italic">We don’t just build websites — we build business tools. See how we’ve helped businesses automate scheduling and increase calls.</p>
-          <%= link_to portfolio_path, class: "flex items-center gap-4 text-chartreuse font-black uppercase tracking-[0.2em] group" do %>
-            <span>View Portfolio</span>
-            <div class="h-px flex-1 bg-chartreuse group-hover:scale-x-110 transition-transform origin-left"></div>
-          <% end %>
+      <% end %>
+    </div>
+
+    <div class="mt-12 text-center">
+      <%= link_to services_path, class: "text-sm font-semibold text-[#5F3475] transition hover:text-[#213885]" do %>
+        See all services →
+      <% end %>
+    </div>
+  </div>
+</section>
+
+<section class="relative py-24">
+  <div class="mx-auto max-w-7xl px-2 md:px-0">
+    <div class="mx-auto max-w-3xl text-center">
+      <p class="text-xs font-bold uppercase tracking-[0.2em] text-[#081849]/58">How we work</p>
+      <h2 class="mt-3 text-4xl font-extrabold text-[#081849] md:text-5xl">A proven 4-step process</h2>
+    </div>
+
+    <div class="perspective-1000 mt-16 grid gap-6 md:grid-cols-4">
+      <% [
+        { number: "01", title: "Discover", text: "We deep-dive into your business, audience, and competitive landscape." },
+        { number: "02", title: "Design", text: "Strategic positioning meets striking visual identity and UX." },
+        { number: "03", title: "Build", text: "Engineering teams ship clean, fast, scalable production code." },
+        { number: "04", title: "Grow", text: "Continuous optimization, SEO, and paid acquisition from day one." }
+      ].each_with_index do |step, index| %>
+        <div class="card-3d glass relative overflow-hidden rounded-2xl border border-[#081849]/10 p-6 animate-fade-up" data-controller="tilt-card" data-action="mousemove->tilt-card#move mouseleave->tilt-card#leave" style="animation-delay: <%= index * 0.08 %>s;">
+          <div class="absolute -right-4 -top-4 text-7xl font-black text-[#5F3475]/15 select-none"><%= step[:number] %></div>
+          <div class="relative">
+            <div class="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-[#213885] to-[#5F3475] text-sm font-bold text-[#ECDFD2] shadow-lg shadow-[#5F3475]/30"><%= step[:number] %></div>
+            <h3 class="mt-4 text-lg font-bold text-[#081849]"><%= step[:title] %></h3>
+            <p class="mt-2 text-sm text-[#081849]/70"><%= step[:text] %></p>
+          </div>
         </div>
-        <div class="glassy p-10 rounded-3xl border border-white/5 relative overflow-hidden group">
-          <div class="absolute inset-0 bg-chartreuse opacity-0 group-hover:opacity-10 transition-opacity"></div>
-          <h3 class="text-3xl font-black text-white italic uppercase mb-4">Ready to grow?</h3>
-          <p class="text-slate-400 mb-8 font-medium">Let’s build your system today.</p>
-          <%= link_to contact_path, class: "inline-block text-xl font-black text-chartreuse hover:text-white transition" do %>
-             👉 <span class="underline decoration-2 underline-offset-8">Get Started</span>
-          <% end %>
+      <% end %>
+    </div>
+  </div>
+</section>
+
+<section class="relative border-y border-[#081849]/5 bg-[#CCCACC]/50 py-24">
+  <div class="mx-auto max-w-7xl px-2 md:px-0">
+    <div class="mx-auto max-w-3xl text-center">
+      <span class="text-xs font-bold uppercase tracking-[0.2em] text-[#081849]/60">Happy clients</span>
+      <h2 class="mt-3 text-4xl font-extrabold text-[#081849] md:text-5xl">What our partners say</h2>
+    </div>
+
+    <div class="perspective-1000 mt-16 grid gap-6 md:grid-cols-3">
+      <% [
+        { quote: "VeloqTech rebuilt our site and booking flow so the business finally feels easy to browse and trust on mobile.", name: "Sarah Chen", role: "Owner, Studio North" },
+        { quote: "The new pages gave our offers structure, improved lead quality, and made our team look far more established online.", name: "Marcus Hale", role: "Founder, Atlas Fitness" },
+        { quote: "From strategy to launch, the polish and follow-through felt like having an in-house growth team for the project.", name: "Priya Nair", role: "Director, Clarity Dental" }
+      ].each_with_index do |testimonial, index| %>
+        <div class="card-3d glass rounded-2xl p-7 animate-fade-up" data-controller="tilt-card" data-action="mousemove->tilt-card#move mouseleave->tilt-card#leave" style="animation-delay: <%= index * 0.1 %>s;">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="#5F3475" opacity="0.4">
+            <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
+          </svg>
+          <p class="mt-4 text-sm leading-relaxed text-[#081849]/85"><%= testimonial[:quote] %></p>
+          <div class="mt-6 border-t border-[#081849]/10 pt-4">
+            <div class="font-semibold text-[#081849]"><%= testimonial[:name] %></div>
+            <div class="text-xs text-[#081849]/55"><%= testimonial[:role] %></div>
+          </div>
         </div>
+      <% end %>
+    </div>
+  </div>
+</section>
+
+<section class="py-24">
+  <div class="mx-auto max-w-5xl px-2 md:px-0">
+    <div class="home-card-3d relative overflow-hidden rounded-[32px] bg-gradient-to-br from-[#213885] via-[#5F3475] to-[#893172] p-12 text-center text-[#ECDFD2] shadow-[0_30px_80px_-20px_rgba(95,52,117,0.5)] md:p-16">
+      <div class="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-white/15 blur-3xl"></div>
+      <div class="absolute -left-20 -bottom-20 h-64 w-64 rounded-full bg-[#893172]/40 blur-3xl"></div>
+      <div class="relative">
+        <h2 class="text-4xl font-extrabold md:text-5xl">
+          Ready to build something <span class="underline decoration-white/40 underline-offset-8">remarkable?</span>
+        </h2>
+        <p class="mx-auto mt-4 max-w-2xl text-lg text-[#ECDFD2]/85">
+          Tell us about your business and we’ll come back with a practical plan for the site, pages, and systems you actually need.
+        </p>
+        <%= link_to contact_path, class: "home-button-light mt-8" do %>
+          Start a Project →
+        <% end %>
       </div>
     </div>
   </div>

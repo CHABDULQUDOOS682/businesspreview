@@ -1,80 +1,111 @@
-<!-- Hero Section -->
-<section class="py-12 md:py-20 lg:py-32 px-4 md:px-0">
-  <div class="max-w-4xl text-center md:text-left">
-    <p class="text-[10px] md:text-sm font-black uppercase tracking-[0.3em] text-chartreuse mb-6">Transparent Investing</p>
-    <h1 class="text-4xl sm:text-5xl md:text-6xl font-black text-white italic uppercase tracking-tighter leading-[1.1] md:leading-tight">Simple Pricing for <span class="text-transparent bg-clip-text bg-gradient-to-r from-chartreuse to-white">Real Growth.</span></h1>
-    <p class="mt-6 text-lg md:text-xl leading-relaxed text-slate-400 font-medium italic">Choose a plan based on your business needs. No hidden costs, just high-performance results.</p>
-  </div>
-</section>
+<% content_for :title, "Pricing | VeloqTech" %>
 
-<!-- Pricing Grid -->
-<section class="grid gap-6 md:gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 pb-20 md:pb-32 px-4 md:px-0">
-  <!-- Starter Package -->
-  <div class="glassy p-8 md:p-10 rounded-[2rem] md:rounded-[2.5rem] border border-white/5 flex flex-col group hover:border-slate-500 transition duration-500">
-    <h2 class="text-[10px] md:text-xs font-black uppercase tracking-[0.3em] text-slate-500 mb-2">Starter Package</h2>
-    <p class="text-xl md:text-2xl font-black text-white uppercase italic mb-8">Static Website</p>
-    <div class="mb-10 space-y-4 flex-1">
-      <% ["1–3 page website", "Mobile responsive design", "Contact form", "Basic SEO setup"].each do |feature| %>
-        <div class="flex items-center gap-3 text-xs md:text-sm font-bold text-slate-400 uppercase tracking-widest">
-          <i class="fa-solid fa-check text-slate-600"></i> <%= feature %>
+<%= render "page_header",
+  eyebrow: "Pricing",
+  title_html: 'Plans that match <br><span class="home-display-accent">your stage.</span>'.html_safe,
+  subtitle: "Transparent pricing, no surprise invoices. Upgrade, downgrade, or pause anytime." %>
+
+<section class="py-16">
+  <div class="mb-10 flex justify-center">
+    <div class="inline-flex items-center gap-2 rounded-full border border-[#081849]/10 bg-[#081849]/5 p-1">
+      <span class="rounded-full bg-[#213885] px-5 py-2 text-sm font-semibold text-[#ECDFD2] shadow-md shadow-[#213885]/25">Project</span>
+      <span class="px-5 py-2 text-sm font-semibold text-[#081849]/55">Retainer save 15%</span>
+    </div>
+  </div>
+
+  <div class="perspective-1000 grid gap-6 lg:grid-cols-3">
+    <% [
+      { name: "Starter", price: "$1,900", cadence: "/ project", description: "For founders launching their first professional online presence.", features: ["5-page custom website", "Mobile-first responsive design", "Basic on-page SEO", "Contact form & analytics", "30 days post-launch support"], highlight: false, cta: "Get started" },
+      { name: "Growth", price: "$4,800", cadence: "/ project", description: "For scaling teams that need a real conversion engine, not just a brochure.", features: ["Up to 15 pages + CMS", "Custom branding & illustration", "Advanced SEO & schema", "Performance marketing setup", "A/B testing framework", "90 days priority support"], highlight: true, cta: "Get started" },
+      { name: "Enterprise", price: "Custom", cadence: "", description: "For established brands needing dedicated capacity and complex integrations.", features: ["Unlimited pages & locales", "Custom web application build", "Dedicated project lead", "DevOps & cloud architecture", "Quarterly growth roadmap", "24/7 SLA support"], highlight: false, cta: "Talk to sales" }
+    ].each do |plan| %>
+      <div class="<%= plan[:highlight] ? 'home-card-3d relative rounded-[28px] border border-transparent bg-gradient-to-br from-[#213885] via-[#5F3475] to-[#893172] p-8 text-[#ECDFD2] shadow-[0_20px_60px_-15px_rgba(95,52,117,0.5)]' : 'home-glass home-card-3d relative rounded-[28px] border border-[#081849]/10 p-8' %>" data-controller="tilt-card" data-action="mousemove->tilt-card#move mouseleave->tilt-card#leave">
+        <% if plan[:highlight] %>
+          <div class="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-[#213885] px-4 py-1 text-xs font-bold uppercase tracking-[0.18em] text-[#ECDFD2] shadow-lg shadow-[#213885]/35">
+            Most Popular
+          </div>
+        <% end %>
+        <h2 class="text-2xl font-bold <%= plan[:highlight] ? 'text-[#ECDFD2]' : 'text-[#081849]' %>"><%= plan[:name] %></h2>
+        <p class="mt-2 text-sm <%= plan[:highlight] ? 'text-[#ECDFD2]/78' : 'text-[#081849]/62' %>"><%= plan[:description] %></p>
+        <div class="mt-6 flex items-baseline gap-1">
+          <span class="text-5xl font-extrabold <%= plan[:highlight] ? 'text-[#ECDFD2]' : 'text-[#081849]' %>"><%= plan[:price] %></span>
+          <% if plan[:cadence].present? %>
+            <span class="text-sm <%= plan[:highlight] ? 'text-[#ECDFD2]/70' : 'text-[#081849]/50' %>"><%= plan[:cadence] %></span>
+          <% end %>
         </div>
+        <ul class="mt-8 space-y-3 text-sm">
+          <% plan[:features].each do |feature| %>
+            <li class="flex items-start gap-3 <%= plan[:highlight] ? 'text-[#ECDFD2]/88' : 'text-[#081849]/80' %>">
+              <i class="fa-solid fa-check mt-1 text-sm <%= plan[:highlight] ? 'text-[#ECDFD2]' : 'text-[#5F3475]' %>"></i>
+              <%= feature %>
+            </li>
+          <% end %>
+        </ul>
+        <%= link_to contact_path, class: "mt-10 inline-flex w-full items-center justify-center rounded-full px-6 py-3 text-center text-sm font-semibold transition hover:-translate-y-0.5 #{plan[:highlight] ? 'bg-[#ECDFD2] text-[#213885] shadow-xl shadow-[#081849]/25' : 'border border-[#081849]/15 text-[#081849] hover:border-[#213885] hover:bg-[#213885] hover:text-[#ECDFD2]'}" do %>
+          <%= plan[:cta] %>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="mt-24">
+    <h2 class="text-center text-3xl font-extrabold text-[#081849] md:text-4xl">Compare <span class="text-[#5F3475]">all features</span></h2>
+    <div class="mt-10 overflow-x-auto rounded-[28px] border border-[#081849]/10 bg-white/40 shadow-[0_18px_45px_rgba(8,24,73,0.06)] backdrop-blur">
+      <table class="min-w-full text-sm">
+        <thead>
+          <tr class="border-b border-[#081849]/10 text-left">
+            <th class="px-6 py-4 font-semibold text-[#081849]">Feature</th>
+            <th class="px-6 py-4 text-center font-semibold text-[#081849]">Starter</th>
+            <th class="px-6 py-4 text-center font-semibold text-[#5F3475]">Growth</th>
+            <th class="px-6 py-4 text-center font-semibold text-[#081849]">Enterprise</th>
+          </tr>
+        </thead>
+        <tbody class="text-[#081849]/80">
+          <% [
+            ["Custom design", true, true, true],
+            ["CMS integration", false, true, true],
+            ["E-commerce", false, true, true],
+            ["Advanced SEO", false, true, true],
+            ["A/B testing", false, true, true],
+            ["Multi-language", false, false, true],
+            ["Dedicated PM", false, false, true],
+            ["24/7 SLA", false, false, true]
+          ].each do |feature, starter, growth, enterprise| %>
+            <tr class="border-b border-[#081849]/5">
+              <td class="px-6 py-4"><%= feature %></td>
+              <% [starter, growth, enterprise].each do |value| %>
+                <td class="px-6 py-4 text-center">
+                  <%= value ? content_tag(:span, "✓", class: "text-[#5F3475]") : content_tag(:span, "—", class: "text-[#081849]/30") %>
+                </td>
+              <% end %>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="mt-24">
+    <h2 class="text-center text-3xl font-extrabold text-[#081849] md:text-4xl">Frequently asked <span class="text-[#5F3475]">questions</span></h2>
+    <div class="mt-10 space-y-3">
+      <% [
+        ["How long does a typical project take?", "Starter sites ship in 3-4 weeks. Growth projects average 6-10 weeks. Enterprise builds typically run 12-20 weeks depending on complexity and integrations."],
+        ["Do you offer ongoing support after launch?", "Yes — every plan includes post-launch support, and we offer monthly retainer packages for continued maintenance, optimization, and growth marketing."],
+        ["Can I upgrade between plans?", "Absolutely. Many clients start with Starter and upgrade to Growth or Enterprise as they scale. We'll credit your prior investment toward the new tier."],
+        ["Do you handle hosting and domains?", "We can. We deploy on Vercel, AWS, or your preferred cloud, and we'll manage DNS, SSL, and CDN if you'd like a fully managed setup."],
+        ["What if I only need help with marketing or SEO?", "Our services are modular. You can engage us purely for SEO, paid acquisition, or content — no website work required."],
+        ["Is there a refund policy?", "We offer a satisfaction guarantee on the discovery phase. If you're not happy with the strategic direction in the first two weeks, we'll refund the full deposit."]
+      ].each_with_index do |(question, answer), index| %>
+        <details class="overflow-hidden rounded-[22px] border border-[#081849]/10 bg-white/35" <%= "open" if index.zero? %>>
+          <summary class="cursor-pointer list-none px-6 py-5 font-semibold text-[#081849] marker:hidden">
+            <div class="flex items-center justify-between gap-4">
+              <span><%= question %></span>
+              <span class="text-xl text-[#5F3475]">+</span>
+            </div>
+          </summary>
+          <div class="px-6 pb-5 text-sm leading-relaxed text-[#081849]/68"><%= answer %></div>
+        </details>
       <% end %>
     </div>
-    <div class="pt-8 border-t border-white/5">
-       <p class="text-[8px] md:text-[10px] font-black uppercase tracking-widest text-slate-600 mb-4">👉 Best for: New businesses</p>
-       <%= link_to contact_path, class: "block w-full py-4 border border-slate-600 rounded-xl text-center text-[10px] md:text-xs font-black uppercase tracking-widest text-slate-300 hover:bg-white hover:text-gun-metal transition" do %>
-         Select Starter
-       <% end %>
-    </div>
-  </div>
-
-  <!-- Growth Package -->
-  <div class="glassy p-8 md:p-10 rounded-[2rem] md:rounded-[2.5rem] border-2 border-chartreuse relative flex flex-col group hover:-translate-y-2 transition duration-500 shadow-[0_0_40px_rgba(225,255,81,0.15)] order-first lg:order-none">
-    <div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-chartreuse text-gun-metal px-6 py-1.5 text-[10px] md:text-xs font-black uppercase tracking-widest rounded-full">Most Popular</div>
-    <h2 class="text-[10px] md:text-xs font-black uppercase tracking-[0.3em] text-chartreuse mb-2">Growth Package</h2>
-    <p class="text-xl md:text-2xl font-black text-white uppercase italic mb-8">Dynamic Website</p>
-    <div class="mb-10 space-y-4 flex-1">
-      <% ["Multi-page website", "Booking & Contact system", "Advanced SEO optimization", "Basic Admin dashboard"].each do |feature| %>
-        <div class="flex items-center gap-3 text-xs md:text-sm font-bold text-white uppercase tracking-widest">
-          <i class="fa-solid fa-bolt text-chartreuse"></i> <%= feature %>
-        </div>
-      <% end %>
-    </div>
-    <div class="pt-8 border-t border-chartreuse/20">
-       <p class="text-[8px] md:text-[10px] font-black uppercase tracking-widest text-chartreuse/60 mb-4">👉 Best for: Barbers, Salons, Restaurants</p>
-       <%= link_to contact_path, class: "block w-full py-4 bg-chartreuse rounded-xl text-center text-[10px] md:text-xs font-black uppercase tracking-widest text-gun-metal transition hover:bg-white" do %>
-         Select Growth
-       <% end %>
-    </div>
-  </div>
-
-  <!-- Pro Package -->
-  <div class="glassy p-8 md:p-10 rounded-[2rem] md:rounded-[2.5rem] border border-white/5 flex flex-col group hover:border-chartreuse transition duration-500">
-    <h2 class="text-[10px] md:text-xs font-black uppercase tracking-[0.3em] text-slate-500 mb-2">Pro Package</h2>
-    <p class="text-xl md:text-2xl font-black text-white uppercase italic mb-8">Business System</p>
-    <div class="mb-10 space-y-4 flex-1">
-      <% ["Advanced dashboard system", "Staff management", "Full Appointment system", "Customer database", "Full Customization"].each do |feature| %>
-        <div class="flex items-center gap-3 text-xs md:text-sm font-bold text-slate-400 uppercase tracking-widest">
-          <i class="fa-solid fa-star text-chartreuse/60"></i> <%= feature %>
-        </div>
-      <% end %>
-    </div>
-    <div class="pt-8 border-t border-white/5">
-       <p class="text-[8px] md:text-[10px] font-black uppercase tracking-widest text-slate-600 mb-4">👉 Best for: Growing or established businesses</p>
-       <%= link_to contact_path, class: "block w-full py-4 glassy rounded-xl text-center text-[10px] md:text-xs font-black uppercase tracking-widest text-white hover:bg-chartreuse hover:text-gun-metal transition" do %>
-         Contact For Pro
-       <% end %>
-    </div>
-  </div>
-</section>
-
-<!-- Final CTA Section -->
-<section class="py-12 md:py-20 -mx-4 md:-mx-6 px-4 md:px-6">
-  <div class="max-w-3xl mx-auto glassy p-8 md:p-12 rounded-[2rem] md:rounded-[3rem] border border-white/10 text-center space-y-6 md:space-y-8">
-     <h3 class="text-2xl md:text-3xl font-black text-white uppercase italic">Not sure what you need?</h3>
-     <p class="text-sm md:text-base text-slate-400 italic font-medium">We offer free consultations to map out your technical requirements.</p>
-     <%= link_to contact_path, class: "inline-block px-10 py-5 bg-chartreuse rounded-full text-gun-metal font-black uppercase tracking-widest shadow-[0_0_20px_rgba(225,255,81,0.2)] hover:bg-white transition" do %>
-        👉 Get a Free Consultation
-     <% end %>
   </div>
 </section>
