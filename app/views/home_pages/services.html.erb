@@ -1,129 +1,56 @@
-<!-- Hero Section -->
-<section class="py-12 md:py-20 lg:py-32 px-4 md:px-0">
-  <div class="max-w-4xl text-center md:text-left">
-    <p class="text-[10px] md:text-sm font-black uppercase tracking-[0.3em] text-chartreuse mb-6">Complete Digital Solutions</p>
-    <h1 class="text-4xl sm:text-5xl md:text-6xl font-black text-white italic uppercase tracking-tighter leading-[1.1] md:leading-tight">Solutions for <span class="text-transparent bg-clip-text bg-gradient-to-r from-chartreuse to-white">Local Empires.</span></h1>
-    <p class="mt-6 text-lg md:text-xl leading-relaxed text-slate-400 font-medium italic">From websites to full business systems — we design tools that help you grow, automate, and scale with engineering precision.</p>
-  </div>
-</section>
+<% content_for :title, "Services | VeloqTech" %>
 
-<!-- Core Services Grid -->
-<section class="grid gap-6 md:gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 pb-20 md:pb-32 px-4 md:px-0">
-  <!-- Web Design -->
-  <div class="glassy p-8 md:p-10 rounded-[2rem] md:rounded-[2.5rem] border border-white/5 group hover:border-chartreuse/40 transition duration-500">
-    <div class="h-12 w-12 md:h-14 md:w-14 bg-gun-metal rounded-2xl flex items-center justify-center text-chartreuse mb-8 shadow-lg group-hover:scale-110 transition">
-      <i class="fa-solid fa-desktop text-xl md:text-2xl"></i>
-    </div>
-    <h2 class="text-xl md:text-2xl font-black text-white uppercase italic tracking-tight mb-4">Web Design</h2>
-    <p class="text-slate-400 mb-8 italic text-sm md:text-base">Modern, fast, and conversion-focused websites built for scale.</p>
-    <ul class="space-y-3 mb-10">
-      <% ["Mobile responsive design", "SEO optimized structure", "Fast loading speed", "Lead generation forms"].each do |tip| %>
-        <li class="flex items-center gap-3 text-[10px] md:text-sm font-bold text-slate-500 uppercase tracking-widest">
-          <div class="h-1 w-3 bg-chartreuse"></div> <%= tip %>
-        </li>
-      <% end %>
-    </ul>
-    <p class="text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] text-slate-600 mb-2">Best for:</p>
-    <p class="text-[10px] md:text-xs font-bold text-chartreuse uppercase">Small & local businesses</p>
-  </div>
+<%= render "page_header",
+  eyebrow: "Our Services",
+  title_html: 'Everything you need <br><span class="home-display-accent">to grow online</span>'.html_safe,
+  subtitle: "Six core practices, one accountable team. Engage on a single service or hire us as your full-stack growth partner." %>
 
-  <!-- Landing Pages -->
-  <div class="glassy p-8 md:p-10 rounded-[2rem] md:rounded-[2.5rem] border border-chartreuse/20 relative group hover:-translate-y-2 transition duration-500">
-    <div class="absolute -top-3 md:-top-4 right-6 md:right-10 bg-chartreuse text-gun-metal px-3 md:px-4 py-1 text-[8px] md:text-[10px] font-black uppercase tracking-widest rounded-full">High-Velocity</div>
-    <div class="h-12 w-12 md:h-14 md:w-14 bg-gun-metal rounded-2xl flex items-center justify-center text-chartreuse mb-8 shadow-lg group-hover:scale-110 transition">
-      <i class="fa-solid fa-fire text-xl md:text-2xl"></i>
-    </div>
-    <h2 class="text-xl md:text-2xl font-black text-white uppercase italic tracking-tight mb-4">Landing Pages</h2>
-    <p class="text-slate-400 mb-8 italic text-sm md:text-base">Turn visitors into customers with high-energy landing pages.</p>
-    <ul class="space-y-3 mb-10">
-      <% ["Ads campaigns", "Product Promotions", "Service-specific marketing", "A/B Testing Ready"].each do |tip| %>
-        <li class="flex items-center gap-3 text-[10px] md:text-sm font-bold text-slate-500 uppercase tracking-widest">
-          <div class="h-1 w-3 bg-white"></div> <%= tip %>
-        </li>
-      <% end %>
-    </ul>
-    <p class="text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] text-slate-600 mb-2">Perfect for:</p>
-    <p class="text-[10px] md:text-xs font-bold text-white uppercase">Growth & Ad strategies</p>
-  </div>
-
-  <!-- Business Web Apps -->
-  <div class="glassy p-8 md:p-10 rounded-[2rem] md:rounded-[2.5rem] border border-white/5 group hover:border-chartreuse/40 transition duration-500">
-    <div class="h-12 w-12 md:h-14 md:w-14 bg-gun-metal rounded-2xl flex items-center justify-center text-chartreuse mb-8 shadow-lg group-hover:scale-110 transition">
-      <i class="fa-solid fa-gears text-xl md:text-2xl"></i>
-    </div>
-    <h2 class="text-xl md:text-2xl font-black text-white uppercase italic tracking-tight mb-4">Business Systems</h2>
-    <p class="text-slate-400 mb-8 italic text-sm md:text-base">Custom-built dashboards to manage operations and customer data.</p>
-    <ul class="space-y-3 mb-10">
-      <% ["Appointment booking", "Staff management", "Customer records", "Admin dashboards"].each do |tip| %>
-        <li class="flex items-center gap-3 text-[10px] md:text-sm font-bold text-slate-500 uppercase tracking-widest">
-          <div class="h-1 w-3 bg-chartreuse"></div> <%= tip %>
-        </li>
-      <% end %>
-    </ul>
-    <p class="text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] text-slate-600 mb-2">Best for:</p>
-    <p class="text-[10px] md:text-xs font-bold text-chartreuse uppercase">Barbers, Salons, Gyms</p>
-  </div>
-</section>
-
-<!-- Industry Solutions -->
-<section class="py-20 md:py-32 bg-black/40 -mx-4 md:-mx-6 px-4 md:px-6">
-  <div class="text-center mb-12 md:mb-16">
-    <h2 class="text-[10px] md:text-xs font-black uppercase tracking-[0.5em] text-chartreuse mb-4">The LaunchReady Advantage</h2>
-    <p class="text-3xl md:text-4xl font-black text-white italic uppercase tracking-tight">Industry-Specific Propulsion.</p>
-  </div>
-  <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+<section class="py-20">
+  <div class="perspective-1000 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
     <% [
-      { name: "Barber Shops", items: ["Booking system", "Service list", "Gallery", "Customer mgmt"], icon: "scissors" },
-      { name: "Restaurants", items: ["Online menu", "Table reservations", "Order inquiries", "SEO Menu"], icon: "utensils" },
-      { name: "Gyms", items: ["Member tracking", "Class scheduling", "Trainer mgmt", "Stripe Sync"], icon: "dumbbell" }
-    ].each do |ind| %>
-      <div class="glassy p-6 md:p-8 rounded-2xl md:rounded-3xl border border-white/5">
-        <div class="flex items-center gap-4 mb-6">
-           <i class="fa-solid fa-<%= ind[:icon] %> text-chartreuse text-xl"></i>
-           <h3 class="text-xl font-black text-white uppercase italic"><%= ind[:name] %></h3>
+      { icon: "fa-code", title: "Web Development", description: "High-performance websites and web apps built with React, Next.js, and Node — engineered for speed, scale, and SEO.", features: ["Custom CMS", "Headless e-commerce", "Web apps & SaaS", "API development"] },
+      { icon: "fa-star", title: "Branding & Identity", description: "Distinctive logos, type systems, and brand guidelines that give your company a voice customers remember.", features: ["Logo design", "Visual identity", "Brand guidelines", "Packaging & print"] },
+      { icon: "fa-desktop", title: "UI / UX Design", description: "Research-driven product design that turns complex flows into intuitive, conversion-focused experiences.", features: ["User research", "Wireframing", "Design systems", "Prototyping"] },
+      { icon: "fa-magnifying-glass", title: "SEO & Content", description: "Technical SEO, keyword strategy, and editorial content that earn rankings, traffic, and qualified leads.", features: ["Technical SEO audit", "Content strategy", "Link building", "Local SEO"] },
+      { icon: "fa-chart-line", title: "Performance Marketing", description: "Data-driven Google, Meta, and LinkedIn ad campaigns optimized weekly for ROAS with transparent dashboards.", features: ["Google Ads", "Meta Ads", "LinkedIn Ads", "Analytics & reporting"] },
+      { icon: "fa-cloud", title: "Cloud & DevOps", description: "Scalable AWS, GCP, and Vercel infrastructure with CI/CD, monitoring, and zero-downtime deployments.", features: ["Cloud architecture", "CI/CD pipelines", "Monitoring & alerts", "Cost optimization"] }
+    ].each_with_index do |service, index| %>
+      <div class="home-glass home-card-3d rounded-[28px] p-8 animate-fade-up" data-controller="tilt-card" data-action="mousemove->tilt-card#move mouseleave->tilt-card#leave" style="animation-delay: <%= index * 0.06 %>s;">
+        <div class="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-[#213885]/18 to-[#893172]/10 ring-1 ring-[#213885]/20">
+          <i class="fa-solid <%= service[:icon] %> text-xl text-[#5F3475]"></i>
         </div>
-        <ul class="space-y-2">
-          <% ind[:items].each do |item| %>
-            <li class="text-slate-500 text-[10px] md:text-sm font-bold uppercase tracking-widest flex items-center gap-2">
-              <div class="h-1 w-1 bg-chartreuse rounded-full"></div> <%= item %>
+        <h2 class="mt-5 text-2xl font-bold text-[#081849]"><%= service[:title] %></h2>
+        <p class="mt-3 text-sm leading-relaxed text-[#081849]/66"><%= service[:description] %></p>
+        <ul class="mt-5 space-y-2">
+          <% service[:features].each do |feature| %>
+            <li class="flex items-center gap-2 text-sm text-[#081849]/72">
+              <span class="h-1.5 w-1.5 rounded-full bg-[#213885]"></span>
+              <%= feature %>
             </li>
           <% end %>
         </ul>
+        <%= link_to contact_path, class: "mt-6 inline-flex items-center gap-1.5 text-sm font-semibold text-[#5F3475] transition hover:gap-3" do %>
+          Get a quote <span>→</span>
+        <% end %>
       </div>
-    <% end %>
-  </div>
-  
-  <div class="mt-16 md:mt-20 glassy p-8 md:p-12 rounded-[2rem] md:rounded-[2.5rem] border border-chartreuse/20 flex flex-col md:flex-row items-center justify-between gap-8 max-w-5xl mx-auto">
-    <div class="space-y-4 text-center md:text-left">
-      <h3 class="text-2xl md:text-3xl font-black text-white uppercase italic">Need something custom?</h3>
-      <p class="text-sm md:text-base text-slate-400 font-medium italic">We build systems tailored to your unique business growth trajectory.</p>
-    </div>
-    <%= link_to contact_path, class: "w-full md:w-auto text-center px-10 py-5 bg-white rounded-full text-gun-metal font-black uppercase tracking-widest transition hover:bg-chartreuse hover:-rotate-2 transform" do %>
-      Contact Us Today
     <% end %>
   </div>
 </section>
 
-<section class="py-20 md:py-32 px-4 md:px-0">
-  <div class="max-w-7xl mx-auto glassy p-8 md:p-12 lg:p-20 rounded-[2.5rem] md:rounded-[3.5rem] border border-white/10 relative overflow-hidden">
-    <!-- Ambient Glow -->
-    <div class="absolute -top-1/2 -left-1/2 w-full h-full bg-chartreuse/5 blur-[150px] -z-10"></div>
-    
-    <div class="grid gap-8 md:gap-12 lg:grid-cols-3 items-center">
-      <div class="lg:col-span-1 text-center lg:text-left">
-        <p class="text-[10px] md:text-xs font-black uppercase tracking-[0.4em] text-chartreuse mb-6">Engagement Fit</p>
-        <h2 class="text-3xl md:text-4xl font-black text-white italic uppercase leading-tight tracking-tighter">Built for businesses that want more than <span class="text-chartreuse">surface-level polish.</span></h2>
-      </div>
-      
-      <div class="glassy p-8 md:p-10 rounded-[1.8rem] md:rounded-[2rem] border border-white/5 space-y-4">
-        <p class="text-lg md:text-xl font-black text-white uppercase italic tracking-tight">Ideal for</p>
-        <p class="text-sm md:text-base text-slate-400 font-medium italic leading-relaxed">Local shops, service providers, and regional clinics ready to automate bookings and scale their digital footprint.</p>
-      </div>
-      
-      <div class="glassy p-8 md:p-10 rounded-[1.8rem] md:rounded-[2rem] border border-white/5 space-y-4">
-        <p class="text-lg md:text-xl font-black text-slate-500 uppercase italic tracking-tight line-through">Not built for</p>
-        <p class="text-sm md:text-base text-slate-500 font-medium italic leading-relaxed">Generic templates, thin SEO strategies, or businesses not ready for high-velocity growth.</p>
-      </div>
+<section class="relative overflow-hidden border-y border-[#081849]/8 bg-[#CCCACC]/45 py-24">
+  <div class="home-grid-bg absolute inset-0 opacity-30"></div>
+  <div class="relative mx-auto max-w-5xl text-center">
+    <h2 class="text-4xl font-extrabold text-[#081849] md:text-5xl">Built for outcomes, not <span class="text-[#5F3475]">deliverables.</span></h2>
+    <p class="mt-6 text-lg text-[#081849]/70">
+      Every engagement starts with a clear KPI — traffic, signups, revenue, retention. We don't ship features; we ship results, measured weekly and reported transparently.
+    </p>
+    <div class="mt-12 grid gap-6 md:grid-cols-3">
+      <% [["Weekly", "Reporting"], ["Quarterly", "Strategy reviews"], ["24h", "Response SLA"]].each do |number, label| %>
+        <div class="home-glass home-card-3d rounded-[28px] p-8" data-controller="tilt-card" data-action="mousemove->tilt-card#move mouseleave->tilt-card#leave">
+          <p class="bg-gradient-to-br from-[#213885] to-[#893172] bg-clip-text text-4xl font-extrabold text-transparent"><%= number %></p>
+          <p class="mt-2 text-sm text-[#081849]/68"><%= label %></p>
+        </div>
+      <% end %>
     </div>
   </div>
 </section>

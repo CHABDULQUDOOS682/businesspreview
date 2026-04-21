@@ -6,6 +6,13 @@ export default class extends Controller {
   connect() {
     // Ensure a consistent initial state (and avoid Turbo caching an "open" menu).
     this.close()
+    this.boundSyncScrolled = this.syncScrolled.bind(this)
+    window.addEventListener("scroll", this.boundSyncScrolled, { passive: true })
+    this.syncScrolled()
+  }
+
+  disconnect() {
+    window.removeEventListener("scroll", this.boundSyncScrolled)
   }
 
   toggle() {
@@ -22,6 +29,10 @@ export default class extends Controller {
     this.#syncAria()
   }
 
+  syncScrolled() {
+    this.element.classList.toggle("home-header-scrolled", window.scrollY > 20)
+  }
+
   #syncAria() {
     if (!this.hasButtonTarget || !this.hasPanelTarget) return
 
@@ -29,4 +40,3 @@ export default class extends Controller {
     this.buttonTarget.setAttribute("aria-expanded", String(open))
   }
 }
-

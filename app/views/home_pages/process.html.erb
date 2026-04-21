@@ -1,75 +1,58 @@
-<!-- Hero Section -->
-<section class="py-12 md:py-20 lg:py-32 px-4 md:px-0">
-  <div class="max-w-4xl text-center md:text-left">
-    <p class="text-[10px] md:text-sm font-black uppercase tracking-[0.3em] text-chartreuse mb-6">The Veloq Method</p>
-    <h1 class="text-4xl sm:text-5xl md:text-6xl font-black text-white italic uppercase tracking-tighter leading-[1.1] md:leading-tight">High-Velocity <span class="text-transparent bg-clip-text bg-gradient-to-r from-chartreuse to-white">Delivery.</span></h1>
-    <p class="mt-6 text-lg md:text-xl leading-relaxed text-slate-400 font-medium italic">A streamlined engineering process designed to take your local business from zero to launch in record time.</p>
-  </div>
-</section>
+<% content_for :title, "Process | VeloqTech" %>
 
-<!-- Timeline Section -->
-<section class="relative pb-20 md:pb-32 px-4 md:px-0">
-  <div class="absolute left-1/2 top-0 bottom-0 w-px bg-white/5 -translate-x-1/2 hidden lg:block"></div>
-  
-  <div class="space-y-8 md:space-y-12">
+<%= render "page_header",
+  eyebrow: "How We Work",
+  title_html: 'A proven 4-step <span class="home-display-accent">delivery process</span>'.html_safe,
+  subtitle: "We keep the path simple: understand the business, shape the offer, build the experience, and launch with the systems needed to support it." %>
+
+<section class="py-20">
+  <div class="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
     <% [
-      { week: "Phase 01", title: "Discovery & Blueprint", desc: "We map out your business goals, target audience, and system requirements.", icon: "magnifying-glass-chart" },
-      { week: "Phase 02", title: "High-Energy Design", desc: "We craft the visual identity and user interface that will WOW your customers.", icon: "palette" },
-      { week: "Phase 03", title: "System Engineering", desc: "Our team builds the custom booking systems and dashboards that power your growth.", icon: "code" },
-      { week: "Phase 04", title: "Launch & Propulsion", desc: "Final QA, SEO optimization, and hitting the 'Go' button on your new digital empire.", icon: "rocket" }
-    ].each_with_index do |phase, idx| %>
-      <div class="relative grid lg:grid-cols-2 gap-8 items-center">
-        <!-- Week Marker for Desktop -->
-        <div class="absolute left-1/2 -translate-x-1/2 w-4 h-4 bg-chartreuse rounded-full border-4 border-gun-metal hidden lg:block"></div>
-        
-        <div class="<%= idx.even? ? 'lg:pr-20' : 'lg:order-2 lg:pl-20' %>">
-           <div class="glassy p-6 md:p-10 rounded-[1.8rem] md:rounded-[2.5rem] border border-white/5 hover:border-chartreuse/30 transition group">
-              <div class="flex items-center gap-4 mb-6">
-                <div class="h-10 w-10 md:h-12 md:w-12 bg-gun-metal rounded-2xl flex items-center justify-center text-chartreuse group-hover:scale-110 transition">
-                   <i class="fa-solid fa-<%= phase[:icon] %> text-lg md:text-xl"></i>
-                </div>
-                <span class="text-[10px] md:text-xs font-black uppercase tracking-[0.3em] text-chartreuse"><%= phase[:week] %></span>
-              </div>
-              <h3 class="text-xl md:text-3xl font-black text-white uppercase italic tracking-tight mb-4"><%= phase[:title] %></h3>
-              <p class="text-sm md:text-base text-slate-400 font-medium italic"><%= phase[:desc] %></p>
-           </div>
-        </div>
-        
-        <div class="<%= idx.even? ? 'hidden lg:block' : 'lg:order-1 hidden lg:block' %>">
-          <!-- Visual Placeholder or Empty Space for balanced layout -->
-        </div>
+      { number: "01", title: "Discover", text: "We audit the business, audience, offer, and current friction points so the build solves the right problem." },
+      { number: "02", title: "Design", text: "We define structure, messaging, and visual direction around conversion clarity and ease of use." },
+      { number: "03", title: "Build", text: "We implement the site, pages, forms, and tooling with performance and handoff in mind." },
+      { number: "04", title: "Launch", text: "We QA the experience, connect the moving parts, and help you go live with confidence." }
+    ].each do |step| %>
+      <div class="home-card-3d overflow-hidden rounded-[28px] bg-gradient-to-br from-[#123b56] to-[#11255f] p-8 text-[#ECDFD2] shadow-[0_24px_55px_-25px_rgba(8,24,73,0.55)]" data-controller="tilt-card" data-action="mousemove->tilt-card#move mouseleave->tilt-card#leave">
+        <p class="text-6xl font-black text-white/10"><%= step[:number] %></p>
+        <h2 class="mt-3 text-2xl font-bold"><%= step[:title] %></h2>
+        <p class="mt-3 text-sm leading-relaxed text-[#ECDFD2]/76"><%= step[:text] %></p>
       </div>
     <% end %>
   </div>
 </section>
 
-<!-- Expectations Section -->
-<section class="py-20 md:py-32 bg-black/20 -mx-4 md:-mx-6 px-4 md:px-6">
-  <div class="text-center mb-12 md:mb-20">
-    <h2 class="text-[10px] md:text-xs font-black uppercase tracking-[0.5em] text-chartreuse mb-4">The Veloq Guarantee</h2>
-    <p class="text-3xl md:text-4xl font-black text-white italic uppercase tracking-tight">What to Expect.</p>
-  </div>
-  
-  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
-    <% [
-      { t: "Daily Updates", d: "Zero mystery. You'll know exactly where we are every day.", icon: "calendar-day" },
-      { t: "Iterative Feedback", d: "We build with you, not just for you.", icon: "comments" },
-      { t: "Built-in SEO", d: "Visibility is engineered into every line of code.", icon: "magnifying-glass" },
-      { t: "Clean Handoff", d: "A system your team can actually manage and scale.", icon: "handshake" }
-    ].each do |item| %>
-      <div class="glassy p-6 md:p-8 rounded-2xl md:rounded-3xl text-center">
-        <div class="text-2xl md:text-3xl text-chartreuse/40 mb-6"><i class="fa-solid fa-<%= item[:icon] %>"></i></div>
-        <h4 class="text-lg md:text-xl font-black text-white uppercase italic mb-4"><%= item[:t] %></h4>
-        <p class="text-xs md:text-sm text-slate-500 font-medium italic"><%= item[:d] %></p>
-      </div>
-    <% end %>
+<section class="relative overflow-hidden border-y border-[#081849]/8 bg-[#CCCACC]/45 py-24">
+  <div class="home-grid-bg absolute inset-0 opacity-30"></div>
+  <div class="relative">
+    <div class="mx-auto max-w-3xl text-center">
+      <p class="text-xs font-bold uppercase tracking-[0.2em] text-[#081849]/58">What to expect</p>
+      <h2 class="mt-3 text-4xl font-extrabold text-[#081849] md:text-5xl">Clear communication at every step</h2>
+    </div>
+
+    <div class="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+      <% [
+        { icon: "fa-calendar-day", title: "Weekly check-ins", text: "We keep decisions visible and progress easy to follow." },
+        { icon: "fa-comments", title: "Tight feedback loops", text: "You review the right things at the right time instead of reviewing everything at once." },
+        { icon: "fa-magnifying-glass", title: "SEO considered early", text: "Page structure and metadata are thought through before launch week." },
+        { icon: "fa-handshake", title: "Clean handoff", text: "You leave with a site your team can confidently use and update." }
+      ].each do |item| %>
+        <div class="home-glass home-card-3d rounded-[28px] p-8 text-center" data-controller="tilt-card" data-action="mousemove->tilt-card#move mouseleave->tilt-card#leave">
+          <i class="fa-solid <%= item[:icon] %> text-2xl text-[#5F3475]"></i>
+          <h3 class="mt-5 text-2xl font-bold text-[#081849]"><%= item[:title] %></h3>
+          <p class="mt-3 text-sm leading-relaxed text-[#081849]/66"><%= item[:text] %></p>
+        </div>
+      <% end %>
+    </div>
   </div>
 </section>
 
-<!-- CTA -->
-<section class="py-20 md:py-32 text-center px-4">
-  <h2 class="text-3xl md:text-4xl font-black text-white italic uppercase mb-10">Ready to start your launch sequence?</h2>
-  <%= link_to contact_path, class: "inline-block w-full sm:w-auto px-12 py-6 bg-chartreuse rounded-full text-gun-metal font-black uppercase tracking-widest shadow-[0_0_30px_rgba(225,255,81,0.4)] hover:bg-white transition" do %>
-    👉 Get Started Today
-  <% end %>
+<section class="py-24 text-center">
+  <h2 class="text-4xl font-extrabold text-[#081849] md:text-5xl">Ready to start your project?</h2>
+  <p class="mx-auto mt-4 max-w-2xl text-lg text-[#081849]/70">We’ll help you identify the right scope, the right launch path, and the right next steps before we build anything.</p>
+  <div class="mt-8">
+    <%= link_to contact_path, class: "home-button-primary" do %>
+      Get Started Today
+    <% end %>
+  </div>
 </section>

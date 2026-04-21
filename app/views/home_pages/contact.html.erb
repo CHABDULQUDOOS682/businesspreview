@@ -1,70 +1,96 @@
-<!-- Hero Section -->
-<section class="py-12 md:py-20 lg:py-32 px-4 md:px-0 text-center md:text-left">
-  <div class="max-w-4xl">
-    <p class="text-[10px] md:text-sm font-black uppercase tracking-[0.3em] text-chartreuse mb-6">Initiate Sync</p>
-    <h1 class="text-4xl sm:text-5xl md:text-6xl font-black text-white italic uppercase tracking-tighter leading-[1.1] md:leading-tight">Let’s Build Your <span class="text-transparent bg-clip-text bg-gradient-to-r from-chartreuse to-white">Business Online.</span></h1>
-    <p class="mt-6 text-lg md:text-xl leading-relaxed text-slate-400 font-medium italic">Tell us about your business — we’ll help you design the right system to bring you more customers.</p>
+<% content_for :title, "Contact | VeloqTech" %>
+
+<%= render "page_header",
+  eyebrow: "Get in Touch",
+  title_html: 'Let&apos;s build something <br><span class="home-display-accent">remarkable.</span>'.html_safe,
+  subtitle: "Tell us about your project and we'll get back to you within one business day with a tailored plan and ballpark timeline." %>
+
+<section class="py-16">
+  <div class="perspective-1000 grid gap-8 lg:grid-cols-5">
+    <div class="space-y-6 lg:col-span-2">
+      <div class="home-glass home-card-3d space-y-6 rounded-[28px] p-8" data-controller="tilt-card" data-action="mousemove->tilt-card#move mouseleave->tilt-card#leave">
+        <% [
+          { icon: "fa-envelope", label: "Email", value: "hello@veloqtech.com", href: "mailto:hello@veloqtech.com" },
+          { icon: "fa-phone", label: "Phone", value: "+1 (415) 555-0142", href: "tel:+14155550142" },
+          { icon: "fa-location-dot", label: "Office", value: "221 Market Street, San Francisco, CA", href: "#" },
+          { icon: "fa-clock", label: "Hours", value: "Mon–Fri · 9am–6pm PT", href: "#" }
+        ].each do |contact| %>
+          <a href="<%= contact[:href] %>" class="group flex items-start gap-4">
+            <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-[#213885]/20 to-[#213885]/5 ring-1 ring-[#213885]/30 transition group-hover:scale-110">
+              <i class="fa-solid <%= contact[:icon] %> text-lg text-[#5F3475]"></i>
+            </div>
+            <div>
+              <p class="text-xs uppercase tracking-[0.18em] text-[#081849]/52"><%= contact[:label] %></p>
+              <p class="mt-1 font-semibold text-[#081849] transition group-hover:text-[#5F3475]"><%= contact[:value] %></p>
+            </div>
+          </a>
+        <% end %>
+      </div>
+
+      <div class="home-glass home-card-3d rounded-[28px] p-8" data-controller="tilt-card" data-action="mousemove->tilt-card#move mouseleave->tilt-card#leave">
+        <h3 class="font-bold text-[#081849]">Response time</h3>
+        <p class="mt-2 text-sm text-[#081849]/65">We respond to all inquiries within one business day. Urgent? Mention it in your message and we’ll prioritize.</p>
+        <div class="mt-5 flex items-center gap-3">
+          <span class="relative flex h-3 w-3">
+            <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#213885] opacity-75"></span>
+            <span class="relative inline-flex h-3 w-3 rounded-full bg-[#213885]"></span>
+          </span>
+          <span class="text-sm font-semibold text-[#081849]">Currently accepting new clients</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="lg:col-span-3">
+      <form class="home-card-3d relative overflow-hidden rounded-[32px] border border-[#081849]/10 bg-white/70 p-8 shadow-[0_18px_45px_rgba(8,24,73,0.06)] backdrop-blur md:p-10" data-controller="tilt-card" data-action="mousemove->tilt-card#move mouseleave->tilt-card#leave">
+        <div class="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-[#5F3475]/10 blur-3xl"></div>
+        <div class="absolute -left-20 -bottom-20 h-64 w-64 rounded-full bg-[#213885]/10 blur-3xl"></div>
+
+        <div class="relative grid gap-5">
+          <div class="grid gap-5 md:grid-cols-2">
+            <label class="block">
+              <span class="mb-2 block text-xs font-bold uppercase tracking-[0.18em] text-[#213885]">First name</span>
+              <input type="text" class="home-input" placeholder="Jane">
+            </label>
+            <label class="block">
+              <span class="mb-2 block text-xs font-bold uppercase tracking-[0.18em] text-[#213885]">Last name</span>
+              <input type="text" class="home-input" placeholder="Doe">
+            </label>
+          </div>
+
+          <div class="grid gap-5 md:grid-cols-2">
+            <label class="block">
+              <span class="mb-2 block text-xs font-bold uppercase tracking-[0.18em] text-[#213885]">Work email</span>
+              <input type="email" class="home-input" placeholder="you@company.com">
+            </label>
+            <label class="block">
+              <span class="mb-2 block text-xs font-bold uppercase tracking-[0.18em] text-[#213885]">Company</span>
+              <input type="text" class="home-input" placeholder="Acme Inc.">
+            </label>
+          </div>
+
+          <label class="block">
+            <span class="mb-2 block text-xs font-bold uppercase tracking-[0.18em] text-[#213885]">Service interest</span>
+            <select class="home-input">
+              <option>Web Development</option>
+              <option>Branding & Identity</option>
+              <option>UI / UX Design</option>
+              <option>SEO & Content</option>
+              <option>Performance Marketing</option>
+              <option>Cloud & DevOps</option>
+            </select>
+          </label>
+
+          <label class="block">
+            <span class="mb-2 block text-xs font-bold uppercase tracking-[0.18em] text-[#213885]">Project details</span>
+            <textarea class="home-input" placeholder="Tell us about your goals, timeline, and anything else we should know…"></textarea>
+          </label>
+
+          <button type="button" class="group relative w-full overflow-hidden rounded-full bg-[#213885] px-8 py-4 text-sm font-bold text-[#ECDFD2] shadow-2xl shadow-[#213885]/30 transition hover:scale-[1.02]">
+            <span class="relative z-10">Send Message →</span>
+            <span class="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-[#081849]/45 to-transparent transition-transform duration-700 group-hover:translate-x-full"></span>
+          </button>
+        </div>
+      </form>
+    </div>
   </div>
 </section>
-
-<div class="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-16 pb-20 md:pb-32 px-4 md:px-0">
-  <!-- Contact Form -->
-  <div class="glassy p-6 md:p-10 rounded-[2rem] md:rounded-[3rem] border border-white/10 order-2 lg:order-1">
-    <form class="space-y-6">
-      <div class="space-y-2">
-        <label class="text-[10px] font-black uppercase tracking-widest text-slate-500">Identity / Name</label>
-        <input type="text" placeholder="Your Name" class="w-full bg-gun-metal border border-white/10 rounded-xl px-6 py-4 text-white placeholder:text-slate-700 focus:border-chartreuse outline-none transition text-sm md:text-base">
-      </div>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div class="space-y-2">
-          <label class="text-[10px] font-black uppercase tracking-widest text-slate-500">Business Type</label>
-          <input type="text" placeholder="e.g. Barber, Gym" class="w-full bg-gun-metal border border-white/10 rounded-xl px-6 py-4 text-white placeholder:text-slate-700 focus:border-chartreuse outline-none transition text-sm md:text-base">
-        </div>
-        <div class="space-y-2">
-          <label class="text-[10px] font-black uppercase tracking-widest text-slate-500">Budget Range</label>
-          <select class="w-full bg-gun-metal border border-white/10 rounded-xl px-6 py-4 text-white focus:border-chartreuse outline-none transition appearance-none text-sm md:text-base">
-            <option>Select Range</option>
-            <option>$1k - $3k</option>
-            <option>$3k - $10k</option>
-            <option>$10k+</option>
-          </select>
-        </div>
-      </div>
-      <div class="space-y-2">
-        <label class="text-[10px] font-black uppercase tracking-widest text-slate-500">Mission Summary</label>
-        <textarea rows="4" placeholder="Briefly describe your goals..." class="w-full bg-gun-metal border border-white/10 rounded-xl px-6 py-4 text-white placeholder:text-slate-700 focus:border-chartreuse outline-none transition text-sm md:text-base"></textarea>
-      </div>
-      <button class="w-full py-5 bg-chartreuse rounded-2xl text-gun-metal font-black uppercase tracking-widest shadow-[0_0_20px_rgba(225,255,81,0.2)] hover:bg-white hover:-translate-y-1 transition text-xs md:text-sm">
-        Initialize Orbit
-      </button>
-    </form>
-  </div>
-
-  <!-- Contact Info & CTAs -->
-  <div class="flex flex-col gap-6 md:gap-8 order-1 lg:order-2">
-    <!-- WhatsApp -->
-    <div class="glassy p-8 md:p-10 rounded-[1.8rem] md:rounded-[2.5rem] border border-chartreuse/20 group">
-       <h3 class="text-[10px] md:text-xs font-black uppercase tracking-widest text-chartreuse mb-6 md:mb-8">Fast Response</h3>
-       <p class="text-2xl md:text-3xl font-black text-white uppercase italic mb-6">WhatsApp Us Instantly.</p>
-       <a href="https://wa.me/yournumber" class="inline-flex items-center gap-4 text-white font-black uppercase tracking-widest group-hover:text-chartreuse transition text-xs md:text-base">
-         <span class="underline decoration-4 underline-offset-8">Chat Now</span>
-         <i class="fa-brands fa-whatsapp text-2xl"></i>
-       </a>
-    </div>
-
-    <!-- Booking -->
-    <div class="glassy p-8 md:p-10 rounded-[1.8rem] md:rounded-[2.5rem] border border-white/5 group">
-       <h3 class="text-[10px] md:text-xs font-black uppercase tracking-widest text-slate-500 mb-6 md:mb-8">Direct Discussion</h3>
-       <p class="text-2xl md:text-3xl font-black text-white uppercase italic mb-6">Book a Strategy Call.</p>
-       <a href="#" class="inline-flex items-center gap-4 text-white font-black uppercase tracking-widest group-hover:text-white transition text-xs md:text-base">
-         <span class="underline decoration-chartreuse decoration-4 underline-offset-8">Schedule Call</span>
-         <i class="fa-solid fa-calendar-days text-xl text-chartreuse"></i>
-       </a>
-    </div>
-
-    <div class="mt-auto pt-8 border-t border-white/5 hidden lg:block">
-       <p class="text-2xl font-black text-white uppercase italic">We don’t just build websites — we build systems that bring customers.</p>
-       <p class="mt-4 text-slate-500 font-medium italic">Let’s grow your business together.</p>
-    </div>
-  </div>
-</div>
