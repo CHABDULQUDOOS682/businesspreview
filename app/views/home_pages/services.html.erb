@@ -1,68 +1,128 @@
-<section class="pb-16 pt-8">
-  <div class="max-w-4xl">
-    <p class="text-sm font-bold uppercase tracking-[0.3em] text-sky-700">Services</p>
-    <h1 class="mt-4 text-5xl font-black tracking-tight text-slate-950">A focused service stack for SaaS brands that need a site with clearer commercial impact.</h1>
-    <p class="mt-6 text-lg leading-8 text-slate-600">We keep the scope intentional: strategy, design, development, and launch support that make the product easier to understand and the next step easier to take.</p>
+<!-- Hero Section -->
+<section class="py-12 md:py-20 lg:py-32 px-4 md:px-0">
+  <div class="max-w-4xl text-center md:text-left">
+    <p class="text-[10px] md:text-sm font-black uppercase tracking-[0.3em] text-chartreuse mb-6">Complete Digital Solutions</p>
+    <h1 class="text-4xl sm:text-5xl md:text-6xl font-black text-white italic uppercase tracking-tighter leading-[1.1] md:leading-tight">Solutions for <span class="text-transparent bg-clip-text bg-gradient-to-r from-chartreuse to-white">Local Empires.</span></h1>
+    <p class="mt-6 text-lg md:text-xl leading-relaxed text-slate-400 font-medium italic">From websites to full business systems — we design tools that help you grow, automate, and scale with engineering precision.</p>
   </div>
 </section>
 
-<section class="grid gap-6 pb-16 lg:grid-cols-2">
-  <div class="rounded-[2rem] border border-white/70 bg-white/75 p-8 shadow-lg shadow-slate-200/70">
-    <p class="text-xs font-bold uppercase tracking-[0.25em] text-sky-700">01</p>
-    <h2 class="mt-4 text-2xl font-black text-slate-950">Strategy and messaging architecture</h2>
-    <p class="mt-4 text-slate-600">We identify core audiences, sharpen the promise, and structure page narratives so product value lands quickly and consistently.</p>
-    <ul class="mt-6 space-y-3 text-sm text-slate-700">
-      <li>Audience and competitor review</li>
-      <li>Homepage message map</li>
-      <li>Offer hierarchy and CTA plan</li>
+<!-- Core Services Grid -->
+<section class="grid gap-6 md:gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 pb-20 md:pb-32 px-4 md:px-0">
+  <!-- Web Design -->
+  <div class="glassy p-8 md:p-10 rounded-[2rem] md:rounded-[2.5rem] border border-white/5 group hover:border-chartreuse/40 transition duration-500">
+    <div class="h-12 w-12 md:h-14 md:w-14 bg-gun-metal rounded-2xl flex items-center justify-center text-chartreuse mb-8 shadow-lg group-hover:scale-110 transition">
+      <i class="fa-solid fa-desktop text-xl md:text-2xl"></i>
+    </div>
+    <h2 class="text-xl md:text-2xl font-black text-white uppercase italic tracking-tight mb-4">Web Design</h2>
+    <p class="text-slate-400 mb-8 italic text-sm md:text-base">Modern, fast, and conversion-focused websites built for scale.</p>
+    <ul class="space-y-3 mb-10">
+      <% ["Mobile responsive design", "SEO optimized structure", "Fast loading speed", "Lead generation forms"].each do |tip| %>
+        <li class="flex items-center gap-3 text-[10px] md:text-sm font-bold text-slate-500 uppercase tracking-widest">
+          <div class="h-1 w-3 bg-chartreuse"></div> <%= tip %>
+        </li>
+      <% end %>
     </ul>
+    <p class="text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] text-slate-600 mb-2">Best for:</p>
+    <p class="text-[10px] md:text-xs font-bold text-chartreuse uppercase">Small & local businesses</p>
   </div>
-  <div class="rounded-[2rem] border border-slate-200 bg-slate-950 p-8 text-white shadow-xl shadow-slate-300/30">
-    <p class="text-xs font-bold uppercase tracking-[0.25em] text-amber-300">02</p>
-    <h2 class="mt-4 text-2xl font-black">High-trust visual design</h2>
-    <p class="mt-4 text-slate-300">We design a visual system that feels decisive, premium, and appropriate for modern B2B SaaS buyers across desktop and mobile.</p>
-    <ul class="mt-6 space-y-3 text-sm text-slate-100">
-      <li>Custom section design</li>
-      <li>Responsive component system</li>
-      <li>Trust and proof placements</li>
+
+  <!-- Landing Pages -->
+  <div class="glassy p-8 md:p-10 rounded-[2rem] md:rounded-[2.5rem] border border-chartreuse/20 relative group hover:-translate-y-2 transition duration-500">
+    <div class="absolute -top-3 md:-top-4 right-6 md:right-10 bg-chartreuse text-gun-metal px-3 md:px-4 py-1 text-[8px] md:text-[10px] font-black uppercase tracking-widest rounded-full">High-Velocity</div>
+    <div class="h-12 w-12 md:h-14 md:w-14 bg-gun-metal rounded-2xl flex items-center justify-center text-chartreuse mb-8 shadow-lg group-hover:scale-110 transition">
+      <i class="fa-solid fa-fire text-xl md:text-2xl"></i>
+    </div>
+    <h2 class="text-xl md:text-2xl font-black text-white uppercase italic tracking-tight mb-4">Landing Pages</h2>
+    <p class="text-slate-400 mb-8 italic text-sm md:text-base">Turn visitors into customers with high-energy landing pages.</p>
+    <ul class="space-y-3 mb-10">
+      <% ["Ads campaigns", "Product Promotions", "Service-specific marketing", "A/B Testing Ready"].each do |tip| %>
+        <li class="flex items-center gap-3 text-[10px] md:text-sm font-bold text-slate-500 uppercase tracking-widest">
+          <div class="h-1 w-3 bg-white"></div> <%= tip %>
+        </li>
+      <% end %>
     </ul>
+    <p class="text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] text-slate-600 mb-2">Perfect for:</p>
+    <p class="text-[10px] md:text-xs font-bold text-white uppercase">Growth & Ad strategies</p>
   </div>
-  <div class="rounded-[2rem] border border-white/70 bg-gradient-to-br from-sky-100 to-cyan-50 p-8 shadow-lg shadow-cyan-100/70">
-    <p class="text-xs font-bold uppercase tracking-[0.25em] text-sky-700">03</p>
-    <h2 class="mt-4 text-2xl font-black text-slate-950">Build and performance foundation</h2>
-    <p class="mt-4 text-slate-700">Our builds prioritize maintainable structure, lightweight frontend delivery, and SEO-friendly markup that stays easy to manage.</p>
-    <ul class="mt-6 space-y-3 text-sm text-slate-700">
-      <li>Rails-based page implementation</li>
-      <li>Semantic headings and metadata</li>
-      <li>Reusable content sections</li>
+
+  <!-- Business Web Apps -->
+  <div class="glassy p-8 md:p-10 rounded-[2rem] md:rounded-[2.5rem] border border-white/5 group hover:border-chartreuse/40 transition duration-500">
+    <div class="h-12 w-12 md:h-14 md:w-14 bg-gun-metal rounded-2xl flex items-center justify-center text-chartreuse mb-8 shadow-lg group-hover:scale-110 transition">
+      <i class="fa-solid fa-gears text-xl md:text-2xl"></i>
+    </div>
+    <h2 class="text-xl md:text-2xl font-black text-white uppercase italic tracking-tight mb-4">Business Systems</h2>
+    <p class="text-slate-400 mb-8 italic text-sm md:text-base">Custom-built dashboards to manage operations and customer data.</p>
+    <ul class="space-y-3 mb-10">
+      <% ["Appointment booking", "Staff management", "Customer records", "Admin dashboards"].each do |tip| %>
+        <li class="flex items-center gap-3 text-[10px] md:text-sm font-bold text-slate-500 uppercase tracking-widest">
+          <div class="h-1 w-3 bg-chartreuse"></div> <%= tip %>
+        </li>
+      <% end %>
     </ul>
-  </div>
-  <div class="rounded-[2rem] border border-white/70 bg-white/75 p-8 shadow-lg shadow-slate-200/70">
-    <p class="text-xs font-bold uppercase tracking-[0.25em] text-sky-700">04</p>
-    <h2 class="mt-4 text-2xl font-black text-slate-950">Launch support and iteration</h2>
-    <p class="mt-4 text-slate-600">We prepare the launch checklist, tune the final experience, and leave your team with a dashboard simple enough to use without friction.</p>
-    <ul class="mt-6 space-y-3 text-sm text-slate-700">
-      <li>Content QA and final reviews</li>
-      <li>Redirect and analytics planning</li>
-      <li>Dashboard-based SEO editing</li>
-    </ul>
+    <p class="text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] text-slate-600 mb-2">Best for:</p>
+    <p class="text-[10px] md:text-xs font-bold text-chartreuse uppercase">Barbers, Salons, Gyms</p>
   </div>
 </section>
 
-<section class="pb-8">
-  <div class="rounded-[2.5rem] border border-white/70 bg-white/75 p-8 shadow-lg shadow-slate-200/70 lg:p-10">
-    <div class="grid gap-6 lg:grid-cols-3">
-      <div>
-        <p class="text-sm font-bold uppercase tracking-[0.25em] text-sky-700">Engagement fit</p>
-        <h2 class="mt-4 text-3xl font-black text-slate-950">Built for SaaS teams that need more than surface-level polish.</h2>
+<!-- Industry Solutions -->
+<section class="py-20 md:py-32 bg-black/40 -mx-4 md:-mx-6 px-4 md:px-6">
+  <div class="text-center mb-12 md:mb-16">
+    <h2 class="text-[10px] md:text-xs font-black uppercase tracking-[0.5em] text-chartreuse mb-4">The LaunchReady Advantage</h2>
+    <p class="text-3xl md:text-4xl font-black text-white italic uppercase tracking-tight">Industry-Specific Propulsion.</p>
+  </div>
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+    <% [
+      { name: "Barber Shops", items: ["Booking system", "Service list", "Gallery", "Customer mgmt"], icon: "scissors" },
+      { name: "Restaurants", items: ["Online menu", "Table reservations", "Order inquiries", "SEO Menu"], icon: "utensils" },
+      { name: "Gyms", items: ["Member tracking", "Class scheduling", "Trainer mgmt", "Stripe Sync"], icon: "dumbbell" }
+    ].each do |ind| %>
+      <div class="glassy p-6 md:p-8 rounded-2xl md:rounded-3xl border border-white/5">
+        <div class="flex items-center gap-4 mb-6">
+           <i class="fa-solid fa-<%= ind[:icon] %> text-chartreuse text-xl"></i>
+           <h3 class="text-xl font-black text-white uppercase italic"><%= ind[:name] %></h3>
+        </div>
+        <ul class="space-y-2">
+          <% ind[:items].each do |item| %>
+            <li class="text-slate-500 text-[10px] md:text-sm font-bold uppercase tracking-widest flex items-center gap-2">
+              <div class="h-1 w-1 bg-chartreuse rounded-full"></div> <%= item %>
+            </li>
+          <% end %>
+        </ul>
       </div>
-      <div class="rounded-[1.75rem] bg-slate-950 p-6 text-white">
-        <p class="text-lg font-bold">Ideal for</p>
-        <p class="mt-3 text-sm leading-7 text-slate-300">Rebrands, new category positioning, launch campaigns, and sites that need to support sales conversations better.</p>
+    <% end %>
+  </div>
+  
+  <div class="mt-16 md:mt-20 glassy p-8 md:p-12 rounded-[2rem] md:rounded-[2.5rem] border border-chartreuse/20 flex flex-col md:flex-row items-center justify-between gap-8 max-w-5xl mx-auto">
+    <div class="space-y-4 text-center md:text-left">
+      <h3 class="text-2xl md:text-3xl font-black text-white uppercase italic">Need something custom?</h3>
+      <p class="text-sm md:text-base text-slate-400 font-medium italic">We build systems tailored to your unique business growth trajectory.</p>
+    </div>
+    <%= link_to contact_path, class: "w-full md:w-auto text-center px-10 py-5 bg-white rounded-full text-gun-metal font-black uppercase tracking-widest transition hover:bg-chartreuse hover:-rotate-2 transform" do %>
+      Contact Us Today
+    <% end %>
+  </div>
+</section>
+
+<section class="py-20 md:py-32 px-4 md:px-0">
+  <div class="max-w-7xl mx-auto glassy p-8 md:p-12 lg:p-20 rounded-[2.5rem] md:rounded-[3.5rem] border border-white/10 relative overflow-hidden">
+    <!-- Ambient Glow -->
+    <div class="absolute -top-1/2 -left-1/2 w-full h-full bg-chartreuse/5 blur-[150px] -z-10"></div>
+    
+    <div class="grid gap-8 md:gap-12 lg:grid-cols-3 items-center">
+      <div class="lg:col-span-1 text-center lg:text-left">
+        <p class="text-[10px] md:text-xs font-black uppercase tracking-[0.4em] text-chartreuse mb-6">Engagement Fit</p>
+        <h2 class="text-3xl md:text-4xl font-black text-white italic uppercase leading-tight tracking-tighter">Built for businesses that want more than <span class="text-chartreuse">surface-level polish.</span></h2>
       </div>
-      <div class="rounded-[1.75rem] border border-slate-200 p-6">
-        <p class="text-lg font-bold text-slate-950">Not built for</p>
-        <p class="mt-3 text-sm leading-7 text-slate-600">Inflated guarantees, thin SEO pages, or generic templates that say a lot without helping buyers understand the product.</p>
+      
+      <div class="glassy p-8 md:p-10 rounded-[1.8rem] md:rounded-[2rem] border border-white/5 space-y-4">
+        <p class="text-lg md:text-xl font-black text-white uppercase italic tracking-tight">Ideal for</p>
+        <p class="text-sm md:text-base text-slate-400 font-medium italic leading-relaxed">Local shops, service providers, and regional clinics ready to automate bookings and scale their digital footprint.</p>
+      </div>
+      
+      <div class="glassy p-8 md:p-10 rounded-[1.8rem] md:rounded-[2rem] border border-white/5 space-y-4">
+        <p class="text-lg md:text-xl font-black text-slate-500 uppercase italic tracking-tight line-through">Not built for</p>
+        <p class="text-sm md:text-base text-slate-500 font-medium italic leading-relaxed">Generic templates, thin SEO strategies, or businesses not ready for high-velocity growth.</p>
       </div>
     </div>
   </div>

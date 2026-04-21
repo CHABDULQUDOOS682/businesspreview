@@ -1,47 +1,70 @@
-<section class="pb-16 pt-8">
-  <div class="grid gap-8 lg:grid-cols-[0.95fr_1.05fr]">
-    <div>
-      <p class="text-sm font-bold uppercase tracking-[0.3em] text-sky-700">Contact</p>
-      <h1 class="mt-4 text-5xl font-black tracking-tight text-slate-950">Tell us where your website is slowing growth.</h1>
-      <p class="mt-6 text-lg leading-8 text-slate-600">We keep discovery straightforward. Share your current situation, the timeline you are working with, and the outcome you want the site to support.</p>
-      <div class="mt-8 space-y-4">
-        <div class="rounded-[1.75rem] border border-white/70 bg-white/75 p-5 shadow-lg shadow-slate-200/70">
-          <p class="text-sm font-semibold text-slate-500">Email</p>
-          <p class="mt-2 text-lg font-bold text-slate-950">hello@launchready.example</p>
-        </div>
-        <div class="rounded-[1.75rem] border border-white/70 bg-white/75 p-5 shadow-lg shadow-slate-200/70">
-          <p class="text-sm font-semibold text-slate-500">Response window</p>
-          <p class="mt-2 text-lg font-bold text-slate-950">Usually within 1 business day</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="rounded-[2.5rem] border border-slate-200 bg-white/85 p-8 shadow-xl shadow-slate-200/80">
-      <h2 class="text-2xl font-black text-slate-950">Project inquiry checklist</h2>
-      <p class="mt-3 text-slate-600">This page is intentionally clear and non-deceptive: no fake urgency, no hidden fields, and no exaggerated performance promises.</p>
-
-      <div class="mt-8 space-y-5">
-        <div class="rounded-[1.5rem] border border-slate-200 p-5">
-          <p class="text-sm font-semibold uppercase tracking-[0.2em] text-sky-700">1</p>
-          <p class="mt-2 text-lg font-bold text-slate-950">Share your product and audience</p>
-          <p class="mt-2 text-sm leading-7 text-slate-600">What does the product do, who buys it, and where does the current site create confusion?</p>
-        </div>
-        <div class="rounded-[1.5rem] border border-slate-200 p-5">
-          <p class="text-sm font-semibold uppercase tracking-[0.2em] text-sky-700">2</p>
-          <p class="mt-2 text-lg font-bold text-slate-950">Define the launch goal</p>
-          <p class="mt-2 text-sm leading-7 text-slate-600">Are you validating a new category, improving sales conversion, or preparing for a release or funding milestone?</p>
-        </div>
-        <div class="rounded-[1.5rem] border border-slate-200 p-5">
-          <p class="text-sm font-semibold uppercase tracking-[0.2em] text-sky-700">3</p>
-          <p class="mt-2 text-lg font-bold text-slate-950">Choose the best next step</p>
-          <p class="mt-2 text-sm leading-7 text-slate-600">We review the fit, recommend a sensible scope, and only move forward if the project is a strong match.</p>
-        </div>
-      </div>
-
-      <div class="mt-8 rounded-[1.75rem] bg-slate-950 p-6 text-white">
-        <p class="text-sm uppercase tracking-[0.25em] text-sky-300">Ready to talk?</p>
-        <p class="mt-3 text-xl font-bold">Email us at hello@launchready.example and include your current site plus a short summary of the project.</p>
-      </div>
-    </div>
+<!-- Hero Section -->
+<section class="py-12 md:py-20 lg:py-32 px-4 md:px-0 text-center md:text-left">
+  <div class="max-w-4xl">
+    <p class="text-[10px] md:text-sm font-black uppercase tracking-[0.3em] text-chartreuse mb-6">Initiate Sync</p>
+    <h1 class="text-4xl sm:text-5xl md:text-6xl font-black text-white italic uppercase tracking-tighter leading-[1.1] md:leading-tight">Let’s Build Your <span class="text-transparent bg-clip-text bg-gradient-to-r from-chartreuse to-white">Business Online.</span></h1>
+    <p class="mt-6 text-lg md:text-xl leading-relaxed text-slate-400 font-medium italic">Tell us about your business — we’ll help you design the right system to bring you more customers.</p>
   </div>
 </section>
+
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-16 pb-20 md:pb-32 px-4 md:px-0">
+  <!-- Contact Form -->
+  <div class="glassy p-6 md:p-10 rounded-[2rem] md:rounded-[3rem] border border-white/10 order-2 lg:order-1">
+    <form class="space-y-6">
+      <div class="space-y-2">
+        <label class="text-[10px] font-black uppercase tracking-widest text-slate-500">Identity / Name</label>
+        <input type="text" placeholder="Your Name" class="w-full bg-gun-metal border border-white/10 rounded-xl px-6 py-4 text-white placeholder:text-slate-700 focus:border-chartreuse outline-none transition text-sm md:text-base">
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="space-y-2">
+          <label class="text-[10px] font-black uppercase tracking-widest text-slate-500">Business Type</label>
+          <input type="text" placeholder="e.g. Barber, Gym" class="w-full bg-gun-metal border border-white/10 rounded-xl px-6 py-4 text-white placeholder:text-slate-700 focus:border-chartreuse outline-none transition text-sm md:text-base">
+        </div>
+        <div class="space-y-2">
+          <label class="text-[10px] font-black uppercase tracking-widest text-slate-500">Budget Range</label>
+          <select class="w-full bg-gun-metal border border-white/10 rounded-xl px-6 py-4 text-white focus:border-chartreuse outline-none transition appearance-none text-sm md:text-base">
+            <option>Select Range</option>
+            <option>$1k - $3k</option>
+            <option>$3k - $10k</option>
+            <option>$10k+</option>
+          </select>
+        </div>
+      </div>
+      <div class="space-y-2">
+        <label class="text-[10px] font-black uppercase tracking-widest text-slate-500">Mission Summary</label>
+        <textarea rows="4" placeholder="Briefly describe your goals..." class="w-full bg-gun-metal border border-white/10 rounded-xl px-6 py-4 text-white placeholder:text-slate-700 focus:border-chartreuse outline-none transition text-sm md:text-base"></textarea>
+      </div>
+      <button class="w-full py-5 bg-chartreuse rounded-2xl text-gun-metal font-black uppercase tracking-widest shadow-[0_0_20px_rgba(225,255,81,0.2)] hover:bg-white hover:-translate-y-1 transition text-xs md:text-sm">
+        Initialize Orbit
+      </button>
+    </form>
+  </div>
+
+  <!-- Contact Info & CTAs -->
+  <div class="flex flex-col gap-6 md:gap-8 order-1 lg:order-2">
+    <!-- WhatsApp -->
+    <div class="glassy p-8 md:p-10 rounded-[1.8rem] md:rounded-[2.5rem] border border-chartreuse/20 group">
+       <h3 class="text-[10px] md:text-xs font-black uppercase tracking-widest text-chartreuse mb-6 md:mb-8">Fast Response</h3>
+       <p class="text-2xl md:text-3xl font-black text-white uppercase italic mb-6">WhatsApp Us Instantly.</p>
+       <a href="https://wa.me/yournumber" class="inline-flex items-center gap-4 text-white font-black uppercase tracking-widest group-hover:text-chartreuse transition text-xs md:text-base">
+         <span class="underline decoration-4 underline-offset-8">Chat Now</span>
+         <i class="fa-brands fa-whatsapp text-2xl"></i>
+       </a>
+    </div>
+
+    <!-- Booking -->
+    <div class="glassy p-8 md:p-10 rounded-[1.8rem] md:rounded-[2.5rem] border border-white/5 group">
+       <h3 class="text-[10px] md:text-xs font-black uppercase tracking-widest text-slate-500 mb-6 md:mb-8">Direct Discussion</h3>
+       <p class="text-2xl md:text-3xl font-black text-white uppercase italic mb-6">Book a Strategy Call.</p>
+       <a href="#" class="inline-flex items-center gap-4 text-white font-black uppercase tracking-widest group-hover:text-white transition text-xs md:text-base">
+         <span class="underline decoration-chartreuse decoration-4 underline-offset-8">Schedule Call</span>
+         <i class="fa-solid fa-calendar-days text-xl text-chartreuse"></i>
+       </a>
+    </div>
+
+    <div class="mt-auto pt-8 border-t border-white/5 hidden lg:block">
+       <p class="text-2xl font-black text-white uppercase italic">We don’t just build websites — we build systems that bring customers.</p>
+       <p class="mt-4 text-slate-500 font-medium italic">Let’s grow your business together.</p>
+    </div>
+  </div>
+</div>

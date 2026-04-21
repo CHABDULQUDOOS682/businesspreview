@@ -1,0 +1,80 @@
+<!-- Hero Section -->
+<section class="py-12 md:py-20 lg:py-32 px-4 md:px-0">
+  <div class="max-w-4xl text-center md:text-left">
+    <p class="text-[10px] md:text-sm font-black uppercase tracking-[0.3em] text-chartreuse mb-6">Transparent Investing</p>
+    <h1 class="text-4xl sm:text-5xl md:text-6xl font-black text-white italic uppercase tracking-tighter leading-[1.1] md:leading-tight">Simple Pricing for <span class="text-transparent bg-clip-text bg-gradient-to-r from-chartreuse to-white">Real Growth.</span></h1>
+    <p class="mt-6 text-lg md:text-xl leading-relaxed text-slate-400 font-medium italic">Choose a plan based on your business needs. No hidden costs, just high-performance results.</p>
+  </div>
+</section>
+
+<!-- Pricing Grid -->
+<section class="grid gap-6 md:gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 pb-20 md:pb-32 px-4 md:px-0">
+  <!-- Starter Package -->
+  <div class="glassy p-8 md:p-10 rounded-[2rem] md:rounded-[2.5rem] border border-white/5 flex flex-col group hover:border-slate-500 transition duration-500">
+    <h2 class="text-[10px] md:text-xs font-black uppercase tracking-[0.3em] text-slate-500 mb-2">Starter Package</h2>
+    <p class="text-xl md:text-2xl font-black text-white uppercase italic mb-8">Static Website</p>
+    <div class="mb-10 space-y-4 flex-1">
+      <% ["1–3 page website", "Mobile responsive design", "Contact form", "Basic SEO setup"].each do |feature| %>
+        <div class="flex items-center gap-3 text-xs md:text-sm font-bold text-slate-400 uppercase tracking-widest">
+          <i class="fa-solid fa-check text-slate-600"></i> <%= feature %>
+        </div>
+      <% end %>
+    </div>
+    <div class="pt-8 border-t border-white/5">
+       <p class="text-[8px] md:text-[10px] font-black uppercase tracking-widest text-slate-600 mb-4">👉 Best for: New businesses</p>
+       <%= link_to contact_path, class: "block w-full py-4 border border-slate-600 rounded-xl text-center text-[10px] md:text-xs font-black uppercase tracking-widest text-slate-300 hover:bg-white hover:text-gun-metal transition" do %>
+         Select Starter
+       <% end %>
+    </div>
+  </div>
+
+  <!-- Growth Package -->
+  <div class="glassy p-8 md:p-10 rounded-[2rem] md:rounded-[2.5rem] border-2 border-chartreuse relative flex flex-col group hover:-translate-y-2 transition duration-500 shadow-[0_0_40px_rgba(225,255,81,0.15)] order-first lg:order-none">
+    <div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-chartreuse text-gun-metal px-6 py-1.5 text-[10px] md:text-xs font-black uppercase tracking-widest rounded-full">Most Popular</div>
+    <h2 class="text-[10px] md:text-xs font-black uppercase tracking-[0.3em] text-chartreuse mb-2">Growth Package</h2>
+    <p class="text-xl md:text-2xl font-black text-white uppercase italic mb-8">Dynamic Website</p>
+    <div class="mb-10 space-y-4 flex-1">
+      <% ["Multi-page website", "Booking & Contact system", "Advanced SEO optimization", "Basic Admin dashboard"].each do |feature| %>
+        <div class="flex items-center gap-3 text-xs md:text-sm font-bold text-white uppercase tracking-widest">
+          <i class="fa-solid fa-bolt text-chartreuse"></i> <%= feature %>
+        </div>
+      <% end %>
+    </div>
+    <div class="pt-8 border-t border-chartreuse/20">
+       <p class="text-[8px] md:text-[10px] font-black uppercase tracking-widest text-chartreuse/60 mb-4">👉 Best for: Barbers, Salons, Restaurants</p>
+       <%= link_to contact_path, class: "block w-full py-4 bg-chartreuse rounded-xl text-center text-[10px] md:text-xs font-black uppercase tracking-widest text-gun-metal transition hover:bg-white" do %>
+         Select Growth
+       <% end %>
+    </div>
+  </div>
+
+  <!-- Pro Package -->
+  <div class="glassy p-8 md:p-10 rounded-[2rem] md:rounded-[2.5rem] border border-white/5 flex flex-col group hover:border-chartreuse transition duration-500">
+    <h2 class="text-[10px] md:text-xs font-black uppercase tracking-[0.3em] text-slate-500 mb-2">Pro Package</h2>
+    <p class="text-xl md:text-2xl font-black text-white uppercase italic mb-8">Business System</p>
+    <div class="mb-10 space-y-4 flex-1">
+      <% ["Advanced dashboard system", "Staff management", "Full Appointment system", "Customer database", "Full Customization"].each do |feature| %>
+        <div class="flex items-center gap-3 text-xs md:text-sm font-bold text-slate-400 uppercase tracking-widest">
+          <i class="fa-solid fa-star text-chartreuse/60"></i> <%= feature %>
+        </div>
+      <% end %>
+    </div>
+    <div class="pt-8 border-t border-white/5">
+       <p class="text-[8px] md:text-[10px] font-black uppercase tracking-widest text-slate-600 mb-4">👉 Best for: Growing or established businesses</p>
+       <%= link_to contact_path, class: "block w-full py-4 glassy rounded-xl text-center text-[10px] md:text-xs font-black uppercase tracking-widest text-white hover:bg-chartreuse hover:text-gun-metal transition" do %>
+         Contact For Pro
+       <% end %>
+    </div>
+  </div>
+</section>
+
+<!-- Final CTA Section -->
+<section class="py-12 md:py-20 -mx-4 md:-mx-6 px-4 md:px-6">
+  <div class="max-w-3xl mx-auto glassy p-8 md:p-12 rounded-[2rem] md:rounded-[3rem] border border-white/10 text-center space-y-6 md:space-y-8">
+     <h3 class="text-2xl md:text-3xl font-black text-white uppercase italic">Not sure what you need?</h3>
+     <p class="text-sm md:text-base text-slate-400 italic font-medium">We offer free consultations to map out your technical requirements.</p>
+     <%= link_to contact_path, class: "inline-block px-10 py-5 bg-chartreuse rounded-full text-gun-metal font-black uppercase tracking-widest shadow-[0_0_20px_rgba(225,255,81,0.2)] hover:bg-white transition" do %>
+        👉 Get a Free Consultation
+     <% end %>
+  </div>
+</section>

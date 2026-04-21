@@ -1,18 +1,63 @@
-<section class="pb-16 pt-8">
-  <div class="grid gap-8 lg:grid-cols-[1fr_0.9fr]">
-    <div>
-      <p class="text-sm font-bold uppercase tracking-[0.3em] text-sky-700">About</p>
-      <h1 class="mt-4 text-5xl font-black tracking-tight text-slate-950">Northstar Studio LLC designs websites that help SaaS companies look more established.</h1>
-      <p class="mt-6 text-lg leading-8 text-slate-600">We believe credibility starts with clarity. That means readable messaging, clear business identity, visible contact options, and legal pages that signal a real company behind the website.</p>
+<!-- Hero Section -->
+<section class="py-12 md:py-20 lg:py-32 px-4 md:px-0">
+  <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+    <div class="space-y-6 md:space-y-8 text-center lg:text-left">
+      <p class="text-[10px] md:text-sm font-black uppercase tracking-[0.3em] text-chartreuse">The Team Behind the Tech</p>
+      <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-white italic uppercase tracking-tighter leading-[1.1] md:leading-[0.9]">We Are <span class="text-transparent bg-clip-text bg-gradient-to-r from-chartreuse to-white">VeloqTech.</span></h1>
+      <p class="text-lg md:text-xl text-slate-400 font-medium italic leading-relaxed">
+        VeloqTech is a high-velocity digital agency focused on building the digital backbone for local businesses. We believe every barber, gym, and clinic deserves a system that works as hard as they do.
+      </p>
+      <div class="flex justify-center lg:justify-start gap-4">
+         <div class="h-px w-12 md:w-20 bg-chartreuse self-center"></div>
+         <p class="text-[10px] md:text-xs font-black uppercase tracking-widest text-slate-500 italic">Est. 2024 • Engineered in the USA</p>
+      </div>
     </div>
-    <div class="rounded-[2.5rem] border border-white/70 bg-white/80 p-8 shadow-lg shadow-slate-200/70">
-      <p class="text-sm font-bold uppercase tracking-[0.25em] text-sky-700">What we optimize for</p>
-      <ul class="mt-6 space-y-4 text-slate-600">
-        <li>Professional first impressions</li>
-        <li>Clear positioning for SaaS offers</li>
-        <li>Legal and privacy transparency</li>
-        <li>Honest claims instead of hype-driven copy</li>
-      </ul>
+    <div class="relative mt-12 lg:mt-0">
+      <div class="glassy p-3 md:p-4 rounded-[2rem] md:rounded-[3rem] border border-white/10 rotate-2 hover:rotate-0 transition duration-700">
+         <div class="bg-gun-metal rounded-[1.8rem] md:rounded-[2.5rem] p-8 md:p-12 aspect-square flex flex-col justify-center items-center text-center space-y-6">
+            <div class="h-16 w-16 md:h-24 md:w-24 bg-chartreuse rounded-full flex items-center justify-center text-gun-metal">
+               <i class="fa-solid fa-code text-3xl md:text-4xl"></i>
+            </div>
+            <h3 class="text-2xl md:text-3xl font-black text-white uppercase italic">Built for Growth.</h3>
+            <p class="text-sm md:text-base text-slate-400 italic">We don't just build websites; we build business tools that automate your success.</p>
+         </div>
+      </div>
     </div>
+  </div>
+</section>
+
+<!-- Values Section -->
+<section class="py-20 md:py-32 bg-black/40 -mx-4 md:-mx-6 px-4 md:px-6">
+  <div class="max-w-7xl mx-auto">
+    <div class="mb-12 md:mb-20 text-center">
+       <h2 class="text-[10px] md:text-xs font-black uppercase tracking-[0.5em] text-chartreuse mb-4">Our Core Values</h2>
+       <p class="text-3xl md:text-4xl font-black text-white italic uppercase tracking-tight">The Veloq Code.</p>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
+      <% [
+        { t: "Speed & Precision", d: "High-velocity delivery without sacrificing the technical details.", icon: "bolt" },
+        { t: "Local First", d: "We focus on the businesses that power our communities.", icon: "location-dot" },
+        { t: "Radical Transparency", d: "Clear communication, honest pricing, and real results.", icon: "eye" }
+      ].each do |value| %>
+        <div class="glassy p-8 md:p-10 rounded-2xl md:rounded-3xl border border-white/5 space-y-6 group hover:border-chartreuse/40 transition">
+          <div class="h-10 w-10 md:h-12 md:w-12 bg-gun-metal rounded-xl flex items-center justify-center text-chartreuse group-hover:scale-110 transition">
+             <i class="fa-solid fa-<%= value[:icon] %> text-lg md:text-xl"></i>
+          </div>
+          <h4 class="text-xl md:text-2xl font-black text-white uppercase italic"><%= value[:t] %></h4>
+          <p class="text-sm md:text-base text-slate-400 font-medium italic"><%= value[:d] %></p>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</section>
+
+<!-- Team CTA -->
+<section class="py-20 md:py-32 text-center px-4">
+  <div class="max-w-3xl mx-auto space-y-8">
+     <h2 class="text-3xl md:text-4xl font-black text-white italic uppercase tracking-tight">Want to know more about how we can help your business?</h2>
+     <p class="text-lg md:text-xl text-slate-400 italic">Let's hop on a call and map out your next move.</p>
+     <%= link_to contact_path, class: "inline-block w-full sm:w-auto px-12 py-6 bg-chartreuse rounded-full text-gun-metal font-black uppercase tracking-widest transition hover:bg-white" do %>
+       Get in Touch
+     <% end %>
   </div>
 </section>

@@ -1,130 +1,214 @@
-<section class="pb-16 pt-8">
-  <div class="grid items-center gap-10 lg:grid-cols-[1.15fr_0.85fr]">
-    <div>
-      <p class="inline-flex rounded-full border border-sky-200 bg-sky-50 px-4 py-2 text-xs font-bold uppercase tracking-[0.3em] text-sky-700">
-        SaaS websites that sell clearly
-      </p>
-      <h1 class="mt-6 max-w-3xl text-5xl font-black leading-tight tracking-tight text-slate-950 md:text-6xl">
-        Turn a forgettable SaaS site into a sharper growth engine.
+<!-- Hero Section -->
+<section class="relative py-12 md:py-20 lg:py-32 overflow-hidden -mx-4 md:-mx-6 px-4 md:px-6">
+  <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+    <div class="space-y-6 md:space-y-8 relative z-10 text-center lg:text-left">
+      <div class="inline-flex rounded-full px-4 py-2 bg-chartreuse/10 border border-chartreuse/20 text-chartreuse text-[10px] md:text-xs font-black uppercase tracking-widest animate-pulse">
+        Now Serving Local Businesses
+      </div>
+      <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black leading-[1.1] lg:leading-[0.9] tracking-tighter text-white uppercase italic">
+        Build a Website That Brings You <span class="text-transparent bg-clip-text bg-gradient-to-r from-chartreuse to-white">Real Customers</span> — Not Just Traffic.
       </h1>
-      <p class="mt-6 max-w-2xl text-lg leading-8 text-slate-600">
-        We help SaaS companies clarify positioning, elevate trust, and launch premium web experiences that feel credible to buyers and simple for teams to manage.
+      <p class="text-lg md:text-xl text-slate-400 max-w-xl mx-auto lg:mx-0 leading-relaxed font-medium italic">
+        VeloqTech creates high-converting websites and business systems for local businesses that want more bookings, calls, and sales.
       </p>
-      <div class="mt-8 flex flex-wrap gap-4">
-        <%= link_to "Book a strategy call", contact_path, class: "rounded-full bg-slate-950 px-6 py-3 text-sm font-semibold text-white shadow-xl shadow-slate-300 transition hover:-translate-y-0.5 hover:bg-slate-800" %>
-        <%= link_to "Explore services", services_path, class: "rounded-full border border-slate-300 bg-white px-6 py-3 text-sm font-semibold text-slate-900 transition hover:border-slate-400 hover:bg-slate-50" %>
+      <div class="flex flex-col sm:flex-row justify-center lg:justify-start gap-4 pt-4">
+        <%= link_to contact_path, class: "px-8 py-5 bg-chartreuse rounded-2xl text-gun-metal font-black uppercase tracking-widest shadow-[0_0_20px_rgba(225,255,81,0.3)] transition hover:-translate-y-1 hover:bg-white text-center" do %>
+          Get a Free Consultation
+        <% end %>
+        <a href="https://wa.me/yournumber" class="px-8 py-5 glassy rounded-2xl text-white font-black uppercase tracking-widest flex items-center justify-center gap-3 hover:bg-white/10 transition">
+          <i class="fa-brands fa-whatsapp text-chartreuse text-xl"></i>
+          WhatsApp Us
+        </a>
       </div>
-      <div class="mt-10 grid max-w-2xl gap-4 sm:grid-cols-3">
-        <div class="rounded-3xl border border-white/70 bg-white/70 p-5 shadow-lg shadow-slate-200/70 backdrop-blur">
-          <p class="text-3xl font-black text-slate-950">6 weeks</p>
-          <p class="mt-2 text-sm text-slate-600">Typical launch timeline with weekly decision checkpoints.</p>
-        </div>
-        <div class="rounded-3xl border border-white/70 bg-white/70 p-5 shadow-lg shadow-slate-200/70 backdrop-blur">
-          <p class="text-3xl font-black text-slate-950">3 layers</p>
-          <p class="mt-2 text-sm text-slate-600">Strategy, design, and build delivered as one connected system.</p>
-        </div>
-        <div class="rounded-3xl border border-white/70 bg-white/70 p-5 shadow-lg shadow-slate-200/70 backdrop-blur">
-          <p class="text-3xl font-black text-slate-950">100%</p>
-          <p class="mt-2 text-sm text-slate-600">Custom layouts, no recycled templates or manipulative conversion gimmicks.</p>
+    </div>
+    <div class="relative mt-12 lg:mt-0">
+      <div class="absolute -inset-1 bg-gradient-to-r from-chartreuse to-gun-metal rounded-3xl blur opacity-20"></div>
+      <div class="relative glassy-dark rounded-3xl p-4 md:p-8 border border-white/10">
+        <!-- Abstract Glassy System Visual -->
+        <div class="aspect-video bg-gradient-to-br from-gun-metal to-black rounded-2xl overflow-hidden relative group">
+          <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-20"></div>
+          <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 md:w-40 h-32 md:h-40 bg-chartreuse/20 rounded-full blur-3xl animate-pulse"></div>
+          <div class="absolute inset-0 flex items-center justify-center">
+             <i class="fa-solid fa-rocket text-5xl md:text-7xl text-chartreuse opacity-40 group-hover:scale-110 transition-transform"></i>
+          </div>
+          <div class="absolute bottom-4 md:bottom-6 left-4 md:left-6 right-4 md:right-6 glassy p-3 md:p-4 rounded-xl border border-white/10">
+            <p class="text-[8px] md:text-[10px] font-black uppercase tracking-widest text-chartreuse">System Status: Orbital</p>
+            <p class="text-[10px] md:text-xs font-bold text-white mt-1">Accelerating Bookings +400%</p>
+          </div>
         </div>
       </div>
     </div>
+  </div>
+</section>
 
-    <div class="relative">
-      <div class="absolute -right-10 -top-10 h-28 w-28 rounded-full bg-amber-300/70 blur-3xl"></div>
-      <div class="absolute -left-8 bottom-8 h-24 w-24 rounded-full bg-sky-300/70 blur-3xl"></div>
-      <div class="relative overflow-hidden rounded-[2rem] border border-white/70 bg-slate-950 p-6 text-white shadow-2xl shadow-slate-400/40">
-        <div class="flex items-center justify-between border-b border-white/10 pb-4">
-          <div>
-            <p class="text-xs uppercase tracking-[0.35em] text-sky-300">Live project board</p>
-            <p class="mt-2 text-xl font-bold">Website relaunch sprint</p>
-          </div>
-          <span class="rounded-full bg-emerald-400/15 px-3 py-1 text-xs font-semibold text-emerald-300">On track</span>
+<!-- Problem Section -->
+<section class="py-20 md:py-24 bg-black/40 -mx-4 md:-mx-6 px-4 md:px-6">
+  <div class="max-w-4xl mx-auto text-center mb-12 md:mb-16">
+    <h2 class="text-[10px] md:text-sm font-black uppercase tracking-[0.4em] text-slate-500 mb-4">The Challenge</h2>
+    <p class="text-3xl md:text-4xl font-black text-white italic uppercase tracking-tight">Most local businesses struggle with:</p>
+  </div>
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+    <% [
+      "No online presence that actually brings customers",
+      "Poor-quality or outdated websites",
+      "Relying only on Instagram or referrals",
+      "Losing clients to competitors with better systems"
+    ].each do |problem| %>
+      <div class="glassy p-6 md:p-8 rounded-3xl border border-white/5 hover:border-chartreuse/30 transition">
+        <div class="h-10 w-10 bg-gun-metal rounded-full flex items-center justify-center text-chartreuse mb-6">
+          <i class="fa-solid fa-xmark"></i>
         </div>
+        <p class="text-xs md:text-sm font-bold text-slate-300 leading-relaxed uppercase tracking-wide"><%= problem %></p>
+      </div>
+    <% end %>
+  </div>
+</section>
 
-        <div class="mt-6 space-y-4">
-          <div class="rounded-3xl bg-white/8 p-5">
-            <p class="text-sm text-slate-300">Positioning focus</p>
-            <p class="mt-2 text-lg font-semibold">Clarify the product story for technical and commercial buyers.</p>
+<!-- Solution Section -->
+<section class="py-20 md:py-32 -mx-4 md:-mx-6 px-4 md:px-6">
+  <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+    <div class="relative order-2 lg:order-1">
+      <div class="glassy-dark rounded-[2rem] md:rounded-[3rem] p-3 md:p-4 border border-white/10">
+        <div class="bg-gun-metal rounded-[1.8rem] md:rounded-[2.5rem] p-6 md:p-10 space-y-6 md:space-y-8">
+          <div class="flex items-center gap-4 border-b border-white/5 pb-6">
+            <div class="h-10 w-10 md:h-12 md:w-12 rounded-2xl bg-chartreuse flex items-center justify-center text-gun-metal font-black">VT</div>
+            <p class="text-lg md:text-xl font-black text-white uppercase italic">We fix that.</p>
           </div>
-          <div class="grid gap-4 md:grid-cols-2">
-            <div class="rounded-3xl bg-gradient-to-br from-sky-400 to-cyan-300 p-5 text-slate-950">
-              <p class="text-sm font-semibold uppercase tracking-[0.25em]">Messaging</p>
-              <p class="mt-3 text-2xl font-black">Crisp headline system</p>
-              <p class="mt-2 text-sm font-medium text-slate-800">Built to support SEO, ads, and sales enablement in one voice.</p>
+          <ul class="space-y-4 md:space-y-6">
+            <% [
+              { title: "Modern websites that convert", icon: "check" },
+              { title: "Booking systems for services", icon: "calendar-check" },
+              { title: "Custom dashboards to manage ops", icon: "chart-line" },
+              { title: "Fast, mobile-first websites", icon: "mobile-screen" }
+            ].each do |sol| %>
+              <li class="flex items-start gap-4 group">
+                <div class="mt-1 h-5 w-5 md:h-6 md:w-6 rounded-full border border-chartreuse flex items-center justify-center text-[8px] md:text-[10px] text-chartreuse group-hover:bg-chartreuse group-hover:text-gun-metal transition">
+                   <i class="fa-solid fa-<%= sol[:icon] %>"></i>
+                </div>
+                <p class="text-base md:text-lg font-bold text-slate-300 italic group-hover:text-white transition"><%= sol[:title] %></p>
+              </li>
+            <% end %>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="space-y-6 md:space-y-8 order-1 lg:order-2 text-center lg:text-left">
+      <h2 class="text-[10px] md:text-xs font-black uppercase tracking-[0.5em] text-chartreuse">Our Solution</h2>
+      <p class="text-4xl md:text-5xl font-black text-white italic uppercase leading-[1.1] md:leading-none">High-Energy Tools Built for <span class="text-chartreuse">Real Growth.</span></p>
+      <p class="text-lg md:text-xl text-slate-400 font-medium italic">At VeloqTech, we don't just design — we engineer the digital backbone of your local empire.</p>
+      <%= link_to services_path, class: "inline-block px-8 py-4 border-2 border-chartreuse text-chartreuse font-black uppercase tracking-widest rounded-full hover:bg-chartreuse hover:text-gun-metal transition shadow-[0_0_15px_rgba(225,255,81,0.2)]" do %>
+        Explore Our Ecosystem
+      <% end %>
+    </div>
+  </div>
+</section>
+
+<!-- Industries We Serve -->
+<section class="py-20 md:py-32 bg-black/20 -mx-4 md:-mx-6 px-4 md:px-6">
+  <div class="text-center mb-12 md:mb-20">
+    <h2 class="text-3xl md:text-4xl font-black text-white italic uppercase tracking-tight">Industries We Serve.</h2>
+  </div>
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+    <% [
+      { name: "Barbers & Salons", icon: "scissors" },
+      { name: "Restaurants & Cafes", icon: "utensils" },
+      { name: "Gyms & Fitness Studios", icon: "dumbbell" },
+      { name: "Clinics & Health", icon: "hospital" },
+      { name: "Real Estate Agents", icon: "house-chimney" },
+      { name: "Local Services", icon: "screwdriver-wrench" }
+    ].each do |ind| %>
+      <div class="glassy p-8 md:p-10 rounded-[1.5rem] md:rounded-[2rem] text-center group hover:-translate-y-2 transition duration-500">
+        <div class="text-4xl md:text-5xl text-chartreuse opacity-40 mb-4 md:mb-6 group-hover:opacity-100 group-hover:scale-110 transition duration-500">
+          <i class="fa-solid fa-<%= ind[:icon] %>"></i>
+        </div>
+        <p class="text-lg md:text-xl font-black text-white hover:text-chartreuse transition"><%= ind[:name] %></p>
+      </div>
+    <% end %>
+  </div>
+</section>
+
+<!-- What Makes Us Different -->
+<!-- Trust / Stats Section -->
+<section class="py-24 bg-chartreuse/5 -mx-6 px-6 border-y border-chartreuse/10">
+  <div class="max-w-7xl mx-auto grid md:grid-cols-4 gap-12 text-center">
+    <% [
+      { n: "50+", t: "Businesses Served", icon: "briefcase" },
+      { n: "400%", t: "Avg Booking Increase", icon: "chart-line" },
+      { n: "24/7", t: "Automated Systems", icon: "clock" },
+      { n: "100%", t: "Custom Engineering", icon: "gear" }
+    ].each do |stat| %>
+      <div class="space-y-2">
+        <p class="text-5xl font-black text-chartreuse italic uppercase tracking-tighter"><%= stat[:n] %></p>
+        <p class="text-sm font-bold text-slate-400 uppercase tracking-widest"><%= stat[:t] %></p>
+      </div>
+    <% end %>
+  </div>
+</section>
+
+<!-- FAQ Section -->
+<section class="py-32 -mx-6 px-6">
+  <div class="max-w-4xl mx-auto">
+    <div class="text-center mb-16">
+      <h2 class="text-xs font-black uppercase tracking-[0.5em] text-chartreuse mb-4">Common Questions</h2>
+      <p class="text-4xl font-black text-white italic uppercase tracking-tight">Everything you need to know.</p>
+    </div>
+    <div class="space-y-6">
+      <% [
+        { q: "How long does a typical build take?", a: "Most websites are launched in 4-6 weeks. Custom business systems can take 8-12 weeks depending on complexity." },
+        { q: "Do I own the code and the website?", a: "Yes, 100%. Once the project is complete and paid for, you own all assets and code." },
+        { q: "Can you integrate with my existing tools?", a: "Absolutely. We specialize in connecting systems like Stripe, Twilio, and various CRM platforms." },
+        { q: "What happens after the launch?", a: "We offer maintenance packages and ongoing support to ensure your system continues to run at peak performance." }
+      ].each do |faq| %>
+        <div class="glassy p-8 rounded-3xl border border-white/5">
+          <p class="text-xl font-black text-white uppercase italic mb-4"><%= faq[:q] %></p>
+          <p class="text-slate-400 font-medium italic"><%= faq[:a] %></p>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</section>
+
+<section class="py-32 -mx-6 px-6">
+  <div class="max-w-7xl mx-auto rounded-[3rem] bg-gradient-to-br from-gun-metal to-black p-12 lg:p-20 border border-white/5 relative overflow-hidden">
+    <!-- Ambient Glow -->
+    <div class="absolute -top-1/2 -right-1/2 w-full h-full bg-chartreuse/10 blur-[150px] -z-10"></div>
+    
+    <h2 class="text-xs font-black uppercase tracking-[0.5em] text-chartreuse mb-8">The Veloq Edge</h2>
+    <div class="grid md:grid-cols-2 gap-12">
+      <div class="space-y-12">
+        <p class="text-5xl font-black text-white italic uppercase tracking-tighter leading-none">What Makes Us <span class="text-chartreuse">Different.</span></p>
+        <div class="space-y-8">
+          <% [
+            { t: "Focus on results, not just design", d: "We build for lead gen and conversions." },
+            { t: "Built for real business growth", d: "Scalable systems that work while you sleep." },
+            { t: "Custom systems (not generic templates)", d: "Unique builds for unique businesses." },
+            { t: "Mobile-first and SEO optimized", d: "Dominate local search instantly." }
+          ].each do |diff| %>
+            <div>
+              <p class="text-xl font-black text-white uppercase italic tracking-tight"><%= diff[:t] %></p>
+              <p class="text-slate-400 mt-2"><%= diff[:d] %></p>
             </div>
-            <div class="rounded-3xl bg-white/8 p-5">
-              <p class="text-sm text-slate-300">Launch assets</p>
-              <ul class="mt-3 space-y-2 text-sm text-slate-100">
-                <li>Homepage narrative</li>
-                <li>Service-led landing pages</li>
-                <li>Trust and compliance blocks</li>
-                <li>Editable SEO panel</li>
-              </ul>
-            </div>
-          </div>
+          <% end %>
         </div>
       </div>
-    </div>
-  </div>
-</section>
-
-<section class="grid gap-6 pb-16 lg:grid-cols-3">
-  <div class="rounded-[2rem] border border-white/70 bg-white/75 p-8 shadow-lg shadow-slate-200/70">
-    <p class="text-sm font-bold uppercase tracking-[0.25em] text-sky-700">Why teams hire us</p>
-    <h2 class="mt-4 text-2xl font-black text-slate-950">Websites that look premium and explain the product fast.</h2>
-    <p class="mt-4 text-slate-600">Buyers do not need more noise. They need clearer offers, stronger proof, and a journey that reduces hesitation.</p>
-  </div>
-  <div class="rounded-[2rem] border border-slate-200 bg-slate-950 p-8 text-white shadow-xl shadow-slate-300/30">
-    <p class="text-sm font-bold uppercase tracking-[0.25em] text-amber-300">What we improve</p>
-    <p class="mt-4 text-2xl font-black">Messaging hierarchy, page speed, trust signals, and qualified lead intent.</p>
-  </div>
-  <div class="rounded-[2rem] border border-white/70 bg-gradient-to-br from-amber-200 to-orange-100 p-8 shadow-lg shadow-amber-200/60">
-    <p class="text-sm font-bold uppercase tracking-[0.25em] text-orange-800">How it feels</p>
-    <p class="mt-4 text-2xl font-black text-slate-950">Like your product finally has a website that matches the ambition behind it.</p>
-  </div>
-</section>
-
-<section class="pb-16">
-  <div class="rounded-[2.5rem] border border-white/70 bg-white/70 p-8 shadow-lg shadow-slate-200/70 lg:p-10">
-    <div class="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
-      <div>
-        <p class="text-sm font-bold uppercase tracking-[0.25em] text-sky-700">Featured capabilities</p>
-        <h2 class="mt-4 text-3xl font-black text-slate-950 md:text-4xl">Everything your SaaS site needs to convert without feeling pushy.</h2>
+      <div class="flex flex-col justify-center space-y-10">
+        <div class="glassy p-10 rounded-3xl border border-chartreuse/20">
+          <h3 class="text-3xl font-black text-white italic uppercase mb-6">Portfolio Preview</h3>
+          <p class="text-slate-400 mb-10 leading-relaxed italic">We don’t just build websites — we build business tools. See how we’ve helped businesses automate scheduling and increase calls.</p>
+          <%= link_to portfolio_path, class: "flex items-center gap-4 text-chartreuse font-black uppercase tracking-[0.2em] group" do %>
+            <span>View Portfolio</span>
+            <div class="h-px flex-1 bg-chartreuse group-hover:scale-x-110 transition-transform origin-left"></div>
+          <% end %>
+        </div>
+        <div class="glassy p-10 rounded-3xl border border-white/5 relative overflow-hidden group">
+          <div class="absolute inset-0 bg-chartreuse opacity-0 group-hover:opacity-10 transition-opacity"></div>
+          <h3 class="text-3xl font-black text-white italic uppercase mb-4">Ready to grow?</h3>
+          <p class="text-slate-400 mb-8 font-medium">Let’s build your system today.</p>
+          <%= link_to contact_path, class: "inline-block text-xl font-black text-chartreuse hover:text-white transition" do %>
+             👉 <span class="underline decoration-2 underline-offset-8">Get Started</span>
+          <% end %>
+        </div>
       </div>
-      <%= link_to "See the full service stack", services_path, class: "rounded-full border border-slate-300 px-5 py-3 text-sm font-semibold text-slate-900 transition hover:border-slate-400 hover:bg-slate-50" %>
-    </div>
-
-    <div class="mt-8 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
-      <div class="rounded-[1.75rem] border border-slate-200 p-6">
-        <p class="text-lg font-bold text-slate-950">Positioning workshops</p>
-        <p class="mt-3 text-sm leading-7 text-slate-600">Clarify who you serve, what makes the offer different, and how to describe it in buyer language.</p>
-      </div>
-      <div class="rounded-[1.75rem] border border-slate-200 p-6">
-        <p class="text-lg font-bold text-slate-950">Conversion-led UX</p>
-        <p class="mt-3 text-sm leading-7 text-slate-600">Build paths that guide visitors from curiosity to confidence with scannable, accessible layouts.</p>
-      </div>
-      <div class="rounded-[1.75rem] border border-slate-200 p-6">
-        <p class="text-lg font-bold text-slate-950">SEO foundations</p>
-        <p class="mt-3 text-sm leading-7 text-slate-600">Ship semantic structure, editable metadata, and content blocks that support discoverability without keyword stuffing.</p>
-      </div>
-      <div class="rounded-[1.75rem] border border-slate-200 p-6">
-        <p class="text-lg font-bold text-slate-950">Launch support</p>
-        <p class="mt-3 text-sm leading-7 text-slate-600">Coordinate QA, redirects, analytics planning, and content reviews so go-live feels controlled, not chaotic.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="pb-8">
-  <div class="rounded-[2.5rem] bg-slate-950 px-8 py-10 text-white shadow-2xl shadow-slate-300/30 lg:px-10">
-    <div class="flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
-      <div class="max-w-2xl">
-        <p class="text-sm font-bold uppercase tracking-[0.3em] text-sky-300">Simple next step</p>
-        <h2 class="mt-4 text-3xl font-black md:text-4xl">If your website undersells your product, we should fix that.</h2>
-        <p class="mt-4 text-slate-300">Share your current site, timeline, and growth goal. We will recommend the clearest path forward.</p>
-      </div>
-      <%= link_to "Start the conversation", contact_path, class: "rounded-full bg-white px-6 py-3 text-sm font-semibold text-slate-950 transition hover:-translate-y-0.5 hover:bg-slate-100" %>
     </div>
   </div>
 </section>
