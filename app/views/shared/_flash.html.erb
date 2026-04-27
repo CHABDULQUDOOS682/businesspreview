@@ -1,0 +1,33 @@
+<div class="fixed right-4 top-4 z-[9999] flex flex-col gap-3 pointer-events-none">
+  <% flash.each do |type, message| %>
+    <% 
+      is_notice = type == "notice"
+      bg_color = is_notice ? "bg-white/80" : "bg-rose-50/90"
+      border_color = is_notice ? "border-blue-200/50" : "border-rose-200/50"
+      text_color = is_notice ? "text-blue-900" : "text-rose-900"
+      icon_color = is_notice ? "text-blue-500" : "text-rose-500"
+      icon = is_notice ? "fa-circle-check" : "fa-circle-exclamation"
+    %>
+    <div 
+      data-controller="flash" 
+      class="pointer-events-auto flex min-w-[320px] max-w-md items-center justify-between gap-4 overflow-hidden rounded-2xl border <%= border_color %> <%= bg_color %> p-4 shadow-[0_20px_50px_rgba(8,24,73,0.12)] backdrop-blur-xl transition-all duration-500 ease-in-out transform"
+    >
+      <div class="flex items-center gap-3">
+        <i class="fa-solid <%= icon %> text-lg <%= icon_color %>"></i>
+        <p class="text-sm font-semibold tracking-tight <%= text_color %>"><%= message %></p>
+      </div>
+      
+      <button 
+        data-action="click->flash#dismiss" 
+        class="group flex h-8 w-8 flex-none items-center justify-center rounded-full bg-black/5 hover:bg-black/10 transition-colors"
+        aria-label="Close"
+      >
+        <i class="fa-solid fa-xmark text-sm <%= icon_color %> opacity-70 group-hover:opacity-100 transition-opacity"></i>
+      </button>
+      
+      <div class="absolute bottom-0 left-0 h-1 w-full bg-black/5">
+        <div class="h-full bg-current opacity-20 transition-all duration-[5000ms] ease-linear" style="width: 100%;" data-flash-target="progress"></div>
+      </div>
+    </div>
+  <% end %>
+</div>

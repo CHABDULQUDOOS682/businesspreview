@@ -31,6 +31,9 @@ Rails.application.routes.draw do
       resources :preview_links, only: [ :create, :destroy ]
     end
     resources :communications, only: [ :index, :show, :create ] do
+      collection do
+        post :bulk_create
+      end
       member do
         post :call
       end
