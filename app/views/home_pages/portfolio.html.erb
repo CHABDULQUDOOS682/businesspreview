@@ -1,16 +1,21 @@
-<% content_for :title, "Portfolio | VeloqTech" %>
+<% content_for :title, "Portfolio | BizzlyTech" %>
 
 <%= render "page_header",
   eyebrow: "Selected Work",
   title_html: 'Real brands.<br><span class="home-display-accent">Real results.</span>'.html_safe,
   subtitle: "A snapshot of brands we've helped launch, scale, and reinvent — across SaaS, retail, fintech, healthcare, and beyond." %>
 
-<section class="py-16">
+<section class="py-16" data-controller="portfolio-filter">
   <div class="mb-12 flex flex-wrap items-center justify-center gap-2">
     <% ["All", "E-commerce", "SaaS", "Branding", "Fintech", "Healthcare", "Marketing"].each_with_index do |label, index| %>
-      <span class="<%= index.zero? ? 'rounded-full border border-[#213885] bg-[#213885] px-5 py-2 text-sm font-medium text-[#ECDFD2]' : 'rounded-full border border-[#081849]/15 bg-[#081849]/5 px-5 py-2 text-sm font-medium text-[#081849]/70' %>">
+      <button 
+        data-portfolio-filter-target="button" 
+        data-action="click->portfolio-filter#filter" 
+        data-category="<%= label %>"
+        class="<%= index.zero? ? 'rounded-full border border-[#213885] bg-[#213885] px-5 py-2 text-sm font-medium text-[#ECDFD2]' : 'rounded-full border border-[#081849]/15 bg-[#081849]/5 px-5 py-2 text-sm font-medium text-[#081849]/70' %> transition-all duration-300"
+      >
         <%= label %>
-      </span>
+      </button>
     <% end %>
   </div>
 
@@ -23,7 +28,14 @@
       { tag: "Healthcare", title: "MediLoop", description: "HIPAA-compliant patient portal with native iOS and Android companion apps.", metric: "HIPAA", color: "from-rose-400/30" },
       { tag: "Marketing", title: "Orbit Studios", description: "12-month SEO program that grew organic traffic from 4k to 180k monthly visits.", metric: "+4400%", color: "from-violet-400/30" }
     ].each do |project| %>
-      <div class="home-card-3d group overflow-hidden rounded-[28px] border border-[#081849]/10 bg-[#ECDFD2]" data-controller="tilt-card" data-action="mousemove->tilt-card#move mouseleave->tilt-card#leave">
+      <div 
+        class="home-card-3d group overflow-hidden rounded-[28px] border border-[#081849]/10 bg-[#ECDFD2]" 
+        data-portfolio-filter-target="item" 
+        data-category="<%= project[:tag] %>"
+        data-controller="tilt-card" 
+        data-action="mousemove->tilt-card#move mouseleave->tilt-card#leave"
+        style="view-transition-name: project-<%= project[:title].parameterize %>"
+      >
         <div class="relative aspect-[4/3] overflow-hidden bg-[#CCCACC]">
           <div class="home-grid-bg absolute inset-0 opacity-50"></div>
           <div class="absolute inset-0 bg-gradient-to-br <%= project[:color] %> to-transparent"></div>
@@ -48,7 +60,7 @@
   </div>
 </section>
 
-<section class="py-24 text-center">
+<section class="pt-24 text-center">
   <h2 class="text-4xl font-extrabold text-[#081849] md:text-5xl">Could the next case study be <span class="text-[#5F3475]">yours?</span></h2>
   <div class="mt-8">
     <%= link_to contact_path, class: "home-button-primary" do %>

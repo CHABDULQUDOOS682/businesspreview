@@ -11,6 +11,7 @@
     <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@twilio/voice-sdk@2.18.0/dist/twilio.min.js"></script>
   </head>
 
@@ -21,12 +22,10 @@
       <aside class="sidebar-container sidebar-container--collapsed" data-controller="side-bar">
         <div class="sidebar-logo-container">
           <%= link_to admin_root_path, class: "sidebar-logo-link" do %>
-            <span class="sidebar-brand-mark">
-              <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-              </svg>
+            <span class="sidebar-brand-mark !bg-transparent !border-0">
+              <%= image_tag "veloqtech_logo.svg", class: "h-8 w-auto", alt: "BT" %>
             </span>
-            <span class="sidebar-item-label text-base font-semibold text-sand-900">PaaS Engine</span>
+            <span class="sidebar-item-label text-base font-bold tracking-tight text-[#081849]">Bizzly<span class="text-[#5F3475]">Tech</span></span>
           <% end %>
         </div>
 
@@ -76,12 +75,10 @@
           <div class="md:hidden">
             <div class="flex items-center justify-between gap-3 px-4 py-3">
               <%= link_to admin_root_path, class: "flex items-center gap-3" do %>
-                <span class="sidebar-brand-mark !h-9 !w-9 !rounded-[12px]">
-                  <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-                  </svg>
+                <span class="sidebar-brand-mark !bg-transparent !border-0 !h-auto !w-auto">
+                  <%= image_tag "veloqtech_logo.svg", class: "h-7 w-auto", alt: "BT" %>
                 </span>
-                <span class="text-base font-semibold text-sand-900">PaaS Engine</span>
+                <span class="text-base font-bold tracking-tight text-[#081849]">Bizzly<span class="text-[#5F3475]">Tech</span></span>
               <% end %>
 
               <button
@@ -149,13 +146,7 @@
 
         <main class="flex grow flex-col overflow-hidden">
           <div id="content" class="template--layout flex grow flex-col overflow-hidden">
-            <% if notice %>
-              <div class="portal-flash-notice"><%= notice %></div>
-            <% end %>
-
-            <% if alert %>
-              <div class="portal-flash-alert"><%= alert %></div>
-            <% end %>
+            <%= render "shared/flash" %>
 
             <div class="portal-scroll-frame">
               <div class="portal-scroll-body template--layout">

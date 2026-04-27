@@ -1,23 +1,37 @@
-<% content_for :title, "Pricing | VeloqTech" %>
+<% content_for :title, "Pricing | BizzlyTech" %>
 
 <%= render "page_header",
   eyebrow: "Pricing",
   title_html: 'Plans that match <br><span class="home-display-accent">your stage.</span>'.html_safe,
   subtitle: "Transparent pricing, no surprise invoices. Upgrade, downgrade, or pause anytime." %>
 
-<section class="py-16">
+<section class="py-16" data-controller="pricing-toggle">
   <div class="mb-10 flex justify-center">
-    <div class="inline-flex items-center gap-2 rounded-full border border-[#081849]/10 bg-[#081849]/5 p-1">
-      <span class="rounded-full bg-[#213885] px-5 py-2 text-sm font-semibold text-[#ECDFD2] shadow-md shadow-[#213885]/25">Project</span>
-      <span class="px-5 py-2 text-sm font-semibold text-[#081849]/55">Retainer save 15%</span>
+    <div class="inline-flex items-center gap-1 rounded-full border border-[#081849]/10 bg-[#081849]/5 p-1">
+      <button 
+        data-pricing-toggle-target="projectBtn" 
+        data-action="click->pricing-toggle#toggle" 
+        data-type="project"
+        class="rounded-full bg-[#213885] px-5 py-2 text-sm font-semibold text-[#ECDFD2] shadow-md shadow-[#213885]/25 transition-all duration-300"
+      >
+        Project
+      </button>
+      <button 
+        data-pricing-toggle-target="retainerBtn" 
+        data-action="click->pricing-toggle#toggle" 
+        data-type="retainer"
+        class="rounded-full px-5 py-2 text-sm font-semibold text-[#081849]/55 transition-all duration-300 hover:text-[#081849]"
+      >
+        Retainer <span class="ml-1 rounded-full bg-[#5F3475]/10 px-2 py-0.5 text-[10px] text-[#5F3475]">-15%</span>
+      </button>
     </div>
   </div>
 
   <div class="perspective-1000 grid gap-6 lg:grid-cols-3">
     <% [
-      { name: "Starter", price: "$1,900", cadence: "/ project", description: "For founders launching their first professional online presence.", features: ["5-page custom website", "Mobile-first responsive design", "Basic on-page SEO", "Contact form & analytics", "30 days post-launch support"], highlight: false, cta: "Get started" },
-      { name: "Growth", price: "$4,800", cadence: "/ project", description: "For scaling teams that need a real conversion engine, not just a brochure.", features: ["Up to 15 pages + CMS", "Custom branding & illustration", "Advanced SEO & schema", "Performance marketing setup", "A/B testing framework", "90 days priority support"], highlight: true, cta: "Get started" },
-      { name: "Enterprise", price: "Custom", cadence: "", description: "For established brands needing dedicated capacity and complex integrations.", features: ["Unlimited pages & locales", "Custom web application build", "Dedicated project lead", "DevOps & cloud architecture", "Quarterly growth roadmap", "24/7 SLA support"], highlight: false, cta: "Talk to sales" }
+      { name: "Starter", project_price: "$1,900", retainer_price: "$1,600", cadence: "/ project", description: "For founders launching their first professional online presence.", features: ["5-page custom website", "Mobile-first responsive design", "Basic on-page SEO", "Contact form & analytics", "30 days post-launch support"], highlight: false, cta: "Get started" },
+      { name: "Growth", project_price: "$4,800", retainer_price: "$4,000", cadence: "/ project", description: "For scaling teams that need a real conversion engine, not just a brochure.", features: ["Up to 15 pages + CMS", "Custom branding & illustration", "Advanced SEO & schema", "Performance marketing setup", "A/B testing framework", "90 days priority support"], highlight: true, cta: "Get started" },
+      { name: "Enterprise", project_price: "Custom", retainer_price: "Custom", cadence: "", description: "For established brands needing dedicated capacity and complex integrations.", features: ["Unlimited pages & locales", "Custom web application build", "Dedicated project lead", "DevOps & cloud architecture", "Quarterly growth roadmap", "24/7 SLA support"], highlight: false, cta: "Talk to sales" }
     ].each do |plan| %>
       <div class="<%= plan[:highlight] ? 'home-card-3d relative rounded-[28px] border border-transparent bg-gradient-to-br from-[#213885] via-[#5F3475] to-[#893172] p-8 text-[#ECDFD2] shadow-[0_20px_60px_-15px_rgba(95,52,117,0.5)]' : 'home-glass home-card-3d relative rounded-[28px] border border-[#081849]/10 p-8' %>" data-controller="tilt-card" data-action="mousemove->tilt-card#move mouseleave->tilt-card#leave">
         <% if plan[:highlight] %>
@@ -28,7 +42,14 @@
         <h2 class="text-2xl font-bold <%= plan[:highlight] ? 'text-[#ECDFD2]' : 'text-[#081849]' %>"><%= plan[:name] %></h2>
         <p class="mt-2 text-sm <%= plan[:highlight] ? 'text-[#ECDFD2]/78' : 'text-[#081849]/62' %>"><%= plan[:description] %></p>
         <div class="mt-6 flex items-baseline gap-1">
-          <span class="text-5xl font-extrabold <%= plan[:highlight] ? 'text-[#ECDFD2]' : 'text-[#081849]' %>"><%= plan[:price] %></span>
+          <span 
+            class="text-5xl font-extrabold transition-all duration-300 <%= plan[:highlight] ? 'text-[#ECDFD2]' : 'text-[#081849]' %>"
+            data-pricing-toggle-target="price"
+            data-project-price="<%= plan[:project_price] %>"
+            data-retainer-price="<%= plan[:retainer_price] %>"
+          >
+            <%= plan[:project_price] %>
+          </span>
           <% if plan[:cadence].present? %>
             <span class="text-sm <%= plan[:highlight] ? 'text-[#ECDFD2]/70' : 'text-[#081849]/50' %>"><%= plan[:cadence] %></span>
           <% end %>

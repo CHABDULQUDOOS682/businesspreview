@@ -102,6 +102,40 @@ class Admin::CommunicationsController < ApplicationController
     end
   end
 
+  def bulk_create
+    business_ids = params[:business_ids]
+    body = params[:body]
+
+    if business_ids.blank? || body.blank?
+      redirect_to admin_businesses_path, alert: "Please select businesses and provide a message."
+      return
+    end
+
+    businesses = Business.where(id: business_ids)
+    sent_count = 0
+    failed_count = 0
+
+    businesses.each do |business|
+      next if business.phone.blank?
+
+      begin
+        SmsService.send_sms(to: business.phone, message: body)
+        Message.create!(
+          from_number: ENV["TWILIO_PHONE_NUMBER"],
+          to_number: business.phone,
+          body: body,
+          direction: "outbound",
+          business_id: business.id
+        )
+        sent_count += 1
+      rescue => e
+        failed_count += 1
+      end
+    end
+
+    redirect_to admin_businesses_path, notice: "Sent #{sent_count} messages. #{failed_count} failed."
+  end
+
   def call
     @number = params[:id]
 
