@@ -12,6 +12,7 @@ Rails.application.routes.draw do
 
   get "landing_pages/show"
   get "/lp/:uuid", to: "landing_pages#show", as: :landing_page
+  get "/pay/:token", to: "payment_invoice_links#show", as: :payment_invoice_link
 
   namespace :admin do
     get "dashboard/index"
@@ -29,6 +30,7 @@ Rails.application.routes.draw do
         post :import
       end
       resources :preview_links, only: [ :create, :destroy ]
+      resources :payment_invoices, only: [ :create ]
     end
     resources :communications, only: [ :index, :show, :create ] do
       collection do
@@ -50,6 +52,8 @@ Rails.application.routes.draw do
   # Browser-to-phone calling
   get "twilio/token", to: "twilio#access_token"
   post "twilio/connect", to: "twilio#connect_call"
+
+  post "stripe/webhooks", to: "stripe_webhooks#create"
 
 
   get "up" => "rails/health#show", as: :rails_health_check

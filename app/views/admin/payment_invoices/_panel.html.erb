@@ -1,0 +1,81 @@
+<div class="bg-white shadow-sm ring-1 ring-slate-900/5 sm:rounded-xl overflow-hidden">
+  <div class="border-b border-slate-200 px-4 py-5 sm:px-6">
+    <h3 class="text-base font-semibold leading-6 text-slate-900">Stripe Invoices</h3>
+    <p class="mt-1 text-sm text-slate-500">Create a hosted Stripe invoice and send the payment link by email, SMS, or both.</p>
+  </div>
+
+  <div class="px-4 py-5 sm:p-6 bg-slate-50/50 border-b border-slate-100">
+    <%= form_with model: [ :admin, business, payment_invoice ], local: true, class: "flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between" do |f| %>
+      <div class="grid grid-cols-1 gap-3 text-sm sm:grid-cols-4 lg:flex-1">
+        <div>
+          <dt class="font-medium text-slate-500">Invoice Type</dt>
+          <dd class="mt-1 font-semibold text-slate-900"><%= payment_invoice.kind_label %></dd>
+        </div>
+        <div>
+          <dt class="font-medium text-slate-500">Amount</dt>
+          <dd class="mt-1 font-semibold text-slate-900"><%= payment_invoice.amount_cents.to_i.positive? ? number_to_currency(payment_invoice.amount, unit: payment_invoice.currency.upcase == "USD" ? "$" : "#{payment_invoice.currency.upcase} ") : "-" %></dd>
+        </div>
+        <div>
+          <dt class="font-medium text-slate-500">Terms</dt>
+          <dd class="mt-1 font-semibold text-slate-900">Due in 7 days</dd>
+        </div>
+        <div>
+          <dt class="font-medium text-slate-500">Delivery</dt>
+          <dd class="mt-1 font-semibold text-slate-900"><%= payment_invoice.delivery_method_label %></dd>
+        </div>
+      </div>
+
+      <div class="flex justify-end">
+        <%= f.submit "Create & Send Invoice", class: "rounded-md bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 disabled:cursor-not-allowed disabled:opacity-60", disabled: !payment_invoice.amount_cents.to_i.positive? %>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="overflow-x-auto">
+    <table class="min-w-full divide-y divide-slate-300">
+      <thead class="bg-slate-50">
+        <tr>
+          <th class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-slate-900 sm:pl-6">Type</th>
+          <th class="px-3 py-3.5 text-left text-sm font-semibold text-slate-900">Amount</th>
+          <th class="px-3 py-3.5 text-left text-sm font-semibold text-slate-900">Status</th>
+          <th class="px-3 py-3.5 text-left text-sm font-semibold text-slate-900">Sent</th>
+          <th class="px-3 py-3.5 text-left text-sm font-semibold text-slate-900">Opened</th>
+          <th class="px-3 py-3.5 text-left text-sm font-semibold text-slate-900">Link</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-slate-200 bg-white">
+        <% payment_invoices.each do |invoice| %>
+          <tr class="hover:bg-slate-50">
+            <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-slate-900 sm:pl-6"><%= invoice.kind_label %></td>
+            <td class="whitespace-nowrap px-3 py-4 text-sm text-slate-600"><%= number_to_currency(invoice.amount, unit: invoice.currency.upcase == "USD" ? "$" : "#{invoice.currency.upcase} ") %></td>
+            <td class="whitespace-nowrap px-3 py-4 text-sm">
+              <span class="inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset <%= invoice.status == 'paid' ? 'bg-emerald-50 text-emerald-700 ring-emerald-600/20' : invoice.status == 'failed' ? 'bg-red-50 text-red-700 ring-red-600/20' : invoice.status == 'opened' ? 'bg-amber-50 text-amber-700 ring-amber-600/20' : 'bg-blue-50 text-blue-700 ring-blue-600/20' %>">
+                <%= invoice.status_label %>
+              </span>
+            </td>
+            <td class="whitespace-nowrap px-3 py-4 text-sm text-slate-600"><%= invoice.sent_at.present? ? time_ago_in_words(invoice.sent_at) + " ago" : "-" %></td>
+            <td class="whitespace-nowrap px-3 py-4 text-sm text-slate-600">
+              <%= invoice.opened_at.present? ? time_ago_in_words(invoice.opened_at) + " ago" : "-" %>
+            </td>
+            <td class="whitespace-nowrap px-3 py-4 text-sm text-slate-600">
+              <% if invoice.paid? && invoice.hosted_invoice_url.present? %>
+                <%= link_to "Open", invoice.hosted_invoice_url, target: "_blank", class: "font-medium text-blue-600 hover:text-blue-500" %>
+              <% elsif invoice.hosted_invoice_url.present? %>
+                <%= link_to "Open", payment_invoice_link_url(invoice.payment_token), target: "_blank", class: "font-medium text-blue-600 hover:text-blue-500" %>
+              <% elsif invoice.last_error.present? %>
+                <span class="text-red-600" title="<%= invoice.last_error %>">Error</span>
+              <% else %>
+                -
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+        <% if payment_invoices.empty? %>
+          <tr>
+            <td colspan="6" class="px-3 py-8 text-center text-sm text-slate-500">No Stripe invoices created yet.</td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
