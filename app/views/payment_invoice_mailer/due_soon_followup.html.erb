@@ -1,0 +1,16 @@
+<h1>Your invoice is due tomorrow</h1>
+
+<p>Hello <%= @business.owner_name.presence || @business.name %>,</p>
+
+<p>
+  This is a reminder that your <%= @payment_invoice.kind_label.downcase %> invoice for
+  <strong><%= number_to_currency(@payment_invoice.amount, unit: @payment_invoice.currency.upcase == "USD" ? "$" : "#{@payment_invoice.currency.upcase} ") %></strong>
+  is due tomorrow.
+</p>
+
+<p>
+  <%= link_to "Open and pay invoice", @payment_url, class: "button" %>
+</p>
+
+<p>If the button does not work, open this link:</p>
+<p><%= link_to @payment_url, @payment_url %></p>

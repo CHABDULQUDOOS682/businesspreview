@@ -1,0 +1,8 @@
+Your invoice is due tomorrow
+
+Hello <%= @business.owner_name.presence || @business.name %>,
+
+This is a reminder that your <%= @payment_invoice.kind_label.downcase %> invoice for <%= number_to_currency(@payment_invoice.amount, unit: @payment_invoice.currency.upcase == "USD" ? "$" : "#{@payment_invoice.currency.upcase} ") %> is due tomorrow.
+
+Open and pay invoice:
+<%= @payment_url %>

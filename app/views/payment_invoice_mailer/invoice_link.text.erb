@@ -1,0 +1,8 @@
+Your invoice is ready
+
+Hello <%= @business.owner_name.presence || @business.name %>,
+
+Your <%= @payment_invoice.kind_label.downcase %> invoice for <%= number_to_currency(@payment_invoice.amount, unit: @payment_invoice.currency.upcase == "USD" ? "$" : "#{@payment_invoice.currency.upcase} ") %> is ready.
+
+Open and pay invoice:
+<%= @payment_url %>
