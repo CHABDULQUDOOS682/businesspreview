@@ -136,24 +136,32 @@ class StripePaymentInvoiceService
   def send_sms!
     raise ConfigurationError, "Stripe did not return a hosted invoice URL" if payment_invoice.hosted_invoice_url.blank?
 
-    SmsService.send_sms(
-      to: payment_invoice.business.phone,
-      message: sms_message
-    )
+    begin
+      SmsService.send_sms(
+        to: payment_invoice.business.phone,
+        message: sms_message
+      )
 
-    Message.create!(
-      from_number: ENV["TWILIO_PHONE_NUMBER"],
-      to_number: payment_invoice.business.phone,
-      body: sms_message,
-      direction: "outbound",
-      business: payment_invoice.business
-    )
+      Message.create!(
+        from_number: ENV["TWILIO_PHONE_NUMBER"],
+        to_number: payment_invoice.business.phone,
+        body: sms_message,
+        direction: "outbound",
+        business: payment_invoice.business
+      )
+    rescue => e
+      raise ConfigurationError, "SMS Error: #{e.message}"
+    end
   end
 
   def send_email!
     raise ConfigurationError, "Stripe did not return a hosted invoice URL" if payment_invoice.hosted_invoice_url.blank?
 
-    PaymentInvoiceMailer.with(payment_invoice: payment_invoice).invoice_link.deliver_now
+    begin
+      PaymentInvoiceMailer.with(payment_invoice: payment_invoice).invoice_link.deliver_now
+    rescue => e
+      raise ConfigurationError, "Email Error: #{e.message}"
+    end
   end
 
   def schedule_followup_email!
