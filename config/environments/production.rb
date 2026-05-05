@@ -59,13 +59,16 @@ Rails.application.configure do
     host: ENV.fetch("APP_HOST", "example.com"),
     protocol: ENV.fetch("APP_PROTOCOL", "https")
   }
+  smtp_port = ENV.fetch("SMTP_PORT", 587).to_i
   config.action_mailer.smtp_settings = {
     address: ENV["SMTP_ADDRESS"],
-    port: ENV.fetch("SMTP_PORT", 587).to_i,
+    port: smtp_port,
     user_name: ENV["SMTP_USERNAME"],
     password: ENV["SMTP_PASSWORD"],
+    domain: ENV.fetch("APP_HOST", "localhost"),
     authentication: :plain,
-    enable_starttls_auto: true
+    enable_starttls_auto: smtp_port == 587,
+    tls: smtp_port == 465
   }.compact
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
