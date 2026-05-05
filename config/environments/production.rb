@@ -60,16 +60,23 @@ Rails.application.configure do
     protocol: ENV.fetch("APP_PROTOCOL", "https")
   }
   smtp_port = ENV.fetch("SMTP_PORT", 587).to_i
-  config.action_mailer.smtp_settings = {
+  smtp_settings = {
     address: ENV["SMTP_ADDRESS"],
     port: smtp_port,
     user_name: ENV["SMTP_USERNAME"],
     password: ENV["SMTP_PASSWORD"],
     domain: ENV.fetch("APP_HOST", "localhost"),
-    authentication: :plain,
-    enable_starttls_auto: smtp_port == 587,
-    tls: smtp_port == 465
-  }.compact
+    authentication: :plain
+  }
+
+  if smtp_port == 465
+    smtp_settings[:ssl] = true
+    smtp_settings[:tls] = true
+  else
+    smtp_settings[:enable_starttls_auto] = true
+  end
+
+  config.action_mailer.smtp_settings = smtp_settings.compact
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
   # the I18n.default_locale when a translation cannot be found).
