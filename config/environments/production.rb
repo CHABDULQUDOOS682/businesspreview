@@ -54,8 +54,14 @@ Rails.application.configure do
   config.solid_queue.connects_to = { database: { writing: :queue } }
 
   config.action_mailer.delivery_method = :smtp
-    config.action_mailer.raise_delivery_errors = true
-    smtp_port = ENV.fetch("SMTP_PORT", 587).to_i
+  config.action_mailer.raise_delivery_errors = true
+  
+  config.action_mailer.default_url_options = {
+    host: ENV.fetch("APP_HOST", "example.com"),
+    protocol: ENV.fetch("APP_PROTOCOL", "https")
+  }
+  
+  smtp_port = ENV.fetch("SMTP_PORT", 587).to_i
     smtp_settings = {
       address: ENV["SMTP_ADDRESS"],
       port: smtp_port,
