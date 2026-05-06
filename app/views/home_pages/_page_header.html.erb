@@ -1,0 +1,48 @@
+<section class="relative border-b border-[#081849]/5" data-controller="home-scene" data-action="mousemove->home-scene#move mouseleave->home-scene#leave">
+  <div class="home-hero-scene pointer-events-none absolute inset-0 opacity-80">
+    <div class="home-grid-animated absolute inset-0 opacity-20"></div>
+    <div class="animate-glow absolute -right-28 -top-24 h-[28rem] w-[28rem] rounded-full bg-[#213885]/10 blur-[110px] home-hero-parallax-reverse"></div>
+    <div class="animate-glow absolute -bottom-24 -left-20 h-[24rem] w-[24rem] rounded-full bg-[#893172]/8 blur-[100px] home-hero-parallax" style="animation-delay: 1.5s;"></div>
+
+    <div class="absolute left-[10%] top-[22%] animate-float-slow home-hero-parallax">
+      <div class="perspective-1000">
+        <div class="preserve-3d animate-spin-slower relative h-16 w-16">
+          <div class="absolute inset-0 border border-[#213885]/30 bg-[#5F3475]/16 backdrop-blur-[2px]" style="transform: translateZ(32px);"></div>
+          <div class="absolute inset-0 border border-[#213885]/22 bg-[#5F3475]/8 backdrop-blur-[2px]" style="transform: rotateY(180deg) translateZ(32px);"></div>
+          <div class="absolute inset-0 border border-[#213885]/25 bg-[#5F3475]/10 backdrop-blur-[2px]" style="transform: rotateY(90deg) translateZ(32px);"></div>
+          <div class="absolute inset-0 border border-[#213885]/18 bg-[#5F3475]/6 backdrop-blur-[2px]" style="transform: rotateX(90deg) translateZ(32px);"></div>
+        </div>
+      </div>
+    </div>
+
+    <svg class="absolute right-[10%] top-[24%] h-[6rem] w-[6rem] animate-float-medium home-hero-parallax-reverse home-hero-svg" viewBox="0 0 120 120" fill="none" style="animation-delay: 0.8s;">
+      <ellipse cx="60" cy="60" rx="50" ry="20" stroke="#5F3475" stroke-width="2.5" opacity="0.35" />
+      <ellipse cx="60" cy="60" rx="50" ry="20" stroke="#5F3475" stroke-width="1" opacity="0.3" transform="rotate(60 60 60)" />
+      <ellipse cx="60" cy="60" rx="50" ry="20" stroke="#5F3475" stroke-width="1" opacity="0.24" transform="rotate(120 60 60)" />
+    </svg>
+
+    <svg class="absolute left-[17%] bottom-[12%] h-[5rem] w-[5rem] animate-float-slow home-hero-parallax home-hero-svg" viewBox="0 0 100 100" fill="none" style="animation-delay: 1.8s;">
+      <polygon points="50,10 90,80 50,65" fill="rgba(95,52,117,0.18)" stroke="#5F3475" stroke-width="1.5" opacity="0.7" />
+      <polygon points="50,10 10,80 50,65" fill="rgba(95,52,117,0.1)" stroke="#5F3475" stroke-width="1.5" opacity="0.55" />
+      <polygon points="50,65 10,80 90,80" fill="rgba(95,52,117,0.06)" stroke="#5F3475" stroke-width="1" opacity="0.35" />
+    </svg>
+  </div>
+
+  <div class="relative mx-auto max-w-7xl px-2 py-20 md:px-0 md:py-28">
+    <div class="mx-auto max-w-4xl text-center animate-fade-up">
+      <span class="home-pill">
+        <span class="home-pill-dot"></span>
+        <%= eyebrow %>
+      </span>
+      <h1 class="home-text-glow mt-6 text-5xl font-extrabold leading-[1.05] tracking-tight text-[#081849] md:text-7xl">
+        <%= title_html %>
+      </h1>
+      <% if local_assigns.fetch(:accent, true) %>
+        <div class="home-section-rule mx-auto mt-5"></div>
+      <% end %>
+      <p class="mx-auto mt-6 max-w-2xl text-lg text-[#081849]/70 md:text-xl">
+        <%= subtitle %>
+      </p>
+    </div>
+  </div>
+</section>

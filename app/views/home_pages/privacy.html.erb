@@ -1,15 +1,26 @@
-<section class="py-20 lg:py-32">
-  <div class="max-w-4xl glassy p-12 lg:p-20 rounded-[3rem] border border-white/10">
-    <p class="text-sm font-black uppercase tracking-[0.3em] text-chartreuse mb-8">Data Governance</p>
-    <h1 class="text-4xl font-black text-white italic uppercase tracking-tighter mb-10 leading-tight">Privacy in the <span class="text-chartreuse font-normal">Orbital Age.</span></h1>
-    <div class="space-y-8 text-lg leading-relaxed text-slate-400 italic">
-      <p>We collect only the contact and project details you choose to share when reaching out about a potential business system engagement.</p>
-      <p>We use that information to respond to your inquiry, understand project trajectory, and improve the clarity and performance of our own growth engine.</p>
-      <p>We do not sell inquiry data, and we avoid collecting unnecessary personal information through misleading forms or hidden interactions.</p>
-      <div class="pt-8 border-t border-white/5 flex items-center gap-4">
-        <p class="text-sm font-black uppercase tracking-widest text-slate-600">Inquiries:</p>
-        <a class="text-chartreuse font-bold uppercase tracking-widest underline decoration-2 underline-offset-4" href="mailto:hello@veloqtech.com">hello@veloqtech.com</a>
+<% content_for :title, "Privacy | BizzlyTech" %>
+
+<%= render "page_header",
+  eyebrow: "Privacy",
+  title_html: 'Privacy built with <span class="home-display-accent">plain language</span>'.html_safe,
+  subtitle: "We keep data collection light, explain what we use it for, and avoid unnecessary information gathering on this site." %>
+
+<section class="py-20">
+  <div class="mx-auto grid max-w-5xl gap-6">
+    <% [
+      { title: "What we collect", text: "If you contact us, we may receive the information you choose to share such as your name, company, email address, and project details." },
+      { title: "How we use it", text: "We use inquiry information to respond to your message, understand your project needs, and improve how clearly our own site communicates services." },
+      { title: "What we do not do", text: "We do not sell inquiry data, and we do not intentionally collect sensitive information through hidden forms or misleading interactions." }
+    ].each do |item| %>
+      <div class="home-glass home-card-3d rounded-[28px] p-8" data-controller="tilt-card" data-action="mousemove->tilt-card#move mouseleave->tilt-card#leave">
+        <h2 class="text-2xl font-bold text-[#081849]"><%= item[:title] %></h2>
+        <p class="mt-3 text-base leading-relaxed text-[#081849]/68"><%= item[:text] %></p>
       </div>
+    <% end %>
+
+    <div class="home-card-3d overflow-hidden rounded-[28px] bg-gradient-to-br from-[#213885] via-[#5F3475] to-[#893172] p-8 text-[#ECDFD2] shadow-[0_20px_60px_-15px_rgba(95,52,117,0.45)]" data-controller="tilt-card" data-action="mousemove->tilt-card#move mouseleave->tilt-card#leave">
+      <p class="text-xs font-bold uppercase tracking-[0.2em] text-[#ECDFD2]/70">Questions?</p>
+      <p class="mt-3 text-2xl font-extrabold">Reach out at <a class="underline decoration-white/35 underline-offset-4" href="mailto:hello@bizzlytech.com">hello@bizzlytech.com</a>.</p>
     </div>
   </div>
 </section>

@@ -62,18 +62,22 @@
   </div>
 </div>
 
-<div class="mt-8 flow-root">
+<div class="mt-8 flow-root" data-controller="bulk-selection">
   <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
     <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
       <div class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg">
         <table class="min-w-full divide-y divide-slate-300">
           <thead class="bg-slate-50">
             <tr>
+              <th scope="col" class="relative px-7 sm:w-12 sm:px-6">
+                <input type="checkbox" data-bulk-selection-target="selectAll" data-action="change->bulk-selection#toggleAll" class="absolute left-4 top-1/2 -mt-2 h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-600">
+              </th>
               <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-slate-900 sm:pl-6">Business Name</th>
               <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-slate-900">Status</th>
               <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-slate-900">City & Country</th>
               <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-slate-900">Niche</th>
               <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-slate-900">Total Visits</th>
+              <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-slate-900">Payment</th>
               <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6">
                 <span class="sr-only">View</span>
               </th>
@@ -82,6 +86,9 @@
           <tbody class="divide-y divide-slate-200 bg-white">
             <% @businesses.each do |b| %>
               <tr class="hover:bg-slate-50">
+                <td class="relative px-7 sm:w-12 sm:px-6">
+                  <input type="checkbox" value="<%= b.id %>" data-bulk-selection-target="checkbox" data-action="change->bulk-selection#toggleItem" class="absolute left-4 top-1/2 -mt-2 h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-600">
+                </td>
                 <td class="py-4 pl-4 pr-3 text-sm font-medium text-slate-900 sm:pl-6">
                   <div class="max-w-xs break-words"><%= b.name %></div>
                 </td>
@@ -102,6 +109,9 @@
                     <%= b.visit_count %>
                   </span>
                 </td>
+                <td class="whitespace-nowrap px-3 py-4 text-sm text-slate-500">
+                  <%= business_payment_status_badge(b) %>
+                </td>
                 <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
                   <%= link_to "View<span class='sr-only'>, #{b.name}</span>".html_safe, admin_business_path(b), class: "text-blue-600 hover:text-blue-900" %>
                 </td>
@@ -109,7 +119,7 @@
             <% end %>
             <% if @businesses.empty? %>
               <tr>
-                <td colspan="6" class="px-3 py-8 text-center text-sm text-slate-500">No businesses found in this tab yet. Adjust filters or add a new business.</td>
+                <td colspan="8" class="px-3 py-8 text-center text-sm text-slate-500">No businesses found in this tab yet. Adjust filters or add a new business.</td>
               </tr>
             <% end %>
           </tbody>
@@ -120,6 +130,32 @@
           <%== pagy_nav(@pagy) %>
         </div>
       <% end %>
+    </div>
+  </div>
+
+  <!-- Bulk Action Bar -->
+  <div data-bulk-selection-target="actionBar" class="fixed bottom-0 inset-x-0 z-50 transform translate-y-full opacity-0 transition-all duration-300 ease-in-out pointer-events-none">
+    <div class="mx-auto max-w-7xl px-4 pb-4">
+      <div class="bg-slate-900 rounded-2xl shadow-2xl p-6 border border-slate-800 pointer-events-auto">
+        <%= form_with url: bulk_create_admin_communications_path, method: :post, local: true, data: { bulk_selection_target: "form", action: "submit->bulk-selection#submit" } do |f| %>
+          <div class="flex flex-col md:flex-row gap-6 items-end">
+            <div class="flex-1 w-full">
+              <div class="flex items-center justify-between mb-3">
+                <span class="text-white font-semibold flex items-center gap-2">
+                  <span class="flex h-6 w-6 items-center justify-center rounded-full bg-blue-600 text-[10px] font-bold" data-bulk-selection-target="count">0</span>
+                  Businesses Selected
+                </span>
+                <span class="text-slate-400 text-xs">Sending via Twilio SMS</span>
+              </div>
+              <%= f.text_area :body, rows: 2, class: "block w-full rounded-xl border-0 bg-slate-800 py-3 text-white shadow-sm ring-1 ring-inset ring-slate-700 placeholder:text-slate-500 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6", placeholder: "Type your bulk message here..." %>
+            </div>
+            <div class="flex items-center gap-3 w-full md:w-auto">
+              <button type="button" data-action="click->bulk-selection#toggleAll" class="flex-1 md:flex-none rounded-xl bg-slate-800 px-4 py-3 text-sm font-semibold text-white hover:bg-slate-700 transition">Cancel</button>
+              <%= f.submit "Send Bulk Message", class: "flex-1 md:flex-none rounded-xl bg-blue-600 px-6 py-3 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600" %>
+            </div>
+          </div>
+        <% end %>
+      </div>
     </div>
   </div>
 </div>
