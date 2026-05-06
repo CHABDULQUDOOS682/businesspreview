@@ -69,11 +69,17 @@ Rails.application.configure do
       password: ENV["SMTP_PASSWORD"],
       domain: ENV.fetch("APP_HOST", "localhost"),
       authentication: :plain,
-      enable_starttls_auto: true,
       openssl_verify_mode: OpenSSL::SSL::VERIFY_NONE
     }
 
-    config.action_mailer.smtp_settings = smtp_settings
+    if smtp_port == 465
+      smtp_settings[:ssl] = true
+      smtp_settings[:tls] = true
+    else
+      smtp_settings[:enable_starttls_auto] = true
+    end
+
+    config.action_mailer.smtp_settings = smtp_settings.compact
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
   # the I18n.default_locale when a translation cannot be found).
