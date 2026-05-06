@@ -53,7 +53,7 @@ Rails.application.routes.draw do
   get "twilio/token", to: "twilio#access_token"
   post "twilio/connect", to: "twilio#connect_call"
 
-  post "stripe/webhooks", to: "stripe_webhooks#create"
+  post "webhooks/stripe", to: "stripe_webhooks#create"
 
 
   get "up" => "rails/health#show", as: :rails_health_check
