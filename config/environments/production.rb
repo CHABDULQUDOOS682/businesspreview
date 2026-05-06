@@ -53,30 +53,21 @@ Rails.application.configure do
   config.active_job.queue_adapter = :solid_queue
   config.solid_queue.connects_to = { database: { writing: :queue } }
 
-  config.action_mailer.raise_delivery_errors = true
   config.action_mailer.delivery_method = :smtp
-  config.action_mailer.default_url_options = {
-    host: ENV.fetch("APP_HOST", "example.com"),
-    protocol: ENV.fetch("APP_PROTOCOL", "https")
-  }
-  smtp_port = ENV.fetch("SMTP_PORT", 587).to_i
-  smtp_settings = {
-    address: ENV["SMTP_ADDRESS"],
-    port: smtp_port,
-    user_name: ENV["SMTP_USERNAME"],
-    password: ENV["SMTP_PASSWORD"],
-    domain: ENV.fetch("APP_HOST", "localhost"),
-    authentication: :plain
-  }
+    config.action_mailer.raise_delivery_errors = true
+    smtp_port = ENV.fetch("SMTP_PORT", 587).to_i
+    smtp_settings = {
+      address: ENV["SMTP_ADDRESS"],
+      port: smtp_port,
+      user_name: ENV["SMTP_USERNAME"],
+      password: ENV["SMTP_PASSWORD"],
+      domain: ENV.fetch("APP_HOST", "localhost"),
+      authentication: :plain,
+      enable_starttls_auto: true,
+      openssl_verify_mode: OpenSSL::SSL::VERIFY_NONE
+    }
 
-  if smtp_port == 465
-    smtp_settings[:ssl] = true
-    smtp_settings[:tls] = true
-  else
-    smtp_settings[:enable_starttls_auto] = true
-  end
-
-  config.action_mailer.smtp_settings = smtp_settings.compact
+    config.action_mailer.smtp_settings = smtp_settings
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
   # the I18n.default_locale when a translation cannot be found).
