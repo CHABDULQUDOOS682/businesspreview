@@ -39,14 +39,19 @@ Rails.application.configure do
   if ENV["SMTP_ADDRESS"].present?
     config.action_mailer.delivery_method = :smtp
     config.action_mailer.raise_delivery_errors = true
-    config.action_mailer.smtp_settings = {
+    smtp_port = ENV.fetch("SMTP_PORT", 587).to_i
+    smtp_settings = {
       address: ENV["SMTP_ADDRESS"],
-      port: ENV.fetch("SMTP_PORT", 587).to_i,
+      port: smtp_port,
       user_name: ENV["SMTP_USERNAME"],
       password: ENV["SMTP_PASSWORD"],
+      domain: ENV.fetch("APP_HOST", "localhost"),
       authentication: :plain,
-      enable_starttls_auto: true
-    }.compact
+      enable_starttls_auto: true,
+      openssl_verify_mode: OpenSSL::SSL::VERIFY_NONE
+    }
+
+    config.action_mailer.smtp_settings = smtp_settings
   else
     config.action_mailer.delivery_method = :letter_opener
   end
