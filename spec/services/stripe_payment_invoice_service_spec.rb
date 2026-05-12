@@ -24,7 +24,7 @@ RSpec.describe StripePaymentInvoiceService do
 
     it "creates a customer and an invoice successfully" do
       service.create_and_send!
-      
+
       expect(payment_invoice.reload.status).to eq("invoice_sent")
       expect(payment_invoice.stripe_invoice_id).to eq("in_123")
       expect(SmsService).to have_received(:send_sms)
@@ -80,7 +80,7 @@ RSpec.describe StripePaymentInvoiceService do
 
     context "when invoice is already paid" do
       let(:paid_invoice_mock) { double("stripe_invoice", id: "in_123", status: "paid", customer: "cus_123", hosted_invoice_url: "url", invoice_pdf: "pdf") }
-      
+
       before do
         allow(Stripe::Invoice).to receive(:finalize_invoice).and_return(paid_invoice_mock)
       end

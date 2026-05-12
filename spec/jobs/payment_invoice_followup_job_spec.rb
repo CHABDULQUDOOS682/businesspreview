@@ -9,7 +9,7 @@ RSpec.describe PaymentInvoiceFollowupJob, type: :job do
       expect {
         PaymentInvoiceFollowupJob.perform_now(payment_invoice)
       }.to change { ActionMailer::Base.deliveries.count }.by(1)
-      
+
       expect(payment_invoice.reload.followup_sent_at).to be_present
     end
 

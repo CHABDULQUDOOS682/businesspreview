@@ -29,7 +29,7 @@ RSpec.describe PaymentInvoice, type: :model do
     it "updates snapshots and receipt url" do
       stripe_invoice = double("stripe_invoice", id: "in_123", status: "paid", amount_due: 1000, amount_paid: 1000, hosted_invoice_url: "url", invoice_pdf: "pdf")
       invoice.store_paid_documents!(stripe_invoice: stripe_invoice, receipt_url: "receipt_url")
-      
+
       expect(invoice.invoice_snapshot_html).to include("in_123")
       expect(invoice.receipt_snapshot_html).to include("receipt_url")
       expect(invoice.receipt_url).to eq("receipt_url")

@@ -5,7 +5,7 @@ RSpec.describe DeveloperTasks::Client do
   let(:client) { DeveloperTasks::Client.new }
 
   describe "#fetch_tasks" do
-    let(:success_body) { [{ id: "1", title: "Task 1", status: "pending" }].to_json }
+    let(:success_body) { [ { id: "1", title: "Task 1", status: "pending" } ].to_json }
 
     it "returns tasks when the request is successful" do
       stub_request(:get, "https://api.github.com/tasks")
@@ -138,7 +138,7 @@ RSpec.describe DeveloperTasks::Client do
 
     it "skips non-Hash items when parsing tasks" do
       # Covers: next unless item.is_a?(Hash) — line 104
-      mixed_body = [nil, "string", 42, { id: "1", title: "Valid Task", status: "open" }].to_json
+      mixed_body = [ nil, "string", 42, { id: "1", title: "Valid Task", status: "open" } ].to_json
       stub_request(:get, "https://api.github.com/tasks")
         .to_return(status: 200, body: mixed_body)
 

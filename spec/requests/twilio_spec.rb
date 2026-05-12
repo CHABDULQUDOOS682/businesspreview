@@ -24,7 +24,7 @@ RSpec.describe "Twilios", type: :request do
       expect {
         post twilio_sms_path, params: params
       }.to change(Message, :count).by(1)
-      
+
       expect(response).to have_http_status(:success)
       message = Message.last
       expect(message.from_number).to eq("+1234567890")

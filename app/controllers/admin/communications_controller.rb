@@ -26,9 +26,9 @@ class Admin::CommunicationsController < ApplicationController
     if last_10.present?
       # Match by business ID or by phone number patterns
       # Use an array of IDs to keep the query simple and index-friendly
-      conditions = ["from_number LIKE :l10 OR to_number LIKE :l10", { l10: "%#{last_10}" }]
+      conditions = [ "from_number LIKE :l10 OR to_number LIKE :l10", { l10: "%#{last_10}" } ]
       if @business
-        @messages = Message.where("#{conditions[0]} OR business_id = :b_id", 
+        @messages = Message.where("#{conditions[0]} OR business_id = :b_id",
                                   l10: "%#{last_10}", b_id: @business.id)
       else
         @messages = Message.where(conditions[0], conditions[1])

@@ -28,7 +28,7 @@ RSpec.describe "StripeWebhooks", type: :request do
       allow_any_instance_of(StripeWebhooksController).to receive(:verified_event).and_call_original
       allow(ENV).to receive(:[]).and_call_original
       allow(ENV).to receive(:[]).with("STRIPE_WEBHOOK_SECRET").and_return(nil)
-      
+
       # Mock the retrieval of the full invoice for receipt
       allow(Stripe::Invoice).to receive(:retrieve) do |params|
         Stripe::Invoice.construct_from(

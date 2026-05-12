@@ -41,12 +41,12 @@ RSpec.describe Business, type: :model do
     it "returns business segment" do
       business = build(:business, subscription: true)
       expect(business.business_segment).to eq("subscriptions")
-      
+
       business.subscription = false
       business.subscription_fee = nil
       business.sold_price = 100
       expect(business.business_segment).to eq("purchased")
-      
+
       business.sold_price = nil
       expect(business.business_segment).to eq("nurture")
     end
@@ -54,7 +54,7 @@ RSpec.describe Business, type: :model do
     it "returns task source name" do
       business = build(:business, name: "Acme", website_name: "Acme Web")
       expect(business.task_source_name).to eq("Acme Web")
-      
+
       business.website_name = nil
       expect(business.task_source_name).to eq("Acme")
     end

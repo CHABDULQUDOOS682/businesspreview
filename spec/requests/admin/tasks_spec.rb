@@ -14,7 +14,7 @@ RSpec.describe "Admin::Tasks", type: :request do
     before do
       allow(DeveloperTasks::Client).to receive(:new).and_return(client_mock)
       allow(client_mock).to receive(:sources).and_return([])
-      allow(client_mock).to receive(:fetch_tasks).and_return([[task], []])
+      allow(client_mock).to receive(:fetch_tasks).and_return([ [ task ], [] ])
     end
 
     it "returns http success" do
@@ -39,7 +39,7 @@ RSpec.describe "Admin::Tasks", type: :request do
 
     before do
       allow(DeveloperTasks::Client).to receive(:new).and_return(client_mock)
-      allow(client_mock).to receive(:update_status).and_return([true, task])
+      allow(client_mock).to receive(:update_status).and_return([ true, task ])
     end
 
     it "updates task status and redirects" do
@@ -50,7 +50,7 @@ RSpec.describe "Admin::Tasks", type: :request do
 
     context "when update fails" do
       before do
-        allow(client_mock).to receive(:update_status).and_return([false, "API Error"])
+        allow(client_mock).to receive(:update_status).and_return([ false, "API Error" ])
       end
 
       it "redirects with alert" do

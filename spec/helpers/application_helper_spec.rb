@@ -19,7 +19,7 @@ RSpec.describe ApplicationHelper, type: :helper do
   end
 
   describe "#visible_business_segment_tabs" do
-    let(:tabs) { [{ key: "nurture" }, { key: "purchased" }] }
+    let(:tabs) { [ { key: "nurture" }, { key: "purchased" } ] }
 
     it "returns all tabs for non-employee roles" do
       allow(helper).to receive(:respond_to?).with(:employee_role?, any_args).and_return(true)
@@ -30,7 +30,7 @@ RSpec.describe ApplicationHelper, type: :helper do
     it "returns only nurture tabs for employee roles" do
       allow(helper).to receive(:respond_to?).with(:employee_role?, any_args).and_return(true)
       allow(helper).to receive(:employee_role?).and_return(true)
-      expect(helper.visible_business_segment_tabs(tabs)).to eq([{ key: "nurture" }])
+      expect(helper.visible_business_segment_tabs(tabs)).to eq([ { key: "nurture" } ])
     end
   end
 end
