@@ -6,7 +6,7 @@ class Admin::TemplatesController < ApplicationController
 
     if allowed_templates.include?(params[:id])
       @template = params[:id]
-      
+
       @business = Business.new(
         name: "Sample Business LLC",
         city: "New York",

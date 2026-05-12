@@ -6,17 +6,18 @@ class PaymentInvoiceLinksController < ApplicationController
 
   def show
     @payment_invoice = PaymentInvoice.find_by!(payment_token: params[:token])
+    target_url = @payment_invoice.hosted_invoice_url
 
-    if @payment_invoice.payment_link_expired? || @payment_invoice.hosted_invoice_url.blank?
+    if @payment_invoice.payment_link_expired? || target_url.blank?
       render :expired, status: :gone
       return
     end
 
-    if @payment_invoice.hosted_invoice_url.start_with?("https://invoice.stripe.com/")
+    if target_url.start_with?("https://invoice.stripe.com/")
       @payment_invoice.mark_opened!
-      redirect_to @payment_invoice.hosted_invoice_url, allow_other_host: true
+      redirect_to target_url, allow_other_host: true
     else
-      render plain: "Unauthorized payment destination", status: :bad_request
+      redirect_to root_path, alert: "Invalid payment link destination."
     end
   end
 end
