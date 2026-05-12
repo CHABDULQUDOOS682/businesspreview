@@ -13,7 +13,10 @@ class PaymentInvoiceLinksController < ApplicationController
       return
     end
 
-    if target_url.start_with?("https://invoice.stripe.com/")
+    uri = URI.parse(target_url)
+    allowed_hosts = ["invoice.stripe.com"]
+
+    if uri.scheme == "https" && allowed_hosts.include?(uri.host)
       @payment_invoice.mark_opened!
       redirect_to target_url, allow_other_host: true
     else
