@@ -12,7 +12,11 @@ class PaymentInvoiceLinksController < ApplicationController
       return
     end
 
-    @payment_invoice.mark_opened!
-    redirect_to @payment_invoice.hosted_invoice_url, allow_other_host: true
+    if @payment_invoice.hosted_invoice_url.start_with?("https://invoice.stripe.com/")
+      @payment_invoice.mark_opened!
+      redirect_to @payment_invoice.hosted_invoice_url, allow_other_host: true
+    else
+      render plain: "Unauthorized payment destination", status: :bad_request
+    end
   end
 end
