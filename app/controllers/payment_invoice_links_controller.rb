@@ -17,7 +17,7 @@ class PaymentInvoiceLinksController < ApplicationController
       @payment_invoice.mark_opened!
       redirect_to target_url, allow_other_host: true
     else
-      redirect_to root_path, alert: "Invalid payment link destination."
+      render plain: "Unauthorized destination", status: :bad_request
     end
   end
 end
