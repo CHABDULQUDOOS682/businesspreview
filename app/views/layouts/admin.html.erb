@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="h-full bg-background">
   <head>
-    <title>Cold Outreach | Admin Panel</title>
+    <title><%= app_name %> | Admin</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
@@ -23,9 +23,9 @@
         <div class="sidebar-logo-container">
           <%= link_to admin_root_path, class: "sidebar-logo-link" do %>
             <span class="sidebar-brand-mark !bg-transparent !border-0">
-              <%= image_tag "veloqtech_logo.svg", class: "h-8 w-auto", alt: "BT" %>
+              <%= image_tag "veloqtech_logo.svg", class: "h-8 w-auto", alt: app_name %>
             </span>
-            <span class="sidebar-item-label text-base font-bold tracking-tight text-[#081849]">Bizzly<span class="text-[#5F3475]">Tech</span></span>
+            <span class="sidebar-item-label text-base font-bold tracking-tight text-[#081849]">DevDe<span class="text-[#5F3475]">Bizz</span></span>
           <% end %>
         </div>
 
@@ -76,9 +76,9 @@
             <div class="flex items-center justify-between gap-3 px-4 py-3">
               <%= link_to admin_root_path, class: "flex items-center gap-3" do %>
                 <span class="sidebar-brand-mark !bg-transparent !border-0 !h-auto !w-auto">
-                  <%= image_tag "veloqtech_logo.svg", class: "h-7 w-auto", alt: "BT" %>
+                  <%= image_tag "veloqtech_logo.svg", class: "h-7 w-auto", alt: app_name %>
                 </span>
-                <span class="text-base font-bold tracking-tight text-[#081849]">Bizzly<span class="text-[#5F3475]">Tech</span></span>
+                <span class="text-base font-bold tracking-tight text-[#081849]">DevDe<span class="text-[#5F3475]">Bizz</span></span>
               <% end %>
 
               <button
@@ -125,7 +125,7 @@
             <% else %>
               <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                 <div>
-                  <p class="portal-kicker">Standard Portal</p>
+                  <p class="portal-kicker"><%= app_name %> Portal</p>
                   <h1 class="portal-page-title mt-2"><%= controller_name.humanize %></h1>
                 </div>
 
