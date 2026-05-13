@@ -117,6 +117,17 @@ class PaymentInvoice < ApplicationRecord
     )
   end
 
+  def safe_stripe_url?
+    return false if hosted_invoice_url.blank?
+
+    uri = URI.parse(hosted_invoice_url)
+
+    uri.scheme == "https" &&
+      uri.host == "invoice.stripe.com"
+  rescue URI::InvalidURIError
+    false
+  end
+
   private
 
   def normalize_currency
