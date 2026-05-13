@@ -17,6 +17,7 @@ class PaymentInvoice < ApplicationRecord
   BILLING_INTERVALS = %w[day week month year].freeze
   DEFAULT_DAYS_UNTIL_DUE = 7
   DEFAULT_BILLING_INTERVAL = "month".freeze
+  ALLOWED_HOSTS = ["invoice.stripe.com"].freeze
 
   validates :kind, inclusion: { in: KINDS.keys }
   validates :delivery_method, inclusion: { in: DELIVERY_METHODS.keys }
@@ -117,15 +118,17 @@ class PaymentInvoice < ApplicationRecord
     )
   end
 
-  def safe_stripe_url?
-    return false if hosted_invoice_url.blank?
+  def safe_hosted_invoice_url
+    return nil if hosted_invoice_url.blank?
 
     uri = URI.parse(hosted_invoice_url)
 
-    uri.scheme == "https" &&
-      uri.host == "invoice.stripe.com"
+    return nil unless uri.is_a?(URI::HTTPS)
+    return nil unless ALLOWED_HOSTS.include?(uri.host)
+
+    uri.to_s
   rescue URI::InvalidURIError
-    false
+    nil
   end
 
   private

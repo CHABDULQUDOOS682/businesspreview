@@ -16,7 +16,7 @@ class PaymentInvoiceLinksController < ApplicationController
     @payment_invoice.mark_opened!
 
     redirect_to(
-      @payment_invoice.hosted_invoice_url,
+      @payment_invoice.safe_hosted_invoice_url,
       allow_other_host: true
     )
   end
