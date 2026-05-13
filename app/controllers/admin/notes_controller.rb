@@ -40,4 +40,3 @@ class Admin::NotesController < ApplicationController
     params.require(:note).permit(:body, :business_id)
   end
 end
-

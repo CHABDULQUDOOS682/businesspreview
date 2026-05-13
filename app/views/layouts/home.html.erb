@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= content_for(:title) || "BizzlyTech" %></title>
+    <title><%= content_for(:title) || app_name %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
-    <meta name="description" content="BizzlyTech builds conversion-focused websites and business systems for ambitious local businesses.">
+    <%= seo_meta_tags %>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
@@ -35,15 +35,16 @@
         <div class="home-grid-bg absolute inset-0 opacity-[0.16]"></div>
       </div>
 
-      <header class="fixed inset-x-0 top-0 z-50 px-4 py-4" data-controller="mobile-nav" data-action="turbo:before-cache->mobile-nav#close">
-        <nav class="home-glass mx-auto flex max-w-7xl items-center justify-between rounded-[26px] px-5 py-3">
-          <%= link_to root_path, class: "flex items-center gap-3 group z-20" do %>
-            <%= image_tag "veloqtech_logo.svg", class: "h-9 w-auto transition group-hover:scale-105", alt: "BizzlyTech" %>
-            <span class="text-lg font-extrabold tracking-tight text-[#081849]">Bizzly<span class="bg-gradient-to-r from-[#5F3475] to-[#893172] bg-clip-text text-transparent">Tech</span></span>
+      <header class="fixed inset-x-0 top-0 z-50 px-3 py-3 sm:px-4 sm:py-4" data-controller="mobile-nav" data-action="turbo:before-cache->mobile-nav#close">
+        <nav class="home-glass mx-auto flex min-h-14 max-w-7xl items-center justify-between gap-3 rounded-2xl px-3 py-2.5 sm:rounded-[26px] sm:px-5 sm:py-3">
+          <%= link_to root_path, class: "flex min-w-0 items-center gap-2 group z-20 sm:gap-3" do %>
+            <%= image_tag "veloqtech_logo.svg", class: "h-8 w-auto shrink-0 transition group-hover:scale-105 sm:h-9", alt: "" %>
+            <span class="brand-wordmark min-w-0 truncate text-base font-extrabold tracking-tight text-[#081849] sm:text-lg">DevDe<span class="brand-wordmark-accent">Bizz</span></span>
           <% end %>
 
           <button 
-            class="rounded-xl border border-[#081849]/10 p-2 text-[#081849] md:hidden" 
+            type="button"
+            class="relative z-30 inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-[#081849]/15 bg-white/55 text-[#081849] shadow-sm lg:hidden" 
             data-action="click->mobile-nav#toggle"
             data-mobile-nav-target="button"
             aria-controls="marketing-mobile-menu"
@@ -52,24 +53,24 @@
             <i class="fa-solid fa-bars text-xl"></i>
           </button>
 
-          <div class="hidden items-center gap-1 md:flex">
+          <div class="hidden min-w-0 items-center gap-1 lg:flex">
             <% marketing_navigation_links.each do |label, path| %>
               <%= link_to label, path, class: marketing_nav_link_classes(path) %>
             <% end %>
-            <%= link_to "Contact", contact_path, class: "ml-3 rounded-full bg-[#213885] px-5 py-2.5 text-sm font-bold text-[#ECDFD2] shadow-lg shadow-[#213885]/25 transition hover:-translate-y-0.5 hover:shadow-[#213885]/35" %>
+            <%= link_to "Contact", contact_path, class: "ml-2 whitespace-nowrap rounded-full bg-[#213885] px-4 py-2.5 text-sm font-bold text-[#ECDFD2] shadow-lg shadow-[#213885]/25 transition hover:-translate-y-0.5 hover:shadow-[#213885]/35 lg:ml-3 lg:px-5" %>
           </div>
         </nav>
         
         <div
           id="marketing-mobile-menu"
-          class="home-glass mx-auto mt-2 hidden max-w-7xl rounded-[26px] border border-[#081849]/10 p-4 md:hidden"
+          class="home-glass mx-auto mt-2 hidden max-h-[calc(100vh-5.75rem)] max-w-7xl overflow-y-auto rounded-2xl border border-[#081849]/10 p-3 shadow-2xl shadow-[#081849]/10 lg:hidden"
           data-mobile-nav-target="panel"
         >
           <div class="flex flex-col gap-2">
             <% marketing_navigation_links.each do |label, path| %>
-              <%= link_to label, path, class: "#{marketing_nav_link_classes(path)} block px-4 py-3" %>
+              <%= link_to label, path, class: "#{marketing_nav_link_classes(path)} block w-full px-4 py-3 text-base" %>
             <% end %>
-            <%= link_to "Contact", contact_path, class: "mt-2 rounded-full bg-[#213885] px-5 py-3 text-center text-sm font-bold text-[#ECDFD2]" %>
+            <%= link_to "Contact", contact_path, class: "mt-2 block rounded-full bg-[#213885] px-5 py-3 text-center text-base font-bold text-[#ECDFD2]" %>
           </div>
         </div>
       </header>
@@ -86,11 +87,11 @@
           <div class="grid gap-12 lg:grid-cols-6">
             <div class="lg:col-span-2">
               <div class="flex items-center gap-3">
-                <%= image_tag "veloqtech_logo.svg", class: "h-10 w-auto", alt: "BizzlyTech" %>
-                <span class="text-xl font-extrabold tracking-tight text-[#081849]">Bizzly<span class="bg-gradient-to-r from-[#5F3475] to-[#893172] bg-clip-text text-transparent">Tech</span></span>
+                <%= image_tag "veloqtech_logo.svg", class: "h-10 w-auto", alt: "" %>
+                <span class="brand-wordmark text-xl font-extrabold tracking-tight text-[#081849]">DevDe<span class="brand-wordmark-accent">Bizz</span></span>
               </div>
               <p class="mt-5 max-w-sm text-sm leading-relaxed text-[#081849]/60">
-                BizzlyTech is an independent digital agency crafting websites, brands, and growth systems for ambitious companies worldwide.
+                DevDeBizz helps service businesses turn their website, follow-up, and client journey into a clear path from interest to booked work.
               </p>
               <div class="mt-6 flex gap-3">
                 <a href="#" aria-label="Twitter" class="home-footer-social">
@@ -123,7 +124,7 @@
           </div>
 
           <div class="mt-14 flex flex-col items-start justify-between gap-4 border-t border-[#081849]/10 pt-8 md:flex-row md:items-center">
-            <p class="text-xs text-[#081849]/50">© <%= Time.current.year %> BizzlyTech, Inc. All rights reserved.</p>
+            <p class="text-xs text-[#081849]/50">© <%= Time.current.year %> DevDeBizz. All rights reserved.</p>
             <div class="flex flex-wrap gap-5 text-xs text-[#081849]/50">
               <%= link_to "Privacy", privacy_path, class: "hover:text-[#5F3475]" %>
               <%= link_to "Terms", contact_path, class: "hover:text-[#5F3475]" %>

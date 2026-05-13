@@ -60,7 +60,7 @@ class TwilioController < ApplicationController
       ENV["TWILIO_ACCOUNT_SID"],
       ENV["TWILIO_API_KEY"],
       ENV["TWILIO_API_SECRET"],
-      [grant],
+      [ grant ],
       identity: identity,
       ttl: 3600
     )

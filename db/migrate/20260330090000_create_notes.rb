@@ -8,4 +8,3 @@ class CreateNotes < ActiveRecord::Migration[7.1]
     end
   end
 end
-

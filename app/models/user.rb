@@ -25,7 +25,7 @@ class User < ApplicationRecord
     return false if user.blank?
     return false if user == self
     return false if user.role_super_admin?
-    return manageable_roles.include?(user.role)
+    manageable_roles.include?(user.role)
   end
 
   def manageable_roles

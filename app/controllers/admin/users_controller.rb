@@ -14,6 +14,8 @@ class Admin::UsersController < ApplicationController
 
   def create
     @user = User.new(permitted_user_attributes)
+    requested_role = params.dig(:user, :role)
+    @user.role = allowed_roles.include?(requested_role) ? requested_role : allowed_roles.first
     temporary_password = SecureRandom.hex(12)
     @user.password = temporary_password
     @user.password_confirmation = temporary_password
@@ -21,7 +23,7 @@ class Admin::UsersController < ApplicationController
 
     if @user.save
       @user.send_reset_password_instructions
-      redirect_to admin_users_path, notice: "#{@user.role.humanize} account created for #{@user.email}. A password setup email has been sent."
+      redirect_to admin_users_path, notice: "#{@user.role.humanize} account created."
     else
       render :new, status: :unprocessable_entity
     end
@@ -80,8 +82,6 @@ class Admin::UsersController < ApplicationController
   end
 
   def permitted_user_attributes
-    attrs = params.require(:user).permit(:email, :role)
-    attrs[:role] = allowed_roles.include?(attrs[:role]) ? attrs[:role] : allowed_roles.first
-    attrs
+    params.require(:user).permit(:email)
   end
 end

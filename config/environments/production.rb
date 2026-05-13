@@ -1,6 +1,9 @@
 require "active_support/core_ext/integer/time"
 
 Rails.application.configure do
+  # Production is intended for the DigitalOcean droplet.
+  # Staging lives in config/environments/staging.rb and should stay production-like.
+
   # Settings specified here will take precedence over those in config/application.rb.
 
   # Code is not reloaded between requests.
@@ -55,12 +58,12 @@ Rails.application.configure do
 
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.raise_delivery_errors = true
-  
+
   config.action_mailer.default_url_options = {
     host: ENV.fetch("APP_HOST", "example.com"),
     protocol: ENV.fetch("APP_PROTOCOL", "https")
   }
-  
+
   smtp_port = ENV.fetch("SMTP_PORT", 587).to_i
     smtp_settings = {
       address: ENV["SMTP_ADDRESS"],
@@ -92,6 +95,11 @@ Rails.application.configure do
   config.active_record.attributes_for_inspect = [ :id ]
 
   config.require_master_key = true
+
+  if ENV["APP_HOSTS"].present?
+    config.hosts.concat(ENV["APP_HOSTS"].split(",").map(&:strip))
+  end
+
   # Enable DNS rebinding protection and other `Host` header attacks.
   # config.hosts = [
   #   "example.com",     # Allow requests from example.com
