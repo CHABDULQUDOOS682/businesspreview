@@ -21,7 +21,7 @@ jobs:
 
   scan_ruby:
     runs-on: ubuntu-latest
-    needs: block_dev_merge # Only runs if branch check passes
+    needs: block_dev_merge
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
