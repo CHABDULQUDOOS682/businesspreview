@@ -2,10 +2,23 @@ class Admin::TemplatesController < ApplicationController
   layout "public"
 
   def preview
-    allowed_templates = %w[classic modern minimalist business_preview]
+    allowed_templates = [
+      "barber/barber_black_gold",
+      "barber/barber_idea",
+      "barber/barber_modern",
+      "barber/barber_premium",
+      "barber/dark_neon",
+      "barber/modern_storefront",
+      "barber/russell_supply",
+      "others/corporate_pro",
+      "others/minimalist_elegance",
+      "others/vibrant_creative"
+    ]
 
-    if allowed_templates.include?(params[:id])
-      @template = params[:id]
+    template_path = params[:id]
+
+    if allowed_templates.include?(template_path)
+      @template = template_path
 
       @business = Business.new(
         name: "Sample Business LLC",
@@ -19,7 +32,8 @@ class Admin::TemplatesController < ApplicationController
 
       render "templates/#{@template}"
     else
-      redirect_to admin_templates_path, alert: "The requested template '#{params[:id]}' is not valid."
+      redirect_to admin_root_path,
+                  alert: "The requested template '#{template_path}' is not valid."
     end
   end
 end

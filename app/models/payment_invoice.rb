@@ -17,7 +17,7 @@ class PaymentInvoice < ApplicationRecord
   BILLING_INTERVALS = %w[day week month year].freeze
   DEFAULT_DAYS_UNTIL_DUE = 7
   DEFAULT_BILLING_INTERVAL = "month".freeze
-  ALLOWED_HOSTS = ["invoice.stripe.com"].freeze
+  ALLOWED_HOSTS = [ "invoice.stripe.com" ].freeze
 
   validates :kind, inclusion: { in: KINDS.keys }
   validates :delivery_method, inclusion: { in: DELIVERY_METHODS.keys }
