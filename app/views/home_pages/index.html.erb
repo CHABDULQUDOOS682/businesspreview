@@ -1,6 +1,7 @@
-<% content_for :title, "BizzlyTech | Websites and systems that convert" %>
+<% content_for :title, "DevDeBizz | Websites and systems that convert" %>
+<% content_for :meta_description, "DevDeBizz designs mobile-ready websites, SEO pages, booking flows, and follow-up systems that help service businesses win more qualified clients." %>
 
-<section class="relative min-h-[90vh]" data-controller="home-scene" data-action="mousemove->home-scene#move mouseleave->home-scene#leave">
+<section class="relative min-h-[90vh] overflow-hidden" data-controller="home-scene" data-action="mousemove->home-scene#move mouseleave->home-scene#leave">
   <div class="home-hero-scene pointer-events-none absolute inset-0">
     <div class="home-grid-animated absolute inset-0 opacity-40"></div>
 
@@ -75,25 +76,25 @@
     <div class="mx-auto max-w-5xl text-center">
       <span class="home-pill">
         <span class="home-pill-dot"></span>
-        Digital Agency · Est. 2019
+        Client websites · SEO · follow-up systems
       </span>
 
-      <h1 class="home-hero-heading text-glow mt-8 text-5xl font-extrabold leading-[1.02] tracking-tight text-[#081849] md:text-8xl">
-        Brands that
+      <h1 class="home-hero-heading text-glow mt-8 text-4xl font-extrabold leading-[1.04] tracking-tight text-[#081849] sm:text-5xl lg:text-7xl">
+        Websites that
         <span class="relative inline-block">
           <span class="relative z-10 bg-gradient-to-br from-[#5F3475] to-[#893172] bg-clip-text text-transparent">
-            scale.
+            earn trust.
           </span>
           <svg class="absolute -bottom-2 left-0 w-full" height="14" viewBox="0 0 200 14" preserveAspectRatio="none">
             <path d="M2 8 Q50 2 100 7 T198 6" stroke="#893172" stroke-width="3" fill="none" stroke-linecap="round" />
           </svg>
         </span>
         <br>
-        Sites that <span class="bg-gradient-to-br from-[#081849] to-[#081849]/40 bg-clip-text text-transparent">convert.</span>
+        Systems that <span class="bg-gradient-to-br from-[#081849] to-[#081849]/40 bg-clip-text text-transparent">book clients.</span>
       </h1>
 
       <p class="mx-auto mt-8 max-w-2xl text-lg leading-relaxed text-[#081849]/70 md:text-xl">
-        BizzlyTech is a full-service digital agency helping ambitious companies launch, grow, and dominate their markets through strategic design, engineering, and growth marketing.
+        DevDeBizz helps service businesses turn visitors into inquiries with clear messaging, responsive websites, local SEO, and simple follow-up workflows.
       </p>
 
       <div class="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
@@ -108,10 +109,10 @@
 
     <div class="perspective-1000 relative mt-24 grid gap-4 md:grid-cols-4">
       <% [
-        { number: "250+", label: "Projects delivered" },
-        { number: "98%", label: "Client retention" },
-        { number: "40+", label: "Team experts" },
-        { number: "12", label: "Industry awards" }
+        { number: "7-day", label: "Launch planning" },
+        { number: "Mobile", label: "First experience" },
+        { number: "SEO", label: "Ready pages" },
+        { number: "CRM", label: "Friendly handoff" }
       ].each_with_index do |stat, index| %>
         <div class="glass card-3d home-floating-shadow relative rounded-2xl p-6 text-center animate-fade-up" data-controller="tilt-card" data-action="mousemove->tilt-card#move mouseleave->tilt-card#leave" style="animation-delay: <%= 0.1 + (index * 0.08) %>s;">
           <div class="absolute inset-x-6 top-0 h-px bg-gradient-to-r from-transparent via-[#5F3475]/50 to-transparent"></div>
@@ -220,11 +221,11 @@
       <div class="swiper" data-carousel-target="container">
         <div class="swiper-wrapper py-12">
           <% [
-            { quote: "BizzlyTech rebuilt our site and booking flow so the business finally feels easy to browse and trust on mobile.", name: "Sarah Chen", role: "Owner, Studio North" },
+            { quote: "DevDeBizz rebuilt our site and booking flow so the business finally feels easy to browse and trust on mobile.", name: "Sarah Chen", role: "Owner, Studio North" },
             { quote: "The new pages gave our offers structure, improved lead quality, and made our team look far more established online.", name: "Marcus Hale", role: "Founder, Atlas Fitness" },
             { quote: "From strategy to launch, the polish and follow-through felt like having an in-house growth team for the project.", name: "Priya Nair", role: "Director, Clarity Dental" },
-            { quote: "We saw a 40% increase in lead conversion within the first month of launching our new funnel systems.", name: "David Miller", role: "CEO, Miller Tech" },
-            { quote: "The attention to detail in the design phase was unlike anything we've experienced with other agencies.", name: "Elena Rossi", role: "Marketing Lead, Luxe Stay" }
+            { quote: "The project gave us a cleaner offer, faster pages, and a follow-up path our team actually uses.", name: "David Miller", role: "Owner, Miller Services" },
+            { quote: "The process was simple, the copy was clear, and our mobile site finally feels professional.", name: "Elena Rossi", role: "Manager, Luxe Stay" }
           ].each_with_index do |testimonial, index| %>
             <div class="swiper-slide h-auto max-w-lg">
               <div class="card-3d glass h-full rounded-2xl p-7 shadow-xl" data-controller="tilt-card" data-action="mousemove->tilt-card#move mouseleave->tilt-card#leave">

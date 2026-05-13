@@ -5,6 +5,9 @@ class Business < ApplicationRecord
   has_many :payment_invoices, dependent: :destroy
   alias_attribute :website, :website_url
 
+  validates :name, presence: true
+  validates :phone, presence: true
+
   SEGMENTS = {
     "nurture" => "Neutral",
     "purchased" => "Purchased Website",

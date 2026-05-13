@@ -1,4 +1,4 @@
-<section class="relative border-b border-[#081849]/5" data-controller="home-scene" data-action="mousemove->home-scene#move mouseleave->home-scene#leave">
+<section class="relative overflow-hidden border-b border-[#081849]/5" data-controller="home-scene" data-action="mousemove->home-scene#move mouseleave->home-scene#leave">
   <div class="home-hero-scene pointer-events-none absolute inset-0 opacity-80">
     <div class="home-grid-animated absolute inset-0 opacity-20"></div>
     <div class="animate-glow absolute -right-28 -top-24 h-[28rem] w-[28rem] rounded-full bg-[#213885]/10 blur-[110px] home-hero-parallax-reverse"></div>
@@ -28,19 +28,19 @@
     </svg>
   </div>
 
-  <div class="relative mx-auto max-w-7xl px-2 py-20 md:px-0 md:py-28">
+  <div class="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-20 lg:px-0 lg:py-28">
     <div class="mx-auto max-w-4xl text-center animate-fade-up">
       <span class="home-pill">
         <span class="home-pill-dot"></span>
         <%= eyebrow %>
       </span>
-      <h1 class="home-text-glow mt-6 text-5xl font-extrabold leading-[1.05] tracking-tight text-[#081849] md:text-7xl">
+      <h1 class="home-text-glow mt-5 text-4xl font-extrabold leading-[1.08] tracking-tight text-[#081849] sm:text-5xl lg:mt-6 lg:text-7xl">
         <%= title_html %>
       </h1>
       <% if local_assigns.fetch(:accent, true) %>
         <div class="home-section-rule mx-auto mt-5"></div>
       <% end %>
-      <p class="mx-auto mt-6 max-w-2xl text-lg text-[#081849]/70 md:text-xl">
+      <p class="mx-auto mt-5 max-w-2xl text-base leading-relaxed text-[#081849]/70 sm:text-lg lg:mt-6 lg:text-xl">
         <%= subtitle %>
       </p>
     </div>

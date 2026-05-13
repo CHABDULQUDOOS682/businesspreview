@@ -17,6 +17,7 @@ class PaymentInvoice < ApplicationRecord
   BILLING_INTERVALS = %w[day week month year].freeze
   DEFAULT_DAYS_UNTIL_DUE = 7
   DEFAULT_BILLING_INTERVAL = "month".freeze
+  ALLOWED_HOSTS = [ "invoice.stripe.com" ].freeze
 
   validates :kind, inclusion: { in: KINDS.keys }
   validates :delivery_method, inclusion: { in: DELIVERY_METHODS.keys }
@@ -115,6 +116,19 @@ class PaymentInvoice < ApplicationRecord
       receipt_snapshot_html: build_receipt_snapshot(stripe_invoice, receipt_url),
       receipt_url: receipt_url.presence || self.receipt_url
     )
+  end
+
+  def safe_hosted_invoice_url
+    return nil if hosted_invoice_url.blank?
+
+    uri = URI.parse(hosted_invoice_url)
+
+    return nil unless uri.is_a?(URI::HTTPS)
+    return nil unless ALLOWED_HOSTS.include?(uri.host)
+
+    uri.to_s
+  rescue URI::InvalidURIError
+    nil
   end
 
   private

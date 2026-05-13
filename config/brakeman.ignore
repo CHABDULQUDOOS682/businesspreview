@@ -1,0 +1,28 @@
+{
+  "ignored_warnings": [
+    {
+      "warning_type": "Redirect",
+      "warning_code": 18,
+      "fingerprint": "b74e0199772a3a71cb0361b3ac0a7d11c220cd726d8d9e56f1c5f7b2a1070d33",
+      "check_name": "Redirect",
+      "message": "Possible unprotected redirect",
+      "file": "app/controllers/payment_invoice_links_controller.rb",
+      "line": 19,
+      "link": "https://brakemanscanner.org/docs/warning_types/redirect/",
+      "code": "redirect_to(PaymentInvoice.find_by!(:payment_token => params[:token]).safe_hosted_invoice_url, :allow_other_host => true)",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "PaymentInvoiceLinksController",
+        "method": "show"
+      },
+      "user_input": "PaymentInvoice.find_by!(:payment_token => params[:token]).safe_hosted_invoice_url",
+      "confidence": "Weak",
+      "cwe_id": [
+        601
+      ],
+      "note": ""
+    }
+  ],
+  "brakeman_version": "8.0.4"
+}
