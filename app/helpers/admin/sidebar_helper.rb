@@ -4,7 +4,8 @@ module Admin::SidebarHelper
     businesses: :orange,
     communications: :green,
     tasks: :blue,
-    users: :purple
+    users: :purple,
+    reviews: :indigo
   }.freeze
 
   def admin_sidebar_partial
@@ -118,6 +119,8 @@ module Admin::SidebarHelper
         '<path d="M9 11l3 3L22 4M4 7h4m-4 4h4m-4 4h4" stroke-linecap="round" stroke-linejoin="round" />'
       when :users
         '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2m19 0v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75M12 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0Z" stroke-linecap="round" stroke-linejoin="round" />'
+      when :reviews
+        '<path d="M11 5H6a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2v-5m-1.414-9.414a2 2 0 1 1 2.828 2.828L11.828 15H9v-2.828l8.586-8.586Z" stroke-linecap="round" stroke-linejoin="round" />'
       else
         ""
       end

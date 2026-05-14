@@ -6,9 +6,10 @@
   subtitle: "Tell us about your project and we'll get back to you within one business day with a tailored plan and ballpark timeline." %>
 
 <section class="py-16">
-  <div class="perspective-1000 grid gap-8 lg:grid-cols-5">
+  <div class="mx-auto max-w-7xl px-2 md:px-0">
+    <div class="grid gap-8 lg:grid-cols-5">
     <div class="space-y-6 lg:col-span-2">
-      <div class="home-glass home-card-3d space-y-6 rounded-[28px] p-8" data-controller="tilt-card" data-action="mousemove->tilt-card#move mouseleave->tilt-card#leave">
+      <div class="home-glass home-card-3d space-y-6 rounded-[28px] p-8">
         <% [
           { icon: "fa-envelope", label: "Email", value: "hello@devdebizz.com", href: "mailto:hello@devdebizz.com" },
           { icon: "fa-phone", label: "Phone", value: "+1 (415) 555-0142", href: "tel:+14155550142" },
@@ -27,7 +28,7 @@
         <% end %>
       </div>
 
-      <div class="home-glass home-card-3d rounded-[28px] p-8" data-controller="tilt-card" data-action="mousemove->tilt-card#move mouseleave->tilt-card#leave">
+      <div class="home-glass home-card-3d rounded-[28px] p-8">
         <h3 class="font-bold text-[#081849]">Response time</h3>
         <p class="mt-2 text-sm text-[#081849]/65">We respond to all inquiries within one business day. Urgent? Mention it in your message and we’ll prioritize.</p>
         <div class="mt-5 flex items-center gap-3">
@@ -41,9 +42,9 @@
     </div>
 
     <div class="lg:col-span-3">
-      <form class="home-card-3d relative overflow-hidden rounded-[32px] border border-[#081849]/10 bg-white/70 p-8 shadow-[0_18px_45px_rgba(8,24,73,0.06)] backdrop-blur md:p-10" data-controller="tilt-card" data-action="mousemove->tilt-card#move mouseleave->tilt-card#leave">
-        <div class="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-[#5F3475]/10 blur-3xl"></div>
-        <div class="absolute -left-20 -bottom-20 h-64 w-64 rounded-full bg-[#213885]/10 blur-3xl"></div>
+      <form class="home-card-3d relative overflow-hidden rounded-[32px] border border-[#081849]/10 bg-white/70 p-8 shadow-[0_18px_45px_rgba(8,24,73,0.06)] md:p-10">
+        <div class="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-[#5F3475]/10"></div>
+        <div class="absolute -left-20 -bottom-20 h-64 w-64 rounded-full bg-[#213885]/10"></div>
 
         <div class="relative grid gap-5">
           <div class="grid gap-5 md:grid-cols-2">
@@ -91,6 +92,7 @@
           </button>
         </div>
       </form>
+    </div>
     </div>
   </div>
 </section>

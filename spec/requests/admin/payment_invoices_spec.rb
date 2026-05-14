@@ -21,7 +21,14 @@ RSpec.describe "Admin::PaymentInvoices", type: :request do
         post admin_business_payment_invoices_path(business)
       }.to change(PaymentInvoice, :count).by(1)
       expect(response).to redirect_to(admin_business_path(business))
-      expect(flash[:notice]).to eq("Invoice created and sent.")
+      expect(flash[:notice]).to include("Invoice created and sent")
+    end
+
+    it "allows overriding delivery method via params" do
+      expect {
+        post admin_business_payment_invoices_path(business), params: { payment_invoice: { delivery_method: "sms" } }
+      }.to change(PaymentInvoice, :count).by(1)
+      expect(PaymentInvoice.last.delivery_method).to eq("sms")
     end
 
     it "handles generic service errors" do

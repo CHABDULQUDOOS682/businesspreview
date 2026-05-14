@@ -4,32 +4,33 @@
     <p class="mt-1 text-sm text-slate-500">Create a hosted Stripe invoice and send the payment link by email, SMS, or both.</p>
   </div>
 
-  <div class="px-4 py-5 sm:p-6 bg-slate-50/50 border-b border-slate-100">
-    <%= form_with model: [ :admin, business, payment_invoice ], local: true, class: "flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between" do |f| %>
-      <div class="grid grid-cols-1 gap-3 text-sm sm:grid-cols-4 lg:flex-1">
-        <div>
-          <dt class="font-medium text-slate-500">Invoice Type</dt>
-          <dd class="mt-1 font-semibold text-slate-900"><%= payment_invoice.kind_label %></dd>
-        </div>
-        <div>
-          <dt class="font-medium text-slate-500">Amount</dt>
-          <dd class="mt-1 font-semibold text-slate-900"><%= payment_invoice.amount_cents.to_i.positive? ? number_to_currency(payment_invoice.amount, unit: payment_invoice.currency.upcase == "USD" ? "$" : "#{payment_invoice.currency.upcase} ") : "-" %></dd>
-        </div>
-        <div>
-          <dt class="font-medium text-slate-500">Terms</dt>
-          <dd class="mt-1 font-semibold text-slate-900">Due in 7 days</dd>
-        </div>
-        <div>
-          <dt class="font-medium text-slate-500">Delivery</dt>
-          <dd class="mt-1 font-semibold text-slate-900"><%= payment_invoice.delivery_method_label %></dd>
-        </div>
+  <div class="px-4 py-5 sm:p-6 bg-slate-50/50 border-b border-slate-100 flex items-center justify-between gap-4">
+    <div class="grid grid-cols-1 gap-3 text-sm sm:grid-cols-3 lg:flex-1 max-w-2xl">
+      <div>
+        <dt class="font-medium text-slate-500">Next Invoice Type</dt>
+        <dd class="mt-1 font-semibold text-slate-900"><%= payment_invoice.kind_label %></dd>
       </div>
+      <div>
+        <dt class="font-medium text-slate-500">Amount to Charge</dt>
+        <dd class="mt-1 font-semibold text-slate-900"><%= payment_invoice.amount_cents.to_i.positive? ? number_to_currency(payment_invoice.amount, unit: payment_invoice.currency.upcase == "USD" ? "$" : "#{payment_invoice.currency.upcase} ") : "-" %></dd>
+      </div>
+      <div>
+        <dt class="font-medium text-slate-500">Terms</dt>
+        <dd class="mt-1 font-semibold text-slate-900">Due in 7 days</dd>
+      </div>
+    </div>
 
-      <div class="flex justify-end">
-        <%= f.submit "Create & Send Invoice", class: "rounded-md bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 disabled:cursor-not-allowed disabled:opacity-60", disabled: !payment_invoice.amount_cents.to_i.positive? %>
-      </div>
-    <% end %>
+    <div class="flex-shrink-0">
+      <button type="button" 
+              class="rounded-md bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 transition-colors disabled:cursor-not-allowed disabled:opacity-60" 
+              <%= 'disabled' unless payment_invoice.amount_cents.to_i.positive? %>
+              onclick="document.getElementById('stripe-invoice-modal-<%= business.id %>').classList.remove('hidden')">
+        Create & Send Invoice
+      </button>
+    </div>
   </div>
+
+  <%= render "admin/shared/stripe_invoice_modal", business: business, payment_invoice: payment_invoice %>
 
   <div class="overflow-x-auto">
     <table class="min-w-full divide-y divide-slate-300">

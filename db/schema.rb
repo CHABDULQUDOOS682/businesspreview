@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_05_06_090300) do
+ActiveRecord::Schema[8.0].define(version: 2026_05_14_200457) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -50,7 +50,9 @@ ActiveRecord::Schema[8.0].define(version: 2026_05_06_090300) do
     t.string "last_invoice_status"
     t.datetime "last_invoice_paid_at"
     t.datetime "last_payment_failed_at"
+    t.string "review_token"
     t.index ["last_invoice_id"], name: "index_businesses_on_last_invoice_id"
+    t.index ["review_token"], name: "index_businesses_on_review_token", unique: true
     t.index ["stripe_checkout_session_id"], name: "index_businesses_on_stripe_checkout_session_id"
     t.index ["stripe_customer_id"], name: "index_businesses_on_stripe_customer_id"
     t.index ["stripe_payment_intent_id"], name: "index_businesses_on_stripe_payment_intent_id"
@@ -104,8 +106,6 @@ ActiveRecord::Schema[8.0].define(version: 2026_05_06_090300) do
     t.string "payment_token", null: false
     t.datetime "opened_at"
     t.string "receipt_url"
-    t.text "invoice_snapshot_html"
-    t.text "receipt_snapshot_html"
     t.datetime "followup_sent_at"
     t.index ["business_id"], name: "index_payment_invoices_on_business_id"
     t.index ["kind"], name: "index_payment_invoices_on_kind"
@@ -127,6 +127,18 @@ ActiveRecord::Schema[8.0].define(version: 2026_05_06_090300) do
     t.datetime "updated_at", null: false
     t.index ["business_id"], name: "index_preview_links_on_business_id"
     t.index ["uuid"], name: "index_preview_links_on_uuid", unique: true
+  end
+
+  create_table "reviews", force: :cascade do |t|
+    t.bigint "business_id"
+    t.string "client_name"
+    t.string "client_role"
+    t.text "content"
+    t.integer "rating", default: 5
+    t.boolean "active", default: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["business_id"], name: "index_reviews_on_business_id"
   end
 
   create_table "solid_cable_messages", force: :cascade do |t|
@@ -157,4 +169,5 @@ ActiveRecord::Schema[8.0].define(version: 2026_05_06_090300) do
   add_foreign_key "notes", "businesses"
   add_foreign_key "payment_invoices", "businesses"
   add_foreign_key "preview_links", "businesses"
+  add_foreign_key "reviews", "businesses"
 end

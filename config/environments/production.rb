@@ -60,7 +60,7 @@ Rails.application.configure do
   config.action_mailer.raise_delivery_errors = true
 
   config.action_mailer.default_url_options = {
-    host: ENV.fetch("APP_HOST", "example.com"),
+    host: ENV.fetch("APP_HOST"),
     protocol: ENV.fetch("APP_PROTOCOL", "https")
   }
 
