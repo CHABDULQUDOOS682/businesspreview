@@ -1,9 +1,23 @@
 require 'simplecov'
 SimpleCov.start 'rails' do
+  # ----------------------------
+  # Coverage thresholds
+  # ----------------------------
+  minimum_coverage 90
+  minimum_coverage_by_file 80
+
+  # ----------------------------
+  # Ignore folders
+  # ----------------------------
   add_filter '/bin/'
   add_filter '/db/'
-  add_filter '/spec/' # Ignore spec files themselves
+  add_filter '/spec/'
+  add_filter '/config/'
+  add_filter '/vendor/'
 
+  # ----------------------------
+  # Coverage groups
+  # ----------------------------
   add_group 'Controllers', 'app/controllers'
   add_group 'Models', 'app/models'
   add_group 'Helpers', 'app/helpers'
@@ -91,4 +105,13 @@ RSpec.configure do |config|
   config.filter_rails_from_backtrace!
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
+
+  config.before(:suite) do
+    # Clear users to prevent "one super admin" validation failures from seeds/previous runs
+    User.delete_all
+    
+    # Set default ENVs for tests to avoid validation failures
+    ENV["TWILIO_PHONE_NUMBER"] ||= "+15005550006"
+    ENV["MAILER_FROM"] ||= "hello@devdebizz.com"
+  end
 end

@@ -32,8 +32,12 @@
               <% end %>
             <% end %>
             <%= link_to "Edit", edit_admin_business_path(@business), class: "rounded-md bg-blue-600 px-3 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-500" %>
+            <button type="button" class="rounded-md bg-white px-3 py-1.5 text-sm font-semibold text-slate-900 shadow-sm ring-1 ring-inset ring-slate-300 hover:bg-slate-50" onclick="document.getElementById('review-link-modal-<%= @business.id %>').classList.remove('hidden')">
+              Request Review
+            </button>
           </div>
         </div>
+        <%= render "admin/shared/review_link_modal", business: @business %>
         <dl class="space-y-4 text-sm leading-6">
           <div class="flex justify-between gap-x-4 border-b border-slate-100 pb-4">
             <dt class="text-slate-500">Industry / Niche</dt>

@@ -58,5 +58,16 @@ RSpec.describe Business, type: :model do
       business.website_name = nil
       expect(business.task_source_name).to eq("Acme")
     end
+
+    it "generates a review token before create" do
+      business = create(:business, review_token: nil)
+      expect(business.review_token).not_to be_nil
+    end
+
+    it "returns a valid review_url" do
+      business = create(:business)
+      expect(business.review_url).to include("/reviews/new/")
+      expect(business.review_url).to include(business.review_token)
+    end
   end
 end

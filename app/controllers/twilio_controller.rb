@@ -33,7 +33,7 @@ class TwilioController < ApplicationController
       business: business
     )
 
-    Rails.logger.info "Saved incoming SMS from #{from_number}: #{body}"
+
 
     response = Twilio::TwiML::MessagingResponse.new
     # response.message(body: "Thank you for your message! We'll get back to you soon.")

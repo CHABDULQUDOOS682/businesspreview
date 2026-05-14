@@ -1,0 +1,60 @@
+<%= form_with(model: [:admin, review], class: "space-y-6") do |f| %>
+  <% if review.errors.any? %>
+    <div class="rounded-xl bg-red-50 p-4 ring-1 ring-inset ring-red-200">
+      <div class="flex">
+        <div class="shrink-0 text-red-400">
+          <i class="fa-solid fa-circle-xmark"></i>
+        </div>
+        <div class="ml-3">
+          <h3 class="text-sm font-medium text-red-800">There were errors with your submission</h3>
+          <div class="mt-2 text-sm text-red-700">
+            <ul class="list-disc space-y-1 pl-5">
+              <% review.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+              <% end %>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+
+  <div class="grid gap-6 md:grid-cols-2">
+    <div class="space-y-2">
+      <%= f.label :client_name, class: "block text-sm font-semibold text-slate-900" %>
+      <%= f.text_field :client_name, class: "block w-full rounded-xl border-0 py-2.5 text-slate-900 shadow-sm ring-1 ring-inset ring-slate-300 placeholder:text-slate-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm", placeholder: "e.g. Sarah Chen" %>
+    </div>
+
+    <div class="space-y-2">
+      <%= f.label :client_role, class: "block text-sm font-semibold text-slate-900" %>
+      <%= f.text_field :client_role, class: "block w-full rounded-xl border-0 py-2.5 text-slate-900 shadow-sm ring-1 ring-inset ring-slate-300 placeholder:text-slate-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm", placeholder: "e.g. Owner, Studio North" %>
+    </div>
+  </div>
+
+  <div class="space-y-2">
+    <%= f.label :content, class: "block text-sm font-semibold text-slate-900" %>
+    <%= f.text_area :content, rows: 4, class: "block w-full rounded-xl border-0 py-2.5 text-slate-900 shadow-sm ring-1 ring-inset ring-slate-300 placeholder:text-slate-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm", placeholder: "What did the client say?" %>
+  </div>
+
+  <div class="grid gap-6 md:grid-cols-2">
+    <div class="space-y-2">
+      <%= f.label :rating, class: "block text-sm font-semibold text-slate-900" %>
+      <%= f.select :rating, (1..5).to_a.reverse, {}, class: "block w-full rounded-xl border-0 py-2.5 text-slate-900 shadow-sm ring-1 ring-inset ring-slate-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm" %>
+    </div>
+
+    <div class="space-y-2">
+      <%= f.label :business_id, "Linked Business (Optional)", class: "block text-sm font-semibold text-slate-900" %>
+      <%= f.collection_select :business_id, Business.order(:name), :id, :name, { include_blank: "Select a business" }, class: "block w-full rounded-xl border-0 py-2.5 text-slate-900 shadow-sm ring-1 ring-inset ring-slate-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm" %>
+    </div>
+  </div>
+
+  <div class="flex items-center gap-3">
+    <%= f.check_box :active, class: "h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-600" %>
+    <%= f.label :active, "Show this review on the website", class: "text-sm font-medium text-slate-900" %>
+  </div>
+
+  <div class="flex items-center justify-end gap-3 border-t border-slate-100 pt-6">
+    <%= link_to "Cancel", admin_reviews_path, class: "text-sm font-semibold text-slate-600 hover:text-slate-900" %>
+    <%= f.submit class: "rounded-full bg-blue-600 px-6 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600" %>
+  </div>
+<% end %>

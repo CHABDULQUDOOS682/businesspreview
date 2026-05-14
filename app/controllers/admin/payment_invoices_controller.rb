@@ -6,10 +6,15 @@ class Admin::PaymentInvoicesController < ApplicationController
 
   def create
     @payment_invoice = PaymentInvoice.build_for_business(@business)
+    
+    # Allow overriding delivery method from params
+    if params[:payment_invoice] && params[:payment_invoice][:delivery_method]
+      @payment_invoice.delivery_method = params[:payment_invoice][:delivery_method]
+    end
 
     if @payment_invoice.save
       StripePaymentInvoiceService.new(@payment_invoice).create_and_send!
-      redirect_to admin_business_path(@business), notice: "Invoice created and sent."
+      redirect_to admin_business_path(@business), notice: "Invoice created and sent via #{@payment_invoice.delivery_method_label}."
     else
       redirect_to admin_business_path(@business), alert: @payment_invoice.errors.full_messages.to_sentence
     end

@@ -49,10 +49,13 @@ class StripeWebhooksController < ApplicationController
     payment_invoice = PaymentInvoice.find_by(stripe_invoice_id: stripe_invoice.id)
     return if payment_invoice.blank?
 
+    new_status = attrs[:status].presence || mapped_invoice_status(stripe_invoice.status, payment_invoice.status)
+    new_url = stripe_value(stripe_invoice, :hosted_invoice_url).presence || payment_invoice.hosted_invoice_url
+    
     payment_invoice.update!(
       {
-        status: attrs[:status].presence || mapped_invoice_status(stripe_invoice.status, payment_invoice.status),
-        hosted_invoice_url: stripe_value(stripe_invoice, :hosted_invoice_url).presence || payment_invoice.hosted_invoice_url,
+        status: new_status,
+        hosted_invoice_url: new_url,
         invoice_pdf: stripe_value(stripe_invoice, :invoice_pdf).presence || payment_invoice.invoice_pdf,
         paid_at: attrs[:paid_at].presence || payment_invoice.paid_at
       }.compact
@@ -86,10 +89,25 @@ class StripeWebhooksController < ApplicationController
   end
 
   def receipt_url_for(stripe_invoice)
-    payment_intent = stripe_value(stripe_invoice, :payment_intent)
-    charge = stripe_value(payment_intent, :latest_charge)
+    return nil if stripe_invoice.blank?
+    # The 'payment_intent' attribute was removed in newer Stripe API versions.
+    # We now need to list payment intents associated with this invoice.
+    begin
+      payment_intents = ::Stripe::PaymentIntent.list(
+        invoice: stripe_invoice.id,
+        limit: 1,
+        expand: ["data.latest_charge"]
+      )
+      
+      payment_intent = payment_intents.data.first
+      return nil if payment_intent.blank?
 
-    stripe_value(charge, :receipt_url)
+      charge = stripe_value(payment_intent, :latest_charge)
+      url = stripe_value(charge, :receipt_url)
+      url
+    rescue ::Stripe::StripeError => e
+      nil
+    end
   end
 
   def mapped_invoice_status(stripe_status, current_status)
@@ -100,9 +118,21 @@ class StripeWebhooksController < ApplicationController
   end
 
   def stripe_value(object, key)
-    return if object.blank?
-    return object.public_send(key) if object.respond_to?(key)
+    return nil if object.blank?
+    
+    # Try hash access first as it's more reliable for Stripe objects
+    value = object[key.to_s] || object[key.to_sym]
+    return value if value.present?
 
-    object[key.to_s] || object[key.to_sym]
+    # Fallback to public_send if hash access fails
+    if object.respond_to?(key)
+      begin
+        object.public_send(key)
+      rescue KeyError
+        nil
+      end
+    else
+      nil
+    end
   end
 end

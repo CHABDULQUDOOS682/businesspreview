@@ -10,7 +10,7 @@ RSpec.describe PaymentInvoiceMailer, type: :mailer do
     it "renders the headers" do
       expect(mail.subject).to include(payment_invoice.kind_label)
       expect(mail.to).to eq([ business.email ])
-      expect(mail.from).to eq([ "Admintest@example.com" ]) # Default from mailer
+      expect(mail.from).to eq([ ApplicationMailer.default[:from] ]) # Use the actual default from the mailer
     end
 
     it "renders the body" do
