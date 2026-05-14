@@ -29,6 +29,11 @@ end
 require 'spec_helper'
 ENV['RAILS_ENV'] ||= 'test'
 require_relative '../config/environment'
+
+# Set default ENVs for tests to avoid validation failures
+ENV["TWILIO_PHONE_NUMBER"] = "+15005550006" if ENV["TWILIO_PHONE_NUMBER"].to_s.strip.empty?
+ENV["MAILER_FROM"] = "hello@devdebizz.com" if ENV["MAILER_FROM"].to_s.strip.empty?
+
 # Prevent database truncation if the environment is production
 abort("The Rails environment is running in production mode!") if Rails.env.production?
 # Uncomment the line below in case you have `--require rails_helper` in the `.rspec` file
@@ -109,9 +114,5 @@ RSpec.configure do |config|
   config.before(:suite) do
     # Clear users to prevent "one super admin" validation failures from seeds/previous runs
     User.delete_all
-
-    # Set default ENVs for tests to avoid validation failures
-    ENV["TWILIO_PHONE_NUMBER"] = "+15005550006" if ENV["TWILIO_PHONE_NUMBER"].to_s.strip.empty?
-    ENV["MAILER_FROM"] = "hello@devdebizz.com" if ENV["MAILER_FROM"].to_s.strip.empty?
   end
 end
