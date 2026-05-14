@@ -111,7 +111,7 @@ RSpec.configure do |config|
     User.delete_all
 
     # Set default ENVs for tests to avoid validation failures
-    ENV["TWILIO_PHONE_NUMBER"] ||= "+15005550006"
-    ENV["MAILER_FROM"] ||= "hello@devdebizz.com"
+    ENV["TWILIO_PHONE_NUMBER"] = "+15005550006" if ENV["TWILIO_PHONE_NUMBER"].to_s.strip.empty?
+    ENV["MAILER_FROM"] = "hello@devdebizz.com" if ENV["MAILER_FROM"].to_s.strip.empty?
   end
 end
