@@ -3,7 +3,10 @@ class Business < ApplicationRecord
   has_many :messages, dependent: :destroy
   has_many :notes, dependent: :destroy
   has_many :payment_invoices, dependent: :destroy
+  has_many :reviews, dependent: :destroy
   alias_attribute :website, :website_url
+
+  before_create :generate_review_token
 
   validates :name, presence: true
   validates :phone, presence: true
@@ -72,5 +75,19 @@ class Business < ApplicationRecord
 
   def task_source_name
     website_name.presence || name
+  end
+
+  def review_url
+    Rails.application.routes.url_helpers.new_review_submission_url(
+      token: review_token,
+      host: ENV.fetch("APP_HOST", "localhost"),
+      port: ENV.fetch("APP_PORT", 3000)
+    )
+  end
+
+  private
+
+  def generate_review_token
+    self.review_token ||= SecureRandom.urlsafe_base64(16)
   end
 end
