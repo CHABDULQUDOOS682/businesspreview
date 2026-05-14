@@ -7,7 +7,7 @@ RSpec.describe ReviewMailer, type: :mailer do
 
     it "renders the headers" do
       expect(mail.subject).to include("We'd love your feedback")
-      expect(mail.to).to eq(["client@example.com"])
+      expect(mail.to).to eq([ "client@example.com" ])
     end
 
     it "renders the body" do

@@ -33,7 +33,7 @@ RSpec.describe "Reviews", type: :request do
       expect {
         post review_submissions_path, params: valid_params
       }.to change(Review, :count).by(1)
-      
+
       review = Review.last
       expect(review.business).to eq(business)
       expect(review.active).to be_falsey
@@ -48,8 +48,8 @@ RSpec.describe "Reviews", type: :request do
     end
 
     it "renders new on validation failure" do
-      post review_submissions_path, params: { 
-        review: { review_token: business.review_token, client_name: "" } 
+      post review_submissions_path, params: {
+        review: { review_token: business.review_token, client_name: "" }
       }
       expect(response).to have_http_status(:unprocessable_entity)
     end

@@ -13,7 +13,7 @@ class ReviewsController < ApplicationController
 
   def create
     @business = Business.find_by(review_token: params.dig(:review, :review_token))
-    
+
     if @business.nil?
       redirect_to root_path, alert: "Invalid review link."
       return

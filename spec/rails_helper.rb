@@ -109,7 +109,7 @@ RSpec.configure do |config|
   config.before(:suite) do
     # Clear users to prevent "one super admin" validation failures from seeds/previous runs
     User.delete_all
-    
+
     # Set default ENVs for tests to avoid validation failures
     ENV["TWILIO_PHONE_NUMBER"] ||= "+15005550006"
     ENV["MAILER_FROM"] ||= "hello@devdebizz.com"

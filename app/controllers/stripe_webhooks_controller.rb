@@ -51,7 +51,7 @@ class StripeWebhooksController < ApplicationController
 
     new_status = attrs[:status].presence || mapped_invoice_status(stripe_invoice.status, payment_invoice.status)
     new_url = stripe_value(stripe_invoice, :hosted_invoice_url).presence || payment_invoice.hosted_invoice_url
-    
+
     payment_invoice.update!(
       {
         status: new_status,
@@ -96,9 +96,9 @@ class StripeWebhooksController < ApplicationController
       payment_intents = ::Stripe::PaymentIntent.list(
         invoice: stripe_invoice.id,
         limit: 1,
-        expand: ["data.latest_charge"]
+        expand: [ "data.latest_charge" ]
       )
-      
+
       payment_intent = payment_intents.data.first
       return nil if payment_intent.blank?
 
@@ -119,7 +119,7 @@ class StripeWebhooksController < ApplicationController
 
   def stripe_value(object, key)
     return nil if object.blank?
-    
+
     # Try hash access first as it's more reliable for Stripe objects
     value = object[key.to_s] || object[key.to_sym]
     return value if value.present?

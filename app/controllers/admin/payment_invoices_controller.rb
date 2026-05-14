@@ -6,7 +6,7 @@ class Admin::PaymentInvoicesController < ApplicationController
 
   def create
     @payment_invoice = PaymentInvoice.build_for_business(@business)
-    
+
     # Allow overriding delivery method from params
     if params[:payment_invoice] && params[:payment_invoice][:delivery_method]
       @payment_invoice.delivery_method = params[:payment_invoice][:delivery_method]

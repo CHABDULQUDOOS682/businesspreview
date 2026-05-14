@@ -134,10 +134,10 @@ RSpec.describe StripePaymentInvoiceService do
       payment_invoice.update(kind: "subscription")
       subscription = Stripe::StripeObject.construct_from(id: "sub_123", latest_invoice: "in_abc")
       allow(Stripe::Invoice).to receive(:retrieve).with("in_abc").and_return(invoice_mock)
-      
+
       val = service.send(:stripe_object_value, subscription, :latest_invoice)
       expect(val).to eq("in_abc")
-      
+
       # Test the specific logic in create_subscription_invoice!
       allow(Stripe::Subscription).to receive(:create).and_return(subscription)
       service.create_and_send!
@@ -146,8 +146,8 @@ RSpec.describe StripePaymentInvoiceService do
 
     it "raises ConfigurationError if update fails" do
       allow(payment_invoice).to receive(:update).and_return(false)
-      allow(payment_invoice.errors).to receive(:full_messages).and_return(["Save failed"])
-      
+      allow(payment_invoice.errors).to receive(:full_messages).and_return([ "Save failed" ])
+
       expect {
         service.send(:update_from_stripe_invoice!, invoice_mock)
       }.to raise_error(StripePaymentInvoiceService::ConfigurationError, /Save failed/)

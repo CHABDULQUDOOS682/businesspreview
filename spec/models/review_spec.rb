@@ -29,7 +29,7 @@ RSpec.describe Review, type: :model do
     it "has an active scope" do
       active_review = create(:review, active: true)
       hidden_review = create(:review, active: false)
-      
+
       expect(Review.active).to include(active_review)
       expect(Review.active).not_to include(hidden_review)
     end

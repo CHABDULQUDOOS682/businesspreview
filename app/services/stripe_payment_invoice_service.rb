@@ -122,7 +122,7 @@ class StripePaymentInvoiceService
   def update_from_stripe_invoice!(invoice)
     payment_invoice.reload
     stripe_status = stripe_object_value(invoice, :status)
-    
+
     attrs = {
       status: stripe_status == "paid" ? "paid" : "invoice_sent",
       stripe_customer_id: stripe_object_value(invoice, :customer),
@@ -201,7 +201,7 @@ class StripePaymentInvoiceService
 
   def stripe_object_value(object, key)
     return nil if object.blank?
-    
+
     # Try hash access first as it's more reliable for Stripe objects
     value = object[key.to_s] || object[key.to_sym]
     return value if value.present?

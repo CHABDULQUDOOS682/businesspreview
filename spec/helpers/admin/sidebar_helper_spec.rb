@@ -56,7 +56,7 @@ RSpec.describe Admin::SidebarHelper, type: :helper do
   end
 
   describe "#admin_sidebar_icon" do
-    [:dashboard, :businesses, :communications, :tasks, :users, :reviews].each do |icon|
+    [ :dashboard, :businesses, :communications, :tasks, :users, :reviews ].each do |icon|
       it "returns #{icon} icon" do
         expect(helper.admin_sidebar_icon(icon, classes: "w-5")).to include("<svg")
       end
