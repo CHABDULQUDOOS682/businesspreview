@@ -4,24 +4,22 @@ RSpec.describe StripePaymentInvoiceService do
   let(:business) { create(:business, phone: "+1234567890", email: "client@example.com") }
   let(:payment_invoice) { create(:payment_invoice, business: business, delivery_method: "email_and_sms") }
   let(:service) { StripePaymentInvoiceService.new(payment_invoice) }
+  let(:customer_mock) { Stripe::StripeObject.construct_from(id: "cus_123") }
+  let(:invoice_mock) { Stripe::StripeObject.construct_from(id: "in_123", status: "open", customer: "cus_123", hosted_invoice_url: "https://stripe.com/inv", invoice_pdf: "https://stripe.com/pdf") }
 
   before do
     allow(Stripe).to receive(:api_key).and_return("sk_test_123")
+    allow(Stripe::Customer).to receive(:create).and_return(customer_mock)
+    allow(Stripe::Invoice).to receive(:create).and_return(invoice_mock)
+    allow(Stripe::InvoiceItem).to receive(:create)
+    allow(Stripe::Invoice).to receive(:finalize_invoice).and_return(invoice_mock)
+    allow(SmsService).to receive(:send_sms)
+    allow(PaymentInvoiceMailer).to receive_message_chain(:with, :invoice_link, :deliver_now)
+    allow(Stripe::Product).to receive(:create).and_return(Stripe::StripeObject.construct_from(id: "prod_123"))
+    allow(Stripe::Price).to receive(:create).and_return(Stripe::StripeObject.construct_from(id: "price_123"))
   end
 
   describe "#create_and_send!" do
-    let(:customer_mock) { double("stripe_customer", id: "cus_123") }
-    let(:invoice_mock) { double("stripe_invoice", id: "in_123", status: "open", customer: "cus_123", hosted_invoice_url: "https://stripe.com/inv", invoice_pdf: "https://stripe.com/pdf") }
-
-    before do
-      allow(Stripe::Customer).to receive(:create).and_return(customer_mock)
-      allow(Stripe::Invoice).to receive(:create).and_return(invoice_mock)
-      allow(Stripe::InvoiceItem).to receive(:create)
-      allow(Stripe::Invoice).to receive(:finalize_invoice).and_return(invoice_mock)
-      allow(SmsService).to receive(:send_sms)
-      allow(PaymentInvoiceMailer).to receive_message_chain(:with, :invoice_link, :deliver_now)
-    end
-
     it "creates a customer and an invoice successfully" do
       service.create_and_send!
 
@@ -33,15 +31,15 @@ RSpec.describe StripePaymentInvoiceService do
 
     context "when kind is subscription" do
       let(:payment_invoice) { create(:payment_invoice, kind: "subscription", business: business) }
-      let(:product_mock) { double("stripe_product", id: "prod_123") }
-      let(:price_mock) { double("stripe_price", id: "price_123") }
-      let(:subscription_mock) { double("stripe_subscription", id: "sub_123", latest_invoice: "in_draft") } # Test string retrieval
+      let(:product_mock) { Stripe::StripeObject.construct_from(id: "prod_123") }
+      let(:price_mock) { Stripe::StripeObject.construct_from(id: "price_123") }
+      let(:subscription_mock) { Stripe::StripeObject.construct_from(id: "sub_123", latest_invoice: "in_draft") }
 
       before do
         allow(Stripe::Product).to receive(:create).and_return(product_mock)
         allow(Stripe::Price).to receive(:create).and_return(price_mock)
         allow(Stripe::Subscription).to receive(:create).and_return(subscription_mock)
-        allow(Stripe::Invoice).to receive(:retrieve).and_return(double("stripe_invoice", id: "in_draft", status: "draft", customer: "cus_123", hosted_invoice_url: "url", invoice_pdf: "pdf"))
+        allow(Stripe::Invoice).to receive(:retrieve).and_return(Stripe::StripeObject.construct_from(id: "in_draft", status: "draft", customer: "cus_123", hosted_invoice_url: "url", invoice_pdf: "pdf"))
         allow(Stripe::Invoice).to receive(:finalize_invoice).and_return(invoice_mock)
       end
 
@@ -60,7 +58,7 @@ RSpec.describe StripePaymentInvoiceService do
     end
 
     context "when delivery fails" do
-      let(:failed_invoice_mock) { double("stripe_invoice", id: "in_123", status: "open", customer: "cus_123", hosted_invoice_url: nil, invoice_pdf: nil) }
+      let(:failed_invoice_mock) { Stripe::StripeObject.construct_from(id: "in_123", status: "open", customer: "cus_123", hosted_invoice_url: nil, invoice_pdf: nil) }
 
       it "raises error if hosted_invoice_url is blank" do
         allow(Stripe::Invoice).to receive(:finalize_invoice).and_return(failed_invoice_mock)
@@ -79,7 +77,7 @@ RSpec.describe StripePaymentInvoiceService do
     end
 
     context "when invoice is already paid" do
-      let(:paid_invoice_mock) { double("stripe_invoice", id: "in_123", status: "paid", customer: "cus_123", hosted_invoice_url: "url", invoice_pdf: "pdf") }
+      let(:paid_invoice_mock) { Stripe::StripeObject.construct_from(id: "in_123", status: "paid", customer: "cus_123", hosted_invoice_url: "url", invoice_pdf: "pdf") }
 
       before do
         allow(Stripe::Invoice).to receive(:finalize_invoice).and_return(paid_invoice_mock)
@@ -130,6 +128,29 @@ RSpec.describe StripePaymentInvoiceService do
       value = service.send(:stripe_object_value, { "hosted_invoice_url" => "https://stripe.test/invoice" }, :hosted_invoice_url)
 
       expect(value).to eq("https://stripe.test/invoice")
+    end
+
+    it "handles retrieval when latest_invoice is a string ID" do
+      payment_invoice.update(kind: "subscription")
+      subscription = Stripe::StripeObject.construct_from(id: "sub_123", latest_invoice: "in_abc")
+      allow(Stripe::Invoice).to receive(:retrieve).with("in_abc").and_return(invoice_mock)
+
+      val = service.send(:stripe_object_value, subscription, :latest_invoice)
+      expect(val).to eq("in_abc")
+
+      # Test the specific logic in create_subscription_invoice!
+      allow(Stripe::Subscription).to receive(:create).and_return(subscription)
+      service.create_and_send!
+      expect(Stripe::Invoice).to have_received(:retrieve).with("in_abc")
+    end
+
+    it "raises ConfigurationError if update fails" do
+      allow(payment_invoice).to receive(:update).and_return(false)
+      allow(payment_invoice.errors).to receive(:full_messages).and_return([ "Save failed" ])
+
+      expect {
+        service.send(:update_from_stripe_invoice!, invoice_mock)
+      }.to raise_error(StripePaymentInvoiceService::ConfigurationError, /Save failed/)
     end
   end
 end

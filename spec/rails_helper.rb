@@ -1,9 +1,23 @@
 require 'simplecov'
 SimpleCov.start 'rails' do
+  # ----------------------------
+  # Coverage thresholds
+  # ----------------------------
+  minimum_coverage 90
+  minimum_coverage_by_file 80
+
+  # ----------------------------
+  # Ignore folders
+  # ----------------------------
   add_filter '/bin/'
   add_filter '/db/'
-  add_filter '/spec/' # Ignore spec files themselves
+  add_filter '/spec/'
+  add_filter '/config/'
+  add_filter '/vendor/'
 
+  # ----------------------------
+  # Coverage groups
+  # ----------------------------
   add_group 'Controllers', 'app/controllers'
   add_group 'Models', 'app/models'
   add_group 'Helpers', 'app/helpers'
@@ -15,6 +29,11 @@ end
 require 'spec_helper'
 ENV['RAILS_ENV'] ||= 'test'
 require_relative '../config/environment'
+
+# Set default ENVs for tests to avoid validation failures
+ENV["TWILIO_PHONE_NUMBER"] = "+15005550006" if ENV["TWILIO_PHONE_NUMBER"].to_s.strip.empty?
+ENV["MAILER_FROM"] = "hello@devdebizz.com" if ENV["MAILER_FROM"].to_s.strip.empty?
+
 # Prevent database truncation if the environment is production
 abort("The Rails environment is running in production mode!") if Rails.env.production?
 # Uncomment the line below in case you have `--require rails_helper` in the `.rspec` file
@@ -91,4 +110,9 @@ RSpec.configure do |config|
   config.filter_rails_from_backtrace!
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
+
+  config.before(:suite) do
+    # Clear users to prevent "one super admin" validation failures from seeds/previous runs
+    User.delete_all
+  end
 end

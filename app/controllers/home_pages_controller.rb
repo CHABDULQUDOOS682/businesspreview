@@ -4,6 +4,7 @@ class HomePagesController < ApplicationController
     skip_before_action :authenticate_user!
 
     def index
+        @reviews = Review.where(active: true).order(created_at: :desc)
     end
 
     def services

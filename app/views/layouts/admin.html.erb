@@ -147,11 +147,8 @@
         <main class="flex grow flex-col overflow-hidden">
           <div id="content" class="template--layout flex grow flex-col overflow-hidden">
             <%= render "shared/flash" %>
-
-            <div class="portal-scroll-frame">
-              <div class="portal-scroll-body template--layout">
-                <%= yield %>
-              </div>
+            <div class="portal-scroll-body template--layout">
+              <%= yield %>
             </div>
           </div>
         </main>

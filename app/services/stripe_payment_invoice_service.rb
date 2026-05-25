@@ -120,8 +120,11 @@ class StripePaymentInvoiceService
   end
 
   def update_from_stripe_invoice!(invoice)
-    payment_invoice.update!(
-      status: stripe_object_value(invoice, :status) == "paid" ? "paid" : "invoice_sent",
+    payment_invoice.reload
+    stripe_status = stripe_object_value(invoice, :status)
+
+    attrs = {
+      status: stripe_status == "paid" ? "paid" : "invoice_sent",
       stripe_customer_id: stripe_object_value(invoice, :customer),
       stripe_invoice_id: stripe_object_value(invoice, :id),
       hosted_invoice_url: stripe_object_value(invoice, :hosted_invoice_url),
@@ -129,8 +132,12 @@ class StripePaymentInvoiceService
       sent_to_email: payment_invoice.email_delivery? ? payment_invoice.business.email : nil,
       sent_to_phone: payment_invoice.sms_delivery? ? payment_invoice.business.phone : nil,
       sent_at: Time.current,
-      paid_at: stripe_object_value(invoice, :status) == "paid" ? Time.current : payment_invoice.paid_at
-    )
+      paid_at: stripe_status == "paid" ? Time.current : payment_invoice.paid_at
+    }
+
+    unless payment_invoice.update(attrs)
+      raise ConfigurationError, "Failed to update invoice: #{payment_invoice.errors.full_messages.to_sentence}"
+    end
   end
 
   def send_sms!
@@ -193,9 +200,19 @@ class StripePaymentInvoiceService
   end
 
   def stripe_object_value(object, key)
-    return if object.blank?
-    return object.public_send(key) if object.respond_to?(key)
+    return nil if object.blank?
 
-    object[key.to_s] || object[key.to_sym]
+    # Try hash access first as it's more reliable for Stripe objects
+    value = object[key.to_s] || object[key.to_sym]
+    return value if value.present?
+
+    # Fallback to public_send if hash access fails
+    if object.respond_to?(key)
+      object.public_send(key)
+    else
+      nil
+    end
+  rescue => e
+    nil
   end
 end

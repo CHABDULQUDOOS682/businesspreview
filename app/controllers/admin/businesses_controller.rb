@@ -89,6 +89,40 @@ class Admin::BusinessesController < ApplicationController
     end
   end
 
+  def send_review_link
+    @business = Business.find(params[:id])
+    method = params[:delivery_method] # 'email' or 'sms'
+    link = @business.review_url
+
+    message = "Hi #{@business.owner_name || @business.name}, we'd love to hear your feedback! Please leave us a review here: #{link}"
+
+    case method
+    when "sms"
+      if @business.phone.present?
+        SmsService.send_sms(to: @business.phone, message: message)
+        Message.create!(
+          from_number: ENV["TWILIO_PHONE_NUMBER"],
+          to_number: @business.phone,
+          body: message,
+          direction: "outbound",
+          business_id: @business.id
+        )
+        redirect_to admin_business_path(@business), notice: "Review link sent via SMS."
+      else
+        redirect_to admin_business_path(@business), alert: "Business phone missing."
+      end
+    when "email"
+      if @business.email.present?
+        ReviewMailer.send_link(@business).deliver_now
+        redirect_to admin_business_path(@business), notice: "Review link sent via Email."
+      else
+        redirect_to admin_business_path(@business), alert: "Business email missing."
+      end
+    else
+      redirect_to admin_business_path(@business), alert: "Invalid delivery method."
+    end
+  end
+
   private
 
   def apply_filters(scope)

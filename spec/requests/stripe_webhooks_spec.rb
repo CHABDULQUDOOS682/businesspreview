@@ -34,13 +34,25 @@ RSpec.describe "StripeWebhooks", type: :request do
         Stripe::Invoice.construct_from(
           id: "in_123",
           status: "paid",
-          payment_intent: {
-            latest_charge: {
-              receipt_url: "https://stripe.com/receipt/123"
-            }
-          }
+          hosted_invoice_url: "https://invoice.stripe.com/123",
+          invoice_pdf: "https://pay.stripe.com/123/pdf"
         )
       end
+
+      # Mock PaymentIntent list for receipt URL
+      allow(Stripe::PaymentIntent).to receive(:list).and_return(
+        Stripe::StripeObject.construct_from(
+          data: [
+            {
+              id: "pi_123",
+              latest_charge: {
+                id: "ch_123",
+                receipt_url: "https://stripe.com/receipt/123"
+              }
+            }
+          ]
+        )
+      )
     end
 
     it "returns http success and updates the invoice" do
@@ -80,7 +92,7 @@ RSpec.describe "StripeWebhooks", type: :request do
 
     it "handles invoice.payment_succeeded" do
       payload = { id: "evt_123", type: "invoice.payment_succeeded", data: { object: { id: "in_123", status: "paid" } } }
-      invoice_double = double("stripe_invoice", id: "in_123", status: "paid", payment_intent: nil, hosted_invoice_url: "url", invoice_pdf: "pdf", amount_due: 1000, amount_paid: 1000)
+      invoice_double = Stripe::StripeObject.construct_from(id: "in_123", status: "paid", hosted_invoice_url: "url", invoice_pdf: "pdf", amount_due: 1000, amount_paid: 1000)
       expect(Stripe::Invoice).to receive(:retrieve).and_return(invoice_double)
       post webhooks_stripe_path, params: payload, as: :json
       expect(response).to have_http_status(:success)
@@ -128,6 +140,22 @@ RSpec.describe "StripeWebhooks", type: :request do
       expect {
         post webhooks_stripe_path, params: payload, as: :json
       }.not_to raise_error
+      expect(response).to have_http_status(:success)
+    end
+
+    it "handles missing payment intent during receipt retrieval" do
+      payload = { id: "evt_123", type: "invoice.paid", data: { object: { id: "in_123", status: "paid" } } }
+      allow(Stripe::PaymentIntent).to receive(:list).and_return(double(data: []))
+      post webhooks_stripe_path, params: payload, as: :json
+      expect(response).to have_http_status(:success)
+      expect(payment_invoice.reload.receipt_url).to be_nil
+    end
+
+    it "handles stripe_value with nil object" do
+      # This triggers the return nil if object.blank? in stripe_value
+      payload = { id: "evt_123", type: "invoice.paid", data: { object: { id: "in_123", status: "paid" } } }
+      allow(Stripe::Invoice).to receive(:retrieve).and_return(nil)
+      post webhooks_stripe_path, params: payload, as: :json
       expect(response).to have_http_status(:success)
     end
   end

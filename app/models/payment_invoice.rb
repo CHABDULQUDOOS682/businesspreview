@@ -17,7 +17,7 @@ class PaymentInvoice < ApplicationRecord
   BILLING_INTERVALS = %w[day week month year].freeze
   DEFAULT_DAYS_UNTIL_DUE = 7
   DEFAULT_BILLING_INTERVAL = "month".freeze
-  ALLOWED_HOSTS = [ "invoice.stripe.com" ].freeze
+  ALLOWED_HOSTS = [ "invoice.stripe.com", "pay.stripe.com", "buy.stripe.com" ].freeze
 
   validates :kind, inclusion: { in: KINDS.keys }
   validates :delivery_method, inclusion: { in: DELIVERY_METHODS.keys }
@@ -112,8 +112,6 @@ class PaymentInvoice < ApplicationRecord
 
   def store_paid_documents!(stripe_invoice:, receipt_url: nil)
     update!(
-      invoice_snapshot_html: build_invoice_snapshot(stripe_invoice),
-      receipt_snapshot_html: build_receipt_snapshot(stripe_invoice, receipt_url),
       receipt_url: receipt_url.presence || self.receipt_url
     )
   end
@@ -149,36 +147,6 @@ class PaymentInvoice < ApplicationRecord
     end
   end
 
-  def build_invoice_snapshot(stripe_invoice)
-    <<~HTML
-      <h1>Invoice #{stripe_value(stripe_invoice, :id) || stripe_invoice_id}</h1>
-      <p>Status: #{stripe_value(stripe_invoice, :status) || status}</p>
-      <p>Business: #{business.name}</p>
-      <p>Amount due: #{format_amount(stripe_value(stripe_invoice, :amount_due) || amount_cents)}</p>
-      <p>Amount paid: #{format_amount(stripe_value(stripe_invoice, :amount_paid) || amount_cents)}</p>
-      <p>Hosted invoice: #{stripe_value(stripe_invoice, :hosted_invoice_url) || hosted_invoice_url}</p>
-      <p>Invoice PDF: #{stripe_value(stripe_invoice, :invoice_pdf) || invoice_pdf}</p>
-      <p>Saved at: #{Time.current.iso8601}</p>
-    HTML
-  end
-
-  def build_receipt_snapshot(stripe_invoice, receipt_url)
-    <<~HTML
-      <h1>Receipt for Invoice #{stripe_value(stripe_invoice, :id) || stripe_invoice_id}</h1>
-      <p>Status: #{stripe_value(stripe_invoice, :status) || status}</p>
-      <p>Business: #{business.name}</p>
-      <p>Amount paid: #{format_amount(stripe_value(stripe_invoice, :amount_paid) || amount_cents)}</p>
-      <p>Paid at: #{paid_at&.iso8601 || Time.current.iso8601}</p>
-      <p>Stripe receipt: #{receipt_url}</p>
-    HTML
-  end
-
-  def stripe_value(object, key)
-    return if object.blank?
-    return object.public_send(key) if object.respond_to?(key)
-
-    object[key.to_s] || object[key.to_sym]
-  end
 
   def format_amount(cents)
     amount = cents.to_i.to_d / 100

@@ -6,57 +6,57 @@
   subtitle: "A snapshot of brands we've helped launch, scale, and reinvent — across SaaS, retail, fintech, healthcare, and beyond." %>
 
 <section class="py-16" data-controller="portfolio-filter">
-  <div class="mb-12 flex flex-wrap items-center justify-center gap-2">
-    <% ["All", "E-commerce", "SaaS", "Branding", "Fintech", "Healthcare", "Marketing"].each_with_index do |label, index| %>
-      <button 
-        data-portfolio-filter-target="button" 
-        data-action="click->portfolio-filter#filter" 
-        data-category="<%= label %>"
-        class="<%= index.zero? ? 'rounded-full border border-[#213885] bg-[#213885] px-5 py-2 text-sm font-medium text-[#ECDFD2]' : 'rounded-full border border-[#081849]/15 bg-[#081849]/5 px-5 py-2 text-sm font-medium text-[#081849]/70' %> transition-all duration-300"
-      >
-        <%= label %>
-      </button>
-    <% end %>
-  </div>
+  <div class="mx-auto max-w-7xl px-2 md:px-0">
+    <div class="mb-12 flex flex-wrap items-center justify-center gap-2">
+      <% ["All", "E-commerce", "SaaS", "Branding", "Fintech", "Healthcare", "Marketing"].each_with_index do |label, index| %>
+        <button 
+          data-portfolio-filter-target="button" 
+          data-action="click->portfolio-filter#filter" 
+          data-category="<%= label %>"
+          class="<%= index.zero? ? 'rounded-full border border-[#213885] bg-[#213885] px-5 py-2 text-sm font-medium text-[#ECDFD2]' : 'rounded-full border border-[#081849]/15 bg-[#081849]/5 px-5 py-2 text-sm font-medium text-[#081849]/70' %> transition-all duration-300"
+        >
+          <%= label %>
+        </button>
+      <% end %>
+    </div>
 
-  <div class="perspective-1000 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-    <% [
-      { tag: "E-commerce", title: "Norvik Apparel", description: "Headless Shopify rebuild that lifted conversion by 38% and cut load time in half.", metric: "+38% conv.", color: "from-[#213885]/30" },
-      { tag: "SaaS", title: "PulseMetric", description: "Analytics dashboard for 12k+ B2B teams, redesigned around a single source of truth.", metric: "12k teams", color: "from-emerald-400/30" },
-      { tag: "Branding", title: "Cedar & Co.", description: "Full identity refresh — wordmark, packaging, and motion system for a craft coffee chain.", metric: "32 stores", color: "from-amber-300/30" },
-      { tag: "Fintech", title: "Kavari Pay", description: "Onboarding flow redesign that doubled signup completion across 7 markets.", metric: "2× signups", color: "from-cyan-400/30" },
-      { tag: "Healthcare", title: "MediLoop", description: "HIPAA-compliant patient portal with native iOS and Android companion apps.", metric: "HIPAA", color: "from-rose-400/30" },
-      { tag: "Marketing", title: "Orbit Studios", description: "12-month SEO program that grew organic traffic from 4k to 180k monthly visits.", metric: "+4400%", color: "from-violet-400/30" }
-    ].each do |project| %>
-      <div 
-        class="home-card-3d group overflow-hidden rounded-[28px] border border-[#081849]/10 bg-[#ECDFD2]" 
-        data-portfolio-filter-target="item" 
-        data-category="<%= project[:tag] %>"
-        data-controller="tilt-card" 
-        data-action="mousemove->tilt-card#move mouseleave->tilt-card#leave"
-        style="view-transition-name: project-<%= project[:title].parameterize %>"
-      >
-        <div class="relative aspect-[4/3] overflow-hidden bg-[#CCCACC]">
-          <div class="home-grid-bg absolute inset-0 opacity-50"></div>
-          <div class="absolute inset-0 bg-gradient-to-br <%= project[:color] %> to-transparent"></div>
-          <div class="absolute left-4 top-4 rounded-full border border-[#081849]/15 bg-white/70 px-3 py-1 text-xs font-semibold text-[#081849] backdrop-blur">
-            <%= project[:tag] %>
-          </div>
-          <div class="absolute right-4 top-4 rounded-full bg-[#213885] px-3 py-1 text-xs font-bold text-[#ECDFD2]">
-            <%= project[:metric] %>
-          </div>
-          <div class="absolute inset-0 flex items-center justify-center">
-            <div class="flex h-28 w-28 items-center justify-center rounded-[28px] border border-[#5F3475]/30 bg-white/30 text-3xl font-extrabold text-[#5F3475] shadow-[0_20px_50px_rgba(95,52,117,0.18)]">
-              <%= project[:title].split.map { |word| word.first }.join.first(2) %>
+    <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      <% [
+        { tag: "E-commerce", title: "Norvik Apparel", description: "Headless Shopify rebuild that lifted conversion by 38% and cut load time in half.", metric: "+38% conv.", color: "from-[#213885]/30" },
+        { tag: "SaaS", title: "PulseMetric", description: "Analytics dashboard for 12k+ B2B teams, redesigned around a single source of truth.", metric: "12k teams", color: "from-emerald-400/30" },
+        { tag: "Branding", title: "Cedar & Co.", description: "Full identity refresh — wordmark, packaging, and motion system for a craft coffee chain.", metric: "32 stores", color: "from-amber-300/30" },
+        { tag: "Fintech", title: "Kavari Pay", description: "Onboarding flow redesign that doubled signup completion across 7 markets.", metric: "2× signups", color: "from-cyan-400/30" },
+        { tag: "Healthcare", title: "MediLoop", description: "HIPAA-compliant patient portal with native iOS and Android companion apps.", metric: "HIPAA", color: "from-rose-400/30" },
+        { tag: "Marketing", title: "Orbit Studios", description: "12-month SEO program that grew organic traffic from 4k to 180k monthly visits.", metric: "+4400%", color: "from-violet-400/30" }
+      ].each do |project| %>
+        <div 
+          class="home-card-3d group overflow-hidden rounded-[28px] border border-[#081849]/10 bg-[#ECDFD2]" 
+          data-portfolio-filter-target="item" 
+          data-category="<%= project[:tag] %>"
+          style="view-transition-name: project-<%= project[:title].parameterize %>"
+        >
+          <div class="relative aspect-[4/3] overflow-hidden bg-[#CCCACC]">
+            <div class="home-grid-bg absolute inset-0 opacity-50"></div>
+            <div class="absolute inset-0 bg-gradient-to-br <%= project[:color] %> to-transparent"></div>
+            <div class="absolute left-4 top-4 rounded-full border border-[#081849]/15 bg-white/70 px-3 py-1 text-xs font-semibold text-[#081849]">
+              <%= project[:tag] %>
+            </div>
+            <div class="absolute right-4 top-4 rounded-full bg-[#213885] px-3 py-1 text-xs font-bold text-[#ECDFD2]">
+              <%= project[:metric] %>
+            </div>
+            <div class="absolute inset-0 flex items-center justify-center">
+              <div class="flex h-28 w-28 items-center justify-center rounded-[28px] border border-[#5F3475]/30 bg-white/30 text-3xl font-extrabold text-[#5F3475] shadow-[0_20px_50px_rgba(95,52,117,0.18)]">
+                <%= project[:title].split.map { |word| word.first }.join.first(2) %>
+              </div>
             </div>
           </div>
+          <div class="p-6">
+            <h3 class="text-2xl font-bold text-[#081849] transition group-hover:text-[#5F3475]"><%= project[:title] %></h3>
+            <p class="mt-2 text-sm leading-relaxed text-[#081849]/64"><%= project[:description] %></p>
+          </div>
         </div>
-        <div class="p-6">
-          <h3 class="text-2xl font-bold text-[#081849] transition group-hover:text-[#5F3475]"><%= project[:title] %></h3>
-          <p class="mt-2 text-sm leading-relaxed text-[#081849]/64"><%= project[:description] %></p>
-        </div>
-      </div>
-    <% end %>
+      <% end %>
+    </div>
   </div>
 </section>
 

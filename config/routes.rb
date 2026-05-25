@@ -13,6 +13,8 @@ Rails.application.routes.draw do
   get "landing_pages/show"
   get "/lp/:uuid", to: "landing_pages#show", as: :landing_page
   get "/pay/:token", to: "payment_invoice_links#show", as: :payment_invoice_link
+  get "/reviews/new/:token", to: "reviews#new", as: :new_review_submission
+  post "/reviews", to: "reviews#create", as: :review_submissions
 
   namespace :admin do
     get "dashboard/index"
@@ -31,6 +33,9 @@ Rails.application.routes.draw do
       end
       resources :preview_links, only: [ :create, :destroy ]
       resources :payment_invoices, only: [ :create ]
+      member do
+        post :send_review_link
+      end
     end
     resources :communications, only: [ :index, :show, :create ] do
       collection do
@@ -38,6 +43,11 @@ Rails.application.routes.draw do
       end
       member do
         post :call
+      end
+    end
+    resources :reviews do
+      member do
+        patch :toggle_active
       end
     end
     get "templates/:id/preview", to: "templates#preview", as: :template_preview

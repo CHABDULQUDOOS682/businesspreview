@@ -1,0 +1,50 @@
+<div id="review-link-modal-<%= business.id %>" class="fixed inset-0 z-50 hidden overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+  <div class="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
+    <div class="fixed inset-0 bg-slate-500/75 transition-opacity" aria-hidden="true" onclick="document.getElementById('review-link-modal-<%= business.id %>').classList.add('hidden')"></div>
+
+    <div class="relative transform overflow-hidden rounded-2xl bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6">
+      <div>
+        <div class="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-blue-100">
+          <svg class="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 8.25h9m-9 3h9m-9 3h9m-6.75-12.75H18a2.25 2.25 0 0 1 2.25 2.25v9a2.25 2.25 0 0 1-2.25 2.25H6.75A2.25 2.25 0 0 1 4.5 15.75v-9a2.25 2.25 0 0 1 2.25-2.25h1.5m.75-3l3 3m0 0l3-3m-3 3v7.5" />
+          </svg>
+        </div>
+        <div class="mt-3 text-center sm:mt-5">
+          <h3 class="text-lg font-semibold leading-6 text-slate-900" id="modal-title">Send Review Link</h3>
+          <div class="mt-2">
+            <p class="text-sm text-slate-500">Choose how you want to send the review submission link to <strong><%= business.name %></strong>.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-8 grid grid-cols-2 gap-4">
+        <%= button_to send_review_link_admin_business_path(business, delivery_method: 'email'), method: :post, class: "flex flex-col items-center justify-center rounded-xl border border-slate-200 p-4 hover:bg-slate-50 transition-colors" do %>
+          <i class="fa-solid fa-envelope text-2xl text-blue-600 mb-2"></i>
+          <span class="text-sm font-bold text-slate-900">Email</span>
+          <span class="text-xs text-slate-500 mt-1"><%= business.email.presence || "No email" %></span>
+        <% end %>
+
+        <%= button_to send_review_link_admin_business_path(business, delivery_method: 'sms'), method: :post, class: "flex flex-col items-center justify-center rounded-xl border border-slate-200 p-4 hover:bg-slate-50 transition-colors" do %>
+          <i class="fa-solid fa-comment-sms text-2xl text-green-600 mb-2"></i>
+          <span class="text-sm font-bold text-slate-900">SMS</span>
+          <span class="text-xs text-slate-500 mt-1"><%= business.phone.presence || "No phone" %></span>
+        <% end %>
+      </div>
+
+      <div class="mt-6">
+        <div class="rounded-xl bg-slate-50 p-3 border border-slate-200">
+          <label class="block text-xs font-bold uppercase tracking-widest text-slate-500 mb-1">Direct Link</label>
+          <div class="flex items-center gap-2">
+            <input type="text" readonly value="<%= business.review_url %>" class="grow bg-transparent text-xs text-slate-600 border-none p-0 focus:ring-0">
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-6">
+        <button type="button" class="inline-flex w-full justify-center rounded-full bg-slate-100 px-3 py-2 text-sm font-semibold text-slate-900 shadow-sm hover:bg-slate-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-600" onclick="document.getElementById('review-link-modal-<%= business.id %>').classList.add('hidden')">
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
