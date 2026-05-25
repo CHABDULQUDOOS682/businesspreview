@@ -53,17 +53,21 @@ RSpec.describe "Admin::Communications", type: :request do
       expect(SmsService).to have_received(:send_sms).with(to: "+1234567890", message: "Hello")
     end
 
-    it "handles failed message sending" do
-      allow(SmsService).to receive(:send_sms).and_raise(StandardError.new("Twilio Error"))
+    it "handles missing business ID" do
+      allow(SmsService).to receive(:send_sms).and_return(true)
+      post admin_communications_path, params: { to_number: "+1234567890", body: "Hello", business_id: "" }
+      expect(response).to redirect_to(admin_communication_path("+1234567890"))
+    end
+
+    it "handles SMS sending failure" do
+      allow(SmsService).to receive(:send_sms).and_raise(StandardError.new("Twilio Down"))
       post admin_communications_path, params: { to_number: "+1234567890", body: "Hello" }
       expect(response).to redirect_to(admin_communication_path("+1234567890"))
-      expect(flash[:alert]).to include("Failed to send")
+      expect(flash[:alert]).to include("Twilio Down")
     end
   end
 
   describe "POST /admin/communications/bulk_create" do
-    let(:business_ids) { [ business.id ] }
-
     before do
       allow(SmsService).to receive(:send_sms)
     end

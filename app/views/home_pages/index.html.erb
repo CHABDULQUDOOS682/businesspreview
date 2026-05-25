@@ -5,18 +5,18 @@
   <div class="home-hero-scene pointer-events-none absolute inset-0">
     <div class="home-grid-animated absolute inset-0 opacity-40"></div>
 
-    <div class="animate-glow absolute -right-32 -top-32 h-[36rem] w-[36rem] rounded-full bg-[#213885]/15 blur-[120px] home-hero-parallax-reverse"></div>
-    <div class="animate-glow absolute -bottom-28 -left-28 h-[30rem] w-[30rem] rounded-full bg-[#893172]/10 blur-[120px] home-hero-parallax" style="animation-delay: 2s;"></div>
+    <div class="animate-glow absolute -right-32 -top-32 h-[36rem] w-[36rem] rounded-full bg-[#213885]/15 home-hero-parallax-reverse"></div>
+    <div class="animate-glow absolute -bottom-28 -left-28 h-[30rem] w-[30rem] rounded-full bg-[#893172]/10 home-hero-parallax" style="animation-delay: 2s;"></div>
 
     <div class="absolute left-[8%] top-[15%] animate-float-slow home-hero-parallax">
       <div class="perspective-1000">
         <div class="preserve-3d animate-spin-slower relative h-20 w-20">
-          <div class="absolute inset-0 border border-[#213885]/35 bg-[#5F3475]/18 backdrop-blur-[2px]" style="transform: translateZ(40px);"></div>
-          <div class="absolute inset-0 border border-[#213885]/28 bg-[#5F3475]/10 backdrop-blur-[2px]" style="transform: rotateY(180deg) translateZ(40px);"></div>
-          <div class="absolute inset-0 border border-[#213885]/30 bg-[#5F3475]/14 backdrop-blur-[2px]" style="transform: rotateY(90deg) translateZ(40px);"></div>
-          <div class="absolute inset-0 border border-[#213885]/20 bg-[#5F3475]/8 backdrop-blur-[2px]" style="transform: rotateY(-90deg) translateZ(40px);"></div>
-          <div class="absolute inset-0 border border-[#213885]/30 bg-[#5F3475]/16 backdrop-blur-[2px]" style="transform: rotateX(90deg) translateZ(40px);"></div>
-          <div class="absolute inset-0 border border-[#213885]/15 bg-[#5F3475]/6 backdrop-blur-[2px]" style="transform: rotateX(-90deg) translateZ(40px);"></div>
+          <div class="absolute inset-0 border border-[#213885]/35 bg-[#5F3475]/18" style="transform: translateZ(40px);"></div>
+          <div class="absolute inset-0 border border-[#213885]/28 bg-[#5F3475]/10" style="transform: rotateY(180deg) translateZ(40px);"></div>
+          <div class="absolute inset-0 border border-[#213885]/30 bg-[#5F3475]/14" style="transform: rotateY(90deg) translateZ(40px);"></div>
+          <div class="absolute inset-0 border border-[#213885]/20 bg-[#5F3475]/8" style="transform: rotateY(-90deg) translateZ(40px);"></div>
+          <div class="absolute inset-0 border border-[#213885]/30 bg-[#5F3475]/16" style="transform: rotateX(90deg) translateZ(40px);"></div>
+          <div class="absolute inset-0 border border-[#213885]/15 bg-[#5F3475]/6" style="transform: rotateX(-90deg) translateZ(40px);"></div>
         </div>
       </div>
     </div>
@@ -107,14 +107,14 @@
       </div>
     </div>
 
-    <div class="perspective-1000 relative mt-24 grid gap-4 md:grid-cols-4">
+    <div class="relative mt-24 grid gap-4 md:grid-cols-4">
       <% [
         { number: "7-day", label: "Launch planning" },
         { number: "Mobile", label: "First experience" },
         { number: "SEO", label: "Ready pages" },
         { number: "CRM", label: "Friendly handoff" }
       ].each_with_index do |stat, index| %>
-        <div class="glass card-3d home-floating-shadow relative rounded-2xl p-6 text-center animate-fade-up" data-controller="tilt-card" data-action="mousemove->tilt-card#move mouseleave->tilt-card#leave" style="animation-delay: <%= 0.1 + (index * 0.08) %>s;">
+        <div class="glass card-3d home-floating-shadow relative rounded-2xl p-6 text-center animate-fade-up" style="animation-delay: <%= 0.1 + (index * 0.08) %>s;">
           <div class="absolute inset-x-6 top-0 h-px bg-gradient-to-r from-transparent via-[#5F3475]/50 to-transparent"></div>
           <p class="bg-gradient-to-br from-[#213885] to-[#893172] bg-clip-text text-4xl font-extrabold text-transparent md:text-5xl"><%= stat[:number] %></p>
           <p class="mt-2 text-xs uppercase tracking-[0.18em] text-[#081849]/58"><%= stat[:label] %></p>
@@ -133,7 +133,7 @@
       <p class="mt-4 text-lg text-[#081849]/70">From your first impression to your follow-up systems, we design the touchpoints that turn interest into booked business.</p>
     </div>
 
-    <div class="perspective-1000 mt-16 grid gap-6 md:grid-cols-3">
+    <div class="mt-16 grid gap-6 md:grid-cols-3">
       <% [
         {
           icon: "fa-layer-group",
@@ -154,8 +154,8 @@
           points: [ "Booking logic", "CRM workflows", "Reminders", "Ops dashboards" ]
         }
       ].each_with_index do |service, index| %>
-        <div class="glass card-3d group relative overflow-hidden rounded-2xl p-8 animate-fade-up" data-controller="tilt-card" data-action="mousemove->tilt-card#move mouseleave->tilt-card#leave" style="animation-delay: <%= index * 0.08 %>s;">
-          <div class="absolute -right-12 -top-12 h-32 w-32 rounded-full bg-[#213885]/0 blur-2xl transition group-hover:bg-[#213885]/30"></div>
+        <div class="glass card-3d group relative overflow-hidden rounded-2xl p-8 animate-fade-up" style="animation-delay: <%= index * 0.08 %>s;">
+
           <div class="relative">
             <div class="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-[#213885]/20 to-[#213885]/5 ring-1 ring-[#213885]/30">
             <i class="fa-solid <%= service[:icon] %> text-xl text-[#5F3475]"></i>
@@ -190,14 +190,14 @@
       <h2 class="mt-3 text-4xl font-extrabold text-[#081849] md:text-5xl">A proven 4-step process</h2>
     </div>
 
-    <div class="perspective-1000 mt-16 grid gap-6 md:grid-cols-4">
+    <div class="mt-16 grid gap-6 md:grid-cols-4">
       <% [
         { number: "01", title: "Discover", text: "We deep-dive into your business, audience, and competitive landscape." },
         { number: "02", title: "Design", text: "Strategic positioning meets striking visual identity and UX." },
         { number: "03", title: "Build", text: "Engineering teams ship clean, fast, scalable production code." },
         { number: "04", title: "Grow", text: "Continuous optimization, SEO, and paid acquisition from day one." }
       ].each_with_index do |step, index| %>
-        <div class="card-3d glass relative overflow-hidden rounded-2xl border border-[#081849]/10 p-6 animate-fade-up" data-controller="tilt-card" data-action="mousemove->tilt-card#move mouseleave->tilt-card#leave" style="animation-delay: <%= index * 0.08 %>s;">
+        <div class="card-3d glass relative overflow-hidden rounded-2xl border border-[#081849]/10 p-6 animate-fade-up" style="animation-delay: <%= index * 0.08 %>s;">
           <div class="absolute -right-0 -top-0 text-7xl font-black text-[#5F3475]/15 select-none"><%= step[:number] %></div>
           <div class="relative">
             <div class="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-[#213885] to-[#5F3475] text-sm font-bold text-[#ECDFD2] shadow-lg shadow-[#5F3475]/30"><%= step[:number] %></div>
@@ -220,24 +220,34 @@
     <div class="relative mt-16 px-4 md:px-0" data-controller="carousel">
       <div class="swiper" data-carousel-target="container">
         <div class="swiper-wrapper py-12">
-          <% [
-            { quote: "DevDeBizz rebuilt our site and booking flow so the business finally feels easy to browse and trust on mobile.", name: "Sarah Chen", role: "Owner, Studio North" },
-            { quote: "The new pages gave our offers structure, improved lead quality, and made our team look far more established online.", name: "Marcus Hale", role: "Founder, Atlas Fitness" },
-            { quote: "From strategy to launch, the polish and follow-through felt like having an in-house growth team for the project.", name: "Priya Nair", role: "Director, Clarity Dental" },
-            { quote: "The project gave us a cleaner offer, faster pages, and a follow-up path our team actually uses.", name: "David Miller", role: "Owner, Miller Services" },
-            { quote: "The process was simple, the copy was clear, and our mobile site finally feels professional.", name: "Elena Rossi", role: "Manager, Luxe Stay" }
-          ].each_with_index do |testimonial, index| %>
-            <div class="swiper-slide h-auto max-w-lg">
-              <div class="card-3d glass h-full rounded-2xl p-7 shadow-xl" data-controller="tilt-card" data-action="mousemove->tilt-card#move mouseleave->tilt-card#leave">
-                <div class="absolute inset-0 -z-10 rounded-2xl bg-gradient-to-br from-[#5F3475]/5 to-transparent"></div>
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="#5F3475" opacity="0.4">
-                  <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
-                </svg>
-                <p class="mt-4 text-sm leading-relaxed text-[#081849]/85 md:text-base"><%= testimonial[:quote] %></p>
-                <div class="mt-6 border-t border-[#081849]/10 pt-4">
-                  <div class="font-bold text-[#081849]"><%= testimonial[:name] %></div>
-                  <div class="text-xs font-medium text-[#081849]/55"><%= testimonial[:role] %></div>
+          <% if @reviews.any? %>
+            <% @reviews.each_with_index do |review, index| %>
+              <div class="swiper-slide h-auto max-w-lg">
+                <div class="card-3d glass h-full rounded-2xl p-7 shadow-xl">
+                  <div class="absolute inset-0 -z-10 rounded-2xl bg-gradient-to-br from-[#5F3475]/5 to-transparent"></div>
+                  <svg width="32" height="32" viewBox="0 0 24 24" fill="#5F3475" opacity="0.4">
+                    <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
+                  </svg>
+                  <div class="mt-4 flex gap-1 text-amber-500">
+                    <% review.rating.times do %>
+                      <i class="fa-solid fa-star text-xs"></i>
+                    <% end %>
+                    <% (5 - review.rating).times do %>
+                      <i class="fa-regular fa-star text-xs"></i>
+                    <% end %>
+                  </div>
+                  <p class="mt-3 text-sm leading-relaxed text-[#081849]/85 md:text-base"><%= review.content %></p>
+                  <div class="mt-6 border-t border-[#081849]/10 pt-4">
+                    <div class="font-bold text-[#081849]"><%= review.client_name %></div>
+                    <div class="text-xs font-medium text-[#081849]/55"><%= review.client_role %></div>
+                  </div>
                 </div>
+              </div>
+            <% end %>
+          <% else %>
+            <div class="swiper-slide h-auto max-w-lg">
+              <div class="card-3d glass h-full rounded-2xl p-7 shadow-xl text-center">
+                <p class="text-[#081849]/60 italic">Reviews will appear here once approved.</p>
               </div>
             </div>
           <% end %>
@@ -245,8 +255,8 @@
 
         <div class="swiper-pagination !-bottom-2"></div>
         
-        <div class="swiper-button-prev !hidden md:!flex !left-0 !h-12 !w-12 !rounded-full !bg-white/50 !text-[#5F3475] !backdrop-blur-sm after:!text-sm hover:!bg-white/80 transition-all"></div>
-        <div class="swiper-button-next !hidden md:!flex !right-0 !h-12 !w-12 !rounded-full !bg-white/50 !text-[#5F3475] !backdrop-blur-sm after:!text-sm hover:!bg-white/80 transition-all"></div>
+        <div class="swiper-button-prev !hidden md:!flex !left-0 !h-12 !w-12 !rounded-full !bg-white/50 !text-[#5F3475] after:!text-sm hover:!bg-white/80 transition-all"></div>
+        <div class="swiper-button-next !hidden md:!flex !right-0 !h-12 !w-12 !rounded-full !bg-white/50 !text-[#5F3475] after:!text-sm hover:!bg-white/80 transition-all"></div>
       </div>
     </div>
   </div>
@@ -254,9 +264,9 @@
 
 <section class="pt-24">
   <div class="mx-auto max-w-5xl px-2 md:px-0">
-    <div class="home-card-3d relative overflow-hidden rounded-[32px] bg-gradient-to-br from-[#213885] via-[#5F3475] to-[#893172] p-12 text-center text-[#ECDFD2] shadow-[0_30px_80px_-20px_rgba(95,52,117,0.5)] md:p-16">
-      <div class="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-white/15 blur-3xl"></div>
-      <div class="absolute -left-20 -bottom-20 h-64 w-64 rounded-full bg-[#893172]/40 blur-3xl"></div>
+    <div class="home-card-3d relative overflow-hidden rounded-[32px] bg-gradient-to-br from-[#213885] via-[#5F3475] to-[#893172] p-12 text-center text-[#ECDFD2] md:p-16">
+      <div class="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-white/15"></div>
+      <div class="absolute -left-20 -bottom-20 h-64 w-64 rounded-full bg-[#893172]/40"></div>
       <div class="relative">
         <h2 class="text-4xl font-extrabold md:text-5xl">
           Ready to build something <span class="underline decoration-white/40 underline-offset-8">remarkable?</span>

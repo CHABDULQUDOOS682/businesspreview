@@ -1,0 +1,52 @@
+<div class="mx-auto max-w-2xl px-4 sm:px-6">
+  <div class="text-center mb-12">
+    <span class="home-pill">
+      <span class="home-pill-dot"></span>
+      Client Testimonial
+    </span>
+    <h1 class="mt-6 text-4xl font-extrabold tracking-tight text-[#081849] sm:text-5xl">
+      Share your experience with <span class="bg-gradient-to-r from-[#5F3475] to-[#893172] bg-clip-text text-transparent"><%= @business.name %></span>
+    </h1>
+    <p class="mt-4 text-lg text-[#081849]/70">
+      Your feedback helps us continue to build remarkable experiences for businesses like yours.
+    </p>
+  </div>
+
+  <div class="home-card-3d relative overflow-hidden rounded-[32px] border border-[#081849]/10 bg-white/70 p-8 shadow-[0_18px_45px_rgba(8,24,73,0.06)] md:p-10">
+    <div class="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-[#5F3475]/10"></div>
+    <div class="absolute -left-20 -bottom-20 h-64 w-64 rounded-full bg-[#213885]/10"></div>
+
+    <%= form_with(model: @review, url: review_submissions_path, class: "relative grid gap-6") do |f| %>
+      <%= f.hidden_field :review_token, value: @business.review_token %>
+
+      <div class="grid gap-6 md:grid-cols-2">
+        <div class="space-y-2">
+          <%= f.label :client_name, "Your Name", class: "mb-2 block text-xs font-bold uppercase tracking-[0.18em] text-[#213885]" %>
+          <%= f.text_field :client_name, required: true, class: "home-input", placeholder: "Jane Doe" %>
+        </div>
+
+        <div class="space-y-2">
+          <%= f.label :client_role, "Your Role / Company", class: "mb-2 block text-xs font-bold uppercase tracking-[0.18em] text-[#213885]" %>
+          <%= f.text_field :client_role, required: true, class: "home-input", placeholder: "e.g. Founder, Acme Inc" %>
+        </div>
+      </div>
+
+      <div class="space-y-2">
+        <%= f.label :rating, "Rating", class: "mb-2 block text-xs font-bold uppercase tracking-[0.18em] text-[#213885]" %>
+        <div class="flex gap-4 items-center">
+          <%= f.select :rating, (1..5).to_a.reverse, {}, class: "home-input !w-auto" %>
+          <span class="text-sm font-semibold text-[#5F3475]">Stars</span>
+        </div>
+      </div>
+
+      <div class="space-y-2">
+        <%= f.label :content, "Your Review", class: "mb-2 block text-xs font-bold uppercase tracking-[0.18em] text-[#213885]" %>
+        <%= f.text_area :content, rows: 5, required: true, class: "home-input", placeholder: "Tell us about your project and the results we achieved together…" %>
+      </div>
+
+      <div class="pt-4">
+        <%= f.submit "Submit Review →", class: "group relative w-full overflow-hidden rounded-full bg-[#213885] px-8 py-4 text-sm font-bold text-[#ECDFD2] shadow-2xl shadow-[#213885]/30 transition hover:scale-[1.02]" %>
+      </div>
+    <% end %>
+  </div>
+</div>

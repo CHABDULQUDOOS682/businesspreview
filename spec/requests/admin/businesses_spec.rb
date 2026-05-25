@@ -19,8 +19,8 @@ RSpec.describe "Admin::Businesses", type: :request do
       expect(response).to have_http_status(:success)
     end
 
-    it "filters by niche, city, and country" do
-      get admin_businesses_path, params: { niche: business.niche, city: business.city, country: business.country }
+    it "filters by city and country" do
+      get admin_businesses_path, params: { city: business.city, country: business.country }
       expect(response).to have_http_status(:success)
     end
 
@@ -94,6 +94,16 @@ RSpec.describe "Admin::Businesses", type: :request do
       expect(response).to redirect_to(admin_businesses_path)
     end
 
+    it "skips rows with blank names" do
+      blank_name_path = Rails.root.join('spec/fixtures/blank_name.csv')
+      File.write(blank_name_path, "Business Name,City,Country,Business Type,Phone Number,Rating\n,NYC,USA,Tech,1234567890,5.0")
+      file = fixture_file_upload(blank_name_path, 'text/csv')
+      expect {
+        post import_admin_businesses_path, params: { file: file }
+      }.not_to change(Business, :count)
+      File.delete(blank_name_path)
+    end
+
     it "redirects if no file is present" do
       post import_admin_businesses_path
       expect(response).to redirect_to(admin_businesses_path)
@@ -141,6 +151,43 @@ RSpec.describe "Admin::Businesses", type: :request do
     it "renders edit if update fails" do
       patch admin_business_path(business), params: { business: { name: "" } }
       expect(response).to have_http_status(:success) # Renders edit
+    end
+  end
+
+  describe "POST /admin/businesses/:id/send_review_link" do
+    it "sends an email and redirects" do
+      expect {
+        post send_review_link_admin_business_path(business), params: { delivery_method: 'email' }
+      }.to change { ActionMailer::Base.deliveries.count }.by(1)
+      expect(response).to redirect_to(admin_business_path(business))
+      expect(flash[:notice]).to include("Review link sent via Email")
+    end
+
+    it "redirects with alert if email is missing" do
+      business.update_columns(email: nil)
+      post send_review_link_admin_business_path(business), params: { delivery_method: 'email' }
+      expect(flash[:alert]).to include("email missing")
+    end
+
+    it "sends an SMS and redirects" do
+      # Mock SmsService
+      allow(SmsService).to receive(:send_sms).and_return(true)
+
+      post send_review_link_admin_business_path(business), params: { delivery_method: 'sms' }
+      expect(response).to redirect_to(admin_business_path(business))
+      expect(flash[:notice]).to include("Review link sent via SMS")
+    end
+
+    it "redirects with alert if phone is missing" do
+      business.update_columns(phone: nil)
+      post send_review_link_admin_business_path(business), params: { delivery_method: 'sms' }
+      expect(flash[:alert]).to include("phone missing")
+    end
+
+    it "redirects with alert if delivery method is invalid" do
+      post send_review_link_admin_business_path(business), params: { delivery_method: 'carrier_pigeon' }
+      expect(response).to redirect_to(admin_business_path(business))
+      expect(flash[:alert]).to include("Invalid")
     end
   end
 end

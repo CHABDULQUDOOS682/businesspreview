@@ -6,21 +6,23 @@
   subtitle: "We keep data collection light, explain what we use it for, and avoid unnecessary information gathering on this site." %>
 
 <section class="py-20">
-  <div class="mx-auto grid max-w-5xl gap-6">
+  <div class="mx-auto max-w-7xl px-2 md:px-0">
+    <div class="grid gap-6">
     <% [
       { title: "What we collect", text: "If you contact us, we may receive the information you choose to share such as your name, company, email address, and project details." },
       { title: "How we use it", text: "We use inquiry information to respond to your message, understand your project needs, and improve how clearly our own site communicates services." },
       { title: "What we do not do", text: "We do not sell inquiry data, and we do not intentionally collect sensitive information through hidden forms or misleading interactions." }
     ].each do |item| %>
-      <div class="home-glass home-card-3d rounded-[28px] p-8" data-controller="tilt-card" data-action="mousemove->tilt-card#move mouseleave->tilt-card#leave">
+      <div class="home-glass home-card-3d rounded-[28px] p-8">
         <h2 class="text-2xl font-bold text-[#081849]"><%= item[:title] %></h2>
         <p class="mt-3 text-base leading-relaxed text-[#081849]/68"><%= item[:text] %></p>
       </div>
     <% end %>
 
-    <div class="home-card-3d overflow-hidden rounded-[28px] bg-gradient-to-br from-[#213885] via-[#5F3475] to-[#893172] p-8 text-[#ECDFD2] shadow-[0_20px_60px_-15px_rgba(95,52,117,0.45)]" data-controller="tilt-card" data-action="mousemove->tilt-card#move mouseleave->tilt-card#leave">
+    <div class="home-card-3d overflow-hidden rounded-[28px] bg-gradient-to-br from-[#213885] via-[#5F3475] to-[#893172] p-8 text-[#ECDFD2]">
       <p class="text-xs font-bold uppercase tracking-[0.2em] text-[#ECDFD2]/70">Questions?</p>
       <p class="mt-3 text-2xl font-extrabold">Reach out at <a class="underline decoration-white/35 underline-offset-4" href="mailto:hello@devdebizz.com">hello@devdebizz.com</a>.</p>
+    </div>
     </div>
   </div>
 </section>

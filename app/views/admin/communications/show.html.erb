@@ -53,7 +53,7 @@
         <div data-chat-scroll-target="bottom"></div>
       </div>
 
-      <div class="sticky bottom-0 flex-shrink-0 border-t border-sand-200 bg-white/95 pt-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))] backdrop-blur">
+      <div class="sticky bottom-0 flex-shrink-0 border-t border-sand-200 bg-white/95 pt-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))] 
         <%= form_with url: admin_communications_path, method: :post, class: "relative" do |f| %>
           <%= f.hidden_field :to_number, value: @number %>
           <%= f.hidden_field :business_id, value: @business&.id %>

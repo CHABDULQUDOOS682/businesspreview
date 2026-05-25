@@ -121,3 +121,47 @@ bundle exec rspec spec/services/stripe_payment_invoice_service_spec.rb spec/serv
 ```
 
 SimpleCov writes coverage output to `coverage/index.html`.
+
+
+GitFlow:
+
+❌ No PRs into development
+✅ Only PR into main
+✅ development is your staging integration branch (merged locally)
+✅ main is production with CI protection
+
+This is actually a valid workflow — just more “developer-controlled staging”.
+
+✅ Your final workflow (correct version)
+🌿 Branch structure
+main → production 🚀 (PR only, protected)
+development → staging 🔧 (manual merge allowed)
+feature/* → work branches
+🔁 Flow you want
+1. Create feature branch from main
+git checkout main
+git pull origin main
+git checkout -b feature/login-fix
+2. Work on feature
+git add .
+git commit -m "fix login bug"
+git push origin feature/login-fix
+3. Merge into development (NO PR)
+git checkout development
+git pull origin development
+git merge --no-ff origin/feature/login-fix
+git push origin development
+
+👉 This triggers staging deploy (Render staging)
+
+4. Test on staging
+Render deploys development
+You verify everything
+5. Create PR → main ONLY
+feature/login-fix → main
+6. CI runs on PR
+tests
+lint
+security checks
+7. Merge PR → main (squash)
+production deploy triggers (Render production)
