@@ -3,133 +3,455 @@
 <%= render "page_header",
   eyebrow: "Pricing",
   title_html: 'Plans that match <br><span class="home-display-accent">your stage.</span>'.html_safe,
-  subtitle: "Transparent pricing, no surprise invoices. Upgrade, downgrade, or pause anytime." %>
+  subtitle: "Choose a monthly website partner or a one-time project build. Clear scope, practical support, and no surprise invoices." %>
+
+<%
+  subscription_plans = [
+    {
+      name: "Essential",
+      price: "$30",
+      cadence: "/ month",
+      setup_fee: "One-time setup fee: $199",
+      description: "Best for local businesses that need a professional online presence.",
+      website_size: ["Up to 5 pages", "Home", "About", "Services", "Gallery/Portfolio", "Contact"],
+      included: [
+        "Managed hosting",
+        "SSL certificate",
+        "Weekly backups",
+        "Security monitoring",
+        "Uptime monitoring",
+        "Contact form management",
+        "1 content update per month",
+        "Basic SEO setup",
+        "Mobile responsive design",
+        "Email support"
+      ],
+      not_included: ["New page creation", "Custom development", "E-commerce"],
+      highlight: false,
+      badge: nil,
+      cta: "Start Essential"
+    },
+    {
+      name: "Growth",
+      price: "$50",
+      cadence: "/ month",
+      setup_fee: "One-time setup fee: $299",
+      description: "Best for businesses actively trying to generate leads.",
+      website_size: ["Up to 10 pages"],
+      included_intro: "Everything in Essential, plus:",
+      included: [
+        "Monthly SEO optimization",
+        "Google Analytics setup",
+        "Google Search Console",
+        "3 content updates per month",
+        "Blog management",
+        "Landing page optimization",
+        "Performance monitoring",
+        "Priority support",
+        "Basic conversion tracking",
+        "2 development hours monthly"
+      ],
+      perfect_for: ["Barbershops", "Salons", "Agencies", "Consultants", "Service businesses"],
+      highlight: true,
+      badge: "Hot Selling",
+      cta: "Choose Growth"
+    },
+    {
+      name: "Business Pro",
+      price: "$99",
+      cadence: "/ month",
+      setup_fee: "One-time setup fee: $499",
+      description: "Best for businesses wanting a dedicated web partner.",
+      website_size: ["Up to 20 pages"],
+      included_intro: "Everything in Growth, plus:",
+      included: [
+        "Unlimited content updates",
+        "Advanced SEO support",
+        "Custom feature enhancements",
+        "Monthly strategy meeting",
+        "Lead funnel optimization",
+        "Performance reports",
+        "Priority emergency support",
+        "CRM integration support",
+        "Marketing tool integration",
+        "5 development hours monthly"
+      ],
+      perfect_for: ["Multi-location businesses", "Growing startups", "Established service companies"],
+      highlight: false,
+      badge: nil,
+      cta: "Start Business Pro"
+    }
+  ]
+
+  project_plans = [
+    {
+      name: "Starter Website",
+      price: "$499",
+      cadence: "/ project",
+      description: "Perfect for startups, local businesses, and personal brands launching their first professional website.",
+      pages: ["Up to 5 pages", "Home", "About", "Services", "Portfolio/Gallery", "Contact"],
+      included: [
+        "Custom UI design",
+        "Mobile responsive design",
+        "Contact forms",
+        "Basic on-page SEO",
+        "Google Analytics setup",
+        "Social media integration",
+        "Speed optimization",
+        "SSL configuration",
+        "Domain & hosting assistance",
+        "30 days post-launch support"
+      ],
+      delivery: "2-3 weeks",
+      best_for: ["Barbershops", "Salons", "Restaurants", "Consultants", "Local service businesses"],
+      highlight: false,
+      badge: nil,
+      cta: "Start Project"
+    },
+    {
+      name: "Business Growth",
+      price: "$999",
+      cadence: "/ project",
+      description: "Built for businesses that need more than a brochure website and want to generate leads consistently.",
+      pages: ["Up to 12 pages"],
+      included_intro: "Everything in Starter, plus:",
+      included: [
+        "CMS (Content Management System)",
+        "Blog setup",
+        "Advanced SEO structure",
+        "Lead capture forms",
+        "Custom service pages",
+        "Conversion-focused design",
+        "Google Search Console setup",
+        "Email marketing integration",
+        "Performance optimization",
+        "Custom animations",
+        "60 days priority support"
+      ],
+      additional_features: ["Admin dashboard", "Blog management", "Lead collection system", "Analytics dashboard"],
+      delivery: "4-6 weeks",
+      best_for: ["Growing companies", "Agencies", "Real estate businesses", "Healthcare clinics", "Service providers"],
+      highlight: true,
+      badge: "Most Popular",
+      cta: "Choose Growth"
+    },
+    {
+      name: "Custom Web Application",
+      price: "Starting at $1,999",
+      cadence: "",
+      description: "For businesses requiring custom software, SaaS products, portals, dashboards, booking systems, or complex integrations.",
+      pages: ["Unlimited, based on requirements"],
+      included_intro: "Everything in Growth, plus:",
+      included: [
+        "Custom web application development",
+        "User authentication",
+        "Role-based access control",
+        "Custom admin dashboard",
+        "Payment gateway integration",
+        "API development & integration",
+        "Database architecture",
+        "Third-party integrations",
+        "Cloud deployment",
+        "Security hardening",
+        "Performance optimization",
+        "DevOps & CI/CD setup",
+        "90 days support"
+      ],
+      example_projects: [
+        "Barber booking platform",
+        "CRM systems",
+        "SaaS products",
+        "Customer portals",
+        "Membership platforms",
+        "Learning management systems",
+        "Marketplace platforms"
+      ],
+      delivery: "6-12+ weeks",
+      best_for: ["Startups", "SaaS founders", "Enterprises", "Businesses requiring automation"],
+      highlight: false,
+      badge: nil,
+      cta: "Talk to Sales"
+    }
+  ]
+
+  subscription_comparison = [
+    ["Monthly price", "$30", "$50", "$99"],
+    ["Pages", "5", "10", "20"],
+    ["Hosting", true, true, true],
+    ["SSL", true, true, true],
+    ["Backups", "Weekly", "Weekly", "Daily"],
+    ["SEO", "Basic", "Advanced", "Advanced"],
+    ["Content updates", "1/month", "3/month", "Unlimited"],
+    ["Dev hours", false, "2 hrs", "5 hrs"],
+    ["Support", "Email", "Priority", "Priority+"],
+    ["Analytics", "Basic", "Advanced", "Advanced"]
+  ]
+
+  project_comparison = [
+    ["Price", "$499", "$999", "$1,999+"],
+    ["Pages", "5", "12", "Unlimited"],
+    ["Responsive design", true, true, true],
+    ["SEO", "Basic", "Advanced", "Advanced"],
+    ["CMS", false, true, true],
+    ["Blog", false, true, true],
+    ["Analytics", true, true, true],
+    ["Admin dashboard", false, true, true],
+    ["Custom features", false, "Limited", "Unlimited"],
+    ["API integrations", false, "Basic", "Advanced"],
+    ["Support", "30 days", "60 days", "90 days"]
+  ]
+
+  render_value = lambda do |value|
+    if value == true
+      content_tag(:span, "✓", class: "text-[#5F3475]")
+    elsif value == false
+      content_tag(:span, "—", class: "text-[#081849]/30")
+    else
+      value
+    end
+  end
+%>
 
 <section class="py-20" data-controller="pricing-toggle">
-  <div class="mx-auto max-w-7xl px-2 md:px-0">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
     <div class="mb-10 flex justify-center">
-    <div class="inline-flex items-center gap-1 rounded-full border border-[#081849]/10 bg-[#081849]/5 p-1">
-      <button 
-        data-pricing-toggle-target="projectBtn" 
-        data-action="click->pricing-toggle#toggle" 
-        data-type="project"
-        class="rounded-full bg-[#213885] px-5 py-2 text-sm font-semibold text-[#ECDFD2] shadow-md shadow-[#213885]/25 transition-all duration-300"
-      >
-        Project
-      </button>
-      <button 
-        data-pricing-toggle-target="retainerBtn" 
-        data-action="click->pricing-toggle#toggle" 
-        data-type="retainer"
-        class="rounded-full px-5 py-2 text-sm font-semibold text-[#081849]/55 transition-all duration-300 hover:text-[#081849]"
-      >
-        Retainer <span class="ml-1 rounded-full bg-[#5F3475]/10 px-2 py-0.5 text-[10px] text-[#5F3475]">-15%</span>
-      </button>
+      <div class="inline-flex items-center gap-1 rounded-full border border-[#081849]/10 bg-[#081849]/5 p-1">
+        <button
+          data-pricing-toggle-target="subscriptionBtn"
+          data-action="click->pricing-toggle#toggle"
+          data-type="subscription"
+          class="rounded-full bg-[#213885] px-5 py-2 text-sm font-semibold text-[#ECDFD2] shadow-md shadow-[#213885]/25 transition-all duration-300"
+        >
+          Subscription <span data-pricing-toggle-target="subscriptionBadge" class="ml-1 rounded-full bg-[#ECDFD2]/18 px-2 py-0.5 text-[10px] uppercase tracking-[0.12em] text-[#ECDFD2]">Hot</span>
+        </button>
+        <button
+          data-pricing-toggle-target="projectBtn"
+          data-action="click->pricing-toggle#toggle"
+          data-type="project"
+          class="rounded-full px-5 py-2 text-sm font-semibold text-[#081849]/55 transition-all duration-300 hover:text-[#081849]"
+        >
+          Project
+        </button>
+      </div>
     </div>
-  </div>
 
-  <div class="grid gap-6 lg:grid-cols-3">
-    <% [
-      { name: "Starter", project_price: "$1,900", retainer_price: "$1,600", cadence: "/ project", description: "For founders launching their first professional online presence.", features: ["5-page custom website", "Mobile-first responsive design", "Basic on-page SEO", "Contact form & analytics", "30 days post-launch support"], highlight: false, cta: "Get started" },
-      { name: "Growth", project_price: "$4,800", retainer_price: "$4,000", cadence: "/ project", description: "For scaling teams that need a real conversion engine, not just a brochure.", features: ["Up to 15 pages + CMS", "Custom branding & illustration", "Advanced SEO & schema", "Performance marketing setup", "A/B testing framework", "90 days priority support"], highlight: true, cta: "Get started" },
-      { name: "Enterprise", project_price: "Custom", retainer_price: "Custom", cadence: "", description: "For established brands needing dedicated capacity and complex integrations.", features: ["Unlimited pages & locales", "Custom web application build", "Dedicated project lead", "DevOps & cloud architecture", "Quarterly growth roadmap", "24/7 SLA support"], highlight: false, cta: "Talk to sales" }
-    ].each do |plan| %>
-      <div class="<%= plan[:highlight] ? 'home-card-3d relative rounded-[28px] border border-transparent bg-gradient-to-br from-[#213885] via-[#5F3475] to-[#893172] p-8 text-[#ECDFD2]' : 'home-glass home-card-3d relative rounded-[28px] border border-[#081849]/10 p-8' %>">
-        <% if plan[:highlight] %>
-          <div class="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-[#213885] px-4 py-1 text-xs font-bold uppercase tracking-[0.18em] text-[#ECDFD2] shadow-lg shadow-[#213885]/35">
-            Most Popular
+    <div data-pricing-toggle-target="panel" data-type="subscription" class="transition-all duration-300">
+      <div class="grid gap-6 lg:grid-cols-3">
+        <% subscription_plans.each do |plan| %>
+          <div class="<%= plan[:highlight] ? 'home-card-3d relative rounded-[28px] border border-transparent bg-gradient-to-br from-[#213885] via-[#5F3475] to-[#893172] p-8 text-[#ECDFD2]' : 'home-glass home-card-3d relative rounded-[28px] border border-[#081849]/10 p-8' %>">
+            <% if plan[:badge].present? %>
+              <div class="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-[#213885] px-4 py-1 text-xs font-bold uppercase tracking-[0.18em] text-[#ECDFD2] shadow-lg shadow-[#213885]/35">
+                <i class="fa-solid fa-star mr-1 text-[10px]"></i><%= plan[:badge] %>
+              </div>
+            <% end %>
+            <h2 class="text-2xl font-bold <%= plan[:highlight] ? 'text-[#ECDFD2]' : 'text-[#081849]' %>"><%= plan[:name] %></h2>
+            <p class="mt-2 min-h-[44px] text-sm <%= plan[:highlight] ? 'text-[#ECDFD2]/78' : 'text-[#081849]/62' %>"><%= plan[:description] %></p>
+            <div class="mt-6 flex flex-wrap items-baseline gap-1">
+              <span class="text-5xl font-extrabold <%= plan[:highlight] ? 'text-[#ECDFD2]' : 'text-[#081849]' %>"><%= plan[:price] %></span>
+              <span class="text-sm <%= plan[:highlight] ? 'text-[#ECDFD2]/70' : 'text-[#081849]/50' %>"><%= plan[:cadence] %></span>
+            </div>
+            <p class="mt-3 text-sm font-semibold <%= plan[:highlight] ? 'text-[#ECDFD2]/78' : 'text-[#081849]/62' %>"><%= plan[:setup_fee] %></p>
+
+            <div class="mt-8 space-y-6 text-sm">
+              <div>
+                <h3 class="text-xs font-bold uppercase tracking-[0.16em] <%= plan[:highlight] ? 'text-[#ECDFD2]/70' : 'text-[#5F3475]' %>">Website Size</h3>
+                <ul class="mt-3 space-y-2">
+                  <% plan[:website_size].each do |item| %>
+                    <li class="<%= plan[:highlight] ? 'text-[#ECDFD2]/88' : 'text-[#081849]/80' %>"><%= item %></li>
+                  <% end %>
+                </ul>
+              </div>
+
+              <div>
+                <h3 class="text-xs font-bold uppercase tracking-[0.16em] <%= plan[:highlight] ? 'text-[#ECDFD2]/70' : 'text-[#5F3475]' %>">Included Services</h3>
+                <% if plan[:included_intro].present? %>
+                  <p class="mt-3 <%= plan[:highlight] ? 'text-[#ECDFD2]/78' : 'text-[#081849]/62' %>"><%= plan[:included_intro] %></p>
+                <% end %>
+                <ul class="mt-3 space-y-3">
+                  <% plan[:included].each do |feature| %>
+                    <li class="flex items-start gap-3 <%= plan[:highlight] ? 'text-[#ECDFD2]/88' : 'text-[#081849]/80' %>">
+                      <i class="fa-solid fa-check mt-1 text-sm <%= plan[:highlight] ? 'text-[#ECDFD2]' : 'text-[#5F3475]' %>"></i>
+                      <%= feature %>
+                    </li>
+                  <% end %>
+                </ul>
+              </div>
+
+              <% if plan[:not_included].present? %>
+                <div>
+                  <h3 class="text-xs font-bold uppercase tracking-[0.16em] text-[#5F3475]">Not Included</h3>
+                  <ul class="mt-3 space-y-2 text-[#081849]/62">
+                    <% plan[:not_included].each do |item| %>
+                      <li><%= item %></li>
+                    <% end %>
+                  </ul>
+                </div>
+              <% end %>
+
+              <% if plan[:perfect_for].present? %>
+                <div>
+                  <h3 class="text-xs font-bold uppercase tracking-[0.16em] <%= plan[:highlight] ? 'text-[#ECDFD2]/70' : 'text-[#5F3475]' %>">Perfect For</h3>
+                  <p class="mt-3 leading-relaxed <%= plan[:highlight] ? 'text-[#ECDFD2]/78' : 'text-[#081849]/62' %>"><%= plan[:perfect_for].join(", ") %></p>
+                </div>
+              <% end %>
+            </div>
+
+            <%= link_to contact_path, class: "mt-10 inline-flex w-full items-center justify-center rounded-full px-6 py-3 text-center text-sm font-semibold transition hover:-translate-y-0.5 #{plan[:highlight] ? 'bg-[#ECDFD2] text-[#213885] shadow-xl shadow-[#081849]/25' : 'border border-[#081849]/15 text-[#081849] hover:border-[#213885] hover:bg-[#213885] hover:text-[#ECDFD2]'}" do %>
+              <%= plan[:cta] %>
+            <% end %>
           </div>
         <% end %>
-        <h2 class="text-2xl font-bold <%= plan[:highlight] ? 'text-[#ECDFD2]' : 'text-[#081849]' %>"><%= plan[:name] %></h2>
-        <p class="mt-2 text-sm <%= plan[:highlight] ? 'text-[#ECDFD2]/78' : 'text-[#081849]/62' %>"><%= plan[:description] %></p>
-        <div class="mt-6 flex items-baseline gap-1">
-          <span 
-            class="text-5xl font-extrabold transition-all duration-300 <%= plan[:highlight] ? 'text-[#ECDFD2]' : 'text-[#081849]' %>"
-            data-pricing-toggle-target="price"
-            data-project-price="<%= plan[:project_price] %>"
-            data-retainer-price="<%= plan[:retainer_price] %>"
-          >
-            <%= plan[:project_price] %>
-          </span>
-          <% if plan[:cadence].present? %>
-            <span class="text-sm <%= plan[:highlight] ? 'text-[#ECDFD2]/70' : 'text-[#081849]/50' %>"><%= plan[:cadence] %></span>
-          <% end %>
-        </div>
-        <ul class="mt-8 space-y-3 text-sm">
-          <% plan[:features].each do |feature| %>
-            <li class="flex items-start gap-3 <%= plan[:highlight] ? 'text-[#ECDFD2]/88' : 'text-[#081849]/80' %>">
-              <i class="fa-solid fa-check mt-1 text-sm <%= plan[:highlight] ? 'text-[#ECDFD2]' : 'text-[#5F3475]' %>"></i>
-              <%= feature %>
-            </li>
-          <% end %>
-        </ul>
-        <%= link_to contact_path, class: "mt-10 inline-flex w-full items-center justify-center rounded-full px-6 py-3 text-center text-sm font-semibold transition hover:-translate-y-0.5 #{plan[:highlight] ? 'bg-[#ECDFD2] text-[#213885] shadow-xl shadow-[#081849]/25' : 'border border-[#081849]/15 text-[#081849] hover:border-[#213885] hover:bg-[#213885] hover:text-[#ECDFD2]'}" do %>
-          <%= plan[:cta] %>
+      </div>
+    </div>
+
+    <div data-pricing-toggle-target="panel" data-type="project" class="hidden transition-all duration-300">
+      <div class="grid gap-6 lg:grid-cols-3">
+        <% project_plans.each do |plan| %>
+          <div class="<%= plan[:highlight] ? 'home-card-3d relative rounded-[28px] border border-transparent bg-gradient-to-br from-[#213885] via-[#5F3475] to-[#893172] p-8 text-[#ECDFD2]' : 'home-glass home-card-3d relative rounded-[28px] border border-[#081849]/10 p-8' %>">
+            <% if plan[:badge].present? %>
+              <div class="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-[#213885] px-4 py-1 text-xs font-bold uppercase tracking-[0.18em] text-[#ECDFD2] shadow-lg shadow-[#213885]/35">
+                <%= plan[:badge] %>
+              </div>
+            <% end %>
+            <h2 class="text-2xl font-bold <%= plan[:highlight] ? 'text-[#ECDFD2]' : 'text-[#081849]' %>"><%= plan[:name] %></h2>
+            <p class="mt-2 min-h-[66px] text-sm <%= plan[:highlight] ? 'text-[#ECDFD2]/78' : 'text-[#081849]/62' %>"><%= plan[:description] %></p>
+            <div class="mt-6 flex flex-wrap items-baseline gap-1">
+              <span class="text-4xl font-extrabold sm:text-5xl <%= plan[:highlight] ? 'text-[#ECDFD2]' : 'text-[#081849]' %>"><%= plan[:price] %></span>
+              <% if plan[:cadence].present? %>
+                <span class="text-sm <%= plan[:highlight] ? 'text-[#ECDFD2]/70' : 'text-[#081849]/50' %>"><%= plan[:cadence] %></span>
+              <% end %>
+            </div>
+
+            <div class="mt-8 space-y-6 text-sm">
+              <div>
+                <h3 class="text-xs font-bold uppercase tracking-[0.16em] <%= plan[:highlight] ? 'text-[#ECDFD2]/70' : 'text-[#5F3475]' %>">Pages</h3>
+                <ul class="mt-3 space-y-2">
+                  <% plan[:pages].each do |item| %>
+                    <li class="<%= plan[:highlight] ? 'text-[#ECDFD2]/88' : 'text-[#081849]/80' %>"><%= item %></li>
+                  <% end %>
+                </ul>
+              </div>
+
+              <div>
+                <h3 class="text-xs font-bold uppercase tracking-[0.16em] <%= plan[:highlight] ? 'text-[#ECDFD2]/70' : 'text-[#5F3475]' %>">Included Services</h3>
+                <% if plan[:included_intro].present? %>
+                  <p class="mt-3 <%= plan[:highlight] ? 'text-[#ECDFD2]/78' : 'text-[#081849]/62' %>"><%= plan[:included_intro] %></p>
+                <% end %>
+                <ul class="mt-3 space-y-3">
+                  <% plan[:included].each do |feature| %>
+                    <li class="flex items-start gap-3 <%= plan[:highlight] ? 'text-[#ECDFD2]/88' : 'text-[#081849]/80' %>">
+                      <i class="fa-solid fa-check mt-1 text-sm <%= plan[:highlight] ? 'text-[#ECDFD2]' : 'text-[#5F3475]' %>"></i>
+                      <%= feature %>
+                    </li>
+                  <% end %>
+                </ul>
+              </div>
+
+              <% if plan[:additional_features].present? %>
+                <div>
+                  <h3 class="text-xs font-bold uppercase tracking-[0.16em] text-[#ECDFD2]/70">Additional Features</h3>
+                  <p class="mt-3 leading-relaxed text-[#ECDFD2]/78"><%= plan[:additional_features].join(", ") %></p>
+                </div>
+              <% end %>
+
+              <% if plan[:example_projects].present? %>
+                <div>
+                  <h3 class="text-xs font-bold uppercase tracking-[0.16em] text-[#5F3475]">Example Projects</h3>
+                  <p class="mt-3 leading-relaxed text-[#081849]/62"><%= plan[:example_projects].join(", ") %></p>
+                </div>
+              <% end %>
+
+              <div>
+                <h3 class="text-xs font-bold uppercase tracking-[0.16em] <%= plan[:highlight] ? 'text-[#ECDFD2]/70' : 'text-[#5F3475]' %>">Delivery Time</h3>
+                <p class="mt-3 <%= plan[:highlight] ? 'text-[#ECDFD2]/88' : 'text-[#081849]/80' %>"><%= plan[:delivery] %></p>
+              </div>
+
+              <div>
+                <h3 class="text-xs font-bold uppercase tracking-[0.16em] <%= plan[:highlight] ? 'text-[#ECDFD2]/70' : 'text-[#5F3475]' %>">Best For</h3>
+                <p class="mt-3 leading-relaxed <%= plan[:highlight] ? 'text-[#ECDFD2]/78' : 'text-[#081849]/62' %>"><%= plan[:best_for].join(", ") %></p>
+              </div>
+            </div>
+
+            <%= link_to contact_path, class: "mt-10 inline-flex w-full items-center justify-center rounded-full px-6 py-3 text-center text-sm font-semibold transition hover:-translate-y-0.5 #{plan[:highlight] ? 'bg-[#ECDFD2] text-[#213885] shadow-xl shadow-[#081849]/25' : 'border border-[#081849]/15 text-[#081849] hover:border-[#213885] hover:bg-[#213885] hover:text-[#ECDFD2]'}" do %>
+              <%= plan[:cta] %>
+            <% end %>
+          </div>
         <% end %>
       </div>
-    <% end %>
-  </div>
+    </div>
 
-  <div class="mt-24">
-    <h2 class="text-center text-3xl font-extrabold text-[#081849] md:text-4xl">Compare <span class="text-[#5F3475]">all features</span></h2>
-    <div class="mt-10 overflow-x-auto rounded-[28px] border border-[#081849]/10 bg-white/40 shadow-[0_18px_45px_rgba(8,24,73,0.06)]">
-      <table class="min-w-full text-sm">
-        <thead>
-          <tr class="border-b border-[#081849]/10 text-left">
-            <th class="px-6 py-4 font-semibold text-[#081849]">Feature</th>
-            <th class="px-6 py-4 text-center font-semibold text-[#081849]">Starter</th>
-            <th class="px-6 py-4 text-center font-semibold text-[#5F3475]">Growth</th>
-            <th class="px-6 py-4 text-center font-semibold text-[#081849]">Enterprise</th>
-          </tr>
-        </thead>
-        <tbody class="text-[#081849]/80">
-          <% [
-            ["Custom design", true, true, true],
-            ["CMS integration", false, true, true],
-            ["E-commerce", false, true, true],
-            ["Advanced SEO", false, true, true],
-            ["A/B testing", false, true, true],
-            ["Multi-language", false, false, true],
-            ["Dedicated PM", false, false, true],
-            ["24/7 SLA", false, false, true]
-          ].each do |feature, starter, growth, enterprise| %>
-            <tr class="border-b border-[#081849]/5">
-              <td class="px-6 py-4"><%= feature %></td>
-              <% [starter, growth, enterprise].each do |value| %>
-                <td class="px-6 py-4 text-center">
-                  <%= value ? content_tag(:span, "✓", class: "text-[#5F3475]") : content_tag(:span, "—", class: "text-[#081849]/30") %>
-                </td>
-              <% end %>
+    <div class="mt-24">
+      <h2 class="text-center text-3xl font-extrabold text-[#081849] md:text-4xl">Compare <span class="text-[#5F3475]">all features</span></h2>
+
+      <div data-pricing-toggle-target="comparison" data-type="subscription" class="mt-10 overflow-x-auto rounded-[28px] border border-[#081849]/10 bg-white/40 shadow-[0_18px_45px_rgba(8,24,73,0.06)]">
+        <table class="min-w-full text-sm">
+          <thead>
+            <tr class="border-b border-[#081849]/10 text-left">
+              <th class="px-6 py-4 font-semibold text-[#081849]">Feature</th>
+              <th class="px-6 py-4 text-center font-semibold text-[#081849]">Essential</th>
+              <th class="px-6 py-4 text-center font-semibold text-[#5F3475]">Growth</th>
+              <th class="px-6 py-4 text-center font-semibold text-[#081849]">Business Pro</th>
             </tr>
-          <% end %>
-        </tbody>
-      </table>
-    </div>
-  </div>
+          </thead>
+          <tbody class="text-[#081849]/80">
+            <% subscription_comparison.each do |feature, essential, growth, pro| %>
+              <tr class="border-b border-[#081849]/5">
+                <td class="px-6 py-4"><%= feature %></td>
+                <% [essential, growth, pro].each do |value| %>
+                  <td class="px-6 py-4 text-center"><%= render_value.call(value) %></td>
+                <% end %>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
 
-  <div class="mt-24">
-    <h2 class="text-center text-3xl font-extrabold text-[#081849] md:text-4xl">Frequently asked <span class="text-[#5F3475]">questions</span></h2>
-    <div class="mt-10 space-y-3">
-      <% [
-        ["How long does a typical project take?", "Starter sites ship in 3-4 weeks. Growth projects average 6-10 weeks. Enterprise builds typically run 12-20 weeks depending on complexity and integrations."],
-        ["Do you offer ongoing support after launch?", "Yes — every plan includes post-launch support, and we offer monthly retainer packages for continued maintenance, optimization, and growth marketing."],
-        ["Can I upgrade between plans?", "Absolutely. Many clients start with Starter and upgrade to Growth or Enterprise as they scale. We'll credit your prior investment toward the new tier."],
-        ["Do you handle hosting and domains?", "We can. We deploy on Vercel, AWS, or your preferred cloud, and we'll manage DNS, SSL, and CDN if you'd like a fully managed setup."],
-        ["What if I only need help with marketing or SEO?", "Our services are modular. You can engage us purely for SEO, paid acquisition, or content — no website work required."],
-        ["Is there a refund policy?", "We offer a satisfaction guarantee on the discovery phase. If you're not happy with the strategic direction in the first two weeks, we'll refund the full deposit."]
-      ].each_with_index do |(question, answer), index| %>
-        <details class="overflow-hidden rounded-[22px] border border-[#081849]/10 bg-white/35" <%= "open" if index.zero? %>>
-          <summary class="cursor-pointer list-none px-6 py-5 font-semibold text-[#081849] marker:hidden">
-            <div class="flex items-center justify-between gap-4">
-              <span><%= question %></span>
-              <span class="text-xl text-[#5F3475]">+</span>
-            </div>
-          </summary>
-          <div class="px-6 pb-5 text-sm leading-relaxed text-[#081849]/68"><%= answer %></div>
-        </details>
-      <% end %>
+      <div data-pricing-toggle-target="comparison" data-type="project" class="mt-10 hidden overflow-x-auto rounded-[28px] border border-[#081849]/10 bg-white/40 shadow-[0_18px_45px_rgba(8,24,73,0.06)]">
+        <table class="min-w-full text-sm">
+          <thead>
+            <tr class="border-b border-[#081849]/10 text-left">
+              <th class="px-6 py-4 font-semibold text-[#081849]">Feature</th>
+              <th class="px-6 py-4 text-center font-semibold text-[#081849]">Starter</th>
+              <th class="px-6 py-4 text-center font-semibold text-[#5F3475]">Growth</th>
+              <th class="px-6 py-4 text-center font-semibold text-[#081849]">Custom</th>
+            </tr>
+          </thead>
+          <tbody class="text-[#081849]/80">
+            <% project_comparison.each do |feature, starter, growth, custom| %>
+              <tr class="border-b border-[#081849]/5">
+                <td class="px-6 py-4"><%= feature %></td>
+                <% [starter, growth, custom].each do |value| %>
+                  <td class="px-6 py-4 text-center"><%= render_value.call(value) %></td>
+                <% end %>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
     </div>
-  </div>
+
+    <div class="mt-24">
+      <h2 class="text-center text-3xl font-extrabold text-[#081849] md:text-4xl">Frequently asked <span class="text-[#5F3475]">questions</span></h2>
+      <div class="mt-10 space-y-3">
+        <% [
+          ["Which option should I choose first?", "Choose Subscription if you want hosting, updates, monitoring, and gradual monthly growth. Choose Project if you need a new website or custom web app built from the ground up."],
+          ["Can I start with a project and move to a subscription?", "Yes. Many clients launch with a project package, then move into a subscription for hosting, updates, SEO, and continuous improvements."],
+          ["Do monthly subscriptions include new pages?", "Essential focuses on maintenance and content updates. Growth and Business Pro include monthly development hours that can be used for smaller enhancements or landing page improvements."],
+          ["How long does a typical project take?", "Starter websites usually take 2-3 weeks. Business Growth projects take 4-6 weeks. Custom web applications usually take 6-12+ weeks depending on scope and integrations."],
+          ["Do you handle hosting and domains?", "Yes. Subscription plans include managed hosting, SSL, backups, monitoring, and support. Project plans include domain and hosting assistance for launch."],
+          ["Can I upgrade between plans?", "Absolutely. You can move from Essential to Growth or Business Pro as your website and business needs grow."]
+        ].each_with_index do |(question, answer), index| %>
+          <details class="overflow-hidden rounded-[22px] border border-[#081849]/10 bg-white/35" <%= "open" if index.zero? %>>
+            <summary class="cursor-pointer list-none px-6 py-5 font-semibold text-[#081849] marker:hidden">
+              <div class="flex items-center justify-between gap-4">
+                <span><%= question %></span>
+                <span class="text-xl text-[#5F3475]">+</span>
+              </div>
+            </summary>
+            <div class="px-6 pb-5 text-sm leading-relaxed text-[#081849]/68"><%= answer %></div>
+          </details>
+        <% end %>
+      </div>
     </div>
   </div>
 </section>
