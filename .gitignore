@@ -29,6 +29,7 @@
 !/tmp/storage/.keep
 
 /public/assets
+app/assets/builds/tailwind.css
 
 # Ignore master key for decrypting credentials and more.
 /config/master.key
