@@ -5,9 +5,9 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable
 
   enum :role, {
-    employee: "employee",
-    admin: "admin",
-    super_admin: "super_admin"
+    employee: 0,
+    admin: 1,
+    super_admin: 2
   }, prefix: true
 
   validates :role, presence: true
