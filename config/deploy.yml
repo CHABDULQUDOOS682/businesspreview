@@ -7,7 +7,10 @@ image: ghcr.io/chabdulqudoos682/businesspreview
 # Deploy to these servers.
 servers:
   web:
-    - 162.243.217.179
+    hosts:
+      - 162.243.217.179
+    options:
+      network: host
   # job:
   #   hosts:
   #     - 192.168.0.1
