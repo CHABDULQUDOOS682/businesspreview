@@ -135,8 +135,12 @@ registry:
 env:
   secret:
     - RAILS_MASTER_KEY
+
   clear:
     SOLID_QUEUE_IN_PUMA: true
+    APP_HOST: 162.243.217.179
+    APP_PROTOCOL: http
+    RAILS_LOG_LEVEL: info
 
 volumes:
   - "preview_app_storage:/rails/storage"
@@ -145,3 +149,8 @@ asset_path: /rails/public/assets
 
 builder:
   arch: amd64
+
+aliases:
+  console: app exec --interactive --reuse "bin/rails console"
+  shell: app exec --interactive --reuse "bash"
+  logs: app logs -f
