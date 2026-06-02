@@ -7,10 +7,8 @@ image: ghcr.io/chabdulqudoos682/businesspreview
 # Deploy to these servers.
 servers:
   web:
-    hosts:
-      - 162.243.217.179
-    options:
-      add-host: "host.docker.internal:host-gateway"
+    - 162.243.217.179
+
   # job:
   #   hosts:
   #     - 192.168.0.1
