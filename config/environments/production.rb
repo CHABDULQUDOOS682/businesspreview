@@ -28,7 +28,7 @@ Rails.application.configure do
   config.active_storage.service = :local
 
   # Assume all access to the app is happening through a SSL-terminating reverse proxy.
-  config.assume_ssl = true
+  config.assume_ssl = false
 
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
   config.force_ssl = false
@@ -59,9 +59,13 @@ Rails.application.configure do
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.raise_delivery_errors = true
 
+  # config.action_mailer.default_url_options = {
+  #   host: ENV.fetch("APP_HOST", "localhost"),
+  #   protocol: ENV.fetch("APP_PROTOCOL", "https")
+  # }
   config.action_mailer.default_url_options = {
     host: ENV.fetch("APP_HOST", "localhost"),
-    protocol: ENV.fetch("APP_PROTOCOL", "https")
+    protocol: ENV.fetch("APP_PROTOCOL", "http")
   }
 
   smtp_port = ENV.fetch("SMTP_PORT", 587).to_i
