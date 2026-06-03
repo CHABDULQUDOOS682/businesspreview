@@ -120,3 +120,7 @@ builder:
 #     port: 6379
 #     directories:
 #       - data:/data
+hooks:
+  post-deploy:
+    - "bin/rails db:prepare"
+    
