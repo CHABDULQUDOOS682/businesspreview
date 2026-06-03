@@ -46,9 +46,9 @@ COPY . .
 RUN bundle exec bootsnap precompile app/ lib/
 
 # Precompiling assets for production without requiring secret RAILS_MASTER_KEY
-RUN SECRET_KEY_BASE_DUMMY=1 \
-    RAILS_MASTER_KEY=1 \
-    bundle exec rails assets:precompile
+RUN --mount=type=secret,id=RAILS_MASTER_KEY \
+    export RAILS_MASTER_KEY=$(cat /run/secrets/RAILS_MASTER_KEY) && \
+    SECRET_KEY_BASE_DUMMY=1 bundle exec rails assets:precompile
 
 
 
