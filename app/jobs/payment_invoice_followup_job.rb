@@ -6,7 +6,7 @@ class PaymentInvoiceFollowupJob < ApplicationJob
     return if payment_invoice.followup_sent_at.present?
     return if payment_invoice.business.email.blank?
 
-    PaymentInvoiceMailer.with(payment_invoice: payment_invoice).due_soon_followup.deliver_now
+    PaymentInvoiceMailer.with(payment_invoice: payment_invoice).due_soon_followup.deliver_later
     payment_invoice.update!(followup_sent_at: Time.current)
   end
 end

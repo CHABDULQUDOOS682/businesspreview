@@ -42,7 +42,8 @@
     </div>
 
     <div class="lg:col-span-3">
-      <form class="home-card-3d relative overflow-hidden rounded-[32px] border border-[#081849]/10 bg-white/70 p-8 shadow-[0_18px_45px_rgba(8,24,73,0.06)] md:p-10">
+      <%# 1. Converted to form_with pointing to your desired route %>
+      <%= form_with url: contact_submissions_path, method: :post, local: true, class: "home-card-3d relative overflow-hidden rounded-[32px] border border-[#081849]/10 bg-white/70 p-8 shadow-[0_18px_45px_rgba(8,24,73,0.06)] md:p-10" do |f| %>
         <div class="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-[#5F3475]/10"></div>
         <div class="absolute -left-20 -bottom-20 h-64 w-64 rounded-full bg-[#213885]/10"></div>
 
@@ -50,49 +51,49 @@
           <div class="grid gap-5 md:grid-cols-2">
             <label class="block">
               <span class="mb-2 block text-xs font-bold uppercase tracking-[0.18em] text-[#213885]">First name</span>
-              <input type="text" class="home-input" placeholder="Jane">
+              <%= f.text_field :first_name, class: "home-input", placeholder: "Jane", required: true %>
             </label>
             <label class="block">
               <span class="mb-2 block text-xs font-bold uppercase tracking-[0.18em] text-[#213885]">Last name</span>
-              <input type="text" class="home-input" placeholder="Doe">
+              <%= f.text_field :last_name, class: "home-input", placeholder: "Doe" %>
             </label>
           </div>
 
           <div class="grid gap-5 md:grid-cols-2">
             <label class="block">
               <span class="mb-2 block text-xs font-bold uppercase tracking-[0.18em] text-[#213885]">Work email</span>
-              <input type="email" class="home-input" placeholder="you@company.com">
+              <%= f.email_field :email, class: "home-input", placeholder: "you@company.com", required: true %>
             </label>
             <label class="block">
               <span class="mb-2 block text-xs font-bold uppercase tracking-[0.18em] text-[#213885]">Company</span>
-              <input type="text" class="home-input" placeholder="Acme Inc.">
+              <%= f.text_field :company, class: "home-input", placeholder: "Acme Inc." %>
             </label>
           </div>
 
           <label class="block">
             <span class="mb-2 block text-xs font-bold uppercase tracking-[0.18em] text-[#213885]">Service interest</span>
-            <select class="home-input">
-              <option>Web Development</option>
-              <option>Branding & Identity</option>
-              <option>UI / UX Design</option>
-              <option>SEO & Content</option>
-              <option>Performance Marketing</option>
-              <option>Cloud & DevOps</option>
-            </select>
+            <%= f.select :service_interest, [
+              ["Web Development", "Web Development"],
+              ["Branding & Identity", "Branding & Identity"],
+              ["UI / UX Design", "UI / UX Design"],
+              ["SEO & Content", "SEO & Content"],
+              ["Performance Marketing", "Performance Marketing"],
+              ["Cloud & DevOps", "Cloud & DevOps"]
+            ], {}, { class: "home-input" } %>
           </label>
 
           <label class="block">
             <span class="mb-2 block text-xs font-bold uppercase tracking-[0.18em] text-[#213885]">Project details</span>
-            <textarea class="home-input" placeholder="Tell us about your goals, timeline, and anything else we should know…"></textarea>
+            <%= f.text_area :message, class: "home-input", placeholder: "Tell us about your goals, timeline, and anything else we should know…", rows: 4 %>
           </label>
 
-          <button type="button" class="group relative w-full overflow-hidden rounded-full bg-[#213885] px-8 py-4 text-sm font-bold text-[#ECDFD2] shadow-2xl shadow-[#213885]/30 transition hover:scale-[1.02]">
+          <%# 2. Changed type to "submit" %>
+          <button type="submit" class="group relative w-full overflow-hidden rounded-full bg-[#213885] px-8 py-4 text-sm font-bold text-[#ECDFD2] shadow-2xl shadow-[#213885]/30 transition hover:scale-[1.02]">
             <span class="relative z-10">Send Message →</span>
             <span class="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-[#081849]/45 to-transparent transition-transform duration-700 group-hover:translate-x-full"></span>
           </button>
         </div>
-      </form>
-    </div>
+      <% end %>
     </div>
   </div>
 </section>

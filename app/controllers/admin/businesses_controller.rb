@@ -113,7 +113,7 @@ class Admin::BusinessesController < ApplicationController
       end
     when "email"
       if @business.email.present?
-        ReviewMailer.send_link(@business).deliver_now
+        ReviewMailer.send_link(@business).deliver_later
         redirect_to admin_business_path(@business), notice: "Review link sent via Email."
       else
         redirect_to admin_business_path(@business), alert: "Business email missing."
