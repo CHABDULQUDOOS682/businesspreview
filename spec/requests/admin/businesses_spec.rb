@@ -155,7 +155,7 @@ RSpec.describe "Admin::Businesses", type: :request do
 
     context "with a valid CSV file" do
       let(:csv_file) do
-        file = Tempfile.new(["import", ".csv"])
+        file = Tempfile.new([ "import", ".csv" ])
         file.write("Business Name,City,Country,Business Type,Phone Number,Rating\n")
         file.write("CSV Biz 1,Chicago,USA,Consulting,18005550199,4.8\n")
         file.write(",Skipped Biz,USA,Consulting,18005550199,4.8\n") # name blank, should skip
@@ -175,7 +175,7 @@ RSpec.describe "Admin::Businesses", type: :request do
 
     context "with some validation failures in CSV rows" do
       let(:csv_file) do
-        file = Tempfile.new(["import", ".csv"])
+        file = Tempfile.new([ "import", ".csv" ])
         file.write("Business Name,City,Country,Business Type,Phone Number,Rating\n")
         file.write("Valid CSV Biz,Chicago,USA,Consulting,18005550199,4.8\n")
         file.write("Invalid CSV Biz,Chicago,USA,Consulting,,4.8\n")
@@ -207,7 +207,7 @@ RSpec.describe "Admin::Businesses", type: :request do
 
     context "when an exception occurs during parsing" do
       let(:csv_file) do
-        file = Tempfile.new(["import", ".csv"])
+        file = Tempfile.new([ "import", ".csv" ])
         file.write("some invalid content")
         file.close
         Rack::Test::UploadedFile.new(file.path, "text/csv")
