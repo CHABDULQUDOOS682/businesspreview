@@ -1,6 +1,6 @@
 class ContactMailer < ApplicationMailer
   # Change the default from address if needed
-  default from: 'no-reply@devdebizz.com'
+  default from: "no-reply@devdebizz.com"
 
   def new_lead_alert(params)
     @first_name       = params[:first_name]
@@ -11,7 +11,7 @@ class ContactMailer < ApplicationMailer
     @message          = params[:message]
 
     mail(
-      to: 'developer.qudoos@gmail.com',
+      to: "developer.qudoos@gmail.com",
       subject: "🔥 New Lead Inbound: #{@first_name} #{@last_name} - #{@service_interest}"
     )
   end
