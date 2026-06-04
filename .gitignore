@@ -30,6 +30,7 @@
 
 /public/assets
 app/assets/builds/tailwind.css
+kamal_cheat_sheet.md
 
 # Ignore master key for decrypting credentials and more.
 /config/master.key
