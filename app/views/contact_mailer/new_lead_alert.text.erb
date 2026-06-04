@@ -1,0 +1,11 @@
+New Lead Inbound!
+=================================
+
+Name: <%= @first_name %> <%= @last_name %>
+Email: <%= @email %>
+Company: <%= @company.presence || "Not specified" %>
+Service Interest: <%= @service_interest %>
+
+Project Details:
+---------------------------------
+<%= @message %>

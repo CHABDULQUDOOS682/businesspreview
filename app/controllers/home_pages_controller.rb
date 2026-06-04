@@ -23,6 +23,18 @@ class HomePagesController < ApplicationController
     def contact
     end
 
+    # POST /contact
+    def create_contact
+        # 1. Safely whitelist incoming form fields using strong parameters
+        contact_params = params.permit(:first_name, :last_name, :email, :company, :service_interest, :message)
+
+        # 2. Hand off the layout variables directly to your background mailer thread
+        ContactMailer.new_lead_alert(contact_params).deliver_later
+
+        # 3. Bounce them right back to the contact screen with a success notice
+        redirect_to contact_path, notice: "Thank you! Your inquiry was sent successfully. We'll be in touch within one business day."
+    end
+
     def privacy
     end
 end

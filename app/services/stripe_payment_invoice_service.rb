@@ -165,7 +165,7 @@ class StripePaymentInvoiceService
     raise ConfigurationError, "Stripe did not return a hosted invoice URL" if payment_invoice.hosted_invoice_url.blank?
 
     begin
-      PaymentInvoiceMailer.with(payment_invoice: payment_invoice).invoice_link.deliver_now
+      PaymentInvoiceMailer.with(payment_invoice: payment_invoice).invoice_link.deliver_later
     rescue => e
       raise ConfigurationError, "Email Error: #{e.message}"
     end

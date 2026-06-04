@@ -1,193 +1,296 @@
-require 'rails_helper'
+require "rails_helper"
+require "tempfile"
 
 RSpec.describe "Admin::Businesses", type: :request do
+  # Include ActiveJob matchers to cleanly verify .deliver_later execution
+  include ActiveJob::TestHelper
+
   let(:admin) { create(:user, :admin) }
-  let!(:business) { create(:business) }
+  let(:employee) { create(:user, role: "employee") }
+  let(:business) { create(:business, email: "developer.qudoos@gmail.com", phone: "+1234567890") }
 
   before do
     sign_in admin
   end
 
   describe "GET /admin/businesses" do
-    it "returns http success" do
-      get admin_businesses_path
-      expect(response).to have_http_status(:success)
+    let!(:nurture_biz) { create(:business, name: "Nurture Biz", niche: "Retail", city: "NYC", country: "USA", sold_price: nil, subscription_fee: nil, subscription: false) }
+    let!(:purchased_biz) { create(:business, name: "Purchased Biz", niche: "Tech", city: "SF", country: "USA", sold_price: 1000, subscription_fee: nil, subscription: false) }
+    let!(:subscription_biz) { create(:business, name: "Sub Biz", niche: "SaaS", city: "Austin", country: "USA", sold_price: nil, subscription_fee: 99, subscription: true) }
+
+    context "when logged in as admin" do
+      it "returns success and lists nurture businesses by default" do
+        get admin_businesses_path
+        expect(response).to have_http_status(:success)
+        expect(assigns(:businesses)).to include(nurture_biz)
+        expect(assigns(:businesses)).not_to include(purchased_biz)
+        expect(assigns(:businesses)).not_to include(subscription_biz)
+      end
+
+      it "lists purchased businesses when segment is purchased" do
+        get admin_businesses_path, params: { segment: "purchased" }
+        expect(response).to have_http_status(:success)
+        expect(assigns(:businesses)).to include(purchased_biz)
+        expect(assigns(:businesses)).not_to include(nurture_biz)
+      end
+
+      it "lists subscription businesses when segment is subscriptions" do
+        get admin_businesses_path, params: { segment: "subscriptions" }
+        expect(response).to have_http_status(:success)
+        expect(assigns(:businesses)).to include(subscription_biz)
+      end
+
+      it "filters by name" do
+        get admin_businesses_path, params: { name: "Nurture" }
+        expect(assigns(:businesses)).to include(nurture_biz)
+        expect(assigns(:businesses)).not_to include(purchased_biz)
+      end
+
+      it "filters by niche" do
+        get admin_businesses_path, params: { niche: "Retail" }
+        expect(assigns(:businesses)).to include(nurture_biz)
+        expect(assigns(:businesses)).not_to include(purchased_biz)
+      end
+
+      it "filters by city" do
+        get admin_businesses_path, params: { city: "NYC" }
+        expect(assigns(:businesses)).to include(nurture_biz)
+      end
+
+      it "filters by country" do
+        get admin_businesses_path, params: { country: "USA" }
+        expect(assigns(:businesses)).to include(nurture_biz)
+      end
     end
 
-    it "filters by name" do
-      get admin_businesses_path, params: { name: business.name }
-      expect(response).to have_http_status(:success)
-    end
+    context "when logged in as employee" do
+      before do
+        sign_in employee
+      end
 
-    it "filters by city and country" do
-      get admin_businesses_path, params: { city: business.city, country: business.country }
-      expect(response).to have_http_status(:success)
-    end
-
-    it "forces nurture segment for employee users regardless of param" do
-      employee = create(:user)
-      sign_out admin
-      sign_in employee
-      get admin_businesses_path, params: { segment: "subscriptions" }
-      expect(response).to have_http_status(:success)
-    end
-
-    it "accepts segment param for non-employee users" do
-      get admin_businesses_path, params: { segment: "subscriptions" }
-      expect(response).to have_http_status(:success)
+      it "forces segment to nurture even if other segment is requested" do
+        get admin_businesses_path, params: { segment: "purchased" }
+        expect(response).to have_http_status(:success)
+        expect(assigns(:segment)).to eq("nurture")
+        expect(assigns(:businesses)).to include(nurture_biz)
+        expect(assigns(:businesses)).not_to include(purchased_biz)
+      end
     end
   end
 
   describe "GET /admin/businesses/new" do
-    it "returns http success" do
+    it "renders the new form" do
       get new_admin_business_path
       expect(response).to have_http_status(:success)
+      expect(assigns(:business)).to be_a_new(Business)
     end
   end
 
   describe "POST /admin/businesses" do
-    it "creates a new business and redirects" do
-      expect {
-        post admin_businesses_path, params: { business: { name: "New", email: "new@example.com", phone: "+1234567890" } }
-      }.to change(Business, :count).by(1)
-      expect(response).to redirect_to(admin_businesses_path)
+    context "with valid parameters" do
+      it "creates a new Business and redirects" do
+        expect {
+          post admin_businesses_path, params: { business: { name: "New Biz", phone: "+111222333" } }
+        }.to change(Business, :count).by(1)
+
+        expect(response).to redirect_to(admin_businesses_path)
+        expect(flash[:notice]).to eq("Business created!")
+      end
     end
 
-    it "renders new when create validation fails" do
-      # name blank → validation fails → render :new (line 68)
-      post admin_businesses_path, params: { business: { name: "", phone: "+1234567890" } }
-      expect(response).to have_http_status(:success)
-    end
-  end
+    context "with invalid parameters" do
+      it "does not create a business and renders new" do
+        expect {
+          post admin_businesses_path, params: { business: { name: "", phone: "" } }
+        }.not_to change(Business, :count)
 
-  describe "GET /admin/businesses/:id/edit" do
-    it "returns http success" do
-      get edit_admin_business_path(business)
-      expect(response).to have_http_status(:success)
+        expect(response).to have_http_status(:success) # render :new returns 200 OK
+      end
     end
   end
 
   describe "GET /admin/businesses/:id" do
-    it "returns http success" do
+    it "renders the show view" do
       get admin_business_path(business)
       expect(response).to have_http_status(:success)
+      expect(assigns(:business)).to eq(business)
     end
   end
 
-  describe "POST /admin/businesses/import" do
-    let(:file_path) { Rails.root.join('spec/fixtures/businesses_import.csv') }
-
-    before do
-      FileUtils.mkdir_p(Rails.root.join('spec/fixtures'))
-      File.write(file_path, "Business Name,City,Country,Business Type,Phone Number,Rating\nTest Business,NYC,USA,Tech,1234567890,5.0")
-    end
-
-    after do
-      File.delete(file_path) if File.exist?(file_path)
-    end
-
-    it "imports businesses from CSV" do
-      file = fixture_file_upload(file_path, 'text/csv')
-      expect {
-        post import_admin_businesses_path, params: { file: file }
-      }.to change(Business, :count).by(1)
-      expect(response).to redirect_to(admin_businesses_path)
-    end
-
-    it "skips rows with blank names" do
-      blank_name_path = Rails.root.join('spec/fixtures/blank_name.csv')
-      File.write(blank_name_path, "Business Name,City,Country,Business Type,Phone Number,Rating\n,NYC,USA,Tech,1234567890,5.0")
-      file = fixture_file_upload(blank_name_path, 'text/csv')
-      expect {
-        post import_admin_businesses_path, params: { file: file }
-      }.not_to change(Business, :count)
-      File.delete(blank_name_path)
-    end
-
-    it "redirects if no file is present" do
-      post import_admin_businesses_path
-      expect(response).to redirect_to(admin_businesses_path)
-      expect(flash[:alert]).to include("Please upload")
-    end
-
-    it "handles failed imports" do
-      # Blank name will skip row in this specific controller logic, so let's use invalid phone if validation exists
-      # Actually, let's use a malformed CSV to trigger the rescue block
-      allow(CSV).to receive(:foreach).and_raise(StandardError.new("CSV Error"))
-      post import_admin_businesses_path, params: { file: fixture_file_upload(file_path, 'text/csv') }
-      expect(response).to redirect_to(admin_businesses_path)
-      expect(flash[:alert]).to include("Import failed")
-    end
-
-    it "reports partial failures when some rows fail validation" do
-      partial_fail_path = Rails.root.join('spec/fixtures/partial_fail.csv')
-      File.write(partial_fail_path, "Business Name,City,Country,Business Type,Phone Number,Rating\nGood Biz,NYC,USA,Tech,9999999999,4.0\nBad Biz,NYC,USA,Tech,9999999998,3.0")
-
-      call_count = 0
-      original_new = Business.method(:new)
-      allow(Business).to receive(:new) do |attrs|
-        biz = original_new.call(attrs)
-        call_count += 1
-        allow(biz).to receive(:save).and_return(call_count == 1)
-        biz
-      end
-
-      file = fixture_file_upload(partial_fail_path, 'text/csv')
-      post import_admin_businesses_path, params: { file: file }
-      expect(response).to redirect_to(admin_businesses_path)
-      expect(flash[:alert]).to match(/Imported \d+, \d+ failed/)
-    ensure
-      File.delete(partial_fail_path) if File.exist?(partial_fail_path)
+  describe "GET /admin/businesses/:id/edit" do
+    it "renders the edit view" do
+      get edit_admin_business_path(business)
+      expect(response).to have_http_status(:success)
+      expect(assigns(:business)).to eq(business)
     end
   end
 
   describe "PATCH /admin/businesses/:id" do
-    it "updates the business and redirects" do
-      patch admin_business_path(business), params: { business: { name: "Updated Name" } }
-      expect(business.reload.name).to eq("Updated Name")
-      expect(response).to redirect_to(admin_business_path(business))
+    context "with valid parameters" do
+      it "updates the business and redirects" do
+        patch admin_business_path(business), params: { business: { name: "Updated Name" } }
+        expect(business.reload.name).to eq("Updated Name")
+        expect(response).to redirect_to(admin_business_path(business))
+        expect(flash[:notice]).to eq("Business updated!")
+      end
     end
 
-    it "renders edit if update fails" do
-      patch admin_business_path(business), params: { business: { name: "" } }
-      expect(response).to have_http_status(:success) # Renders edit
+    context "with invalid parameters" do
+      it "does not update the business and renders edit" do
+        patch admin_business_path(business), params: { business: { name: "" } }
+        expect(business.reload.name).not_to eq("")
+        expect(response).to have_http_status(:success)
+      end
+    end
+  end
+
+  describe "POST /admin/businesses/import" do
+    context "when file is missing" do
+      it "redirects and sets an alert" do
+        post import_admin_businesses_path
+        expect(response).to redirect_to(admin_businesses_path)
+        expect(flash[:alert]).to eq("Please upload a CSV file.")
+      end
+    end
+
+    context "with a valid CSV file" do
+      let(:csv_file) do
+        file = Tempfile.new([ "import", ".csv" ])
+        file.write("Business Name,City,Country,Business Type,Phone Number,Rating\n")
+        file.write("CSV Biz 1,Chicago,USA,Consulting,18005550199,4.8\n")
+        file.write(",Skipped Biz,USA,Consulting,18005550199,4.8\n") # name blank, should skip
+        file.close
+        Rack::Test::UploadedFile.new(file.path, "text/csv")
+      end
+
+      it "imports valid businesses and redirects with notice" do
+        expect {
+          post import_admin_businesses_path, params: { file: csv_file }
+        }.to change(Business, :count).by(1)
+
+        expect(response).to redirect_to(admin_businesses_path)
+        expect(flash[:notice]).to eq("Imported 1 businesses successfully.")
+      end
+    end
+
+    context "with some validation failures in CSV rows" do
+      let(:csv_file) do
+        file = Tempfile.new([ "import", ".csv" ])
+        file.write("Business Name,City,Country,Business Type,Phone Number,Rating\n")
+        file.write("Valid CSV Biz,Chicago,USA,Consulting,18005550199,4.8\n")
+        file.write("Invalid CSV Biz,Chicago,USA,Consulting,,4.8\n")
+        file.close
+        Rack::Test::UploadedFile.new(file.path, "text/csv")
+      end
+
+      before do
+        allow_any_instance_of(Business).to receive(:save).and_wrap_original do |method, *args|
+          instance = method.receiver
+          if instance.name == "Invalid CSV Biz"
+            instance.errors.add(:phone, "can't be blank")
+            false
+          else
+            method.call(*args)
+          end
+        end
+      end
+
+      it "imports valid ones, lists failed ones, and redirects with alert" do
+        expect {
+          post import_admin_businesses_path, params: { file: csv_file }
+        }.to change(Business, :count).by(1)
+
+        expect(response).to redirect_to(admin_businesses_path)
+        expect(flash[:alert]).to eq("Imported 1, 1 failed.")
+      end
+    end
+
+    context "when an exception occurs during parsing" do
+      let(:csv_file) do
+        file = Tempfile.new([ "import", ".csv" ])
+        file.write("some invalid content")
+        file.close
+        Rack::Test::UploadedFile.new(file.path, "text/csv")
+      end
+
+      before do
+        allow(CSV).to receive(:foreach).and_raise(StandardError.new("Malformed CSV file"))
+      end
+
+      it "rescues standard errors and redirects with alert" do
+        post import_admin_businesses_path, params: { file: csv_file }
+        expect(response).to redirect_to(admin_businesses_path)
+        expect(flash[:alert]).to eq("Import failed: Malformed CSV file")
+      end
     end
   end
 
   describe "POST /admin/businesses/:id/send_review_link" do
-    it "sends an email and redirects" do
-      expect {
-        post send_review_link_admin_business_path(business), params: { delivery_method: 'email' }
-      }.to change { ActionMailer::Base.deliveries.count }.by(1)
-      expect(response).to redirect_to(admin_business_path(business))
-      expect(flash[:notice]).to include("Review link sent via Email")
+    context "with email delivery method" do
+      context "when business has an email" do
+        it "sends an email and redirects" do
+          expect {
+            post send_review_link_admin_business_path(business), params: { delivery_method: 'email' }
+          }.to have_enqueued_mail(ReviewMailer, :send_link).with(business)
+
+          expect(response).to redirect_to(admin_business_path(business))
+          expect(flash[:notice]).to eq("Review link sent via Email.")
+        end
+      end
+
+      context "when business email is missing" do
+        before do
+          business.update!(email: nil)
+        end
+
+        it "does not send and redirects with alert" do
+          expect {
+            post send_review_link_admin_business_path(business), params: { delivery_method: 'email' }
+          }.not_to have_enqueued_mail(ReviewMailer, :send_link)
+
+          expect(response).to redirect_to(admin_business_path(business))
+          expect(flash[:alert]).to eq("Business email missing.")
+        end
+      end
     end
 
-    it "redirects with alert if email is missing" do
-      business.update_columns(email: nil)
-      post send_review_link_admin_business_path(business), params: { delivery_method: 'email' }
-      expect(flash[:alert]).to include("email missing")
+    context "with sms delivery method" do
+      context "when business has a phone number" do
+        it "sends an SMS and redirects" do
+          allow(SmsService).to receive(:send_sms).and_return(true)
+
+          expect {
+            post send_review_link_admin_business_path(business), params: { delivery_method: 'sms' }
+          }.to change(Message, :count).by(1)
+
+          expect(response).to redirect_to(admin_business_path(business))
+          expect(flash[:notice]).to eq("Review link sent via SMS.")
+        end
+      end
+
+      context "when business phone is missing" do
+        before do
+          # Skip validations to make phone nil
+          business.update_attribute(:phone, nil)
+        end
+
+        it "does not send and redirects with alert" do
+          expect {
+            post send_review_link_admin_business_path(business), params: { delivery_method: 'sms' }
+          }.not_to change(Message, :count)
+
+          expect(response).to redirect_to(admin_business_path(business))
+          expect(flash[:alert]).to eq("Business phone missing.")
+        end
+      end
     end
 
-    it "sends an SMS and redirects" do
-      # Mock SmsService
-      allow(SmsService).to receive(:send_sms).and_return(true)
-
-      post send_review_link_admin_business_path(business), params: { delivery_method: 'sms' }
-      expect(response).to redirect_to(admin_business_path(business))
-      expect(flash[:notice]).to include("Review link sent via SMS")
-    end
-
-    it "redirects with alert if phone is missing" do
-      business.update_columns(phone: nil)
-      post send_review_link_admin_business_path(business), params: { delivery_method: 'sms' }
-      expect(flash[:alert]).to include("phone missing")
-    end
-
-    it "redirects with alert if delivery method is invalid" do
-      post send_review_link_admin_business_path(business), params: { delivery_method: 'carrier_pigeon' }
-      expect(response).to redirect_to(admin_business_path(business))
-      expect(flash[:alert]).to include("Invalid")
+    context "with an invalid delivery method" do
+      it "redirects with alert" do
+        post send_review_link_admin_business_path(business), params: { delivery_method: 'carrier_pigeon' }
+        expect(response).to redirect_to(admin_business_path(business))
+        expect(flash[:alert]).to eq("Invalid delivery method.")
+      end
     end
   end
 end

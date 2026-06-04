@@ -14,7 +14,7 @@ RSpec.describe StripePaymentInvoiceService do
     allow(Stripe::InvoiceItem).to receive(:create)
     allow(Stripe::Invoice).to receive(:finalize_invoice).and_return(invoice_mock)
     allow(SmsService).to receive(:send_sms)
-    allow(PaymentInvoiceMailer).to receive_message_chain(:with, :invoice_link, :deliver_now)
+    allow(PaymentInvoiceMailer).to receive_message_chain(:with, :invoice_link, :deliver_later)
     allow(Stripe::Product).to receive(:create).and_return(Stripe::StripeObject.construct_from(id: "prod_123"))
     allow(Stripe::Price).to receive(:create).and_return(Stripe::StripeObject.construct_from(id: "price_123"))
   end
@@ -71,7 +71,7 @@ RSpec.describe StripePaymentInvoiceService do
       end
 
       it "handles Mailer errors" do
-        allow(PaymentInvoiceMailer).to receive_message_chain(:with, :invoice_link, :deliver_now).and_raise(StandardError.new("SMTP error"))
+        allow(PaymentInvoiceMailer).to receive_message_chain(:with, :invoice_link, :deliver_later).and_raise(StandardError.new("SMTP error"))
         expect { service.create_and_send! }.to raise_error(StripePaymentInvoiceService::ConfigurationError, /Email Error/)
       end
     end

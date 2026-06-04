@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   get "pricing", to: "home_pages#pricing"
   get "portfolio", to: "home_pages#portfolio"
   get "contact", to: "home_pages#contact"
+  post "contact", to: "home_pages#create_contact", as: :contact_submissions
   get "privacy", to: "home_pages#privacy"
 
   get "landing_pages/show"
