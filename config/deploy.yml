@@ -41,6 +41,22 @@ env:
   secret:
     - RAILS_MASTER_KEY
     - DATABASE_URL
+    - TWILIO_ACCOUNT_SID
+    - TWILIO_AUTH_TOKEN
+    - TWILIO_PHONE_NUMBER
+    - TWILIO_VOICE_URL
+    - TWILIO_API_KEY
+    - TWILIO_API_SECRET
+    - TWILIO_TWIML_APP_SID
+    - STRIPE_SECRET_KEY
+    - STRIPE_WEBHOOK_SECRET
+    - MAIL_FROM
+    - SMTP_ADDRESS
+    - SMTP_PORT
+    - SMTP_USERNAME
+    - SMTP_PASSWORD
+    - APP_HOST
+    - APP_PROTOCOL
 
   clear:
     # Run the Solid Queue Supervisor inside the web server's Puma process to do jobs.
