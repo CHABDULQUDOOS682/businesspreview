@@ -69,3 +69,5 @@ gem "twilio-ruby"
 gem "stripe"
 gem "dotenv-rails"
 gem "pagy", "~> 9.0"
+
+gem "sendgrid-actionmailer", "~> 3.2"
