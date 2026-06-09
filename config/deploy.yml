@@ -24,7 +24,9 @@ servers:
 proxy:
   ssl: true
   app_port: 80
-  host: devdebizz.com
+  host: 
+    - devdebizz.com
+    - url5955.devdebizz.com
   # host: app.example.com
 
 # Credentials for your image host.
@@ -74,6 +76,7 @@ env:
 
     APP_HOST: devdebizz.com
     APP_PROTOCOL: https
+    APP_HOSTS: devdebizz.com,www.devdebizz.com,url5955.devdebizz.com
     PORT: 80
 
 # Aliases are triggered with "bin/kamal <alias>". You can overwrite arguments on invocation:
