@@ -24,10 +24,9 @@ servers:
 proxy:
   ssl: true
   app_port: 80
-  host: 
+  hosts:
     - devdebizz.com
     - url5955.devdebizz.com
-  # host: app.example.com
 
 # Credentials for your image host.
 registry:
