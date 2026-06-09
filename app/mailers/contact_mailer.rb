@@ -1,6 +1,4 @@
 class ContactMailer < ApplicationMailer
-  # Change the default from address if needed
-  default from: "no-reply@devdebizz.com"
 
   def new_lead_alert(params)
     @first_name       = params[:first_name]
