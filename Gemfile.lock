@@ -369,7 +369,13 @@ GEM
       rubocop-performance (>= 1.24)
       rubocop-rails (>= 2.30)
     ruby-progressbar (1.13.0)
+    ruby_http_client (3.6.0)
     securerandom (0.4.1)
+    sendgrid-actionmailer (3.2.0)
+      mail (~> 2.7)
+      sendgrid-ruby (~> 6.4)
+    sendgrid-ruby (6.7.0)
+      ruby_http_client (~> 3.4)
     simplecov (0.22.0)
       docile (~> 1.1)
       simplecov-html (~> 0.11)
@@ -485,6 +491,7 @@ DEPENDENCIES
   rails-controller-testing
   rspec-rails
   rubocop-rails-omakase
+  sendgrid-actionmailer (~> 3.2)
   simplecov
   solid_cable
   solid_cache

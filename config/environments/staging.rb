@@ -16,7 +16,7 @@ Rails.application.configure do
   # Safer for testing (avoid real cached responses hiding bugs)
   config.action_controller.perform_caching = false
 
-  # Safer email behavior in staging (don’t fail deploys due to SMTP)
+  # Safer email behavior in staging (don’t fail deploys due to SendGrid errors)
   config.action_mailer.raise_delivery_errors = false
 
   # Optional: disable SSL enforcement in staging if needed for local/dev testing

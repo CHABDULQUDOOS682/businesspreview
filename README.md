@@ -45,6 +45,8 @@ APP_HOST=your-render-staging-domain.onrender.com
 APP_PROTOCOL=https
 APP_HOSTS=your-render-staging-domain.onrender.com
 SOLID_QUEUE_IN_PUMA=true
+SENDGRID_API_KEY=SG....
+MAILER_FROM=hello@your-domain.com
 ```
 
 DigitalOcean production should set:
@@ -57,6 +59,8 @@ APP_HOST=your-production-domain.com
 APP_PROTOCOL=https
 APP_HOSTS=your-production-domain.com,www.your-production-domain.com
 SOLID_QUEUE_IN_PUMA=true
+SENDGRID_API_KEY=SG....
+MAILER_FROM=hello@your-domain.com
 ```
 
 Run database preparation after deploy for both staging and production:
@@ -82,19 +86,16 @@ TWILIO_AUTH_TOKEN=...
 TWILIO_PHONE_NUMBER=...
 ```
 
-Required for real email delivery:
+Required for real email delivery (SendGrid API — used in production/staging):
 
 ```bash
+SENDGRID_API_KEY=SG....
+MAILER_FROM=hello@your-domain.com   # must be verified in SendGrid
 APP_HOST=your-domain.com
 APP_PROTOCOL=https
-MAILER_FROM=billing@your-domain.com
-SMTP_ADDRESS=smtp.example.com
-SMTP_PORT=587
-SMTP_USERNAME=...
-SMTP_PASSWORD=...
 ```
 
-Without SMTP in development, emails open through `letter_opener`.
+In development, emails open through `letter_opener` unless you set `SMTP_ADDRESS` for local SMTP testing.
 
 ## Stripe Webhook
 

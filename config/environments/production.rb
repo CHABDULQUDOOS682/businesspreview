@@ -56,7 +56,6 @@ Rails.application.configure do
   config.active_job.queue_adapter = :solid_queue
   config.solid_queue.connects_to = { database: { writing: :queue } }
 
-  config.action_mailer.delivery_method = :smtp
   config.action_mailer.raise_delivery_errors = true
 
   config.action_mailer.default_url_options = {
@@ -64,26 +63,11 @@ Rails.application.configure do
     protocol: ENV.fetch("APP_PROTOCOL", "https")
   }
 
-
-  smtp_port = ENV.fetch("SMTP_PORT", 587).to_i
-    smtp_settings = {
-      address: ENV["SMTP_ADDRESS"],
-      port: smtp_port,
-      user_name: ENV["SMTP_USERNAME"],
-      password: ENV["SMTP_PASSWORD"],
-      domain: ENV.fetch("APP_HOST", "localhost"),
-      authentication: :plain,
-      openssl_verify_mode: OpenSSL::SSL::VERIFY_NONE
-    }
-
-    if smtp_port == 465
-      smtp_settings[:ssl] = true
-      smtp_settings[:tls] = true
-    else
-      smtp_settings[:enable_starttls_auto] = true
-    end
-
-    config.action_mailer.smtp_settings = smtp_settings.compact
+  config.action_mailer.delivery_method = :sendgrid_actionmailer
+  config.action_mailer.sendgrid_actionmailer_settings = {
+    api_key: ENV.fetch("SENDGRID_API_KEY"),
+    raise_delivery_errors: true
+  }
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
   # the I18n.default_locale when a translation cannot be found).
