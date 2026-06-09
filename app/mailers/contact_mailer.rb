@@ -1,5 +1,4 @@
 class ContactMailer < ApplicationMailer
-
   def new_lead_alert(params)
     @first_name       = params[:first_name]
     @last_name        = params[:last_name]
