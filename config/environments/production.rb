@@ -63,11 +63,16 @@ Rails.application.configure do
     protocol: ENV.fetch("APP_PROTOCOL", "https")
   }
 
-  config.action_mailer.delivery_method = :sendgrid_actionmailer
-  config.action_mailer.sendgrid_actionmailer_settings = {
-    api_key: ENV.fetch("SENDGRID_API_KEY"),
-    raise_delivery_errors: true
-  }
+  # Asset precompile runs with SECRET_KEY_BASE_DUMMY=1 and no runtime secrets.
+  if ENV["SECRET_KEY_BASE_DUMMY"].present?
+    config.action_mailer.delivery_method = :test
+  else
+    config.action_mailer.delivery_method = :sendgrid_actionmailer
+    config.action_mailer.sendgrid_actionmailer_settings = {
+      api_key: ENV.fetch("SENDGRID_API_KEY"),
+      raise_delivery_errors: true
+    }
+  end
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
   # the I18n.default_locale when a translation cannot be found).
