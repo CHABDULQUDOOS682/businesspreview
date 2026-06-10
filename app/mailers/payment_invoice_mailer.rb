@@ -5,7 +5,7 @@ class PaymentInvoiceMailer < ApplicationMailer
     @payment_url = payment_invoice_link_url(
       @payment_invoice.payment_token,
       host: ENV.fetch("APP_HOST", "localhost"),
-      protocol: ENV.fetch("APP_PROTOCOL", "http")
+      protocol: ENV.fetch("APP_PROTOCOL", "https")
     )
 
     mail(
@@ -20,7 +20,7 @@ class PaymentInvoiceMailer < ApplicationMailer
     @payment_url = payment_invoice_link_url(
       @payment_invoice.payment_token,
       host: ENV.fetch("APP_HOST", "localhost"),
-      protocol: ENV.fetch("APP_PROTOCOL", "http")
+      protocol: ENV.fetch("APP_PROTOCOL", "https")
     )
 
     mail(

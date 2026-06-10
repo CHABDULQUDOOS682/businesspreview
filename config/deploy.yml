@@ -75,7 +75,7 @@ env:
 
     APP_HOST: devdebizz.com
     APP_PROTOCOL: https
-    APP_HOSTS: devdebizz.com,www.devdebizz.com,url5955.devdebizz.com
+    APP_HOSTS: devdebizz.com,www.devdebizz.com
     PORT: 80
 
 # Aliases are triggered with "bin/kamal <alias>". You can overwrite arguments on invocation:
@@ -135,4 +135,3 @@ builder:
 #     port: 6379
 #     directories:
 #       - data:/data
-    

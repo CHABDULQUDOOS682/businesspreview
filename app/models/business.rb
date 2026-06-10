@@ -81,7 +81,7 @@ class Business < ApplicationRecord
     Rails.application.routes.url_helpers.new_review_submission_url(
       token: review_token,
       host: ENV.fetch("APP_HOST", "localhost"),
-      port: ENV.fetch("APP_PROTOCOL", "http")
+      protocol: ENV.fetch("APP_PROTOCOL", "https")
     )
   end
 
