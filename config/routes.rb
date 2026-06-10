@@ -72,17 +72,4 @@ Rails.application.routes.draw do
   # Routes for frontend
   get "design_1", to: "frontend#design_1", as: :design_1
   get "abc", to: "frontend#abc", as: :abc
-
-  # SendGrid click-tracking subdomain (Link Branding). DNS for url5955.devdebizz.com
-  # must point at this app; requests are forwarded to SendGrid over HTTPS.
-  constraints(subdomain: "url5955") do
-    match "*path",
-          to: ->(env) {
-            request = Rack::Request.new(env)
-            location = "https://sendgrid.net#{request.path_info}"
-            location = "#{location}?#{request.query_string}" if request.query_string.present?
-            [ 301, { "Location" => location }, [] ]
-          },
-          via: :all
-  end
 end
