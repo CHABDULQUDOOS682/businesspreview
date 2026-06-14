@@ -1,5 +1,5 @@
 <%= turbo_stream_from "conversation:#{@conversation_key}" if @conversation_key.present? %>
-<div class="flex h-full min-h-[42rem] flex-col"
+<div class="flex h-full min-h-[42rem] min-w-0 max-w-full flex-col overflow-x-hidden"
      data-controller="twilio-call chat-scroll"
      data-action="turbo:load@window->chat-scroll#scrollToBottom turbo:render@window->chat-scroll#scrollToBottom"
      data-twilio-call-phone-number-value="<%= @number %>">
@@ -15,7 +15,7 @@
       </div>
     </div>
 
-    <div class="flex w-full sm:w-auto gap-2 sm:gap-3">
+    <div class="flex w-full flex-wrap gap-2 sm:w-auto sm:flex-nowrap sm:gap-3">
       <!-- Browser Call Button -->
       <button type="button" 
               data-twilio-call-target="callButton"
@@ -40,9 +40,9 @@
     </div>
   </div>
 
-  <div class="mt-2 flex min-h-0 flex-1 flex-col lg:flex-row lg:gap-6">
+  <div class="mt-2 flex min-h-0 min-w-0 flex-1 flex-col lg:flex-row lg:gap-6">
     <!-- Messages column -->
-    <div class="flex-1 flex flex-col">
+    <div class="flex min-w-0 flex-1 flex-col">
       <div id="messages" class="mb-4 flex-1 min-h-0 overflow-y-auto rounded-[24px] border border-sand-200 bg-sand-50/80 p-4 shadow-inner" data-chat-scroll-target="list">
         <div id="message_list" class="space-y-4">
           <%= render partial: "admin/communications/message",
@@ -57,10 +57,10 @@
         <%= form_with url: admin_communications_path, method: :post, class: "relative" do |f| %>
           <%= f.hidden_field :to_number, value: @number %>
           <%= f.hidden_field :business_id, value: @business&.id %>
-          <div class="flex items-end gap-2">
+          <div class="flex min-w-0 items-end gap-2">
             <%= f.text_area :body,
                             rows: 1,
-                            class: "block w-full rounded-2xl border border-slate-300 bg-white shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm py-3 px-4 resize-none min-h-11 max-h-36",
+                            class: "block min-w-0 w-full rounded-2xl border border-slate-300 bg-white px-4 py-3 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm resize-none min-h-11 max-h-36",
                             placeholder: "Type your message..." %>
             <button
               type="submit"
@@ -78,7 +78,7 @@
 
     <!-- Notes column -->
     <% if @business %>
-      <div class="mt-4 lg:mt-0 lg:w-80 flex-shrink-0">
+      <div class="mt-4 min-w-0 flex-shrink-0 lg:mt-0 lg:w-80">
         <%= render "admin/notes/notes_panel", business: @business %>
       </div>
     <% end %>

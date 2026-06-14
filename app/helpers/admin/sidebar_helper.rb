@@ -5,7 +5,11 @@ module Admin::SidebarHelper
     communications: :green,
     tasks: :blue,
     users: :purple,
-    reviews: :indigo
+    reviews: :indigo,
+    invoices: :green,
+    call_logs: :orange,
+    preview_links: :indigo,
+    notes: :indigo
   }.freeze
 
   def admin_sidebar_partial
@@ -121,6 +125,14 @@ module Admin::SidebarHelper
         '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2m19 0v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75M12 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0Z" stroke-linecap="round" stroke-linejoin="round" />'
       when :reviews
         '<path d="M11 5H6a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2v-5m-1.414-9.414a2 2 0 1 1 2.828 2.828L11.828 15H9v-2.828l8.586-8.586Z" stroke-linecap="round" stroke-linejoin="round" />'
+      when :invoices
+        '<path d="M9 12h6m-6 4h6m2 5H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5.586a1 1 0 0 1 .707.293l5.414 5.414a1 1 0 0 1 .293.707V19a2 2 0 0 1-2 2Z" stroke-linecap="round" stroke-linejoin="round" />'
+      when :call_logs
+        '<path d="M2 3h6.5l2 5-2.5 1.5a11 11 0 0 0 5 5L14.5 12l5 2V20a2 2 0 0 1-2 2A17 17 0 0 1 2 5a2 2 0 0 1 2-2h-2Z" stroke-linecap="round" stroke-linejoin="round" />'
+      when :preview_links
+        '<path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" stroke-linecap="round" stroke-linejoin="round" /><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" stroke-linecap="round" stroke-linejoin="round" />'
+      when :notes
+        '<path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2m-6 9h4m-4 4h6" stroke-linecap="round" stroke-linejoin="round" />'
       else
         ""
       end

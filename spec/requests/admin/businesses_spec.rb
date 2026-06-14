@@ -32,12 +32,16 @@ RSpec.describe "Admin::Businesses", type: :request do
         expect(response).to have_http_status(:success)
         expect(assigns(:businesses)).to include(purchased_biz)
         expect(assigns(:businesses)).not_to include(nurture_biz)
+        expect(response.body).to include(admin_communication_path(purchased_biz.phone))
+        expect(response.body).to include("Chat")
       end
 
       it "lists subscription businesses when segment is subscriptions" do
         get admin_businesses_path, params: { segment: "subscriptions" }
         expect(response).to have_http_status(:success)
         expect(assigns(:businesses)).to include(subscription_biz)
+        expect(response.body).to include(admin_communication_path(subscription_biz.phone))
+        expect(response.body).to include("Chat")
       end
 
       it "filters by name" do
@@ -114,6 +118,22 @@ RSpec.describe "Admin::Businesses", type: :request do
       get admin_business_path(business)
       expect(response).to have_http_status(:success)
       expect(assigns(:business)).to eq(business)
+    end
+
+    it "includes a chat link for subscription businesses" do
+      subscription_biz = create(
+        :business,
+        name: "Sub Show Biz",
+        phone: "+15559876543",
+        subscription: true,
+        subscription_fee: 99
+      )
+
+      get admin_business_path(subscription_biz)
+
+      expect(response).to have_http_status(:success)
+      expect(response.body).to include(admin_communication_path(subscription_biz.phone))
+      expect(response.body).to include("Chat")
     end
   end
 

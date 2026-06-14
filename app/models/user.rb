@@ -4,6 +4,8 @@ class User < ApplicationRecord
   devise :database_authenticatable,
          :recoverable, :rememberable, :validatable
 
+  has_many :notes, dependent: :nullify
+
   enum :role, {
     employee: 0,
     admin: 1,
@@ -16,6 +18,10 @@ class User < ApplicationRecord
   before_validation :set_default_role, on: :create
 
   scope :managed_by_admin, -> { where(role: "employee") }
+
+  def display_name
+    name.presence || email.split("@").first
+  end
 
   def can_manage_users?
     role_super_admin? || role_admin?

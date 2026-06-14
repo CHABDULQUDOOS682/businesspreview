@@ -5,12 +5,12 @@
   when "purchased" then "bg-blue-50 text-blue-700 ring-blue-600/20"
   else "bg-emerald-50 text-emerald-700 ring-emerald-600/20"
 end %>
-<li id="<%= dom_id(business, :conversation) %>">
-  <%= link_to business.phone.present? ? admin_communication_path(business.phone) : "#", class: "block hover:bg-gray-50 #{'opacity-50 cursor-not-allowed' unless business.phone.present?}" do %>
+<li id="<%= dom_id(business, :conversation) %>" class="min-w-0">
+  <%= link_to business.phone.present? ? admin_communication_path(business.phone) : "#", class: "block min-w-0 max-w-full hover:bg-gray-50 #{'opacity-50 cursor-not-allowed' unless business.phone.present?}" do %>
     <div class="px-4 py-4 sm:px-6">
-      <div class="flex items-start justify-between gap-2">
+      <div class="flex min-w-0 flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
         <div class="min-w-0 flex flex-col gap-1 sm:flex-row sm:flex-wrap sm:items-center sm:gap-2">
-          <p class="min-w-0 text-sm font-bold text-indigo-600 break-words leading-snug">
+          <p class="min-w-0 max-w-full text-sm font-bold text-indigo-600 break-words leading-snug [overflow-wrap:anywhere]">
             <%= business.name %>
           </p>
           <span class="inline-flex w-fit max-w-full items-center rounded-md bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-600 break-all">
@@ -32,7 +32,7 @@ end %>
           <% end %>
         </div>
         <% if latest_msg %>
-          <div class="flex-shrink-0 flex">
+          <div class="flex flex-shrink-0">
             <p class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full <%= latest_msg.direction == "inbound" ? "bg-green-100 text-green-800" : "bg-blue-100 text-blue-800" %>">
               <%= latest_msg.direction.capitalize %>
             </p>

@@ -1,0 +1,9 @@
+<% if business.phone.present? %>
+  <% button_class = local_assigns.fetch(:button_class, "inline-flex h-9 shrink-0 items-center justify-center gap-1.5 rounded-md bg-green-600 px-3 text-sm font-semibold text-white shadow-sm hover:bg-green-500 whitespace-nowrap") %>
+  <%= link_to admin_communication_path(business.phone), class: button_class do %>
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-4 w-4 shrink-0" aria-hidden="true">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 8.25h9m-9 3h9m-9 3h9m-6.75-12.75H18a2.25 2.25 0 0 1 2.25 2.25v9a2.25 2.25 0 0 1-2.25 2.25H6.75A2.25 2.25 0 0 1 4.5 15.75v-9a2.25 2.25 0 0 1 2.25-2.25h1.5m.75-3l3 3m0 0l3-3m-3 3v7.5" />
+    </svg>
+    Chat
+  <% end %>
+<% end %>

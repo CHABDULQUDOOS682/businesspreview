@@ -82,6 +82,6 @@ class Admin::UsersController < ApplicationController
   end
 
   def permitted_user_attributes
-    params.require(:user).permit(:email)
+    params.require(:user).permit(:email, :name)
   end
 end

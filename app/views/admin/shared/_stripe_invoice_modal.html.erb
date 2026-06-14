@@ -22,20 +22,24 @@
         </div>
       </div>
 
-      <div class="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
-        <%= button_to admin_business_payment_invoices_path(business, payment_invoice: { delivery_method: 'email' }), method: :post, class: "flex flex-col items-center justify-center rounded-xl border border-slate-200 p-4 hover:bg-slate-50 transition-colors group" do %>
+      <%
+        modal_button_class = "flex w-full min-w-0 flex-col items-center justify-center rounded-xl border border-slate-200 p-4 hover:bg-slate-50 transition-colors group"
+        modal_form_class = "m-0 w-full min-w-0"
+      %>
+      <div class="mt-8 grid grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-4">
+        <%= button_to admin_business_payment_invoices_path(business, payment_invoice: { delivery_method: 'email' }), method: :post, form: { class: modal_form_class }, class: modal_button_class do %>
           <i class="fa-solid fa-envelope text-2xl text-blue-600 mb-2 group-hover:scale-110 transition-transform"></i>
           <span class="text-sm font-bold text-slate-900">Email</span>
           <span class="text-[10px] text-slate-500 mt-1 truncate w-full text-center"><%= business.email.presence || "No email" %></span>
         <% end %>
 
-        <%= button_to admin_business_payment_invoices_path(business, payment_invoice: { delivery_method: 'sms' }), method: :post, class: "flex flex-col items-center justify-center rounded-xl border border-slate-200 p-4 hover:bg-slate-50 transition-colors group" do %>
+        <%= button_to admin_business_payment_invoices_path(business, payment_invoice: { delivery_method: 'sms' }), method: :post, form: { class: modal_form_class }, class: modal_button_class do %>
           <i class="fa-solid fa-comment-sms text-2xl text-green-600 mb-2 group-hover:scale-110 transition-transform"></i>
           <span class="text-sm font-bold text-slate-900">SMS</span>
           <span class="text-[10px] text-slate-500 mt-1 truncate w-full text-center"><%= business.phone.presence || "No phone" %></span>
         <% end %>
 
-        <%= button_to admin_business_payment_invoices_path(business, payment_invoice: { delivery_method: 'email_and_sms' }), method: :post, class: "flex flex-col items-center justify-center rounded-xl border border-slate-200 p-4 hover:bg-slate-50 transition-colors group" do %>
+        <%= button_to admin_business_payment_invoices_path(business, payment_invoice: { delivery_method: 'email_and_sms' }), method: :post, form: { class: modal_form_class }, class: modal_button_class do %>
           <div class="flex gap-x-1 mb-2">
             <i class="fa-solid fa-envelope text-lg text-blue-600"></i>
             <i class="fa-solid fa-comment-sms text-lg text-green-600"></i>

@@ -21,18 +21,20 @@ Rails.application.routes.draw do
     get "dashboard/index"
     root "dashboard#index"
     resources :tasks, only: [ :index, :update ]
+    resources :call_logs, only: [ :index ]
+    resources :payment_invoices, only: [ :index ]
+    resources :preview_links, only: [ :index, :create, :destroy ]
     resources :users, only: [ :index, :new, :create, :destroy ] do
       member do
         patch :toggle_status
         post :resend_invite
       end
     end
-    resources :notes, only: [ :create, :edit, :update, :destroy ]
+    resources :notes, only: [ :index, :create, :edit, :update, :destroy ]
     resources :businesses do
       collection do
         post :import
       end
-      resources :preview_links, only: [ :create, :destroy ]
       resources :payment_invoices, only: [ :create ]
       member do
         post :send_review_link

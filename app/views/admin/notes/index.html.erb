@@ -1,0 +1,122 @@
+<%
+  field_class = "mt-1 block w-full rounded-lg border-0 px-3 py-2.5 text-slate-900 shadow-sm ring-1 ring-inset ring-slate-300 placeholder:text-slate-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+  select_class = "mt-1 block w-full rounded-lg border-0 px-3 py-2.5 text-slate-900 shadow-sm ring-1 ring-inset ring-slate-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+%>
+
+<% content_for :page_header do %>
+  <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+    <div>
+      <h1 class="text-2xl font-bold tracking-tight text-slate-900">All Notes</h1>
+      <p class="mt-1 text-sm text-slate-600">Review and manage internal notes across all businesses.</p>
+    </div>
+    <div class="grid grid-cols-1 gap-3 text-sm sm:grid-cols-2">
+      <div class="rounded-lg bg-white px-4 py-3 shadow-sm ring-1 ring-slate-900/5">
+        <p class="text-slate-500">Total notes</p>
+        <p class="mt-1 text-lg font-semibold text-slate-900"><%= number_with_delimiter(@total_count) %></p>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+<div class="mb-6 rounded-xl bg-white px-4 py-4 shadow-sm ring-1 ring-slate-900/5 sm:px-6">
+  <%= form_with url: admin_notes_path, method: :get, local: true, class: "grid grid-cols-1 gap-4 lg:grid-cols-4 lg:items-end" do |f| %>
+    <div class="lg:col-span-2">
+      <%= f.label :q, "Search", class: "block text-sm font-medium leading-6 text-slate-900" %>
+      <%= f.text_field :q, value: params[:q], class: field_class, placeholder: "Search by note content, business name, or author" %>
+    </div>
+
+    <div>
+      <%= f.label :role, "Author Role", class: "block text-sm font-medium leading-6 text-slate-900" %>
+      <%= f.select :role, options_for_select([ [ "All roles", "" ] ] + User.roles.map { |key, _| [ key.humanize, key ] }, params[:role]), {}, class: select_class %>
+    </div>
+
+    <div>
+      <%= f.label :user_id, "Author Name", class: "block text-sm font-medium leading-6 text-slate-900" %>
+      <%= f.select :user_id, options_for_select([ [ "All authors", "" ] ] + @users.map { |u| [ u.display_name, u.id ] }, params[:user_id]), {}, class: select_class %>
+    </div>
+
+    <div class="flex flex-wrap gap-2 lg:col-span-4">
+      <%= f.submit "Apply filters", class: "rounded-md bg-indigo-600 px-3 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500" %>
+      <% if params[:q].present? || params[:role].present? || params[:user_id].present? %>
+        <%= link_to "Clear", admin_notes_path, class: "rounded-md bg-white px-3 py-2.5 text-sm font-semibold text-slate-900 shadow-sm ring-1 ring-inset ring-slate-300 hover:bg-slate-50" %>
+      <% end %>
+    </div>
+  <% end %>
+</div>
+
+<div class="mt-8 flow-root">
+  <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+    <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+      <div class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:rounded-xl bg-white">
+        <table class="min-w-full divide-y divide-slate-300">
+          <thead class="bg-slate-50">
+            <tr>
+              <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-600 sm:pl-6">Record</th>
+              <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-600 sm:pl-6">Business</th>
+              <th scope="col" class="px-3 py-3.5 text-left text-xs font-semibold uppercase tracking-wide text-slate-600">Note Content</th>
+              <th scope="col" class="px-3 py-3.5 text-left text-xs font-semibold uppercase tracking-wide text-slate-600">Author</th>
+              <th scope="col" class="px-3 py-3.5 text-left text-xs font-semibold uppercase tracking-wide text-slate-600">Created</th>
+              <th scope="col" class="relative py-3.5 pl-3 pr-4 text-right text-xs font-semibold uppercase tracking-wide text-slate-600 sm:pr-6">Actions</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-200 bg-white">
+            <% @notes.each do |note| %>
+              <tr class="hover:bg-slate-50">
+                <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm text-slate-600 sm:pl-6">
+                  <div class="font-medium text-slate-900">#<%= note.id %></div>
+                </td>
+                <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium">
+                  <%= link_to note.business.name, admin_business_path(note.business), class: "text-indigo-700 hover:text-indigo-600 hover:underline" %>
+                  <div class="mt-1 text-xs font-normal text-slate-500"><%= note.business.email.presence || "-" %></div>
+                </td>
+                <td class="px-3 py-4 text-sm text-slate-700">
+                  <div class="whitespace-pre-wrap break-words max-w-xl"><%= note.body %></div>
+                </td>
+                <td class="whitespace-nowrap px-3 py-4 text-sm text-slate-600">
+                  <div>
+                    <div class="font-medium text-slate-900"><%= note.creator_name %></div>
+                    <% if note.user.present? %>
+                      <% badge_classes = case note.user.role
+                        when "super_admin" then "bg-purple-50 text-purple-700 ring-purple-200"
+                        when "admin" then "bg-blue-50 text-blue-700 ring-blue-200"
+                        else "bg-emerald-50 text-emerald-700 ring-emerald-200"
+                      end %>
+                      <span class="inline-flex items-center rounded-full px-2.5 py-0.5 mt-1 text-xs font-medium ring-1 ring-inset <%= badge_classes %>">
+                        <%= note.creator_role %>
+                      </span>
+                    <% else %>
+                      <span class="inline-flex items-center rounded-full px-2.5 py-0.5 mt-1 text-xs font-medium ring-1 ring-inset bg-slate-50 text-slate-600 ring-slate-200">
+                        <%= note.creator_role %>
+                      </span>
+                    <% end %>
+                  </div>
+                </td>
+                <td class="whitespace-nowrap px-3 py-4 text-sm text-slate-500">
+                  <%= l(note.created_at, format: :short) %>
+                  <div class="text-xs text-slate-400 mt-0.5"><%= time_ago_in_words(note.created_at) %> ago</div>
+                </td>
+                <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
+                  <div class="flex justify-end items-center gap-2">
+                    <%= link_to "Edit", edit_admin_note_path(note), class: "text-indigo-600 hover:text-indigo-900 font-semibold" %>
+                    <span class="text-slate-300">·</span>
+                    <%= button_to "Delete", admin_note_path(note), method: :delete, data: { turbo_confirm: "Delete this note?" }, class: "text-red-600 hover:text-red-900 font-semibold bg-transparent border-0 p-0 cursor-pointer" %>
+                  </div>
+                </td>
+              </tr>
+            <% end %>
+            <% if @notes.empty? %>
+              <tr>
+                <td colspan="6" class="px-3 py-12 text-center text-sm text-slate-500">No notes found.</td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+      <% if @pagy.pages > 1 %>
+        <div class="mt-4 flex justify-end">
+          <%== pagy_nav(@pagy) %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

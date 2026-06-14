@@ -28,15 +28,17 @@ RSpec.describe "Admin::Users", type: :request do
       {
         user: {
           email: "newuser@example.com",
-          role: "employee"
+          role: "employee",
+          name: "John Doe"
         }
       }
     end
 
-    it "creates a new user and redirects" do
+    it "creates a new user with name and redirects" do
       expect {
         post admin_users_path, params: valid_params
       }.to change(User, :count).by(1)
+      expect(User.find_by(email: "newuser@example.com").name).to eq("John Doe")
       expect(response).to redirect_to(admin_users_path)
     end
 
