@@ -71,9 +71,7 @@
               <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-slate-900 sm:pl-6">Business Name</th>
               <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-slate-900">City & Country</th>
               <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-slate-900">Niche</th>
-              <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6">
-                <span class="sr-only">View</span>
-              </th>
+              <th scope="col" class="relative py-3.5 pl-3 pr-4 text-right text-sm font-semibold text-slate-900 sm:pr-6">Actions</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-slate-200 bg-white">
@@ -88,7 +86,12 @@
                 <td class="px-3 py-4 text-sm text-slate-500"><%= [b.city, b.country].compact.join(", ").presence || "Unknown" %></td>
                 <td class="px-3 py-4 text-sm text-slate-500"><%= b.niche.presence || "-" %></td>
                 <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-                  <%= link_to "View<span class='sr-only'>, #{b.name}</span>".html_safe, admin_business_path(b), class: "text-blue-600 hover:text-blue-900" %>
+                  <div class="flex justify-end gap-3">
+                    <% if b.phone.present? %>
+                      <%= link_to "Chat<span class='sr-only'>, #{b.name}</span>".html_safe, admin_communication_path(b.phone), class: "text-green-700 hover:text-green-600" %>
+                    <% end %>
+                    <%= link_to "View<span class='sr-only'>, #{b.name}</span>".html_safe, admin_business_path(b), class: "text-blue-600 hover:text-blue-900" %>
+                  </div>
                 </td>
               </tr>
             <% end %>

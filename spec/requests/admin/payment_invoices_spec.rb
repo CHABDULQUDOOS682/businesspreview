@@ -8,6 +8,48 @@ RSpec.describe "Admin::PaymentInvoices", type: :request do
     sign_in admin
   end
 
+  describe "GET /admin/payment_invoices" do
+    it "shows invoices across businesses with business links" do
+      invoice = create(
+        :payment_invoice,
+        business: business,
+        status: "paid",
+        sent_to_email: "billing@example.com",
+        stripe_invoice_id: "in_123"
+      )
+
+      get admin_payment_invoices_path
+
+      expect(response).to have_http_status(:ok)
+      expect(response.body).to include("All Invoices")
+      expect(response.body).to include(invoice.kind_label)
+      expect(response.body).to include("billing@example.com")
+      expect(response.body).to include("in_123")
+      expect(response.body).to include(admin_business_path(business))
+      expect(response.body).to include(business.name)
+    end
+
+    it "filters invoices by status" do
+      paid_invoice = create(:payment_invoice, business: business, status: "paid")
+      draft_invoice = create(:payment_invoice, business: create(:business, name: "Draft Co"), status: "draft")
+
+      get admin_payment_invoices_path(status: "paid")
+
+      expect(response.body).to include(paid_invoice.business.name)
+      expect(response.body).not_to include(draft_invoice.business.name)
+    end
+
+    it "redirects employees" do
+      sign_out admin
+      sign_in create(:user, :employee)
+
+      get admin_payment_invoices_path
+
+      expect(response).to redirect_to(admin_root_path)
+      expect(flash[:alert]).to include("do not have access")
+    end
+  end
+
   describe "POST /admin/businesses/:business_id/payment_invoices" do
     let(:service_mock) { instance_double(StripePaymentInvoiceService) }
 

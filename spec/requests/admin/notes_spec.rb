@@ -9,11 +9,24 @@ RSpec.describe "Admin::Notes", type: :request do
     sign_in admin
   end
 
+  describe "GET /admin/notes" do
+    it "returns http success" do
+      get admin_notes_path
+      expect(response).to have_http_status(:success)
+    end
+
+    it "allows searching and filtering" do
+      get admin_notes_path, params: { q: "important", role: "admin" }
+      expect(response).to have_http_status(:success)
+    end
+  end
+
   describe "POST /admin/notes" do
-    it "creates a new note and redirects" do
+    it "creates a new note, assigns the current user and redirects" do
       expect {
         post admin_notes_path, params: { note: { body: "New note", business_id: business.id } }
       }.to change(Note, :count).by(1)
+      expect(Note.last.user).to eq(admin)
       expect(response).to redirect_to(admin_business_path(business))
     end
 

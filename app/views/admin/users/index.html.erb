@@ -27,8 +27,15 @@
       <% @users.each do |user| %>
         <tr class="hover:bg-slate-50">
           <td class="px-4 py-4 text-sm text-slate-900">
-            <div class="flex items-center gap-2">
-              <span><%= user.email %></span>
+            <div class="flex items-start gap-2">
+              <div>
+                <% if user.name.present? %>
+                  <div class="font-medium text-slate-900"><%= user.name %></div>
+                  <div class="text-xs text-slate-500"><%= user.email %></div>
+                <% else %>
+                  <div class="font-medium text-slate-900"><%= user.email %></div>
+                <% end %>
+              </div>
               <% if user == current_user %>
                 <span class="inline-flex items-center rounded-full bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-600 ring-1 ring-inset ring-slate-200">You</span>
               <% end %>

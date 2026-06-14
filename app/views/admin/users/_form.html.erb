@@ -5,8 +5,13 @@
 
   <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
     <div class="sm:col-span-2">
+      <%= f.label :name, class: "block text-sm font-medium leading-6 text-slate-900" %>
+      <%= f.text_field :name, autofocus: true, class: field_class, placeholder: "John Doe" %>
+    </div>
+
+    <div class="sm:col-span-2">
       <%= f.label :email, class: "block text-sm font-medium leading-6 text-slate-900" %>
-      <%= f.email_field :email, autofocus: true, class: field_class, placeholder: "name@example.com" %>
+      <%= f.email_field :email, class: field_class, placeholder: "name@example.com" %>
     </div>
 
     <div class="sm:col-span-2">

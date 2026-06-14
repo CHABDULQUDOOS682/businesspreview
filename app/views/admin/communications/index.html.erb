@@ -21,9 +21,9 @@
 <% end %>
 
 <%= turbo_stream_from "business_conversations" %>
-<div class="space-y-8">
+<div class="max-w-full min-w-0 space-y-8 overflow-x-hidden">
     <!-- Businesses Section -->
-    <div class="bg-white px-4 py-4 shadow-sm ring-1 ring-slate-900/5 sm:rounded-xl sm:px-6">
+    <div class="max-w-full min-w-0 bg-white px-4 py-4 shadow-sm ring-1 ring-slate-900/5 sm:rounded-xl sm:px-6">
       <%= render "admin/shared/business_segment_tabs", tabs: tabs, current_segment: @segment %>
 
       <div class="mt-5">
@@ -33,7 +33,7 @@
         </svg>
         <%= Business::SEGMENTS.fetch(@segment) %> Conversations
       </h3>
-      <div class="bg-white shadow overflow-hidden sm:rounded-md border border-gray-200">
+      <div class="max-w-full min-w-0 overflow-hidden border border-gray-200 bg-white shadow sm:rounded-md">
         <ul role="list" class="divide-y divide-gray-200">
           <% if @businesses.any? %>
             <% @businesses.each do |business| %>
@@ -63,7 +63,7 @@
           </svg>
           Other Inquiries
         </h3>
-        <div class="bg-white shadow overflow-hidden sm:rounded-md border border-gray-200">
+        <div class="max-w-full min-w-0 overflow-hidden border border-gray-200 bg-white shadow sm:rounded-md">
           <ul role="list" class="divide-y divide-gray-200">
             <% @standalone_conversations.each do |msg| %>
               <% other_number = msg.direction == "inbound" ? msg.from_number : msg.to_number %>

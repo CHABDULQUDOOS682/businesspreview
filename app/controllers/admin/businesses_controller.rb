@@ -71,7 +71,6 @@ class Admin::BusinessesController < ApplicationController
 
   def show
     @business = Business.find(params[:id])
-    @templates = PreviewLink.available_templates
     @payment_invoice = PaymentInvoice.build_for_business(@business)
     @payment_invoices = @business.payment_invoices.recent
   end
