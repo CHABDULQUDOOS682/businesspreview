@@ -18,7 +18,7 @@ RSpec.describe ContactMailer, type: :mailer do
     it "renders the headers" do
       expect(mail.subject).to eq("🔥 New Lead Inbound: Jane Doe - Web Design")
       expect(mail.to).to eq([ "developer.qudoos@gmail.com" ])
-      expect(mail.from).to eq([ "Admintest@example.com" ])
+      expect(mail.from).to eq([ ApplicationMailer.default[:from] ])
     end
 
     it "renders the body with params details" do
