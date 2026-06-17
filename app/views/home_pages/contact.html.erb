@@ -11,20 +11,34 @@
     <div class="space-y-6 lg:col-span-2">
       <div class="home-glass home-card-3d space-y-6 rounded-[28px] p-8">
         <% [
-          { icon: "fa-envelope", label: "Email", value: "hello@devdebizz.com", href: "mailto:hello@devdebizz.com" },
-          { icon: "fa-phone", label: "Phone", value: "+1 (415) 555-0142", href: "tel:+14155550142" },
-          { icon: "fa-location-dot", label: "Office", value: "221 Market Street, San Francisco, CA", href: "#" },
-          { icon: "fa-clock", label: "Hours", value: "Mon–Fri · 9am–6pm PT", href: "#" }
+          { icon: "fa-envelope", label: "Email", value: "devdebizz@gmail.com", href: "mailto:devdebizz@gmail.com" },
+          { icon: "fa-phone", label: "Phone", value: "NA", href: "tel:+111111111" },
+          { icon: "fa-location-dot", label: "Office", value: "1001 S. Main St. STE 500 Kalispell, MT 59901", href: "https://www.google.com/maps/place/1001+S+Main+St+%23500,+Kalispell,+MT+59901,+USA/@48.1888896,-114.31241,17z/data=!3m1!4b1!4m6!3m5!1s0x536650c2d7e25017:0x2306ba598ba234da!8m2!3d48.1888861!4d-114.3098297!16s%2Fg%2F11mhk0p7_f?authuser=0&hl=en&entry=ttu&g_ep=EgoyMDI2MDYxMy4wIKXMDSoASAFQAw%3D%3D" },
+          { icon: "fa-clock", label: "Hours", value: "Mon–Fri · 24/7", href: "#" }
         ].each do |contact| %>
-          <a href="<%= contact[:href] %>" class="group flex items-start gap-4">
+
+          <a
+            href="<%= contact[:href] %>"
+            class="group flex items-start gap-4"
+            <% if contact[:label] == "Office" %>
+              target="_blank"
+              rel="noopener noreferrer"
+            <% end %>
+          >
+
             <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-[#213885]/20 to-[#213885]/5 ring-1 ring-[#213885]/30 transition group-hover:scale-110">
               <i class="fa-solid <%= contact[:icon] %> text-lg text-[#5F3475]"></i>
             </div>
+
             <div>
               <p class="text-xs uppercase tracking-[0.18em] text-[#081849]/52"><%= contact[:label] %></p>
-              <p class="mt-1 font-semibold text-[#081849] transition group-hover:text-[#5F3475]"><%= contact[:value] %></p>
+              <p class="mt-1 font-semibold text-[#081849] transition group-hover:text-[#5F3475]">
+                <%= contact[:value] %>
+              </p>
             </div>
+
           </a>
+
         <% end %>
       </div>
 
