@@ -68,6 +68,6 @@ gem "pry-byebug"
 gem "twilio-ruby"
 gem "stripe"
 gem "dotenv-rails"
-gem "pagy", "~> 9.0"
+gem "pagy", "~> 43.5"
 
 gem "sendgrid-actionmailer", "~> 3.2"
