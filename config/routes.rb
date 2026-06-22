@@ -10,6 +10,17 @@ Rails.application.routes.draw do
   get "contact", to: "home_pages#contact"
   post "contact", to: "home_pages#create_contact", as: :contact_submissions
   get "privacy", to: "home_pages#privacy"
+  get "careers", to: "home_pages#careers"
+  get "press", to: "home_pages#press"
+  get "partners", to: "home_pages#partners"
+  get "blog", to: "home_pages#blog"
+  get "help_center", to: "home_pages#help_center"
+  get "documentation", to: "home_pages#documentation"
+  get "brand_kit", to: "home_pages#brand_kit"
+  get "terms", to: "home_pages#terms"
+  get "cookie_policy", to: "home_pages#cookie_policy"
+  get "gdpr", to: "home_pages#gdpr"
+  get "accessibility", to: "home_pages#accessibility"
 
   get "landing_pages/show"
   get "/lp/:uuid", to: "landing_pages#show", as: :landing_page

@@ -8,6 +8,10 @@ module ApplicationHelper
     APP_NAME
   end
 
+  def contact_email
+    ENV.fetch("CONTACT_EMAIL", "devdebizz@gmail.com")
+  end
+
   def default_meta_description
     DEFAULT_META_DESCRIPTION
   end

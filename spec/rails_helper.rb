@@ -32,7 +32,8 @@ require_relative '../config/environment'
 
 # Set default ENVs for tests to avoid validation failures
 ENV["TWILIO_PHONE_NUMBER"] = "+15005550006" if ENV["TWILIO_PHONE_NUMBER"].to_s.strip.empty?
-ENV["MAILER_FROM"] = "hello@devdebizz.com" if ENV["MAILER_FROM"].to_s.strip.empty?
+ENV["MAILER_FROM"] = "devdebizz@gmail.com" if ENV["MAILER_FROM"].to_s.strip.empty?
+ENV["CONTACT_EMAIL"] = "devdebizz@gmail.com" if ENV["CONTACT_EMAIL"].to_s.strip.empty?
 
 # Prevent database truncation if the environment is production
 abort("The Rails environment is running in production mode!") if Rails.env.production?

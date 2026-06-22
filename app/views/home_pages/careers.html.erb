@@ -1,0 +1,46 @@
+<% content_for :title, "Careers | DevDeBizz" %>
+
+<%= render "page_header",
+  eyebrow: "Careers",
+  title_html: 'Join our remote <span class="home-display-accent">creator network</span>'.html_safe,
+  subtitle: "We work with designers, developers, and copywriters to build clean websites and practical follow-up tools for service businesses." %>
+
+<section class="py-20">
+  <div class="mx-auto max-w-7xl px-2 md:px-0">
+    <div class="mx-auto max-w-3xl text-center">
+      <p class="text-xs font-bold uppercase tracking-[0.2em] text-[#081849]/58">How we collaborate</p>
+      <h2 class="mt-3 text-4xl font-extrabold text-[#081849]">A modular, local-focused network</h2>
+      <p class="mt-4 text-lg text-[#081849]/78">
+        We match client projects with specialists in our network. No endless standups, no corporate overhead—just high-craft work, clear specifications, and reliable handoffs.
+      </p>
+    </div>
+
+    <div class="mt-16 grid gap-6 md:grid-cols-3">
+      <% [
+        { icon: "fa-code", title: "Rails / Front-End Dev", desc: "Build clean Rails routes, integrate Stripe, Twilio, and configure custom CRM connectors. Focuses on speed and solid code.", type: "Contract / Remote" },
+        { icon: "fa-compass", title: "UI/UX Brand Designer", desc: "Create high-converting, gorgeous layouts and vector brand kits. Focuses on custom typography and rich glassmorphic details.", type: "Contract / Remote" },
+        { icon: "fa-feather-pointed", title: "Growth Copywriter", desc: "Write clear, action-oriented landing page copy and follow-up email campaigns that convert cold leads to booked service calls.", type: "Contract / Remote" }
+      ].each do |role| %>
+        <div class="home-glass home-card-3d flex flex-col justify-between rounded-[28px] p-8">
+          <div>
+            <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#213885]/8 text-[#5F3475]">
+              <i class="fa-solid <%= role[:icon] %> text-xl"></i>
+            </div>
+            <h3 class="mt-6 text-2xl font-bold text-[#081849]"><%= role[:title] %></h3>
+            <p class="mt-3 text-sm leading-relaxed text-[#081849]/66"><%= role[:desc] %></p>
+          </div>
+          <div class="mt-6 border-t border-[#081849]/8 pt-4">
+            <span class="inline-block text-xs font-bold uppercase tracking-wider text-[#213885] bg-[#213885]/8 px-3 py-1 rounded-full"><%= role[:type] %></span>
+          </div>
+        </div>
+      <% end %>
+    </div>
+
+    <div class="mt-16 text-center">
+      <p class="text-sm text-[#081849]/50 mb-6">Don’t see a matching role? We are always open to meeting talented builders.</p>
+      <%= link_to contact_path, class: "home-button-primary" do %>
+        Get in Touch & Apply
+      <% end %>
+    </div>
+  </div>
+</section>

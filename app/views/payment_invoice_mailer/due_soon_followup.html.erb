@@ -1,16 +1,59 @@
-<h1>Your invoice is due tomorrow</h1>
+<h1 style="margin: 0 0 16px 0; font-size: 22px; font-weight: 800; color: #081849; font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; line-height: 1.3;">Your invoice is due tomorrow</h1>
 
-<p>Hello <%= @business.owner_name.presence || @business.name %>,</p>
-
-<p>
-  This is a reminder that your <%= @payment_invoice.kind_label.downcase %> invoice for
-  <strong><%= number_to_currency(@payment_invoice.amount, unit: @payment_invoice.currency.upcase == "USD" ? "$" : "#{@payment_invoice.currency.upcase} ") %></strong>
-  is due tomorrow.
+<p style="margin: 0 0 20px 0; font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 15px; line-height: 1.6; color: #334155;">
+  Hello <%= @business.owner_name.presence || @business.name %>,
 </p>
 
-<p>
-  <%= link_to "Open and pay invoice", @payment_url, class: "button" %>
+<p style="margin: 0 0 24px 0; font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 15px; line-height: 1.6; color: #334155;">
+  This is a friendly reminder that your <%= @payment_invoice.kind_label.downcase %> invoice is due tomorrow. Please review the details below and complete the payment using the secure link.
 </p>
 
-<p>If the button does not work, open this link:</p>
-<p><%= link_to @payment_url, @payment_url %></p>
+<!-- Invoice Details Card -->
+<table border="0" cellpadding="0" cellspacing="0" width="100%" style="margin-bottom: 32px; border: 1px solid rgba(8, 24, 73, 0.08); border-radius: 16px; background-color: #FAF8F5; border-collapse: separate !important; overflow: hidden;">
+  <tr>
+    <td style="padding: 24px; text-align: center; border-bottom: 1px solid rgba(8, 24, 73, 0.05); font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+      <span style="font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(8, 24, 73, 0.5); display: block; margin-bottom: 6px;">Amount Due</span>
+      <span style="font-size: 32px; font-weight: 800; color: #081849;"><%= number_to_currency(@payment_invoice.amount, unit: @payment_invoice.currency.upcase == "USD" ? "$" : "#{@payment_invoice.currency.upcase} ") %></span>
+    </td>
+  </tr>
+  <tr>
+    <td style="padding: 18px 24px; font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+      <table border="0" cellpadding="0" cellspacing="0" width="100%">
+        <tr>
+          <td style="font-size: 14px; color: rgba(8, 24, 73, 0.6); padding-bottom: 8px;">Invoice Type</td>
+          <td style="font-size: 14px; font-weight: 600; color: #081849; text-align: right; padding-bottom: 8px;"><%= @payment_invoice.kind_label %></td>
+        </tr>
+        <tr>
+          <td style="font-size: 14px; color: rgba(8, 24, 73, 0.6); padding-bottom: 8px;">Client Business</td>
+          <td style="font-size: 14px; font-weight: 600; color: #081849; text-align: right; padding-bottom: 8px;"><%= @business.name %></td>
+        </tr>
+        <tr>
+          <td style="font-size: 14px; color: rgba(8, 24, 73, 0.6);">Due Date</td>
+          <td style="font-size: 14px; font-weight: 700; color: #b45309; text-align: right;">Tomorrow</td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+
+<!-- Call to Action Button -->
+<table border="0" cellpadding="0" cellspacing="0" width="100%" style="margin-bottom: 32px;">
+  <tr>
+    <td align="center">
+      <table border="0" cellpadding="0" cellspacing="0" style="border-collapse: separate !important;">
+        <tr>
+          <td align="center" bgcolor="#213885" style="border-radius: 9999px;">
+            <a href="<%= @payment_url %>" target="_blank" style="font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 15px; font-weight: bold; color: #ECDFD2; text-decoration: none; padding: 16px 36px; border-radius: 9999px; border: 1px solid #213885; display: inline-block; letter-spacing: 0.02em;">Open and pay invoice &rarr;</a>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+
+<p style="margin: 0 0 8px 0; font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 1.5; color: rgba(8, 24, 73, 0.5); text-align: center;">
+  If the button does not work, open this link:
+</p>
+<p style="margin: 0; font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 13px; line-height: 1.5; text-align: center; word-break: break-all;">
+  <a href="<%= @payment_url %>" style="color: #213885; text-decoration: underline;"><%= @payment_url %></a>
+</p>

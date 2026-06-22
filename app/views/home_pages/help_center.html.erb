@@ -1,0 +1,67 @@
+<% content_for :title, "Help Center | DevDeBizz" %>
+
+<%= render "page_header",
+  eyebrow: "Help Center",
+  title_html: 'How can we <span class="home-display-accent">help you today?</span>'.html_safe,
+  subtitle: "Answers to frequently asked questions about our process, invoicing, and updates." %>
+
+<section class="py-20">
+  <div class="mx-auto max-w-7xl px-2 md:px-0">
+    <div class="grid gap-6 md:grid-cols-3">
+      <div class="home-glass home-card-3d rounded-[28px] p-8">
+        <h2 class="text-2xl font-bold text-[#081849] flex items-center gap-2">
+          <i class="fa-solid fa-circle-question text-[#5F3475]"></i> Process & Timeline
+        </h2>
+        <div class="mt-6 space-y-6">
+          <div>
+            <h3 class="font-bold text-[#081849]">How long does a website project take?</h3>
+            <p class="mt-2 text-sm leading-relaxed text-[#081849]/66">A typical service business site takes 3 to 4 weeks from scope approval to launching live.</p>
+          </div>
+          <div>
+            <h3 class="font-bold text-[#081849]">Do you offer custom designs?</h3>
+            <p class="mt-2 text-sm leading-relaxed text-[#081849]/66">Yes. Every brand wordmark, color scheme, layout structure, and asset is crafted specifically for your target audience.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="home-glass home-card-3d rounded-[28px] p-8">
+        <h2 class="text-2xl font-bold text-[#081849] flex items-center gap-2">
+          <i class="fa-solid fa-credit-card text-[#5F3475]"></i> Billing & Invoicing
+        </h2>
+        <div class="mt-6 space-y-6">
+          <div>
+            <h3 class="font-bold text-[#081849]">What are your payment terms?</h3>
+            <p class="mt-2 text-sm leading-relaxed text-[#081849]/66">Usually, we require a 50% deposit to initiate design, and the remaining 50% upon final sign-off and site launch.</p>
+          </div>
+          <div>
+            <h3 class="font-bold text-[#081849]">How do I pay invoices?</h3>
+            <p class="mt-2 text-sm leading-relaxed text-[#081849]/66">We send secure Stripe invoice links via email. You can pay instantly using credit card, Apple Pay, or bank transfers.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="home-glass home-card-3d rounded-[28px] p-8">
+        <h2 class="text-2xl font-bold text-[#081849] flex items-center gap-2">
+          <i class="fa-solid fa-life-ring text-[#5F3475]"></i> Post-Launch Support
+        </h2>
+        <div class="mt-6 space-y-6">
+          <div>
+            <h3 class="font-bold text-[#081849]">Do you offer hosting support?</h3>
+            <p class="mt-2 text-sm leading-relaxed text-[#081849]/66">Yes, we provide fully-managed staging and deployment support to guarantee maximum performance and SEO speed.</p>
+          </div>
+          <div>
+            <h3 class="font-bold text-[#081849]">How do I request edits?</h3>
+            <p class="mt-2 text-sm leading-relaxed text-[#081849]/66">Clients can email us or submit support request messages directly. We usually implement minor modifications within 24 hours.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-16 text-center">
+      <p class="text-[#081849]/70 mb-4 font-semibold">Still have questions?</p>
+      <%= link_to contact_path, class: "home-button-primary" do %>
+        Contact Support Desk
+      <% end %>
+    </div>
+  </div>
+</section>
