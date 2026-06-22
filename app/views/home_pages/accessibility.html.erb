@@ -1,0 +1,27 @@
+<% content_for :title, "Accessibility | DevDeBizz" %>
+
+<%= render "page_header",
+  eyebrow: "Accessibility",
+  title_html: 'Accessible web <span class="home-display-accent">standards</span>'.html_safe,
+  subtitle: "Our commitment to ensuring this site is clear, navigable, and usable for all visitors." %>
+
+<section class="py-20">
+  <div class="mx-auto max-w-4xl px-2 md:px-0">
+    <div class="home-glass home-card-3d rounded-[32px] p-8 md:p-12 space-y-8 text-[#081849]/80 leading-relaxed">
+      <div>
+        <h2 class="text-2xl font-bold text-[#081849] mb-3">Our commitment</h2>
+        <p>At DevDeBizz, we want to ensure our digital experiences are usable by everyone. We build websites using semantic HTML elements, high-contrast text, clear label definitions, and structured navigation layouts to ensure compatibility with screen readers and assistive technology.</p>
+      </div>
+
+      <div>
+        <h2 class="text-2xl font-bold text-[#081849] mb-3">Compliance standard</h2>
+        <p>We work to align this site and client assets with the Web Content Accessibility Guidelines (WCAG) 2.1 Level AA conformance standards. We check contrast ratios, link descriptions, keyboard focus paths, and image description tags to keep accessibility high.</p>
+      </div>
+
+      <div>
+        <h2 class="text-2xl font-bold text-[#081849] mb-3">Submit feedback</h2>
+        <p>If you encounter any difficulty navigating our site or have suggestions on how we can improve usability, please reach out to us directly at: <%= link_to contact_email, "mailto:#{contact_email}", class: "font-semibold underline text-[#213885]" %>.</p>
+      </div>
+    </div>
+  </div>
+</section>

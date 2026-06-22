@@ -54,6 +54,7 @@ env:
     - STRIPE_WEBHOOK_SECRET
     - MAILER_FROM
     - SENDGRID_API_KEY
+    - CONTACT_EMAIL
 
   clear:
     # Run the Solid Queue Supervisor inside the web server's Puma process to do jobs.

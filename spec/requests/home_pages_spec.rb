@@ -64,4 +64,81 @@ RSpec.describe "HomePages", type: :request do
       expect(response).to have_http_status(:success)
     end
   end
+
+  describe "GET /careers" do
+    it "returns http success" do
+      get careers_path
+      expect(response).to have_http_status(:success)
+    end
+  end
+
+  describe "GET /press" do
+    it "returns http success" do
+      get press_path
+      expect(response).to have_http_status(:success)
+    end
+  end
+
+  describe "GET /partners" do
+    it "returns http success" do
+      get partners_path
+      expect(response).to have_http_status(:success)
+    end
+  end
+
+  describe "GET /blog" do
+    it "returns http success" do
+      get blog_path
+      expect(response).to have_http_status(:success)
+    end
+  end
+
+  describe "GET /help_center" do
+    it "returns http success" do
+      get help_center_path
+      expect(response).to have_http_status(:success)
+    end
+  end
+
+  describe "GET /documentation" do
+    it "returns http success" do
+      get documentation_path
+      expect(response).to have_http_status(:success)
+    end
+  end
+
+  describe "GET /brand_kit" do
+    it "returns http success" do
+      get brand_kit_path
+      expect(response).to have_http_status(:success)
+    end
+  end
+
+  describe "GET /terms" do
+    it "returns http success" do
+      get terms_path
+      expect(response).to have_http_status(:success)
+    end
+  end
+
+  describe "GET /cookie_policy" do
+    it "returns http success" do
+      get cookie_policy_path
+      expect(response).to have_http_status(:success)
+    end
+  end
+
+  describe "GET /gdpr" do
+    it "returns http success" do
+      get gdpr_path
+      expect(response).to have_http_status(:success)
+    end
+  end
+
+  describe "GET /accessibility" do
+    it "returns http success" do
+      get accessibility_path
+      expect(response).to have_http_status(:success)
+    end
+  end
 end

@@ -7,7 +7,7 @@ RSpec.describe "Admin::Businesses", type: :request do
 
   let(:admin) { create(:user, :admin) }
   let(:employee) { create(:user, role: "employee") }
-  let(:business) { create(:business, email: "developer.qudoos@gmail.com", phone: "+1234567890") }
+  let(:business) { create(:business, email: "devdebizz@gmail.com", phone: "+1234567890") }
 
   before do
     sign_in admin

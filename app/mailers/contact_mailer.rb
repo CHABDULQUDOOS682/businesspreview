@@ -8,7 +8,7 @@ class ContactMailer < ApplicationMailer
     @message          = params[:message]
 
     mail(
-      to: "developer.qudoos@gmail.com",
+      to: ENV.fetch("CONTACT_EMAIL", "devdebizz@gmail.com"),
       subject: "🔥 New Lead Inbound: #{@first_name} #{@last_name} - #{@service_interest}"
     )
   end

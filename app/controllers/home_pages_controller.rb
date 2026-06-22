@@ -37,4 +37,37 @@ class HomePagesController < ApplicationController
 
     def privacy
     end
+
+    def careers
+    end
+
+    def press
+    end
+
+    def partners
+    end
+
+    def blog
+    end
+
+    def help_center
+    end
+
+    def documentation
+    end
+
+    def brand_kit
+    end
+
+    def terms
+    end
+
+    def cookie_policy
+    end
+
+    def gdpr
+    end
+
+    def accessibility
+    end
 end

@@ -2,138 +2,141 @@
 <html>
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
+      /* Client-specific Styles & Resets */
+      body, table, td, a { -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+      table, td { mso-table-lspace: 0pt; mso-table-rspace: 0pt; border-collapse: collapse !important; }
+      img { -ms-interpolation-mode: bicubic; border: 0; height: auto; line-height: 100%; outline: none; text-decoration: none; }
       body {
-        margin: 0;
-        padding: 0;
-        background: #eef2ff;
-        font-family: Arial, Helvetica, sans-serif;
-        color: #0f172a;
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+        background-color: #ECDFD2;
+        font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        color: #081849;
+        -webkit-font-smoothing: antialiased;
       }
+      
+      /* Outlook Link Fix */
+      a { color: #213885; text-decoration: none; }
+      a:hover { text-decoration: underline !important; }
 
-      .email-shell {
-        width: 100%;
-        padding: 32px 16px;
-        box-sizing: border-box;
-      }
-
-      .email-card {
-        max-width: 640px;
-        margin: 0 auto;
-        background: #ffffff;
-        border-radius: 24px;
-        overflow: hidden;
-        border: 1px solid #dbeafe;
-        box-shadow: 0 18px 45px rgba(15, 23, 42, 0.08);
-      }
-
-      .email-hero {
-        background: linear-gradient(135deg, #0f172a 0%, #1d4ed8 100%);
-        padding: 28px 32px;
-        color: #ffffff;
-      }
-
-      .brand-row {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-      }
-
-      .brand-badge {
-        width: 40px;
-        height: 40px;
-        border-radius: 12px;
-        background: rgba(255, 255, 255, 0.16);
-        text-align: center;
-        line-height: 40px;
-        font-size: 22px;
-        font-weight: bold;
-      }
-
-      .brand-name {
-        font-size: 24px;
-        font-weight: 700;
-        letter-spacing: -0.02em;
-      }
-
-      .hero-copy {
-        margin-top: 18px;
-        font-size: 15px;
-        line-height: 1.7;
-        color: rgba(255, 255, 255, 0.86);
-      }
-
-      .email-body {
-        padding: 32px;
-      }
-
-      .email-body h1 {
-        margin: 0 0 14px;
-        font-size: 28px;
-        line-height: 1.2;
-        color: #0f172a;
-      }
-
-      .email-body p {
-        margin: 0 0 16px;
-        font-size: 15px;
-        line-height: 1.7;
-        color: #475569;
-      }
-
-      .cta-button {
-        display: inline-block;
-        padding: 14px 22px;
-        border-radius: 14px;
-        background: #2563eb;
-        color: #ffffff !important;
-        text-decoration: none;
-        font-weight: 700;
-        margin: 12px 0 18px;
-      }
-
-      .info-box {
-        margin-top: 18px;
-        padding: 18px 20px;
-        background: #f8fafc;
-        border: 1px solid #e2e8f0;
-        border-radius: 16px;
-      }
-
-      .footer {
-        padding: 0 32px 32px;
-        font-size: 13px;
-        line-height: 1.7;
-        color: #64748b;
-      }
-
-      .footer a {
-        color: #2563eb;
+      /* Responsive utility styles */
+      @media only screen and (max-width: 600px) {
+        .email-card {
+          width: 100% !important;
+          border-radius: 16px !important;
+        }
+        .email-shell {
+          padding: 16px 8px !important;
+        }
+        .email-body {
+          padding: 32px 20px !important;
+        }
+        .email-hero {
+          padding: 28px 20px !important;
+        }
+        .footer {
+          padding: 0 20px 28px !important;
+        }
       }
     </style>
   </head>
 
-  <body>
-    <div class="email-shell">
-      <div class="email-card">
-        <div class="email-hero">
-          <div class="brand-row">
-            <div class="brand-badge">D</div>
-            <div class="brand-name">DevDeBizz</div>
-          </div>
-          <div class="hero-copy">
-            Clear websites, client-friendly systems, and practical follow-up for growing businesses.
-          </div>
-        </div>
+  <body style="margin: 0; padding: 0; background-color: #ECDFD2; font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+    <!-- Shell/Background Table -->
+    <table border="0" cellpadding="0" cellspacing="0" width="100%" class="email-shell" style="background-color: #ECDFD2; table-layout: fixed;">
+      <tr>
+        <td align="center" style="padding: 32px 16px;">
+          <!--[if (gte mso 9)|(IE)]>
+          <table align="center" border="0" cellspacing="0" cellpadding="0" width="600">
+            <tr>
+              <td align="center" valign="top" width="600">
+          <![endif]-->
+          
+          <!-- Email Card -->
+          <table border="0" cellpadding="0" cellspacing="0" width="100%" class="email-card" style="max-width: 600px; background-color: #ffffff; border: 1px solid rgba(8, 24, 73, 0.1); border-radius: 24px; overflow: hidden; box-shadow: 0 12px 30px rgba(8, 24, 73, 0.06); border-collapse: separate !important;">
+            
+            <!-- Email Hero Header -->
+            <tr>
+              <td class="email-hero" style="background: linear-gradient(135deg, #081849 0%, #213885 50%, #5F3475 100%); padding: 32px; color: #ffffff;">
+                <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                  <tr>
+                    <td align="left" style="font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+                      <table border="0" cellpadding="0" cellspacing="0" style="border-collapse: collapse !important;">
+                        <tr>
+                          <% if attachments['logo.png'] %>
+                            <td style="padding-right: 12px; vertical-align: middle;">
+                              <img src="<%= attachments['logo.png'].url %>" alt="DevDeBizz Logo" width="38" height="38" style="display: block; border-radius: 10px; border: 0;" />
+                            </td>
+                          <% end %>
+                          <td style="vertical-align: middle;">
+                            <span style="font-size: 22px; font-weight: 800; letter-spacing: -0.02em; color: #ffffff; line-height: 1;">
+                              DevDe<span style="color: #ECDFD2;">Bizz</span>
+                            </span>
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
 
-        <div class="email-body">
-          <%= yield %>
-        </div>
+            <!-- Email Body Content -->
+            <tr>
+              <td class="email-body" style="padding: 40px 32px; background-color: #ffffff;">
+                <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                  <tr>
+                    <td style="font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 15px; line-height: 1.7; color: #334155;">
+                      <%= yield %>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
 
-        <div class="footer">
-          This email was sent by DevDeBizz. If you did not expect it, you can safely ignore it.
-        </div>
-      </div>
-    </div>
+            <!-- Email Footer -->
+            <tr>
+              <td class="footer" style="padding: 0 32px 32px; background-color: #ffffff; font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+                <!-- Divider -->
+                <table border="0" cellpadding="0" cellspacing="0" width="100%" style="margin-bottom: 24px;">
+                  <tr>
+                    <td style="border-top: 1px solid rgba(8, 24, 73, 0.08); height: 1px; line-height: 1px; font-size: 1px;">&nbsp;</td>
+                  </tr>
+                </table>
+                <!-- Footer Content -->
+                <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                  <tr>
+                    <td align="center" style="font-size: 12px; line-height: 1.6; color: rgba(8, 24, 73, 0.6); text-align: center;">
+                      <p style="margin: 0 0 12px 0;">This email was sent by DevDeBizz. If you did not expect it, you can safely ignore it.</p>
+                      <p style="margin: 0;">
+                        <a href="https://devdebizz.com" style="color: #213885; text-decoration: none; font-weight: 600;">Visit Website</a>
+                        &nbsp;&bull;&nbsp;
+                        <a href="mailto:<%= contact_email %>" style="color: #213885; text-decoration: none; font-weight: 600;">Contact Support</a>
+                      </p>
+                      <p style="margin: 16px 0 0 0; font-size: 11px; color: rgba(8, 24, 73, 0.4);">
+                        © <%= Time.current.year %> DevDeBizz. All rights reserved.
+                      </p>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+
+          </table>
+          <!--[if (gte mso 9)|(IE)]>
+              </td>
+            </tr>
+          </table>
+          <![endif]-->
+        </td>
+      </tr>
+    </table>
   </body>
 </html>

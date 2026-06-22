@@ -5,7 +5,7 @@ module HomePagesHelper
       [ "Services", services_path ],
       [ "About", about_path ],
       [ "Process", process_path ],
-      [ "Portfolio", portfolio_path ],
+      # [ "Portfolio", portfolio_path ],
       [ "Pricing", pricing_path ]
     ]
   end
@@ -16,10 +16,10 @@ module HomePagesHelper
         title: "Company",
         links: [
           [ "About", about_path ],
-          [ "Careers", contact_path ],
-          [ "Press", contact_path ],
-          [ "Partners", contact_path ],
-          [ "Blog", portfolio_path ]
+          [ "Careers", careers_path ],
+          [ "Press", press_path ],
+          [ "Partners", partners_path ],
+          [ "Blog", blog_path ]
         ]
       },
       {
@@ -28,28 +28,27 @@ module HomePagesHelper
           [ "Web Development", services_path ],
           [ "Branding", services_path ],
           [ "UI/UX Design", services_path ],
-          [ "SEO & Content", services_path ],
-          [ "Pricing", pricing_path ]
+          [ "SEO & Content", services_path ]
         ]
       },
       {
         title: "Resources",
         links: [
-          [ "Case Studies", portfolio_path ],
+          # [ "Case Studies", portfolio_path ],
           [ "Pricing", pricing_path ],
-          [ "Help Center", contact_path ],
-          [ "Documentation", contact_path ],
-          [ "Brand Kit", contact_path ]
+          [ "Help Center", help_center_path ],
+          [ "Documentation", documentation_path ],
+          [ "Brand Kit", brand_kit_path ]
         ]
       },
       {
         title: "Legal",
         links: [
           [ "Privacy Policy", privacy_path ],
-          [ "Terms of Service", contact_path ],
-          [ "Cookie Policy", contact_path ],
-          [ "GDPR", contact_path ],
-          [ "Accessibility", contact_path ]
+          [ "Terms of Service", terms_path ],
+          [ "Cookie Policy", cookie_policy_path ],
+          [ "GDPR", gdpr_path ],
+          [ "Accessibility", accessibility_path ]
         ]
       }
     ]
