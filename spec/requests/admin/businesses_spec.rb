@@ -100,6 +100,12 @@ RSpec.describe "Admin::Businesses", type: :request do
         expect(response).to redirect_to(admin_businesses_path)
         expect(flash[:notice]).to eq("Business created!")
       end
+
+      it "assigns the seller for commission attribution" do
+        post admin_businesses_path, params: { business: { name: "Sold Biz", phone: "+111222333", sold_by_id: employee.id } }
+
+        expect(Business.last.sold_by).to eq(employee)
+      end
     end
 
     context "with invalid parameters" do
@@ -152,6 +158,12 @@ RSpec.describe "Admin::Businesses", type: :request do
         expect(business.reload.name).to eq("Updated Name")
         expect(response).to redirect_to(admin_business_path(business))
         expect(flash[:notice]).to eq("Business updated!")
+      end
+
+      it "updates the seller for commission attribution" do
+        patch admin_business_path(business), params: { business: { sold_by_id: employee.id } }
+
+        expect(business.reload.sold_by).to eq(employee)
       end
     end
 

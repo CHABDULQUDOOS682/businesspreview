@@ -36,25 +36,8 @@ Rails.application.configure do
 
   # Make template changes take effect immediately.
   config.action_mailer.perform_caching = false
-  if ENV["SMTP_ADDRESS"].present?
-    config.action_mailer.delivery_method = :smtp
-    config.action_mailer.raise_delivery_errors = true
-    smtp_port = ENV.fetch("SMTP_PORT", 587).to_i
-    smtp_settings = {
-      address: ENV["SMTP_ADDRESS"],
-      port: smtp_port,
-      user_name: ENV["SMTP_USERNAME"],
-      password: ENV["SMTP_PASSWORD"],
-      domain: ENV.fetch("APP_HOST", "localhost"),
-      authentication: :plain,
-      enable_starttls_auto: true,
-      openssl_verify_mode: OpenSSL::SSL::VERIFY_NONE
-    }
-
-    config.action_mailer.smtp_settings = smtp_settings
-  else
-    config.action_mailer.delivery_method = :letter_opener
-  end
+  config.action_mailer.delivery_method = :letter_opener
+  config.action_mailer.perform_deliveries = true
 
   # Set localhost to be used by links generated in mailer templates.
   config.action_mailer.default_url_options = {

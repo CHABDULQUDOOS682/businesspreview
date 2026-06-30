@@ -1,0 +1,181 @@
+<% content_for :page_header do %>
+  <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+    <div>
+      <p class="portal-kicker"><%= employee_role? ? "My Earnings" : "Sales Compensation" %></p>
+      <h1 class="portal-page-title mt-2"><%= employee_role? ? "My Commissions" : "Commissions" %></h1>
+      <p class="mt-2 text-sm text-sand-600">
+        <%= employee_role? ? "Track commissions created from paid invoices assigned to you." : "Review employee commissions created from paid invoices." %>
+      </p>
+    </div>
+
+    <% if super_admin? || admin_role? %>
+      <div class="flex flex-wrap items-center gap-2">
+        <% if @selected_employee.present? %>
+          <%= link_to "Show all employees", admin_commissions_path, class: "btn-base btn-sand px-3 py-2 text-sm shadow-sm" %>
+        <% end %>
+        <%= link_to "Rate settings", admin_commission_rates_path, class: "btn-base btn-sand px-3 py-2 text-sm shadow-sm" %>
+      </div>
+    <% end %>
+  </div>
+<% end %>
+
+<div class="space-y-6">
+  <div class="grid grid-cols-1 gap-4 md:grid-cols-4">
+    <div class="portal-stat-card">
+      <dt class="text-sm font-medium text-sand-500">This Month</dt>
+      <dd class="mt-2 text-2xl font-bold text-sand-900"><%= number_to_currency(@current_month_total) %></dd>
+    </div>
+    <div class="portal-stat-card">
+      <dt class="text-sm font-medium text-sand-500">Pending</dt>
+      <dd class="mt-2 text-2xl font-bold text-accent-amber"><%= number_to_currency(@pending_total) %></dd>
+    </div>
+    <div class="portal-stat-card">
+      <dt class="text-sm font-medium text-sand-500">Approved</dt>
+      <dd class="mt-2 text-2xl font-bold text-accent-blue"><%= number_to_currency(@approved_total) %></dd>
+    </div>
+    <div class="portal-stat-card">
+      <dt class="text-sm font-medium text-sand-500">Paid Out</dt>
+      <dd class="mt-2 text-2xl font-bold text-accent-green"><%= number_to_currency(@paid_out_total) %></dd>
+    </div>
+  </div>
+
+  <% if (super_admin? || admin_role?) && @employee_summaries.present? %>
+    <div class="portal-panel overflow-hidden">
+      <div class="border-b border-sand-200 px-5 py-4">
+        <h2 class="text-base font-semibold text-sand-900">Commission by Employee</h2>
+        <p class="mt-1 text-sm text-sand-600">
+          <%= @selected_employee.present? ? "Filtered to #{@selected_employee.display_name}." : "Totals across all commission statuses." %>
+        </p>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-sand-200">
+          <thead class="bg-sand-50">
+            <tr>
+              <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-sand-500">Employee</th>
+              <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-sand-500">Commissions</th>
+              <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-sand-500">Pending</th>
+              <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-sand-500">Approved</th>
+              <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-sand-500">Paid Out</th>
+              <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-sand-500">Total</th>
+              <th class="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-sand-500">View</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-sand-200 bg-white">
+            <% @employee_summaries.each do |summary| %>
+              <% user = summary[:user] %>
+              <tr class="<%= @selected_employee == user ? 'bg-accent-amber-bg/40' : '' %>">
+                <td class="px-4 py-4 text-sm text-sand-900">
+                  <div class="font-medium"><%= user.display_name %></div>
+                  <div class="text-xs text-sand-500"><%= user.email %></div>
+                </td>
+                <td class="px-4 py-4 text-sm text-sand-700"><%= summary[:count] %></td>
+                <td class="px-4 py-4 text-sm font-medium text-accent-amber"><%= number_to_currency(summary[:pending]) %></td>
+                <td class="px-4 py-4 text-sm font-medium text-accent-blue"><%= number_to_currency(summary[:approved]) %></td>
+                <td class="px-4 py-4 text-sm font-medium text-accent-green"><%= number_to_currency(summary[:paid_out]) %></td>
+                <td class="px-4 py-4 text-sm font-semibold text-sand-900"><%= number_to_currency(summary[:total]) %></td>
+                <td class="px-4 py-4 text-right text-sm">
+                  <% if @selected_employee == user %>
+                    <%= link_to "Clear", admin_commissions_path, class: "text-sand-500 hover:text-sand-900" %>
+                  <% else %>
+                    <%= link_to "Details", admin_commissions_path(employee_id: user.id), class: "text-accent-blue hover:underline" %>
+                  <% end %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  <% end %>
+
+  <div class="portal-panel overflow-hidden">
+    <% if @selected_employee.present? %>
+      <div class="border-b border-sand-200 px-5 py-4">
+        <h2 class="text-base font-semibold text-sand-900"><%= @selected_employee.display_name %> Commission Details</h2>
+        <p class="mt-1 text-sm text-sand-600">Showing only this employee's commission records.</p>
+      </div>
+    <% end %>
+    <div class="overflow-x-auto">
+      <table class="min-w-full divide-y divide-sand-200">
+        <thead class="bg-sand-50">
+          <tr>
+            <% unless employee_role? %>
+              <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-sand-500">Employee</th>
+            <% end %>
+            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-sand-500">Business</th>
+            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-sand-500">Invoice</th>
+            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-sand-500">Rate</th>
+            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-sand-500">Commission</th>
+            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-sand-500">Status</th>
+            <% if super_admin? || admin_role? %>
+              <th class="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-sand-500">Actions</th>
+            <% end %>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-sand-200 bg-white">
+          <% @commissions.each do |commission| %>
+            <% status_classes = case commission.status
+               when "pending" then "bg-accent-amber-bg text-accent-amber ring-accent-amber/20"
+               when "approved" then "bg-accent-blue-bg text-accent-blue ring-accent-blue/20"
+               when "paid_out" then "bg-accent-green-bg text-accent-green ring-accent-green/20"
+               else "bg-sand-100 text-sand-600 ring-sand-200"
+               end %>
+            <tr>
+              <% unless employee_role? %>
+                <td class="px-4 py-4 text-sm text-sand-900">
+                  <div class="font-medium"><%= commission.user.display_name %></div>
+                  <div class="text-xs text-sand-500"><%= commission.user.email %></div>
+                </td>
+              <% end %>
+              <td class="px-4 py-4 text-sm">
+                <%= link_to commission.business.name, admin_business_path(commission.business), class: "font-medium text-accent-blue hover:underline" %>
+                <div class="text-xs text-sand-500"><%= [commission.business.city, commission.business.country].compact.join(", ").presence || "No location" %></div>
+              </td>
+              <td class="px-4 py-4 text-sm text-sand-700">
+                <div><%= commission.kind == "one_time" ? "Website sale" : "Subscription" %></div>
+                <div class="text-xs text-sand-500">
+                  <%= commission.month_number.present? ? "Month #{commission.month_number}" : "One-time" %>
+                  <% if commission.payment_invoice.paid_at.present? %>
+                    · Paid <%= l commission.payment_invoice.paid_at.to_date, format: :default %>
+                  <% end %>
+                </div>
+              </td>
+              <td class="px-4 py-4 text-sm text-sand-700">
+                <%= number_to_currency(commission.base_amount) %>
+                <div class="text-xs text-sand-500"><%= number_with_precision(commission.percentage, precision: 2, strip_insignificant_zeros: true) %>%</div>
+              </td>
+              <td class="px-4 py-4 text-sm font-semibold text-sand-900"><%= number_to_currency(commission.commission_amount) %></td>
+              <td class="px-4 py-4 text-sm">
+                <span class="inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset <%= status_classes %>">
+                  <%= commission.status.humanize %>
+                </span>
+              </td>
+              <% if super_admin? || admin_role? %>
+                <td class="px-4 py-4 text-right text-sm">
+                  <% if commission.status == "pending" %>
+                    <%= form_with url: approve_admin_commission_path(commission), method: :patch, local: true, class: "inline-flex items-center justify-end gap-2" do |f| %>
+                      <%= f.number_field :percentage, value: commission.percentage, step: 0.01, min: 0, max: 100, class: "w-20 rounded-lg border-0 px-2 py-1.5 text-sm text-sand-900 shadow-sm ring-1 ring-inset ring-sand-300 focus:ring-2 focus:ring-inset focus:ring-accent-blue" %>
+                      <%= f.submit "Approve", class: "rounded-md bg-accent-blue px-3 py-1.5 text-sm font-semibold text-white shadow-sm hover:brightness-95" %>
+                    <% end %>
+                  <% elsif commission.status == "approved" %>
+                    <%= button_to "Mark paid", mark_paid_out_admin_commission_path(commission), method: :patch, class: "rounded-md bg-accent-green px-3 py-1.5 text-sm font-semibold text-white shadow-sm hover:brightness-95" %>
+                  <% else %>
+                    <span class="text-sand-400">-</span>
+                  <% end %>
+                </td>
+              <% end %>
+            </tr>
+          <% end %>
+
+          <% if @commissions.empty? %>
+            <tr>
+              <td colspan="<%= employee_role? ? 5 : 7 %>" class="px-4 py-10 text-center text-sm text-sand-500">
+                No commissions have been created yet. They appear here when an attributed invoice is marked paid.
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
