@@ -56,7 +56,7 @@ RSpec.describe Admin::SidebarHelper, type: :helper do
   end
 
   describe "#admin_sidebar_icon" do
-    [ :dashboard, :businesses, :communications, :tasks, :users, :reviews ].each do |icon|
+    [ :dashboard, :businesses, :communications, :tasks, :users, :reviews, :commission_rates ].each do |icon|
       it "returns #{icon} icon" do
         expect(helper.admin_sidebar_icon(icon, classes: "w-5")).to include("<svg")
       end
@@ -83,6 +83,12 @@ RSpec.describe Admin::SidebarHelper, type: :helper do
   end
 
   describe "accent classes" do
+    it "returns amber classes for commission rate links" do
+      expect(helper.send(:admin_sidebar_current_bg_class, :amber)).to eq("bg-accent-amber")
+      expect(helper.send(:admin_sidebar_hover_bg_class, :amber)).to eq("bg-accent-amber-bg")
+      expect(helper.send(:admin_sidebar_hover_text_class, :amber)).to eq("text-accent-amber")
+    end
+
     it "handles unknown accents with defaults" do
       expect(helper.send(:admin_sidebar_current_bg_class, :unknown)).to eq("bg-sand-900")
       expect(helper.send(:admin_sidebar_hover_bg_class, :unknown)).to eq("bg-sand-200")

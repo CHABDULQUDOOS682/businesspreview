@@ -5,6 +5,9 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable
 
   has_many :notes, dependent: :nullify
+  has_many :commissions, dependent: :nullify
+  has_many :employee_commission_rates, dependent: :destroy
+  has_many :businesses_sold, class_name: "Business", foreign_key: :sold_by_id, dependent: :nullify
 
   enum :role, {
     employee: 0,

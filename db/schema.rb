@@ -10,9 +10,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_06_14_014715) do
+ActiveRecord::Schema[8.0].define(version: 2026_07_01_000200) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "business_commission_rates", force: :cascade do |t|
+    t.bigint "business_id", null: false
+    t.string "kind", null: false
+    t.integer "month_number"
+    t.decimal "percentage", precision: 5, scale: 2, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["business_id", "kind", "month_number"], name: "index_business_rates_on_business_kind_month", unique: true
+    t.index ["business_id", "kind"], name: "index_business_rates_on_one_time_kind", unique: true, where: "(month_number IS NULL)"
+    t.index ["business_id"], name: "index_business_commission_rates_on_business_id"
+  end
 
   create_table "businesses", force: :cascade do |t|
     t.string "name"
@@ -51,12 +63,76 @@ ActiveRecord::Schema[8.0].define(version: 2026_06_14_014715) do
     t.datetime "last_invoice_paid_at"
     t.datetime "last_payment_failed_at"
     t.string "review_token"
+    t.bigint "sold_by_id"
     t.index ["last_invoice_id"], name: "index_businesses_on_last_invoice_id"
     t.index ["review_token"], name: "index_businesses_on_review_token", unique: true
+    t.index ["sold_by_id"], name: "index_businesses_on_sold_by_id"
     t.index ["stripe_checkout_session_id"], name: "index_businesses_on_stripe_checkout_session_id"
     t.index ["stripe_customer_id"], name: "index_businesses_on_stripe_customer_id"
     t.index ["stripe_payment_intent_id"], name: "index_businesses_on_stripe_payment_intent_id"
     t.index ["stripe_subscription_id"], name: "index_businesses_on_stripe_subscription_id"
+  end
+
+  create_table "call_logs", force: :cascade do |t|
+    t.bigint "business_id"
+    t.string "from_number"
+    t.string "to_number"
+    t.string "direction", default: "outbound", null: false
+    t.string "status"
+    t.integer "duration_seconds"
+    t.string "twilio_call_sid"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["business_id"], name: "index_call_logs_on_business_id"
+    t.index ["created_at"], name: "index_call_logs_on_created_at"
+    t.index ["direction"], name: "index_call_logs_on_direction"
+    t.index ["twilio_call_sid"], name: "index_call_logs_on_twilio_call_sid", unique: true, where: "(twilio_call_sid IS NOT NULL)"
+  end
+
+  create_table "commission_rates", force: :cascade do |t|
+    t.string "kind", null: false
+    t.integer "month_number"
+    t.decimal "percentage", precision: 5, scale: 2, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["kind", "month_number"], name: "index_commission_rates_on_kind_and_month_number", unique: true
+    t.index ["kind"], name: "index_commission_rates_on_one_time_kind", unique: true, where: "(month_number IS NULL)"
+  end
+
+  create_table "commissions", force: :cascade do |t|
+    t.bigint "business_id", null: false
+    t.bigint "user_id", null: false
+    t.bigint "payment_invoice_id", null: false
+    t.string "kind", null: false
+    t.integer "month_number"
+    t.decimal "base_amount", precision: 10, scale: 2, null: false
+    t.decimal "percentage", precision: 5, scale: 2, null: false
+    t.decimal "commission_amount", precision: 10, scale: 2, null: false
+    t.string "status", default: "pending", null: false
+    t.datetime "approved_at"
+    t.bigint "approved_by_id"
+    t.datetime "paid_out_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["approved_by_id"], name: "index_commissions_on_approved_by_id"
+    t.index ["business_id"], name: "index_commissions_on_business_id"
+    t.index ["payment_invoice_id", "month_number"], name: "index_commissions_on_invoice_and_month", unique: true
+    t.index ["payment_invoice_id"], name: "index_commissions_on_one_time_invoice", unique: true, where: "(month_number IS NULL)"
+    t.index ["payment_invoice_id"], name: "index_commissions_on_payment_invoice_id"
+    t.index ["status"], name: "index_commissions_on_status"
+    t.index ["user_id"], name: "index_commissions_on_user_id"
+  end
+
+  create_table "employee_commission_rates", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "kind", null: false
+    t.integer "month_number"
+    t.decimal "percentage", precision: 5, scale: 2, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id", "kind", "month_number"], name: "index_employee_rates_on_user_kind_month", unique: true
+    t.index ["user_id", "kind"], name: "index_employee_rates_on_one_time_kind", unique: true, where: "(month_number IS NULL)"
+    t.index ["user_id"], name: "index_employee_commission_rates_on_user_id"
   end
 
   create_table "messages", force: :cascade do |t|
@@ -168,6 +244,14 @@ ActiveRecord::Schema[8.0].define(version: 2026_06_14_014715) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "business_commission_rates", "businesses"
+  add_foreign_key "businesses", "users", column: "sold_by_id"
+  add_foreign_key "call_logs", "businesses"
+  add_foreign_key "commissions", "businesses"
+  add_foreign_key "commissions", "payment_invoices"
+  add_foreign_key "commissions", "users"
+  add_foreign_key "commissions", "users", column: "approved_by_id"
+  add_foreign_key "employee_commission_rates", "users"
   add_foreign_key "messages", "businesses"
   add_foreign_key "notes", "businesses"
   add_foreign_key "notes", "users"
