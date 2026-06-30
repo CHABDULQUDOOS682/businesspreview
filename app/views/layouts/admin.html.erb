@@ -3,6 +3,8 @@
   <head>
     <title><%= app_name %> | Admin</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link rel="icon" href="<%= asset_path('logo/Fav-Icon 49x49.svg') %>" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/icon.png">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -22,9 +24,7 @@
       <aside class="sidebar-container sidebar-container--collapsed" data-controller="side-bar">
         <div class="sidebar-logo-container">
           <%= link_to admin_root_path, class: "sidebar-logo-link" do %>
-            <span class="sidebar-brand-mark !bg-transparent !border-0">
-              <%= image_tag "veloqtech_logo.svg", class: "h-8 w-auto", alt: app_name %>
-            </span>
+            <%= image_tag "logo/Website Icon logo SVG 512x512.svg", class: "h-8 w-auto", alt: app_name %>
             <span class="sidebar-item-label text-base font-bold tracking-tight text-[#081849]">DevDe<span class="text-[#5F3475]">Bizz</span></span>
           <% end %>
         </div>
@@ -76,7 +76,7 @@
             <div class="flex items-center justify-between gap-3 px-4 py-3">
               <%= link_to admin_root_path, class: "flex items-center gap-3" do %>
                 <span class="sidebar-brand-mark !bg-transparent !border-0 !h-auto !w-auto">
-                  <%= image_tag "veloqtech_logo.svg", class: "h-7 w-auto", alt: app_name %>
+                  <%= image_tag "logo/Website Icon logo SVG 512x512.svg", class: "h-7 w-auto", alt: app_name %>
                 </span>
                 <span class="text-base font-bold tracking-tight text-[#081849]">DevDe<span class="text-[#5F3475]">Bizz</span></span>
               <% end %>

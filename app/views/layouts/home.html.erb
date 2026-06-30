@@ -11,8 +11,7 @@
 
     <%= yield :head %>
 
-    <link rel="icon" href="/icon.png" type="image/png">
-    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    <link rel="icon" href="<%= asset_path('logo/Fav-Icon 49x49.svg') %>" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/icon.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -37,8 +36,8 @@
 
       <header class="fixed inset-x-0 top-0 z-50 px-3 py-3 sm:px-4 sm:py-4" data-controller="mobile-nav" data-action="turbo:before-cache->mobile-nav#close">
         <nav class="home-glass mx-auto flex min-h-14 max-w-7xl items-center justify-between gap-3 rounded-2xl px-3 py-2.5 sm:rounded-[26px] sm:px-5 sm:py-3">
-          <%= link_to root_path, class: "flex min-w-0 items-center gap-2 group z-20 sm:gap-3" do %>
-            <%= image_tag "veloqtech_logo.svg", class: "h-8 w-auto shrink-0 transition group-hover:scale-105 sm:h-9", alt: "" %>
+          <%= link_to root_path, class: "flex min-w-0 items-center gap-1 group z-20 sm:gap-2" do %>
+            <%= image_tag "logo/Website Icon logo SVG 512x512.svg", class: "h-8 w-auto shrink-0 transition group-hover:scale-105 sm:h-9", alt: "" %>
             <span class="brand-wordmark min-w-0 truncate text-base font-extrabold tracking-tight text-[#081849] sm:text-lg">DevDe<span class="brand-wordmark-accent">Bizz</span></span>
           <% end %>
 
@@ -87,7 +86,7 @@
           <div class="grid gap-12 lg:grid-cols-6">
             <div class="lg:col-span-2">
               <div class="flex items-center gap-3">
-                <%= image_tag "veloqtech_logo.svg", class: "h-10 w-auto", alt: "" %>
+                <%= image_tag "logo/Website Icon logo SVG 512x512.svg", class: "h-10 w-auto", alt: "" %>
                 <span class="brand-wordmark text-xl font-extrabold tracking-tight text-[#081849]">DevDe<span class="brand-wordmark-accent">Bizz</span></span>
               </div>
               <p class="mt-5 max-w-sm text-sm leading-relaxed text-[#081849]/60">

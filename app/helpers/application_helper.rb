@@ -19,7 +19,7 @@ module ApplicationHelper
   def seo_meta_tags
     title = content_for(:title).presence || app_name
     description = content_for(:meta_description).presence || default_meta_description
-    image = content_for(:og_image).presence || image_url("veloqtech_logo.svg")
+    image = content_for(:og_image).presence || image_url("logo/Website Icon logo SVG 512x512.svg")
     canonical = content_for(:canonical_url).presence || request.original_url
 
     safe_join(

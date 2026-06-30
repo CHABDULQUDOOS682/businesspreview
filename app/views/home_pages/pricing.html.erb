@@ -13,16 +13,14 @@
       cadence: "/ month",
       setup_fee: "One-time setup fee: $199",
       description: "Best for local businesses that need a professional online presence.",
-      website_size: ["Up to 5 pages", "Home", "About", "Services", "Gallery/Portfolio", "Contact"],
+      website_size: ["Landing Page", "Hero Section", "About Section", "Services Section", "Gallery/Portfolio Section", "Contact Section", "Location Section"],
       included: [
         "Managed hosting",
-        "SSL certificate",
-        "Weekly backups",
         "Security monitoring",
         "Uptime monitoring",
         "Contact form management",
-        "1 content update per month",
-        "Basic SEO setup",
+        "2 content update per month",
+        "SEO setup",
         "Mobile responsive design",
         "Email support"
       ],
@@ -37,19 +35,23 @@
       cadence: "/ month",
       setup_fee: "One-time setup fee: $299",
       description: "Best for businesses actively trying to generate leads.",
-      website_size: ["Up to 10 pages"],
+      website_size: ["Up to 5 pages", "Home", "Services", "Gallery/Portfolio", "About", "Contact"],
       included_intro: "Everything in Essential, plus:",
       included: [
+        "Dashboard with",
+        "Overview",
+        "Staff Management",
+        "Service Management",
+        "Gallery Management",
+        "Business Hours Management",
+        "--------------------------- ",
         "Monthly SEO optimization",
         "Google Analytics setup",
         "Google Search Console",
-        "3 content updates per month",
-        "Blog management",
-        "Landing page optimization",
+        "5 content updates per month",
         "Performance monitoring",
         "Priority support",
-        "Basic conversion tracking",
-        "2 development hours monthly"
+        "Basic conversion tracking"
       ],
       perfect_for: ["Barbershops", "Salons", "Agencies", "Consultants", "Service businesses"],
       highlight: true,
@@ -62,19 +64,24 @@
       cadence: "/ month",
       setup_fee: "One-time setup fee: $499",
       description: "Best for businesses wanting a dedicated web partner.",
-      website_size: ["Up to 20 pages"],
+      website_size: ["Up to 10 pages", "Home", "Services", "Gallery/Portfolio", "About", "Contact", "FAQ", "Appointments", "+3 Extra Pages (as needed)" ],
       included_intro: "Everything in Growth, plus:",
       included: [
-        "Unlimited content updates",
-        "Advanced SEO support",
-        "Custom feature enhancements",
+        "Dashboard with",
+        "Overview",
+        "Appointment Booking System",
+        "Reviews Management",
+        "Customers Management",
+        "Staff Management",
+        "Service Management",
+        "Gallery Management",
+        "Business Hours Management",
+        "---------------------------",
+        "10 content updates per month",
+        "SEO support",
         "Monthly strategy meeting",
-        "Lead funnel optimization",
-        "Performance reports",
         "Priority emergency support",
-        "CRM integration support",
-        "Marketing tool integration",
-        "5 development hours monthly"
+        "CRM integration support"
       ],
       perfect_for: ["Multi-location businesses", "Growing startups", "Established service companies"],
       highlight: false,
@@ -176,20 +183,19 @@
 
   subscription_comparison = [
     ["Monthly price", "$30", "$50", "$99"],
-    ["Pages", "5", "10", "20"],
+    ["Setup fee", "$199", "$299", "$499"],
+    ["Pages", "Landing Page", "Up to 5", "Up to 10"],
     ["Hosting", true, true, true],
-    ["SSL", true, true, true],
-    ["Backups", "Weekly", "Weekly", "Daily"],
-    ["SEO", "Basic", "Advanced", "Advanced"],
-    ["Content updates", "1/month", "3/month", "Unlimited"],
-    ["Dev hours", false, "2 hrs", "5 hrs"],
-    ["Support", "Email", "Priority", "Priority+"],
-    ["Analytics", "Basic", "Advanced", "Advanced"]
+    ["SEO", "Basic Setup", "Monthly Optimization", "Advanced SEO Support"],
+    ["Content updates", "2 / month", "5 / month", "10 / month"],
+    ["Admin Dashboard", false, "Basic", "Advanced (Booking)"],
+    ["Support", "Email", "Priority", "Priority Emergency"],
+    ["Analytics", false, "GA & Search Console", "GA & Search Console"]
   ]
 
   project_comparison = [
-    ["Price", "$499", "$999", "$1,999+"],
-    ["Pages", "5", "12", "Unlimited"],
+    ["Price", "$499", "$999", "Starting at $1,999"],
+    ["Pages", "Up to 5", "Up to 12", "Unlimited"],
     ["Responsive design", true, true, true],
     ["SEO", "Basic", "Advanced", "Advanced"],
     ["CMS", false, true, true],
@@ -238,65 +244,99 @@
     <div data-pricing-toggle-target="panel" data-type="subscription" class="transition-all duration-300">
       <div class="grid gap-6 lg:grid-cols-3">
         <% subscription_plans.each do |plan| %>
-          <div class="<%= plan[:highlight] ? 'home-card-3d relative rounded-[28px] border border-transparent bg-gradient-to-br from-[#213885] via-[#5F3475] to-[#893172] p-8 text-[#ECDFD2]' : 'home-glass home-card-3d relative rounded-[28px] border border-[#081849]/10 p-8' %>">
+          <div class="<%= plan[:highlight] ? 'home-card-3d relative rounded-[28px] border border-transparent bg-gradient-to-br from-[#213885] via-[#5F3475] to-[#893172] p-8 text-[#ECDFD2] shadow-2xl hover:-translate-y-1 transition-all duration-300' : 'home-glass home-card-3d relative rounded-[28px] border border-[#081849]/10 p-8 hover:-translate-y-1 transition-all duration-300 bg-white/40 shadow-[0_15px_30px_-10px_rgba(8,24,73,0.05)]' %>">
             <% if plan[:badge].present? %>
               <div class="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-[#213885] px-4 py-1 text-xs font-bold uppercase tracking-[0.18em] text-[#ECDFD2] shadow-lg shadow-[#213885]/35">
                 <i class="fa-solid fa-star mr-1 text-[10px]"></i><%= plan[:badge] %>
               </div>
             <% end %>
             <h2 class="text-2xl font-bold <%= plan[:highlight] ? 'text-[#ECDFD2]' : 'text-[#081849]' %>"><%= plan[:name] %></h2>
-            <p class="mt-2 min-h-[44px] text-sm <%= plan[:highlight] ? 'text-[#ECDFD2]/78' : 'text-[#081849]/62' %>"><%= plan[:description] %></p>
-            <div class="mt-6 flex flex-wrap items-baseline gap-1">
-              <span class="text-5xl font-extrabold <%= plan[:highlight] ? 'text-[#ECDFD2]' : 'text-[#081849]' %>"><%= plan[:price] %></span>
-              <span class="text-sm <%= plan[:highlight] ? 'text-[#ECDFD2]/70' : 'text-[#081849]/50' %>"><%= plan[:cadence] %></span>
+            <p class="mt-2 min-h-[44px] text-sm leading-relaxed <%= plan[:highlight] ? 'text-[#ECDFD2]/78' : 'text-[#081849]/62' %>"><%= plan[:description] %></p>
+            
+            <div class="mt-6 border-t border-b py-5 <%= plan[:highlight] ? 'border-white/10' : 'border-[#081849]/8' %>">
+              <div class="flex flex-wrap items-baseline gap-1">
+                <span class="text-5xl font-extrabold <%= plan[:highlight] ? 'text-[#ECDFD2]' : 'text-[#081849]' %>"><%= plan[:price] %></span>
+                <span class="text-sm font-semibold <%= plan[:highlight] ? 'text-[#ECDFD2]/70' : 'text-[#081849]/50' %>"><%= plan[:cadence] %></span>
+              </div>
+              <p class="mt-2 text-xs font-semibold uppercase tracking-wider <%= plan[:highlight] ? 'text-[#ECDFD2]/80' : 'text-[#5F3475]' %>"><%= plan[:setup_fee] %></p>
             </div>
-            <p class="mt-3 text-sm font-semibold <%= plan[:highlight] ? 'text-[#ECDFD2]/78' : 'text-[#081849]/62' %>"><%= plan[:setup_fee] %></p>
 
-            <div class="mt-8 space-y-6 text-sm">
-              <div>
+            <div class="mt-8 space-y-5 text-sm">
+              <div class="rounded-2xl p-5 <%= plan[:highlight] ? 'bg-white/8 border border-white/10' : 'bg-[#081849]/3 border border-[#081849]/5' %>">
                 <h3 class="text-xs font-bold uppercase tracking-[0.16em] <%= plan[:highlight] ? 'text-[#ECDFD2]/70' : 'text-[#5F3475]' %>">Website Size</h3>
                 <ul class="mt-3 space-y-2">
                   <% plan[:website_size].each do |item| %>
-                    <li class="<%= plan[:highlight] ? 'text-[#ECDFD2]/88' : 'text-[#081849]/80' %>"><%= item %></li>
-                  <% end %>
-                </ul>
-              </div>
-
-              <div>
-                <h3 class="text-xs font-bold uppercase tracking-[0.16em] <%= plan[:highlight] ? 'text-[#ECDFD2]/70' : 'text-[#5F3475]' %>">Included Services</h3>
-                <% if plan[:included_intro].present? %>
-                  <p class="mt-3 <%= plan[:highlight] ? 'text-[#ECDFD2]/78' : 'text-[#081849]/62' %>"><%= plan[:included_intro] %></p>
-                <% end %>
-                <ul class="mt-3 space-y-3">
-                  <% plan[:included].each do |feature| %>
-                    <li class="flex items-start gap-3 <%= plan[:highlight] ? 'text-[#ECDFD2]/88' : 'text-[#081849]/80' %>">
-                      <i class="fa-solid fa-check mt-1 text-sm <%= plan[:highlight] ? 'text-[#ECDFD2]' : 'text-[#5F3475]' %>"></i>
-                      <%= feature %>
+                    <li class="flex items-center gap-2 <%= plan[:highlight] ? 'text-[#ECDFD2]/88' : 'text-[#081849]/80' %>">
+                      <i class="fa-regular fa-file-lines text-xs opacity-75 <%= plan[:highlight] ? 'text-[#ECDFD2]/60' : 'text-[#5F3475]/60' %>"></i>
+                      <span><%= item %></span>
                     </li>
                   <% end %>
                 </ul>
               </div>
 
+              <div class="rounded-2xl p-5 <%= plan[:highlight] ? 'bg-white/8 border border-white/10' : 'bg-[#081849]/3 border border-[#081849]/5' %>">
+                <h3 class="text-xs font-bold uppercase tracking-[0.16em] <%= plan[:highlight] ? 'text-[#ECDFD2]/70' : 'text-[#5F3475]' %>">Included Services</h3>
+                <% if plan[:included_intro].present? %>
+                  <p class="mt-2 text-xs leading-relaxed opacity-90 <%= plan[:highlight] ? 'text-[#ECDFD2]/78' : 'text-[#081849]/62' %>"><%= plan[:included_intro] %></p>
+                <% end %>
+                <ul class="mt-3 space-y-2.5">
+                  <% 
+                    in_dashboard = false 
+                    plan[:included].each do |feature| 
+                      feature_str = feature.to_s.strip
+                      if feature_str.start_with?("Dashboard with")
+                        in_dashboard = true
+                  %>
+                        <li class="mt-4 font-bold text-xs uppercase tracking-[0.12em] <%= plan[:highlight] ? 'text-[#ECDFD2]/70' : 'text-[#5F3475]' %>"><%= feature %></li>
+                  <% 
+                      elsif feature_str.start_with?("-")
+                        in_dashboard = false
+                  %>
+                        <li class="py-1"><hr class="<%= plan[:highlight] ? 'border-white/10' : 'border-[#081849]/10' %>"></li>
+                  <% 
+                      elsif in_dashboard
+                  %>
+                        <li class="flex items-center gap-2.5 pl-3.5 <%= plan[:highlight] ? 'text-[#ECDFD2]/88' : 'text-[#081849]/80' %>">
+                          <span class="h-1.5 w-1.5 rounded-full <%= plan[:highlight] ? 'bg-[#ECDFD2]/50' : 'bg-[#5F3475]/50' %>"></span>
+                          <span><%= feature %></span>
+                        </li>
+                  <% 
+                      else
+                  %>
+                        <li class="flex items-start gap-3 <%= plan[:highlight] ? 'text-[#ECDFD2]/88' : 'text-[#081849]/80' %>">
+                          <i class="fa-solid fa-check mt-1 text-sm <%= plan[:highlight] ? 'text-[#ECDFD2]' : 'text-[#5F3475]' %>"></i>
+                          <span><%= feature %></span>
+                        </li>
+                  <% 
+                      end
+                    end
+                  %>
+                </ul>
+              </div>
+
               <% if plan[:not_included].present? %>
-                <div>
+                <div class="rounded-2xl p-5 <%= plan[:highlight] ? 'bg-white/8 border border-white/10' : 'bg-[#081849]/3 border border-[#081849]/5' %>">
                   <h3 class="text-xs font-bold uppercase tracking-[0.16em] text-[#5F3475]">Not Included</h3>
                   <ul class="mt-3 space-y-2 text-[#081849]/62">
                     <% plan[:not_included].each do |item| %>
-                      <li><%= item %></li>
+                      <li class="flex items-center gap-2">
+                        <i class="fa-solid fa-xmark text-xs text-red-500/70"></i>
+                        <span><%= item %></span>
+                      </li>
                     <% end %>
                   </ul>
                 </div>
               <% end %>
 
               <% if plan[:perfect_for].present? %>
-                <div>
+                <div class="rounded-2xl p-5 <%= plan[:highlight] ? 'bg-white/8 border border-white/10' : 'bg-[#081849]/3 border border-[#081849]/5' %>">
                   <h3 class="text-xs font-bold uppercase tracking-[0.16em] <%= plan[:highlight] ? 'text-[#ECDFD2]/70' : 'text-[#5F3475]' %>">Perfect For</h3>
                   <p class="mt-3 leading-relaxed <%= plan[:highlight] ? 'text-[#ECDFD2]/78' : 'text-[#081849]/62' %>"><%= plan[:perfect_for].join(", ") %></p>
                 </div>
               <% end %>
             </div>
 
-            <%= link_to contact_path, class: "mt-10 inline-flex w-full items-center justify-center rounded-full px-6 py-3 text-center text-sm font-semibold transition hover:-translate-y-0.5 #{plan[:highlight] ? 'bg-[#ECDFD2] text-[#213885] shadow-xl shadow-[#081849]/25' : 'border border-[#081849]/15 text-[#081849] hover:border-[#213885] hover:bg-[#213885] hover:text-[#ECDFD2]'}" do %>
+            <%= link_to contact_path, class: "mt-8 inline-flex w-full items-center justify-center rounded-full px-6 py-3 text-center text-sm font-bold transition-all duration-200 hover:-translate-y-0.5 #{plan[:highlight] ? 'bg-[#ECDFD2] text-[#213885] shadow-xl shadow-[#081849]/25 hover:bg-[#ECDFD2]/90' : 'border border-[#081849]/15 text-[#081849] hover:border-[#213885] hover:bg-[#213885] hover:text-[#ECDFD2]'}" do %>
               <%= plan[:cta] %>
             <% end %>
           </div>
@@ -307,72 +347,78 @@
     <div data-pricing-toggle-target="panel" data-type="project" class="hidden transition-all duration-300">
       <div class="grid gap-6 lg:grid-cols-3">
         <% project_plans.each do |plan| %>
-          <div class="<%= plan[:highlight] ? 'home-card-3d relative rounded-[28px] border border-transparent bg-gradient-to-br from-[#213885] via-[#5F3475] to-[#893172] p-8 text-[#ECDFD2]' : 'home-glass home-card-3d relative rounded-[28px] border border-[#081849]/10 p-8' %>">
+          <div class="<%= plan[:highlight] ? 'home-card-3d relative rounded-[28px] border border-transparent bg-gradient-to-br from-[#213885] via-[#5F3475] to-[#893172] p-8 text-[#ECDFD2] shadow-2xl hover:-translate-y-1 transition-all duration-300' : 'home-glass home-card-3d relative rounded-[28px] border border-[#081849]/10 p-8 hover:-translate-y-1 transition-all duration-300 bg-white/40 shadow-[0_15px_30px_-10px_rgba(8,24,73,0.05)]' %>">
             <% if plan[:badge].present? %>
               <div class="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-[#213885] px-4 py-1 text-xs font-bold uppercase tracking-[0.18em] text-[#ECDFD2] shadow-lg shadow-[#213885]/35">
-                <%= plan[:badge] %>
+                <i class="fa-solid fa-star mr-1 text-[10px]"></i><%= plan[:badge] %>
               </div>
             <% end %>
             <h2 class="text-2xl font-bold <%= plan[:highlight] ? 'text-[#ECDFD2]' : 'text-[#081849]' %>"><%= plan[:name] %></h2>
-            <p class="mt-2 min-h-[66px] text-sm <%= plan[:highlight] ? 'text-[#ECDFD2]/78' : 'text-[#081849]/62' %>"><%= plan[:description] %></p>
-            <div class="mt-6 flex flex-wrap items-baseline gap-1">
-              <span class="text-4xl font-extrabold sm:text-5xl <%= plan[:highlight] ? 'text-[#ECDFD2]' : 'text-[#081849]' %>"><%= plan[:price] %></span>
-              <% if plan[:cadence].present? %>
-                <span class="text-sm <%= plan[:highlight] ? 'text-[#ECDFD2]/70' : 'text-[#081849]/50' %>"><%= plan[:cadence] %></span>
-              <% end %>
+            <p class="mt-2 min-h-[66px] text-sm leading-relaxed <%= plan[:highlight] ? 'text-[#ECDFD2]/78' : 'text-[#081849]/62' %>"><%= plan[:description] %></p>
+            
+            <div class="mt-6 border-t border-b py-5 <%= plan[:highlight] ? 'border-white/10' : 'border-[#081849]/8' %>">
+              <div class="flex flex-wrap items-baseline gap-1">
+                <span class="text-4xl font-extrabold sm:text-5xl <%= plan[:highlight] ? 'text-[#ECDFD2]' : 'text-[#081849]' %>"><%= plan[:price] %></span>
+                <% if plan[:cadence].present? %>
+                  <span class="text-sm font-semibold <%= plan[:highlight] ? 'text-[#ECDFD2]/70' : 'text-[#081849]/50' %>"><%= plan[:cadence] %></span>
+                <% end %>
+              </div>
             </div>
 
-            <div class="mt-8 space-y-6 text-sm">
-              <div>
+            <div class="mt-8 space-y-5 text-sm">
+              <div class="rounded-2xl p-5 <%= plan[:highlight] ? 'bg-white/8 border border-white/10' : 'bg-[#081849]/3 border border-[#081849]/5' %>">
                 <h3 class="text-xs font-bold uppercase tracking-[0.16em] <%= plan[:highlight] ? 'text-[#ECDFD2]/70' : 'text-[#5F3475]' %>">Pages</h3>
                 <ul class="mt-3 space-y-2">
                   <% plan[:pages].each do |item| %>
-                    <li class="<%= plan[:highlight] ? 'text-[#ECDFD2]/88' : 'text-[#081849]/80' %>"><%= item %></li>
+                    <li class="flex items-center gap-2 <%= plan[:highlight] ? 'text-[#ECDFD2]/88' : 'text-[#081849]/80' %>">
+                      <i class="fa-regular fa-file-lines text-xs opacity-75 <%= plan[:highlight] ? 'text-[#ECDFD2]/60' : 'text-[#5F3475]/60' %>"></i>
+                      <span><%= item %></span>
+                    </li>
                   <% end %>
                 </ul>
               </div>
 
-              <div>
+              <div class="rounded-2xl p-5 <%= plan[:highlight] ? 'bg-white/8 border border-white/10' : 'bg-[#081849]/3 border border-[#081849]/5' %>">
                 <h3 class="text-xs font-bold uppercase tracking-[0.16em] <%= plan[:highlight] ? 'text-[#ECDFD2]/70' : 'text-[#5F3475]' %>">Included Services</h3>
                 <% if plan[:included_intro].present? %>
-                  <p class="mt-3 <%= plan[:highlight] ? 'text-[#ECDFD2]/78' : 'text-[#081849]/62' %>"><%= plan[:included_intro] %></p>
+                  <p class="mt-2 text-xs leading-relaxed opacity-90 <%= plan[:highlight] ? 'text-[#ECDFD2]/78' : 'text-[#081849]/62' %>"><%= plan[:included_intro] %></p>
                 <% end %>
-                <ul class="mt-3 space-y-3">
+                <ul class="mt-3 space-y-2.5">
                   <% plan[:included].each do |feature| %>
                     <li class="flex items-start gap-3 <%= plan[:highlight] ? 'text-[#ECDFD2]/88' : 'text-[#081849]/80' %>">
                       <i class="fa-solid fa-check mt-1 text-sm <%= plan[:highlight] ? 'text-[#ECDFD2]' : 'text-[#5F3475]' %>"></i>
-                      <%= feature %>
+                      <span><%= feature %></span>
                     </li>
                   <% end %>
                 </ul>
               </div>
 
               <% if plan[:additional_features].present? %>
-                <div>
-                  <h3 class="text-xs font-bold uppercase tracking-[0.16em] text-[#ECDFD2]/70">Additional Features</h3>
-                  <p class="mt-3 leading-relaxed text-[#ECDFD2]/78"><%= plan[:additional_features].join(", ") %></p>
+                <div class="rounded-2xl p-5 <%= plan[:highlight] ? 'bg-white/8 border border-white/10' : 'bg-[#081849]/3 border border-[#081849]/5' %>">
+                  <h3 class="text-xs font-bold uppercase tracking-[0.16em] <%= plan[:highlight] ? 'text-[#ECDFD2]/70' : 'text-[#5F3475]' %>">Additional Features</h3>
+                  <p class="mt-3 leading-relaxed <%= plan[:highlight] ? 'text-[#ECDFD2]/78' : 'text-[#081849]/62' %>"><%= plan[:additional_features].join(", ") %></p>
                 </div>
               <% end %>
 
               <% if plan[:example_projects].present? %>
-                <div>
-                  <h3 class="text-xs font-bold uppercase tracking-[0.16em] text-[#5F3475]">Example Projects</h3>
-                  <p class="mt-3 leading-relaxed text-[#081849]/62"><%= plan[:example_projects].join(", ") %></p>
+                <div class="rounded-2xl p-5 <%= plan[:highlight] ? 'bg-white/8 border border-white/10' : 'bg-[#081849]/3 border border-[#081849]/5' %>">
+                  <h3 class="text-xs font-bold uppercase tracking-[0.16em] <%= plan[:highlight] ? 'text-[#ECDFD2]/70' : 'text-[#5F3475]' %>">Example Projects</h3>
+                  <p class="mt-3 leading-relaxed <%= plan[:highlight] ? 'text-[#ECDFD2]/78' : 'text-[#081849]/62' %>"><%= plan[:example_projects].join(", ") %></p>
                 </div>
               <% end %>
 
-              <div>
+              <div class="rounded-2xl p-5 <%= plan[:highlight] ? 'bg-white/8 border border-white/10' : 'bg-[#081849]/3 border border-[#081849]/5' %> flex justify-between items-center">
                 <h3 class="text-xs font-bold uppercase tracking-[0.16em] <%= plan[:highlight] ? 'text-[#ECDFD2]/70' : 'text-[#5F3475]' %>">Delivery Time</h3>
-                <p class="mt-3 <%= plan[:highlight] ? 'text-[#ECDFD2]/88' : 'text-[#081849]/80' %>"><%= plan[:delivery] %></p>
+                <span class="rounded-full px-3 py-1 text-xs font-bold uppercase tracking-wider <%= plan[:highlight] ? 'bg-white/15 text-[#ECDFD2]' : 'bg-[#213885]/10 text-[#213885]' %>"><%= plan[:delivery] %></span>
               </div>
 
-              <div>
+              <div class="rounded-2xl p-5 <%= plan[:highlight] ? 'bg-white/8 border border-white/10' : 'bg-[#081849]/3 border border-[#081849]/5' %>">
                 <h3 class="text-xs font-bold uppercase tracking-[0.16em] <%= plan[:highlight] ? 'text-[#ECDFD2]/70' : 'text-[#5F3475]' %>">Best For</h3>
                 <p class="mt-3 leading-relaxed <%= plan[:highlight] ? 'text-[#ECDFD2]/78' : 'text-[#081849]/62' %>"><%= plan[:best_for].join(", ") %></p>
               </div>
             </div>
 
-            <%= link_to contact_path, class: "mt-10 inline-flex w-full items-center justify-center rounded-full px-6 py-3 text-center text-sm font-semibold transition hover:-translate-y-0.5 #{plan[:highlight] ? 'bg-[#ECDFD2] text-[#213885] shadow-xl shadow-[#081849]/25' : 'border border-[#081849]/15 text-[#081849] hover:border-[#213885] hover:bg-[#213885] hover:text-[#ECDFD2]'}" do %>
+            <%= link_to contact_path, class: "mt-8 inline-flex w-full items-center justify-center rounded-full px-6 py-3 text-center text-sm font-bold transition-all duration-200 hover:-translate-y-0.5 #{plan[:highlight] ? 'bg-[#ECDFD2] text-[#213885] shadow-xl shadow-[#081849]/25 hover:bg-[#ECDFD2]/90' : 'border border-[#081849]/15 text-[#081849] hover:border-[#213885] hover:bg-[#213885] hover:text-[#ECDFD2]'}" do %>
               <%= plan[:cta] %>
             <% end %>
           </div>
