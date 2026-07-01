@@ -13,7 +13,9 @@
         <% if @selected_employee.present? %>
           <%= link_to "Show all employees", admin_commissions_path, class: "btn-base btn-sand px-3 py-2 text-sm shadow-sm" %>
         <% end %>
-        <%= link_to "Rate settings", admin_commission_rates_path, class: "btn-base btn-sand px-3 py-2 text-sm shadow-sm" %>
+        <% if super_admin? %>
+          <%= link_to "Rate settings", admin_commission_rates_path, class: "btn-base btn-sand px-3 py-2 text-sm shadow-sm" %>
+        <% end %>
       </div>
     <% end %>
   </div>

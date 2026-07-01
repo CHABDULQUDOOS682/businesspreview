@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_07_01_000200) do
+ActiveRecord::Schema[8.0].define(version: 2026_07_01_000400) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -24,6 +24,30 @@ ActiveRecord::Schema[8.0].define(version: 2026_07_01_000200) do
     t.index ["business_id", "kind", "month_number"], name: "index_business_rates_on_business_kind_month", unique: true
     t.index ["business_id", "kind"], name: "index_business_rates_on_one_time_kind", unique: true, where: "(month_number IS NULL)"
     t.index ["business_id"], name: "index_business_commission_rates_on_business_id"
+  end
+
+  create_table "business_import_rows", force: :cascade do |t|
+    t.bigint "business_import_id", null: false
+    t.bigint "business_id"
+    t.integer "row_number", null: false
+    t.string "business_name"
+    t.string "phone"
+    t.string "status", null: false
+    t.text "reason"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["business_id"], name: "index_business_import_rows_on_business_id"
+    t.index ["business_import_id"], name: "index_business_import_rows_on_business_import_id"
+    t.index ["status"], name: "index_business_import_rows_on_status"
+  end
+
+  create_table "business_imports", force: :cascade do |t|
+    t.bigint "imported_by_id"
+    t.string "filename"
+    t.datetime "completed_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["imported_by_id"], name: "index_business_imports_on_imported_by_id"
   end
 
   create_table "businesses", force: :cascade do |t|
@@ -64,6 +88,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_07_01_000200) do
     t.datetime "last_payment_failed_at"
     t.string "review_token"
     t.bigint "sold_by_id"
+    t.index "lower((phone)::text)", name: "index_businesses_on_lower_phone", unique: true
     t.index ["last_invoice_id"], name: "index_businesses_on_last_invoice_id"
     t.index ["review_token"], name: "index_businesses_on_review_token", unique: true
     t.index ["sold_by_id"], name: "index_businesses_on_sold_by_id"
@@ -245,6 +270,9 @@ ActiveRecord::Schema[8.0].define(version: 2026_07_01_000200) do
   end
 
   add_foreign_key "business_commission_rates", "businesses"
+  add_foreign_key "business_import_rows", "business_imports"
+  add_foreign_key "business_import_rows", "businesses"
+  add_foreign_key "business_imports", "users", column: "imported_by_id"
   add_foreign_key "businesses", "users", column: "sold_by_id"
   add_foreign_key "call_logs", "businesses"
   add_foreign_key "commissions", "businesses"

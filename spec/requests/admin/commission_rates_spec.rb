@@ -21,9 +21,10 @@ RSpec.describe "Admin::CommissionRates", type: :request do
     context "when admin" do
       before { sign_in admin }
 
-      it "returns success and renders index" do
+      it "redirects to admin_root_path with alert" do
         get admin_commission_rates_path
-        expect(response).to have_http_status(:success)
+        expect(response).to redirect_to(admin_root_path)
+        expect(flash[:alert]).to be_present
       end
     end
 
@@ -55,8 +56,8 @@ RSpec.describe "Admin::CommissionRates", type: :request do
       }
     end
 
-    context "when authorized (admin)" do
-      before { sign_in admin }
+    context "when authorized (super_admin)" do
+      before { sign_in super_admin }
 
       it "bulk updates percentages and redirects to index" do
         patch admin_commission_rate_path(rate1), params: params
@@ -76,6 +77,16 @@ RSpec.describe "Admin::CommissionRates", type: :request do
         expect(response).to redirect_to(admin_commission_rates_path)
         expect(flash[:alert]).to be_present
         expect(rate1.reload.percentage).to eq(10.0) # untouched
+      end
+    end
+
+    context "when unauthorized (admin)" do
+      before { sign_in admin }
+
+      it "does not update and redirects" do
+        patch admin_commission_rate_path(rate1), params: params
+        expect(response).to redirect_to(admin_root_path)
+        expect(rate1.reload.percentage).to eq(10.0)
       end
     end
 

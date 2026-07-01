@@ -2,6 +2,7 @@
 <nav class="<%= mobile ? 'space-y-1 px-3 py-3' : 'sidebar-items-section-container' %>">
   <%= admin_sidebar_nav_link "Dashboard", admin_root_path, controller: "admin/dashboard", icon: :dashboard, mobile: mobile %>
   <%= admin_sidebar_nav_link "Businesses", admin_businesses_path, controller: "admin/businesses", icon: :businesses, mobile: mobile %>
+  <%= admin_sidebar_nav_link "Import Reports", admin_business_imports_path, controller: "admin/business_imports", icon: :import_reports, mobile: mobile %>
   <%= admin_sidebar_nav_link "Prototype Links", admin_preview_links_path, controller: "admin/preview_links", icon: :preview_links, mobile: mobile %>
   <%= admin_sidebar_nav_link "Communications", admin_communications_path, controller: "admin/communications", icon: :communications, mobile: mobile, badge: admin_sidebar_unread_badge(mobile: mobile) %>
   <%= admin_sidebar_nav_link "Tasks", admin_tasks_path, controller: "admin/tasks", icon: :tasks, mobile: mobile %>

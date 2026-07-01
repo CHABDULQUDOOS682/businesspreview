@@ -9,10 +9,12 @@ class Business < ApplicationRecord
   has_many :business_commission_rates, dependent: :destroy
   alias_attribute :website, :website_url
 
+  before_validation :normalize_phone
   before_create :generate_review_token
 
   validates :name, presence: true
   validates :phone, presence: true
+  validates :phone, uniqueness: { case_sensitive: false }, if: -> { phone.present? }
 
   SEGMENTS = {
     "nurture" => "Neutral",
@@ -89,6 +91,14 @@ class Business < ApplicationRecord
   end
 
   private
+
+  def normalize_phone
+    return if phone.blank?
+
+    digits = phone.to_s.gsub(/[^\d+]/, "")
+    digits = "+#{digits.delete('+')}" if digits.present?
+    self.phone = digits
+  end
 
   def generate_review_token
     self.review_token ||= SecureRandom.urlsafe_base64(16)

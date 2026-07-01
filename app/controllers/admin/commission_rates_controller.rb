@@ -1,6 +1,6 @@
 class Admin::CommissionRatesController < ApplicationController
   layout "admin"
-  before_action :require_user_management_access!
+  before_action :require_super_admin!
 
   def index
     @commission_rates = CommissionRate.order(:kind, :month_number)

@@ -1,0 +1,55 @@
+<% content_for :page_header do %>
+  <div class="sm:flex sm:items-start sm:justify-between">
+    <div class="sm:flex-auto">
+      <h1 class="text-2xl font-semibold leading-6 text-slate-900">Import Reports</h1>
+      <p class="mt-1 text-sm text-slate-600">Review business CSV imports, skipped duplicates, and validation failures.</p>
+    </div>
+  </div>
+<% end %>
+
+<div class="mt-8 flow-root">
+  <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+    <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+      <div class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg">
+        <table class="min-w-full divide-y divide-slate-300">
+          <thead class="bg-slate-50">
+            <tr>
+              <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-slate-900 sm:pl-6">Filename</th>
+              <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-slate-900">Imported By</th>
+              <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-slate-900">Created</th>
+              <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-slate-900">Duplicates</th>
+              <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-slate-900">Failed</th>
+              <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-slate-900">Imported At</th>
+              <th scope="col" class="relative py-3.5 pl-3 pr-4 text-right text-sm font-semibold text-slate-900 sm:pr-6">Actions</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-200 bg-white">
+            <% @business_imports.each do |business_import| %>
+              <tr class="hover:bg-slate-50">
+                <td class="py-4 pl-4 pr-3 text-sm font-medium text-slate-900 sm:pl-6"><%= business_import.filename.presence || "CSV import" %></td>
+                <td class="px-3 py-4 text-sm text-slate-500"><%= business_import.imported_by&.display_name || "Unknown" %></td>
+                <td class="whitespace-nowrap px-3 py-4 text-sm text-slate-500"><%= business_import.created_count %></td>
+                <td class="whitespace-nowrap px-3 py-4 text-sm text-slate-500"><%= business_import.duplicate_count %></td>
+                <td class="whitespace-nowrap px-3 py-4 text-sm text-slate-500"><%= business_import.failed_count %></td>
+                <td class="whitespace-nowrap px-3 py-4 text-sm text-slate-500"><%= business_import.created_at.strftime("%b %-d, %Y %l:%M %p") %></td>
+                <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
+                  <%= link_to "View", admin_business_import_path(business_import), class: "text-blue-600 hover:text-blue-900" %>
+                </td>
+              </tr>
+            <% end %>
+            <% if @business_imports.empty? %>
+              <tr>
+                <td colspan="7" class="px-3 py-8 text-center text-sm text-slate-500">No business imports have been run yet.</td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+      <% if @pagy.pages > 1 %>
+        <div class="mt-4 flex justify-end">
+          <%== pagy_nav(@pagy) %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
