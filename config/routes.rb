@@ -64,6 +64,13 @@ Rails.application.routes.draw do
         patch :toggle_active
       end
     end
+    resources :commissions, only: [ :index ] do
+      member do
+        patch :approve
+        patch :mark_paid_out
+      end
+    end
+    resources :commission_rates, only: [ :index, :update ]
     get "templates/:id/preview", to: "templates#preview", as: :template_preview
   end
 

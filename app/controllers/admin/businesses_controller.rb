@@ -2,6 +2,7 @@ require "csv"
 
 class Admin::BusinessesController < ApplicationController
   layout "admin"
+  before_action :set_seller_options, only: [ :new, :create, :edit, :update ]
 
   def index
     @segment = employee_role? ? "nurture" : Business.normalize_segment(params[:segment])
@@ -58,10 +59,13 @@ class Admin::BusinessesController < ApplicationController
 
   def new
     @business = Business.new
+    @business.sold_by ||= current_user if @seller_options.include?(current_user)
   end
 
   def create
     @business = Business.new(business_params)
+    @business.sold_by ||= current_user if @seller_options.include?(current_user)
+
     if @business.save
       redirect_to admin_businesses_path, notice: "Business created!"
     else
@@ -149,10 +153,17 @@ class Admin::BusinessesController < ApplicationController
             :sold_price,
             :subscription_fee,
             :subscription,
+            :sold_by_id,
             :task_source_enabled,
             :task_base_url,
             :task_secret,
             :task_endpoint_path
           )
+  end
+
+  def set_seller_options
+    sellers = User.where(role: "employee").to_a
+    sellers << current_user if current_user&.role_admin? || current_user&.role_super_admin?
+    @seller_options = sellers.uniq.sort_by { |user| user.display_name.to_s.downcase }
   end
 end

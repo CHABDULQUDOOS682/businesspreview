@@ -1,0 +1,54 @@
+<% content_for :page_header do %>
+  <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+    <div>
+      <p class="portal-kicker">Workspace settings</p>
+      <h1 class="portal-page-title mt-2">Commission Rates</h1>
+      <p class="mt-2 text-sm text-sand-600">
+        Manage global default commission rates for one-time website sales and recurring subscription cycles.
+      </p>
+    </div>
+  </div>
+<% end %>
+
+<div class="mx-auto max-w-4xl">
+  <div class="overflow-hidden rounded-[24px] border border-sand-200 bg-white shadow-[0_8px_24px_rgba(26,25,24,0.04)] p-6 md:p-8">
+    <%= form_with url: admin_commission_rate_path("bulk"), method: :patch, local: true, class: "space-y-6" do |f| %>
+      <table class="min-w-full divide-y divide-slate-200">
+        <thead class="bg-slate-50">
+          <tr>
+            <th class="px-4 py-3.5 text-left text-sm font-semibold text-slate-900">Sale Kind</th>
+            <th class="px-4 py-3.5 text-left text-sm font-semibold text-slate-900">Month Cycle</th>
+            <th class="px-4 py-3.5 text-left text-sm font-semibold text-slate-900 w-32">Percentage (%)</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-200 bg-white">
+          <% @commission_rates.each do |rate| %>
+            <tr class="hover:bg-slate-50">
+              <td class="px-4 py-4 text-sm font-medium text-slate-900">
+                <%= rate.kind == "one_time" ? "Website Sale" : "Subscription" %>
+              </td>
+              <td class="px-4 py-4 text-sm text-slate-500">
+                <%= rate.month_number.present? ? "Month #{rate.month_number}" : "N/A" %>
+              </td>
+              <td class="px-4 py-4 text-sm">
+                <%= fields_for "commission_rates[#{rate.id}]", rate do |ff| %>
+                  <%= ff.number_field :percentage, 
+                                      step: 0.01, 
+                                      min: 0, 
+                                      max: 100, 
+                                      class: "block w-full rounded-lg border-0 px-3 py-2 text-slate-900 shadow-sm ring-1 ring-inset ring-slate-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6", 
+                                      value: rate.percentage %>
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+
+      <div class="flex items-center justify-end gap-3 border-t border-slate-200 pt-6">
+        <%= link_to "Cancel", admin_root_path, class: "rounded-md bg-white px-3 py-2 text-sm font-semibold text-slate-900 shadow-sm ring-1 ring-inset ring-slate-300 hover:bg-slate-50" %>
+        <%= f.submit "Save rates", class: "rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500" %>
+      </div>
+    <% end %>
+  </div>
+</div>

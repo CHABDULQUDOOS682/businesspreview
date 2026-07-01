@@ -6,6 +6,8 @@ module Admin::SidebarHelper
     tasks: :blue,
     users: :purple,
     reviews: :indigo,
+    commissions: :amber,
+    commission_rates: :amber,
     invoices: :green,
     call_logs: :orange,
     preview_links: :indigo,
@@ -125,6 +127,10 @@ module Admin::SidebarHelper
         '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2m19 0v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75M12 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0Z" stroke-linecap="round" stroke-linejoin="round" />'
       when :reviews
         '<path d="M11 5H6a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2v-5m-1.414-9.414a2 2 0 1 1 2.828 2.828L11.828 15H9v-2.828l8.586-8.586Z" stroke-linecap="round" stroke-linejoin="round" />'
+      when :commissions
+        '<path d="M12 6v12m3-9.5H10.5a2.5 2.5 0 0 0 0 5H13.5a2.5 2.5 0 0 1 0 5H9" stroke-linecap="round" stroke-linejoin="round" /><path d="M4 4h16v16H4z" stroke-linecap="round" stroke-linejoin="round" />'
+      when :commission_rates
+        '<path d="M12 2v20m5-16H9.5a3.5 3.5 0 0 0 0 7H14.5a3.5 3.5 0 0 1 0 7H6" stroke-linecap="round" stroke-linejoin="round" />'
       when :invoices
         '<path d="M9 12h6m-6 4h6m2 5H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5.586a1 1 0 0 1 .707.293l5.414 5.414a1 1 0 0 1 .293.707V19a2 2 0 0 1-2 2Z" stroke-linecap="round" stroke-linejoin="round" />'
       when :call_logs
@@ -157,6 +163,7 @@ module Admin::SidebarHelper
     when :green then "bg-accent-green"
     when :blue then "bg-accent-blue"
     when :purple then "bg-accent-purple"
+    when :amber then "bg-accent-amber"
     else "bg-sand-900"
     end
   end
@@ -168,6 +175,7 @@ module Admin::SidebarHelper
     when :green then "bg-accent-green-bg"
     when :blue then "bg-accent-blue-bg"
     when :purple then "bg-accent-purple-bg"
+    when :amber then "bg-accent-amber-bg"
     else "bg-sand-200"
     end
   end
@@ -179,6 +187,7 @@ module Admin::SidebarHelper
     when :green then "text-accent-green"
     when :blue then "text-accent-blue"
     when :purple then "text-accent-purple"
+    when :amber then "text-accent-amber"
     else "text-sand-900"
     end
   end

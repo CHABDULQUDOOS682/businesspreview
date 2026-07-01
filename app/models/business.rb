@@ -4,6 +4,9 @@ class Business < ApplicationRecord
   has_many :notes, dependent: :destroy
   has_many :payment_invoices, dependent: :destroy
   has_many :reviews, dependent: :destroy
+  belongs_to :sold_by, class_name: "User", optional: true
+  has_many :commissions, dependent: :destroy
+  has_many :business_commission_rates, dependent: :destroy
   alias_attribute :website, :website_url
 
   before_create :generate_review_token

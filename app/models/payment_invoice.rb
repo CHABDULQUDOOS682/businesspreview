@@ -32,6 +32,9 @@ class PaymentInvoice < ApplicationRecord
 
   scope :recent, -> { order(created_at: :desc) }
 
+  after_update :create_commission_if_paid, if: -> { saved_change_to_status? && status == "paid" }
+
+
   def self.build_for_business(business)
     kind = business.subscription_active? ? "subscription" : "one_time"
 
@@ -146,6 +149,13 @@ class PaymentInvoice < ApplicationRecord
       errors.add(:delivery_method, "requires a business phone number")
     end
   end
+
+  def create_commission_if_paid
+    Commission.build_for_paid_invoice!(self)
+  rescue => e
+    Rails.logger.error("[Commission] failed to build for invoice #{id}: #{e.message}")
+  end
+
 
 
   def format_amount(cents)

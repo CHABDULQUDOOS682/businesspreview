@@ -115,5 +115,7 @@ RSpec.configure do |config|
   config.before(:suite) do
     # Clear users to prevent "one super admin" validation failures from seeds/previous runs
     User.delete_all
+    # Clear global commission rates to prevent "Kind has already been taken" validation failures from seeds
+    CommissionRate.delete_all
   end
 end
