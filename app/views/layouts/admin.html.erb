@@ -30,7 +30,9 @@
         </div>
 
         <div class="sidebar-items-container">
-          <%= render admin_sidebar_partial %>
+          <div class="sidebar-nav-scroll">
+            <%= render admin_sidebar_partial %>
+          </div>
 
           <div class="sidebar-account-card rounded-[20px] border border-sand-200 bg-sand-50/80 p-3 shadow-[0_8px_18px_rgba(26,25,24,0.03)]">
             <% if user_signed_in? %>
