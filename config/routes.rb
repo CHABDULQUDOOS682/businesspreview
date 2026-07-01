@@ -51,6 +51,11 @@ Rails.application.routes.draw do
         post :send_review_link
       end
     end
+    resources :business_imports, only: [ :index, :show ] do
+      member do
+        get :download, defaults: { format: "csv" }
+      end
+    end
     resources :communications, only: [ :index, :show, :create ] do
       collection do
         post :bulk_create

@@ -11,7 +11,8 @@ module Admin::SidebarHelper
     invoices: :green,
     call_logs: :orange,
     preview_links: :indigo,
-    notes: :indigo
+    notes: :indigo,
+    import_reports: :blue
   }.freeze
 
   def admin_sidebar_partial
@@ -139,6 +140,8 @@ module Admin::SidebarHelper
         '<path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" stroke-linecap="round" stroke-linejoin="round" /><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" stroke-linecap="round" stroke-linejoin="round" />'
       when :notes
         '<path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2m-6 9h4m-4 4h6" stroke-linecap="round" stroke-linejoin="round" />'
+      when :import_reports
+        '<path d="M8 7h8m-8 4h8m-8 4h5M5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z" stroke-linecap="round" stroke-linejoin="round" />'
       else
         ""
       end

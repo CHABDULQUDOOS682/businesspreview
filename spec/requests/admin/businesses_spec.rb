@@ -6,6 +6,7 @@ RSpec.describe "Admin::Businesses", type: :request do
   include ActiveJob::TestHelper
 
   let(:admin) { create(:user, :admin) }
+  let(:super_admin) { create(:user, :super_admin) }
   let(:employee) { create(:user, role: "employee") }
   let(:business) { create(:business, email: "devdebizz@gmail.com", phone: "+1234567890") }
 
@@ -177,6 +178,23 @@ RSpec.describe "Admin::Businesses", type: :request do
   end
 
   describe "POST /admin/businesses/import" do
+    before do
+      sign_in super_admin
+    end
+
+    context "when logged in as admin" do
+      before do
+        sign_in admin
+      end
+
+      it "redirects without importing" do
+        post import_admin_businesses_path
+
+        expect(response).to redirect_to(admin_root_path)
+        expect(flash[:alert]).to eq("You do not have permission to access that page.")
+      end
+    end
+
     context "when file is missing" do
       it "redirects and sets an alert" do
         post import_admin_businesses_path
@@ -200,40 +218,33 @@ RSpec.describe "Admin::Businesses", type: :request do
           post import_admin_businesses_path, params: { file: csv_file }
         }.to change(Business, :count).by(1)
 
-        expect(response).to redirect_to(admin_businesses_path)
-        expect(flash[:notice]).to eq("Imported 1 businesses successfully.")
+        import = BusinessImport.last
+        expect(response).to redirect_to(admin_business_import_path(import))
+        expect(flash[:notice]).to eq("Imported 1 of 2 rows (0 duplicates, 1 failed).")
       end
     end
 
-    context "with some validation failures in CSV rows" do
+    context "with a duplicate phone in CSV rows" do
       let(:csv_file) do
         file = Tempfile.new([ "import", ".csv" ])
         file.write("Business Name,City,Country,Business Type,Phone Number,Rating\n")
-        file.write("Valid CSV Biz,Chicago,USA,Consulting,18005550199,4.8\n")
-        file.write("Invalid CSV Biz,Chicago,USA,Consulting,,4.8\n")
+        file.write("Existing CSV Biz,Chicago,USA,Consulting,+1 (800) 555-0199,4.8\n")
         file.close
         Rack::Test::UploadedFile.new(file.path, "text/csv")
       end
 
       before do
-        allow_any_instance_of(Business).to receive(:save).and_wrap_original do |method, *args|
-          instance = method.receiver
-          if instance.name == "Invalid CSV Biz"
-            instance.errors.add(:phone, "can't be blank")
-            false
-          else
-            method.call(*args)
-          end
-        end
+        create(:business, phone: "+18005550199")
       end
 
-      it "imports valid ones, lists failed ones, and redirects with alert" do
+      it "does not create a duplicate business and redirects to the import report" do
         expect {
           post import_admin_businesses_path, params: { file: csv_file }
-        }.to change(Business, :count).by(1)
+        }.not_to change(Business, :count)
 
-        expect(response).to redirect_to(admin_businesses_path)
-        expect(flash[:alert]).to eq("Imported 1, 1 failed.")
+        import = BusinessImport.last
+        expect(response).to redirect_to(admin_business_import_path(import))
+        expect(flash[:notice]).to eq("Imported 0 of 1 rows (1 duplicates, 0 failed).")
       end
     end
 

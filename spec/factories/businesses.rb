@@ -5,7 +5,7 @@ FactoryBot.define do
     city { "New York" }
     country { "USA" }
     sequence(:email) { |n| "contact#{n}@acmecorp.com" }
-    phone { "+1234567890" }
+    sequence(:phone) { |n| "+123456789#{n}" }
     visit_count { 0 }
     subscription { false }
     sold_price { 500 }

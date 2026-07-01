@@ -1,7 +1,6 @@
-require "csv"
-
 class Admin::BusinessesController < ApplicationController
   layout "admin"
+  before_action :require_super_admin!, only: [ :import ]
   before_action :set_seller_options, only: [ :new, :create, :edit, :update ]
 
   def index
@@ -22,39 +21,16 @@ class Admin::BusinessesController < ApplicationController
       return
     end
 
-    created = 0
-    failed = []
-
     begin
-      CSV.foreach(params[:file].path, headers: true) do |row|
-        attrs = {
-          name: row["Business Name"],
-          city: row["City"],
-          country: row["Country"],
-          niche: row["Business Type"],
-          phone: "+#{row['Phone Number']}",
-          rating: row["Rating"]
-        }.compact
-
-        next if attrs[:name].blank?
-
-        business = Business.new(attrs)
-        if business.save
-          created += 1
-        else
-          failed << { name: attrs[:name], errors: business.errors.full_messages }
-        end
-      end
+      import = BusinessImportService.new(params[:file].path, imported_by: current_user).call
     rescue => e
       redirect_to admin_businesses_path, alert: "Import failed: #{e.message}"
       return
     end
 
-    if failed.empty?
-      redirect_to admin_businesses_path, notice: "Imported #{created} businesses successfully."
-    else
-      redirect_to admin_businesses_path, alert: "Imported #{created}, #{failed.size} failed."
-    end
+    redirect_to admin_business_import_path(import),
+                notice: "Imported #{import.created_count} of #{import.total_rows} rows " \
+                        "(#{import.duplicate_count} duplicates, #{import.failed_count} failed)."
   end
 
   def new

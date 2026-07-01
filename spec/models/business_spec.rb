@@ -1,6 +1,40 @@
 require 'rails_helper'
 
 RSpec.describe Business, type: :model do
+  describe "validations" do
+    it "requires a phone number" do
+      business = build(:business, phone: nil)
+
+      expect(business).not_to be_valid
+      expect(business.errors[:phone]).to include("can't be blank")
+    end
+
+    it "normalizes phone numbers before validation" do
+      business = build(:business, phone: " (123) 456-7890 ")
+
+      business.valid?
+
+      expect(business.phone).to eq("+1234567890")
+    end
+
+    it "normalizes a leading plus and removes formatting" do
+      business = build(:business, phone: "+1.234.567.890")
+
+      business.valid?
+
+      expect(business.phone).to eq("+1234567890")
+    end
+
+    it "treats differently formatted copies of the same phone as duplicates" do
+      create(:business, phone: "+1 (800) 555-0199")
+
+      duplicate = build(:business, phone: "1-800-555-0199")
+
+      expect(duplicate).not_to be_valid
+      expect(duplicate.errors[:phone]).to include("has already been taken")
+    end
+  end
+
   describe "scopes" do
     it "filters task sources" do
       create(:business, task_source_enabled: true, task_base_url: "http://api.com", task_secret: "secret")
