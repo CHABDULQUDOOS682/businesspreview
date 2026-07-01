@@ -39,7 +39,7 @@ class BusinessImportService
         next
       end
 
-      if Business.exists?(["lower(phone) = ?", normalized_phone.downcase])
+      if Business.exists?([ "lower(phone) = ?", normalized_phone.downcase ])
         record_row(import, row_number, name, raw_phone, "duplicate", "Phone number already exists in the database")
         next
       end
