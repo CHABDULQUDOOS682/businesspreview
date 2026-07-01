@@ -7,7 +7,7 @@ class BusinessCommissionRate < ApplicationRecord
   validates :percentage, numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 100 }
   validates :month_number, presence: true, if: :subscription?
   validates :month_number, absence: true, if: :one_time?
-  validates :business_id, uniqueness: { scope: [:kind, :month_number] }
+  validates :business_id, uniqueness: { scope: [ :kind, :month_number ] }
 
   def subscription?
     kind == "subscription"

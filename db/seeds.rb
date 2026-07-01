@@ -29,7 +29,7 @@ end
   { kind: "one_time", month_number: nil, percentage: 10.0 },
   { kind: "subscription", month_number: 1, percentage: 8.0 },
   { kind: "subscription", month_number: 2, percentage: 4.0 },
-  { kind: "subscription", month_number: 3, percentage: 2.0 },
+  { kind: "subscription", month_number: 3, percentage: 2.0 }
 ].each do |attrs|
   CommissionRate.find_or_create_by!(kind: attrs[:kind], month_number: attrs[:month_number]) do |r|
     r.percentage = attrs[:percentage]

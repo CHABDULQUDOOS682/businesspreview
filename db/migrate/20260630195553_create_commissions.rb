@@ -16,7 +16,7 @@ class CreateCommissions < ActiveRecord::Migration[8.0]
       t.timestamps
     end
     add_index :commissions, :status
-    add_index :commissions, [:payment_invoice_id, :month_number], unique: true,
+    add_index :commissions, [ :payment_invoice_id, :month_number ], unique: true,
       name: "index_commissions_on_invoice_and_month"
   end
 end

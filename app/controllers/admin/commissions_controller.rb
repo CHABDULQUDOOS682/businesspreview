@@ -60,6 +60,6 @@ class Admin::CommissionsController < ApplicationController
         total: commissions.sum(&:commission_amount),
         count: commissions.size
       }
-    end.sort_by { |summary| [-summary[:total].to_d, summary[:user].display_name.to_s.downcase] }
+    end.sort_by { |summary| [ -summary[:total].to_d, summary[:user].display_name.to_s.downcase ] }
   end
 end

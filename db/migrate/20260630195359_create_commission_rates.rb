@@ -6,6 +6,6 @@ class CreateCommissionRates < ActiveRecord::Migration[8.0]
       t.decimal :percentage, precision: 5, scale: 2, null: false
       t.timestamps
     end
-    add_index :commission_rates, [:kind, :month_number], unique: true
+    add_index :commission_rates, [ :kind, :month_number ], unique: true
   end
 end
