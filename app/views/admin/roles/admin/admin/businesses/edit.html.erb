@@ -29,13 +29,6 @@
           <%= render "admin/businesses/sold_by_field", form: f, seller_options: @seller_options, field_class: field_class %>
 
           <div class="sm:col-span-3">
-            <%= f.label :owner_name, "Owner Name", class: "block text-sm font-medium leading-6 text-slate-900" %>
-            <div class="mt-2">
-              <%= f.text_field :owner_name, class: field_class %>
-            </div>
-          </div>
-
-          <div class="sm:col-span-3">
             <%= f.label :city, "City", class: "block text-sm font-medium leading-6 text-slate-900" %>
             <div class="mt-2">
               <%= f.text_field :city, class: field_class %>
@@ -50,7 +43,14 @@
           </div>
 
           <div class="sm:col-span-6">
-            <%= f.label :niche, "Niche / Industry", class: "block text-sm font-medium leading-6 text-slate-900" %>
+            <%= f.label :business_location, "Business Location", class: "block text-sm font-medium leading-6 text-slate-900" %>
+            <div class="mt-2">
+              <%= f.text_field :business_location, class: field_class, placeholder: "Google Maps URL or address" %>
+            </div>
+          </div>
+
+          <div class="sm:col-span-6">
+            <%= f.label :niche, "Business Type", class: "block text-sm font-medium leading-6 text-slate-900" %>
             <div class="mt-2">
               <%= f.text_field :niche, class: field_class %>
             </div>
@@ -70,15 +70,8 @@
             </div>
           </div>
 
-          <div class="sm:col-span-3">
-            <%= f.label :website_name, "Website Name", class: "block text-sm font-medium leading-6 text-slate-900" %>
-            <div class="mt-2">
-              <%= f.text_field :website_name, class: field_class %>
-            </div>
-          </div>
-
-          <div class="sm:col-span-3">
-            <%= f.label :website_url, "Website URL", class: "block text-sm font-medium leading-6 text-slate-900" %>
+          <div class="sm:col-span-6">
+            <%= f.label :website_url, "Website", class: "block text-sm font-medium leading-6 text-slate-900" %>
             <div class="mt-2">
               <%= f.url_field :website_url, class: field_class, placeholder: "https://" %>
             </div>
@@ -88,13 +81,6 @@
             <%= f.label :rating, "Google Rating", class: "block text-sm font-medium leading-6 text-slate-900" %>
             <div class="mt-2">
               <%= f.number_field :rating, step: 0.1, class: field_class %>
-            </div>
-          </div>
-
-          <div class="sm:col-span-6">
-            <%= f.label :message, "Message", class: "block text-sm font-medium leading-6 text-slate-900" %>
-            <div class="mt-2">
-              <%= f.text_area :message, rows: 4, class: field_class %>
             </div>
           </div>
 

@@ -4,7 +4,7 @@ require "tempfile"
 RSpec.describe BusinessImportService do
   def csv_upload(rows)
     file = Tempfile.new([ "business_import", ".csv" ])
-    file.write("Business Name,City,Country,Business Type,Phone Number,Rating\n")
+    file.write("Country,City,Business Location,Business Name,Rating,OutOff,Business Type,Email,Phone Number,Website\n")
     rows.each { |row| file.write("#{row}\n") }
     file.close
     file
@@ -14,8 +14,8 @@ RSpec.describe BusinessImportService do
 
   it "creates businesses for fresh valid rows" do
     file = csv_upload([
-      "Alpha,Chicago,USA,Consulting,18005550199,4.8",
-      "Beta,Austin,USA,Retail,+1 (800) 555-0200,4.6"
+      "USA,Chicago,[https://maps.example/alpha](https://maps.example/alpha),Alpha,4.8,-10,Consulting,alpha@example.com,18005550199,[https://alpha.example](https://alpha.example)",
+      "USA,Austin,https://maps.example/beta,Beta,4.6,-8,Retail,beta@example.com,+1 (800) 555-0200,https://beta.example"
     ])
 
     import = described_class.new(file.path, imported_by: imported_by).call
@@ -25,13 +25,18 @@ RSpec.describe BusinessImportService do
     expect(import.duplicate_count).to eq(0)
     expect(import.failed_count).to eq(0)
     expect(Business.pluck(:phone)).to include("+18005550199", "+18005550200")
+    expect(Business.find_by(phone: "+18005550199")).to have_attributes(
+      business_location: "https://maps.example/alpha",
+      email: "alpha@example.com",
+      website_url: "https://alpha.example"
+    )
   ensure
     file&.unlink
   end
 
   it "reports a row as duplicate when the phone already exists" do
     create(:business, phone: "+18005550199")
-    file = csv_upload([ "Alpha,Chicago,USA,Consulting,1 (800) 555-0199,4.8" ])
+    file = csv_upload([ "USA,Chicago,https://maps.example/alpha,Alpha,4.8,-10,Consulting,alpha@example.com,1 (800) 555-0199,https://alpha.example" ])
 
     import = described_class.new(file.path, imported_by: imported_by).call
     row = import.business_import_rows.first
@@ -45,8 +50,8 @@ RSpec.describe BusinessImportService do
 
   it "reports duplicate phone numbers within the same file" do
     file = csv_upload([
-      "Alpha,Chicago,USA,Consulting,18005550199,4.8",
-      "Beta,Austin,USA,Retail,+1 (800) 555-0199,4.6"
+      "USA,Chicago,https://maps.example/alpha,Alpha,4.8,-10,Consulting,alpha@example.com,18005550199,https://alpha.example",
+      "USA,Austin,https://maps.example/beta,Beta,4.6,-8,Retail,beta@example.com,+1 (800) 555-0199,https://beta.example"
     ])
 
     import = described_class.new(file.path, imported_by: imported_by).call
@@ -62,8 +67,8 @@ RSpec.describe BusinessImportService do
 
   it "reports blank business names and phone numbers as failed rows" do
     file = csv_upload([
-      ",Chicago,USA,Consulting,18005550199,4.8",
-      "Beta,Austin,USA,Retail,,4.6"
+      "USA,Chicago,https://maps.example/blank,,4.8,-10,Consulting,blank@example.com,18005550199,https://blank.example",
+      "USA,Austin,https://maps.example/beta,Beta,4.6,-8,Retail,beta@example.com,,https://beta.example"
     ])
 
     import = described_class.new(file.path, imported_by: imported_by).call
@@ -79,10 +84,10 @@ RSpec.describe BusinessImportService do
   it "persists correct counts for a mixed import" do
     create(:business, phone: "+18005550200")
     file = csv_upload([
-      "Alpha,Chicago,USA,Consulting,18005550199,4.8",
-      "Existing,Austin,USA,Retail,18005550200,4.6",
-      "In File Duplicate,Austin,USA,Retail,+1 (800) 555-0199,4.6",
-      "Missing Phone,Austin,USA,Retail,,4.6"
+      "USA,Chicago,https://maps.example/alpha,Alpha,4.8,-10,Consulting,alpha@example.com,18005550199,https://alpha.example",
+      "USA,Austin,https://maps.example/existing,Existing,4.6,-8,Retail,existing@example.com,18005550200,https://existing.example",
+      "USA,Austin,https://maps.example/file-duplicate,In File Duplicate,4.6,-8,Retail,file@example.com,+1 (800) 555-0199,https://file.example",
+      "USA,Austin,https://maps.example/missing,Missing Phone,4.6,-8,Retail,missing@example.com,,https://missing.example"
     ])
 
     import = described_class.new(file.path, imported_by: imported_by).call

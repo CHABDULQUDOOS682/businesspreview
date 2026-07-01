@@ -4,6 +4,7 @@ FactoryBot.define do
     owner_name { "John Doe" }
     city { "New York" }
     country { "USA" }
+    business_location { "https://www.google.com/maps/place/Acme+Corp" }
     sequence(:email) { |n| "contact#{n}@acmecorp.com" }
     sequence(:phone) { |n| "+123456789#{n}" }
     visit_count { 0 }

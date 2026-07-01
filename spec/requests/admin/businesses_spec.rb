@@ -95,11 +95,29 @@ RSpec.describe "Admin::Businesses", type: :request do
     context "with valid parameters" do
       it "creates a new Business and redirects" do
         expect {
-          post admin_businesses_path, params: { business: { name: "New Biz", phone: "+111222333" } }
+          post admin_businesses_path, params: {
+            business: {
+              name: "New Biz",
+              country: "USA",
+              city: "Birmingham",
+              business_location: "https://www.google.com/maps/place/New+Biz",
+              niche: "Barber shop",
+              email: "new@example.com",
+              phone: "+111222333",
+              rating: "4.8",
+              website_url: "https://new.example"
+            }
+          }
         }.to change(Business, :count).by(1)
 
         expect(response).to redirect_to(admin_businesses_path)
         expect(flash[:notice]).to eq("Business created!")
+        expect(Business.last).to have_attributes(
+          business_location: "https://www.google.com/maps/place/New+Biz",
+          niche: "Barber shop",
+          email: "new@example.com",
+          website_url: "https://new.example"
+        )
       end
 
       it "assigns the seller for commission attribution" do
@@ -155,8 +173,16 @@ RSpec.describe "Admin::Businesses", type: :request do
   describe "PATCH /admin/businesses/:id" do
     context "with valid parameters" do
       it "updates the business and redirects" do
-        patch admin_business_path(business), params: { business: { name: "Updated Name" } }
+        patch admin_business_path(business), params: {
+          business: {
+            name: "Updated Name",
+            business_location: "https://www.google.com/maps/place/Updated",
+            website_url: "https://updated.example"
+          }
+        }
         expect(business.reload.name).to eq("Updated Name")
+        expect(business.business_location).to eq("https://www.google.com/maps/place/Updated")
+        expect(business.website_url).to eq("https://updated.example")
         expect(response).to redirect_to(admin_business_path(business))
         expect(flash[:notice]).to eq("Business updated!")
       end
@@ -206,9 +232,9 @@ RSpec.describe "Admin::Businesses", type: :request do
     context "with a valid CSV file" do
       let(:csv_file) do
         file = Tempfile.new([ "import", ".csv" ])
-        file.write("Business Name,City,Country,Business Type,Phone Number,Rating\n")
-        file.write("CSV Biz 1,Chicago,USA,Consulting,18005550199,4.8\n")
-        file.write(",Skipped Biz,USA,Consulting,18005550199,4.8\n") # name blank, should skip
+        file.write("Country,City,Business Location,Business Name,Rating,OutOff,Business Type,Email,Phone Number,Website\n")
+        file.write("USA,Chicago,https://maps.example/csv-biz,CSV Biz 1,4.8,-10,Consulting,csv@example.com,18005550199,https://csv.example\n")
+        file.write("USA,Chicago,https://maps.example/skipped,,4.8,-10,Consulting,skipped@example.com,18005550199,https://skipped.example\n") # name blank, should fail
         file.close
         Rack::Test::UploadedFile.new(file.path, "text/csv")
       end
@@ -221,14 +247,19 @@ RSpec.describe "Admin::Businesses", type: :request do
         import = BusinessImport.last
         expect(response).to redirect_to(admin_business_import_path(import))
         expect(flash[:notice]).to eq("Imported 1 of 2 rows (0 duplicates, 1 failed).")
+        expect(Business.find_by(phone: "+18005550199")).to have_attributes(
+          business_location: "https://maps.example/csv-biz",
+          email: "csv@example.com",
+          website_url: "https://csv.example"
+        )
       end
     end
 
     context "with a duplicate phone in CSV rows" do
       let(:csv_file) do
         file = Tempfile.new([ "import", ".csv" ])
-        file.write("Business Name,City,Country,Business Type,Phone Number,Rating\n")
-        file.write("Existing CSV Biz,Chicago,USA,Consulting,+1 (800) 555-0199,4.8\n")
+        file.write("Country,City,Business Location,Business Name,Rating,OutOff,Business Type,Email,Phone Number,Website\n")
+        file.write("USA,Chicago,https://maps.example/existing,Existing CSV Biz,4.8,-10,Consulting,existing@example.com,+1 (800) 555-0199,https://existing.example\n")
         file.close
         Rack::Test::UploadedFile.new(file.path, "text/csv")
       end

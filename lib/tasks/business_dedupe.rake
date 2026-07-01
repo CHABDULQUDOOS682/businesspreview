@@ -21,7 +21,7 @@ namespace :business do
 
           survivor.assign_attributes(
             duplicate.attributes.slice(
-              "owner_name", "city", "country", "niche", "email",
+              "owner_name", "city", "country", "business_location", "niche", "email",
               "website_url", "website_name", "rating"
             ).compact.except(*survivor.attributes.compact.keys)
           )

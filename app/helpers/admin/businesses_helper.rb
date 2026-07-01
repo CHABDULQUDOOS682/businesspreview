@@ -20,5 +20,15 @@ module Admin
         content_tag(:span, "No Invoice", class: "text-slate-400 text-xs")
       end
     end
+
+    def business_location_link(business)
+      location = business.business_location.presence
+      return "-" if location.blank?
+
+      location = location.to_s.match(/\[[^\]]+\]\(([^)]+)\)/)&.captures&.first || location
+      href = location.match?(%r{\Ahttps?://}i) ? location : "https://www.google.com/maps/search/?api=1&query=#{ERB::Util.url_encode(location)}"
+
+      link_to "Open location", href, target: "_blank", rel: "noopener", class: "text-blue-600 hover:text-blue-500"
+    end
   end
 end

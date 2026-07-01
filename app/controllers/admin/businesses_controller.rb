@@ -119,6 +119,7 @@ class Admin::BusinessesController < ApplicationController
             :owner_name,
             :city,
             :country,
+            :business_location,
             :niche,
             :phone,
             :email,

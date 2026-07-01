@@ -39,4 +39,39 @@ RSpec.describe Admin::BusinessesHelper, type: :helper do
       expect(helper.business_payment_status_badge(business)).to include("bg-slate-50")
     end
   end
+
+  describe "#business_location_link" do
+    it "returns a Google Maps link when business location is a URL" do
+      business.business_location = "https://www.google.com/maps/place/Acme"
+
+      html = helper.business_location_link(business)
+
+      expect(html).to include("Open location")
+      expect(html).to include("https://www.google.com/maps/place/Acme")
+      expect(html).to include('target="_blank"')
+    end
+
+    it "builds a Google Maps search link when business location is plain text" do
+      business.business_location = "Birmingham Alabama"
+
+      html = helper.business_location_link(business)
+
+      expect(html).to include("https://www.google.com/maps/search/?api=1&amp;query=Birmingham%20Alabama")
+    end
+
+    it "uses the URL from a markdown-style location link" do
+      business.business_location = "[https://maps.example/acme](https://maps.example/acme)"
+
+      html = helper.business_location_link(business)
+
+      expect(html).to include("https://maps.example/acme")
+      expect(html).not_to include("%5Bhttps")
+    end
+
+    it "returns a dash when business location is blank" do
+      business.business_location = nil
+
+      expect(helper.business_location_link(business)).to eq("-")
+    end
+  end
 end
