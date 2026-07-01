@@ -48,9 +48,12 @@ class BusinessImportService
         name: name,
         city: row["City"],
         country: row["Country"],
+        business_location: clean_link(row["Business Location"]),
         niche: row["Business Type"],
+        email: row["Email"],
         phone: normalized_phone,
-        rating: row["Rating"]
+        rating: row["Rating"],
+        website_url: clean_link(row["Website"])
       )
 
       if business.save
@@ -72,6 +75,12 @@ class BusinessImportService
 
     digits = phone.to_s.gsub(/[^\d+]/, "")
     digits.present? ? "+#{digits.delete('+')}" : nil
+  end
+
+  def clean_link(value)
+    return nil if value.blank?
+
+    value.to_s.match(/\[[^\]]+\]\(([^)]+)\)/)&.captures&.first || value
   end
 
   def record_row(import, row_number, name, phone, status, reason, business_id: nil)

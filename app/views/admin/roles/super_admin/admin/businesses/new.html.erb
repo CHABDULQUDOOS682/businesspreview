@@ -40,9 +40,23 @@
           </div>
 
           <div class="sm:col-span-6">
-            <%= f.label :niche, "Niche / Industry", class: "block text-sm font-medium leading-6 text-slate-900" %>
+            <%= f.label :business_location, "Business Location", class: "block text-sm font-medium leading-6 text-slate-900" %>
             <div class="mt-2">
-              <%= f.text_field :niche, class: field_class, placeholder: "e.g. Real Estate, Dental, HVAC" %>
+              <%= f.text_field :business_location, class: field_class, placeholder: "Google Maps URL or address" %>
+            </div>
+          </div>
+
+          <div class="sm:col-span-6">
+            <%= f.label :niche, "Business Type", class: "block text-sm font-medium leading-6 text-slate-900" %>
+            <div class="mt-2">
+              <%= f.text_field :niche, class: field_class, placeholder: "e.g. Barber shop" %>
+            </div>
+          </div>
+
+          <div class="sm:col-span-3">
+            <%= f.label :email, "Email", class: "block text-sm font-medium leading-6 text-slate-900" %>
+            <div class="mt-2">
+              <%= f.email_field :email, class: field_class %>
             </div>
           </div>
 
@@ -61,9 +75,9 @@
           </div>
 
           <div class="sm:col-span-6">
-            <%= f.label :website, "Current Website URL", class: "block text-sm font-medium leading-6 text-slate-900" %>
+            <%= f.label :website_url, "Website", class: "block text-sm font-medium leading-6 text-slate-900" %>
             <div class="mt-2">
-              <%= f.text_field :website, class: field_class, placeholder: "https://" %>
+              <%= f.url_field :website_url, class: field_class, placeholder: "https://" %>
             </div>
           </div>
 

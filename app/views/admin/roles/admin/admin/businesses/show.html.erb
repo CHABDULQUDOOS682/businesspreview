@@ -23,24 +23,28 @@
         <%= render "admin/shared/business_profile_actions", business: @business %>
         <dl class="space-y-4 text-sm leading-6">
           <div class="flex justify-between gap-x-4 border-b border-slate-100 pb-4">
-            <dt class="text-slate-500">Industry / Niche</dt>
-            <dd class="text-slate-900 font-medium"><%= @business.niche.presence || "-" %></dd>
+            <dt class="text-slate-500">City</dt>
+            <dd class="text-slate-900 font-medium"><%= @business.city.presence || "-" %></dd>
           </div>
           <div class="flex justify-between gap-x-4 border-b border-slate-100 pb-4">
-            <dt class="text-slate-500">Location</dt>
-            <dd class="text-slate-900 font-medium"><%= [@business.city, @business.country].compact.join(", ").presence || "-" %></dd>
+            <dt class="text-slate-500">Country</dt>
+            <dd class="text-slate-900 font-medium"><%= @business.country.presence || "-" %></dd>
           </div>
           <div class="flex justify-between gap-x-4 border-b border-slate-100 pb-4">
-            <dt class="text-slate-500">Phone</dt>
-            <dd class="text-slate-900 font-medium"><%= @business.phone.presence || "-" %></dd>
+            <dt class="text-slate-500">Business Location</dt>
+            <dd class="text-slate-900 font-medium"><%= business_location_link(@business) %></dd>
           </div>
           <div class="flex justify-between gap-x-4 border-b border-slate-100 pb-4">
             <dt class="text-slate-500">Google Rating</dt>
             <dd class="text-slate-900 font-medium"><%= @business.rating.presence || "-" %></dd>
           </div>
           <div class="flex justify-between gap-x-4 border-b border-slate-100 pb-4">
-            <dt class="text-slate-500">Owner Name</dt>
-            <dd class="text-slate-900 font-medium"><%= @business.try(:owner_name).presence || "-" %></dd>
+            <dt class="text-slate-500">Business Type</dt>
+            <dd class="text-slate-900 font-medium"><%= @business.niche.presence || "-" %></dd>
+          </div>
+          <div class="flex justify-between gap-x-4 border-b border-slate-100 pb-4">
+            <dt class="text-slate-500">Phone</dt>
+            <dd class="text-slate-900 font-medium"><%= @business.phone.presence || "-" %></dd>
           </div>
           <div class="flex justify-between gap-x-4 border-b border-slate-100 pb-4">
             <dt class="text-slate-500">Email</dt>
@@ -53,11 +57,7 @@
             </dd>
           </div>
           <div class="flex justify-between gap-x-4 border-b border-slate-100 pb-4">
-            <dt class="text-slate-500">Website Name</dt>
-            <dd class="text-slate-900 font-medium"><%= @business.try(:website_name).presence || "-" %></dd>
-          </div>
-          <div class="flex justify-between gap-x-4 border-b border-slate-100 pb-4">
-            <dt class="text-slate-500">Website URL</dt>
+            <dt class="text-slate-500">Website</dt>
             <dd class="text-slate-900 font-medium">
               <% if @business.try(:website_url).present? %>
                 <%= link_to "Visit Site", @business.website_url, target: "_blank", class: "text-blue-600 hover:text-blue-500" %>
@@ -65,10 +65,6 @@
                 -
               <% end %>
             </dd>
-          </div>
-          <div class="flex justify-between gap-x-4 border-b border-slate-100 pb-4">
-            <dt class="text-slate-500">Message</dt>
-            <dd class="text-slate-900 font-medium"><%= @business.try(:message).presence || "-" %></dd>
           </div>
           <div class="flex justify-between gap-x-4 border-b border-slate-100 pb-4">
             <dt class="text-slate-500">Sold Price</dt>

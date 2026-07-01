@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_07_01_000400) do
+ActiveRecord::Schema[8.0].define(version: 2026_07_02_000100) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -88,6 +88,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_07_01_000400) do
     t.datetime "last_payment_failed_at"
     t.string "review_token"
     t.bigint "sold_by_id"
+    t.string "business_location"
     t.index "lower((phone)::text)", name: "index_businesses_on_lower_phone", unique: true
     t.index ["last_invoice_id"], name: "index_businesses_on_last_invoice_id"
     t.index ["review_token"], name: "index_businesses_on_review_token", unique: true
