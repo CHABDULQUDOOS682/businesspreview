@@ -16,6 +16,7 @@
   <table class="min-w-full divide-y divide-slate-200">
     <thead class="bg-slate-50">
       <tr>
+        <th class="px-4 py-3.5 text-left text-sm font-semibold text-slate-900">Name</th>
         <th class="px-4 py-3.5 text-left text-sm font-semibold text-slate-900">Email</th>
         <th class="px-4 py-3.5 text-left text-sm font-semibold text-slate-900">Role</th>
         <th class="px-4 py-3.5 text-left text-sm font-semibold text-slate-900">Status</th>
@@ -31,10 +32,19 @@
               <div>
                 <% if user.name.present? %>
                   <div class="font-medium text-slate-900"><%= user.name %></div>
-                  <div class="text-xs text-slate-500"><%= user.email %></div>
                 <% else %>
-                  <div class="font-medium text-slate-900"><%= user.email %></div>
+                  <div class="font-medium text-slate-900">No Name</div>
                 <% end %>
+              </div>
+              <% if user == current_user %>
+                <span class="inline-flex items-center rounded-full bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-600 ring-1 ring-inset ring-slate-200">You</span>
+              <% end %>
+            </div>
+          </td>
+          <td class="px-4 py-4 text-sm text-slate-900">
+            <div class="flex items-start gap-2">
+              <div>
+                <div class="font-medium text-slate-900"><%= user.email %></div>
               </div>
               <% if user == current_user %>
                 <span class="inline-flex items-center rounded-full bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-600 ring-1 ring-inset ring-slate-200">You</span>

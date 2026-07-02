@@ -63,6 +63,11 @@ Rails.application.configure do
     protocol: ENV.fetch("APP_PROTOCOL", "https")
   }
 
+  Rails.application.routes.default_url_options = {
+    host: ENV.fetch("APP_HOST", "localhost"),
+    protocol: ENV.fetch("APP_PROTOCOL", "https")
+}
+
   # Asset precompile runs with SECRET_KEY_BASE_DUMMY=1 and no runtime secrets.
   if ENV["SECRET_KEY_BASE_DUMMY"].present?
     config.action_mailer.delivery_method = :test
