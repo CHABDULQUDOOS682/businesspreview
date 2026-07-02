@@ -55,6 +55,8 @@ env:
     - MAILER_FROM
     - SENDGRID_API_KEY
     - CONTACT_EMAIL
+    - APP_HOST
+    - APP_PROTOCOL
 
   clear:
     # Run the Solid Queue Supervisor inside the web server's Puma process to do jobs.
