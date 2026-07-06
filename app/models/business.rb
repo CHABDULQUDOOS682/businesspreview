@@ -78,6 +78,12 @@ class Business < ApplicationRecord
     subscription? || subscription_fee.present?
   end
 
+  def subscription_first_invoice?(excluding: nil)
+    scope = payment_invoices.where(kind: "subscription").where.not(status: %w[draft failed])
+    scope = scope.where.not(id: excluding.id) if excluding&.id
+    scope.none?
+  end
+
   def task_source_name
     website_name.presence || name
   end

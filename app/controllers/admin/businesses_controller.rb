@@ -35,12 +35,10 @@ class Admin::BusinessesController < ApplicationController
 
   def new
     @business = Business.new
-    @business.sold_by ||= current_user if @seller_options.include?(current_user)
   end
 
   def create
     @business = Business.new(business_params)
-    @business.sold_by ||= current_user if @seller_options.include?(current_user)
 
     if @business.save
       redirect_to admin_businesses_path, notice: "Business created!"
@@ -113,29 +111,32 @@ class Admin::BusinessesController < ApplicationController
   end
 
   def business_params
-    params.require(:business)
-          .permit(
-            :name,
-            :owner_name,
-            :city,
-            :country,
-            :business_location,
-            :niche,
-            :phone,
-            :email,
-            :website_url,
-            :website_name,
-            :rating,
-            :message,
-            :sold_price,
-            :subscription_fee,
-            :subscription,
-            :sold_by_id,
-            :task_source_enabled,
-            :task_base_url,
-            :task_secret,
-            :task_endpoint_path
-          )
+    permitted = params.require(:business)
+                      .permit(
+                        :name,
+                        :owner_name,
+                        :city,
+                        :country,
+                        :business_location,
+                        :niche,
+                        :phone,
+                        :email,
+                        :website_url,
+                        :website_name,
+                        :rating,
+                        :message,
+                        :sold_price,
+                        :subscription_fee,
+                        :subscription,
+                        :sold_by_id,
+                        :task_source_enabled,
+                        :task_base_url,
+                        :task_secret,
+                        :task_endpoint_path
+                      )
+
+    permitted[:sold_by_id] = nil if permitted[:sold_by_id].blank?
+    permitted
   end
 
   def set_seller_options

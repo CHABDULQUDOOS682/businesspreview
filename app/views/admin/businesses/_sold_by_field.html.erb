@@ -1,11 +1,9 @@
 <div class="sm:col-span-3">
   <%= form.label :sold_by_id, "Sold By", class: "block text-sm font-medium leading-6 text-slate-900" %>
   <div class="mt-2">
-    <%= form.collection_select :sold_by_id,
-                               seller_options,
-                               :id,
-                               :display_name,
-                               { include_blank: "Unassigned" },
-                               class: field_class %>
+    <%= form.select :sold_by_id,
+                    options_from_collection_for_select(seller_options, :id, :display_name, form.object.sold_by_id),
+                    { include_blank: "Unassigned" },
+                    class: field_class %>
   </div>
 </div>
