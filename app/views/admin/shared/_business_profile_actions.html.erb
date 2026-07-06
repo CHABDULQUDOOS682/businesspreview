@@ -4,6 +4,9 @@
 <div class="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
   <h3 class="text-base font-semibold leading-6 text-slate-900">Profile</h3>
   <div class="flex flex-wrap items-center gap-2 sm:justify-end">
+    <%= render "admin/shared/business_call_button",
+               business: business,
+               button_class: "#{action_button_class} bg-emerald-600 text-white hover:bg-emerald-500" %>
     <%= render "admin/shared/business_chat_button",
                business: business,
                button_class: "#{action_button_class} bg-green-600 text-white hover:bg-green-500" %>

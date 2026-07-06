@@ -21,6 +21,33 @@ RSpec.describe PaymentInvoice, type: :model do
       business.update(phone: nil)
       expect(PaymentInvoice.build_for_business(business).delivery_method).to eq("email")
     end
+
+    it "charges sold price only for one-time website sales" do
+      business.update(subscription: false, subscription_fee: nil, sold_price: 500)
+
+      invoice = PaymentInvoice.build_for_business(business)
+
+      expect(invoice.kind).to eq("one_time")
+      expect(invoice.amount_cents).to eq(50_000)
+    end
+
+    it "charges sold price plus subscription fee on the first subscription invoice" do
+      business.update(subscription: true, sold_price: 500, subscription_fee: 99)
+
+      invoice = PaymentInvoice.build_for_business(business)
+
+      expect(invoice.kind).to eq("subscription")
+      expect(invoice.amount_cents).to eq(59_900)
+    end
+
+    it "charges only the subscription fee on later subscription invoices" do
+      business.update(subscription: true, sold_price: 500, subscription_fee: 99)
+      create(:payment_invoice, business: business, kind: "subscription", status: "paid", amount_cents: 59_900)
+
+      invoice = PaymentInvoice.build_for_business(business)
+
+      expect(invoice.amount_cents).to eq(9_900)
+    end
   end
 
   describe "#store_paid_documents!" do
@@ -77,6 +104,12 @@ RSpec.describe PaymentInvoice, type: :model do
     it "default_amount_for returns nil if blank" do
       business.update_columns(sold_price: nil, subscription_fee: nil)
       expect(PaymentInvoice.default_amount_for(business, "one_time")).to be_nil
+    end
+
+    it "subscription_invoice_amount_cents returns subscription fee when sold price is absent" do
+      business.update(subscription: true, sold_price: nil, subscription_fee: 99)
+
+      expect(PaymentInvoice.subscription_invoice_amount_cents(business)).to eq(9_900)
     end
 
     it "mark_opened! sets status and timestamp" do

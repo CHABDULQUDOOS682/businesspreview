@@ -125,6 +125,12 @@ RSpec.describe "Admin::Businesses", type: :request do
 
         expect(Business.last.sold_by).to eq(employee)
       end
+
+      it "keeps sold_by unassigned when Unassigned is selected" do
+        post admin_businesses_path, params: { business: { name: "Unassigned Biz", phone: "+111222334", sold_by_id: "" } }
+
+        expect(Business.last.sold_by).to be_nil
+      end
     end
 
     context "with invalid parameters" do
@@ -191,6 +197,22 @@ RSpec.describe "Admin::Businesses", type: :request do
         patch admin_business_path(business), params: { business: { sold_by_id: employee.id } }
 
         expect(business.reload.sold_by).to eq(employee)
+      end
+
+      it "clears sold_by when Unassigned is selected" do
+        business.update!(sold_by: employee)
+
+        patch admin_business_path(business), params: { business: { sold_by_id: "" } }
+
+        expect(business.reload.sold_by).to be_nil
+      end
+
+      it "keeps sold_by unassigned when updating other fields" do
+        business.update!(sold_by: nil)
+
+        patch admin_business_path(business), params: { business: { name: "Still Unassigned", sold_by_id: "" } }
+
+        expect(business.reload).to have_attributes(name: "Still Unassigned", sold_by: nil)
       end
     end
 

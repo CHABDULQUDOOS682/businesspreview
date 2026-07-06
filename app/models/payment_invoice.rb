@@ -37,25 +37,39 @@ class PaymentInvoice < ApplicationRecord
 
   def self.build_for_business(business)
     kind = business.subscription_active? ? "subscription" : "one_time"
-
-    business.payment_invoices.new(
+    invoice = business.payment_invoices.new(
       kind: kind,
-      amount_cents: default_amount_for(business, kind).to_i,
       currency: "usd",
       delivery_method: default_delivery_method_for(business),
       days_until_due: DEFAULT_DAYS_UNTIL_DUE,
       billing_interval: DEFAULT_BILLING_INTERVAL
     )
+    invoice.amount_cents = default_amount_for(business, kind, excluding: invoice).to_i
+    invoice
   end
 
-  def self.default_amount_for(business, kind)
-    amount =
-      if kind.to_s == "subscription"
-        business.subscription_fee
-      else
-        business.sold_price
-      end
+  def self.default_amount_for(business, kind, excluding: nil)
+    case kind.to_s
+    when "subscription"
+      subscription_invoice_amount_cents(business, excluding: excluding)
+    else
+      dollars_to_cents(business.sold_price)
+    end
+  end
 
+  def self.subscription_invoice_amount_cents(business, excluding: nil)
+    fee_cents = dollars_to_cents(business.subscription_fee)
+    sold_cents = dollars_to_cents(business.sold_price)
+
+    if business.subscription_first_invoice?(excluding: excluding)
+      total = (fee_cents || 0) + (sold_cents || 0)
+      total.positive? ? total : nil
+    else
+      fee_cents
+    end
+  end
+
+  def self.dollars_to_cents(amount)
     return nil if amount.blank?
 
     (BigDecimal(amount.to_s) * 100).round.to_i

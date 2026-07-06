@@ -1,8 +1,7 @@
 <%= turbo_stream_from "conversation:#{@conversation_key}" if @conversation_key.present? %>
 <div class="flex h-full min-h-[42rem] min-w-0 max-w-full flex-col overflow-x-hidden"
-     data-controller="twilio-call chat-scroll"
-     data-action="turbo:load@window->chat-scroll#scrollToBottom turbo:render@window->chat-scroll#scrollToBottom"
-     data-twilio-call-phone-number-value="<%= @number %>">
+     data-controller="chat-scroll"
+     data-action="turbo:load@window->chat-scroll#scrollToBottom turbo:render@window->chat-scroll#scrollToBottom">
 
   <div class="mb-4 flex flex-shrink-0 flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
     <div class="min-w-0">
@@ -15,31 +14,21 @@
       </h2>
       <div class="mt-1 flex flex-wrap items-center gap-2">
         <p class="text-sm text-gray-500 break-all"><%= @number %></p>
-        <span class="text-xs font-semibold px-2 py-0.5 rounded-full bg-gray-100 text-gray-600" data-twilio-call-target="status">Initializing...</span>
+        <span class="text-xs font-medium text-slate-500">Calls continue in the floating phone bar while you browse.</span>
       </div>
     </div>
 
     <div class="flex w-full flex-wrap gap-2 sm:w-auto sm:flex-nowrap sm:gap-3">
-      <!-- Browser Call Button -->
-      <button type="button" 
-              data-twilio-call-target="callButton"
-              data-action="click->twilio-call#makeCall"
-              class="flex-1 sm:flex-none justify-center inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-50 disabled:cursor-not-allowed">
+      <button type="button"
+              data-controller="call-trigger"
+              data-call-trigger-phone-number-value="<%= @number %>"
+              data-call-trigger-label-value="<%= @business&.name || @number %>"
+              data-action="click->call-trigger#call"
+              class="flex-1 sm:flex-none justify-center inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
         <svg class="-ml-1 mr-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 0 0 2.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 0 1-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 0 0-1.091-.852H3.75A2.25 2.25 0 0 0 1.5 4.5v2.25Z" />
         </svg>
-        <span class="whitespace-nowrap">Call Browser</span>
-      </button>
-
-      <!-- Hangup Button -->
-      <button type="button" 
-              data-twilio-call-target="hangupButton"
-              data-action="click->twilio-call#hangup"
-              class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
-        <svg class="-ml-1 mr-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-        </svg>
-        <span class="whitespace-nowrap">Hang Up</span>
+        <span class="whitespace-nowrap">Call</span>
       </button>
     </div>
   </div>

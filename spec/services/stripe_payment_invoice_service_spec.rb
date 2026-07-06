@@ -30,7 +30,8 @@ RSpec.describe StripePaymentInvoiceService do
     end
 
     context "when kind is subscription" do
-      let(:payment_invoice) { create(:payment_invoice, kind: "subscription", business: business) }
+      let(:business) { create(:business, phone: "+1234567890", email: "client@example.com", subscription: true, sold_price: 500, subscription_fee: 99) }
+      let(:payment_invoice) { create(:payment_invoice, kind: "subscription", business: business, amount_cents: 59_900) }
       let(:product_mock) { Stripe::StripeObject.construct_from(id: "prod_123") }
       let(:price_mock) { Stripe::StripeObject.construct_from(id: "price_123") }
       let(:subscription_mock) { Stripe::StripeObject.construct_from(id: "sub_123", latest_invoice: "in_draft") }
@@ -46,6 +47,36 @@ RSpec.describe StripePaymentInvoiceService do
       it "creates a subscription and associated objects" do
         service.create_and_send!
         expect(payment_invoice.reload.stripe_subscription_id).to eq("sub_123")
+      end
+
+      it "uses the monthly subscription fee for the recurring Stripe price" do
+        service.create_and_send!
+
+        expect(Stripe::Price).to have_received(:create).with(hash_including(unit_amount: 9_900))
+      end
+
+      it "adds the sold price as a one-time line item on the first subscription invoice" do
+        service.create_and_send!
+
+        expect(Stripe::InvoiceItem).to have_received(:create).with(hash_including(
+          invoice: "in_draft",
+          amount: 50_000,
+          description: "Website Sale"
+        ))
+      end
+
+      context "when a prior subscription invoice already exists" do
+        before do
+          create(:payment_invoice, business: business, kind: "subscription", status: "paid", amount_cents: 59_900)
+        end
+
+        let(:payment_invoice) { create(:payment_invoice, kind: "subscription", business: business, amount_cents: 9_900) }
+
+        it "does not add the sold price line item again" do
+          service.create_and_send!
+
+          expect(Stripe::InvoiceItem).not_to have_received(:create)
+        end
       end
     end
 

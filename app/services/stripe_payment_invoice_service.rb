@@ -63,14 +63,21 @@ class StripePaymentInvoiceService
   end
 
   def create_subscription_invoice!
+    business = payment_invoice.business
+    subscription_cents = PaymentInvoice.dollars_to_cents(business.subscription_fee)
+
+    if subscription_cents.blank? || subscription_cents <= 0
+      raise ConfigurationError, "Subscription fee is required to create a subscription invoice"
+    end
+
     customer_id = ensure_customer!
     product = ::Stripe::Product.create(
-      name: "#{payment_invoice.business.name} #{DEFAULT_PRODUCT_NAMES.fetch(payment_invoice.kind)}",
+      name: "#{business.name} #{DEFAULT_PRODUCT_NAMES.fetch(payment_invoice.kind)}",
       metadata: stripe_metadata
     )
     price = ::Stripe::Price.create(
       product: product.id,
-      unit_amount: payment_invoice.amount_cents,
+      unit_amount: subscription_cents,
       currency: payment_invoice.currency,
       recurring: { interval: payment_invoice.billing_interval },
       metadata: stripe_metadata
@@ -88,6 +95,8 @@ class StripePaymentInvoiceService
     latest_invoice = stripe_object_value(subscription, :latest_invoice)
     latest_invoice = ::Stripe::Invoice.retrieve(latest_invoice) if latest_invoice.is_a?(String)
 
+    add_initial_sold_price_line_item!(customer_id, latest_invoice) if latest_invoice.present?
+
     sent_invoice = latest_invoice
     if latest_invoice.present? && stripe_object_value(latest_invoice, :status) == "draft"
       sent_invoice = ::Stripe::Invoice.finalize_invoice(latest_invoice.id)
@@ -99,6 +108,26 @@ class StripePaymentInvoiceService
       stripe_price_id: price.id
     )
     update_from_stripe_invoice!(sent_invoice) if sent_invoice.present?
+  end
+
+  def add_initial_sold_price_line_item!(customer_id, invoice)
+    business = payment_invoice.business
+    return unless business.subscription_first_invoice?(excluding: payment_invoice)
+
+    sold_cents = PaymentInvoice.dollars_to_cents(business.sold_price)
+    return if sold_cents.blank? || sold_cents <= 0
+
+    invoice_id = stripe_object_value(invoice, :id)
+    return if invoice_id.blank?
+
+    ::Stripe::InvoiceItem.create(
+      customer: customer_id,
+      invoice: invoice_id,
+      amount: sold_cents,
+      currency: payment_invoice.currency,
+      description: DEFAULT_PRODUCT_NAMES.fetch("one_time"),
+      metadata: stripe_metadata
+    )
   end
 
   def ensure_customer!
