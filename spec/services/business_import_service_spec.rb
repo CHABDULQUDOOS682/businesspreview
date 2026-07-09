@@ -65,6 +65,28 @@ RSpec.describe BusinessImportService do
     file&.unlink
   end
 
+  it "reports rows that fail model validation on save" do
+    failing_business = build(:business)
+    failing_business.errors.add(:base, "Could not save")
+    allow(Business).to receive(:new).and_call_original
+    allow(Business).to receive(:new).with(hash_including(name: "Gamma")).and_return(failing_business)
+    allow(failing_business).to receive(:save).and_return(false)
+
+    file = csv_upload([
+      "USA,Chicago,https://maps.example/gamma,Gamma,4.8,-10,Consulting,gamma@example.com,18005550333,https://gamma.example"
+    ])
+
+    import = described_class.new(file.path, imported_by: imported_by).call
+    row = import.business_import_rows.first
+
+    expect(import.created_count).to eq(0)
+    expect(import.failed_count).to eq(1)
+    expect(row.status).to eq("failed")
+    expect(row.reason).to eq("Could not save")
+  ensure
+    file&.unlink
+  end
+
   it "reports blank business names and phone numbers as failed rows" do
     file = csv_upload([
       "USA,Chicago,https://maps.example/blank,,4.8,-10,Consulting,blank@example.com,18005550199,https://blank.example",

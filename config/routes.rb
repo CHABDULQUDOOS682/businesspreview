@@ -76,6 +76,11 @@ Rails.application.routes.draw do
       end
     end
     resources :commission_rates, only: [ :index, :update ]
+    resources :jobs, only: [ :index, :show ] do
+      member do
+        post :retry
+      end
+    end
     get "templates/:id/preview", to: "templates#preview", as: :template_preview
   end
 

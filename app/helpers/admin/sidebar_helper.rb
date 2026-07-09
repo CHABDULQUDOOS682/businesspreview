@@ -12,7 +12,8 @@ module Admin::SidebarHelper
     call_logs: :orange,
     preview_links: :indigo,
     notes: :indigo,
-    import_reports: :blue
+    import_reports: :blue,
+    jobs: :blue
   }.freeze
 
   def admin_sidebar_partial
@@ -22,11 +23,12 @@ module Admin::SidebarHelper
     "admin/shared/sidebars/#{role}"
   end
 
-  def admin_sidebar_link_active?(path: nil, controller: nil)
+  def admin_sidebar_link_active?(path: nil, controller: nil, path_prefix: nil)
     current_page_match = path.present? && current_page?(path)
     controller_match = controller.present? && params[:controller] == controller
+    path_prefix_match = path_prefix.present? && request.path.start_with?(path_prefix)
 
-    current_page_match || controller_match
+    current_page_match || controller_match || path_prefix_match
   end
 
   def admin_sidebar_role_badge_classes(role = current_user&.role)
@@ -40,8 +42,8 @@ module Admin::SidebarHelper
     end
   end
 
-  def admin_sidebar_nav_link(label, path, controller:, icon:, mobile: false, badge: nil)
-    active = admin_sidebar_link_active?(path: path, controller: controller)
+  def admin_sidebar_nav_link(label, path, controller:, icon:, mobile: false, badge: nil, path_prefix: nil)
+    active = admin_sidebar_link_active?(path: path, controller: controller, path_prefix: path_prefix)
     accent = admin_sidebar_accent(icon)
     icon_classes = mobile ? "h-5 w-5" : "h-[1.05rem] w-[1.05rem]"
 
@@ -142,6 +144,8 @@ module Admin::SidebarHelper
         '<path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2m-6 9h4m-4 4h6" stroke-linecap="round" stroke-linejoin="round" />'
       when :import_reports
         '<path d="M8 7h8m-8 4h8m-8 4h5M5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z" stroke-linecap="round" stroke-linejoin="round" />'
+      when :jobs
+        '<path d="M4 7h16v10H5.17L4 16.17V5Z" stroke-linecap="round" stroke-linejoin="round" /><path d="M9 12h6m-6 4h6" stroke-linecap="round" stroke-linejoin="round" />'
       else
         ""
       end

@@ -91,6 +91,16 @@ RSpec.describe "Admin::Commissions", type: :request do
       expect(response).to redirect_to(admin_commissions_path)
       expect(commission.reload.status).to eq("pending")
     end
+
+    it "redirects with validation errors when approval fails" do
+      sign_in admin
+      commission.update!(status: "approved", approved_at: Time.current, approved_by: admin)
+
+      patch approve_admin_commission_path(commission), params: { percentage: 12 }
+
+      expect(response).to redirect_to(admin_commissions_path)
+      expect(flash[:alert]).to be_present
+    end
   end
 
   describe "PATCH /admin/commissions/:id/mark_paid_out" do
@@ -103,6 +113,15 @@ RSpec.describe "Admin::Commissions", type: :request do
       expect(response).to redirect_to(admin_commissions_path)
       expect(commission.reload.status).to eq("paid_out")
       expect(commission.paid_out_at).to be_present
+    end
+
+    it "redirects with validation errors when payout fails" do
+      sign_in admin
+
+      patch mark_paid_out_admin_commission_path(commission)
+
+      expect(response).to redirect_to(admin_commissions_path)
+      expect(flash[:alert]).to be_present
     end
   end
 end

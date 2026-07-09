@@ -1,9 +1,9 @@
 require "rails_helper"
 
 RSpec.describe Admin::BusinessesHelper, type: :helper do
-  let(:business) { create(:business) }
-
   describe "#business_payment_status_badge" do
+    let(:business) { create(:business, subscription: false, subscription_fee: nil) }
+
     it "returns 'No Invoice' if no invoice exists" do
       expect(helper.business_payment_status_badge(business)).to include("No Invoice")
     end
@@ -38,9 +38,40 @@ RSpec.describe Admin::BusinessesHelper, type: :helper do
       create(:payment_invoice, business: business, status: "void")
       expect(helper.business_payment_status_badge(business)).to include("bg-slate-50")
     end
+
+    context "for subscription businesses" do
+      let(:business) { create(:business, subscription: true, subscription_fee: 50) }
+
+      it "returns the subscription payment status label" do
+        business.update!(subscription_payment_status: "current")
+
+        expect(helper.business_payment_status_badge(business)).to include("Payment Current")
+        expect(helper.business_payment_status_badge(business)).to include("bg-emerald-50")
+      end
+
+      it "returns inactive when billing has not started" do
+        expect(helper.business_payment_status_badge(business)).to include("Inactive")
+      end
+
+      it "returns past due status" do
+        business.update!(subscription_payment_status: "past_due")
+
+        expect(helper.business_payment_status_badge(business)).to include("Payment Overdue")
+        expect(helper.business_payment_status_badge(business)).to include("bg-amber-50")
+      end
+
+      it "returns suspended status" do
+        business.update!(subscription_payment_status: "suspended")
+
+        expect(helper.business_payment_status_badge(business)).to include("Suspended")
+        expect(helper.business_payment_status_badge(business)).to include("bg-red-50")
+      end
+    end
   end
 
   describe "#business_location_link" do
+    let(:business) { create(:business) }
+
     it "returns a Google Maps link when business location is a URL" do
       business.business_location = "https://www.google.com/maps/place/Acme"
 

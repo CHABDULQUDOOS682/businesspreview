@@ -19,6 +19,17 @@ RSpec.describe "Admin::Notes", type: :request do
       get admin_notes_path, params: { q: "important", role: "admin" }
       expect(response).to have_http_status(:success)
     end
+
+    it "filters notes by user" do
+      author = create(:user, :admin)
+      authored_note = create(:note, business: business, user: author, body: "Author note")
+
+      get admin_notes_path, params: { user_id: author.id }
+
+      expect(response).to have_http_status(:success)
+      expect(assigns(:notes)).to include(authored_note)
+      expect(assigns(:notes).map(&:user_id).uniq).to eq([ author.id ])
+    end
   end
 
   describe "POST /admin/notes" do

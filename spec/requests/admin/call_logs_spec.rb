@@ -37,6 +37,28 @@ RSpec.describe "Admin::CallLogs", type: :request do
       expect(response.body).to include("Northside Barber")
     end
 
+    it "filters by search query" do
+      call_log = TwilioCallLogService::Record.new(
+        business: business,
+        direction: "outbound",
+        from_number: "+15550000001",
+        to_number: "+15550000002",
+        sid: "CA_SEARCH",
+        status: "completed"
+      )
+      other_call = TwilioCallLogService::Record.new(
+        business: create(:business, name: "Hidden Co"),
+        direction: "outbound",
+        sid: "CA_OTHER"
+      )
+      allow(service).to receive(:recent_calls).and_return([ call_log, other_call ])
+
+      get admin_call_logs_path, params: { q: "CA_SEARCH" }
+
+      expect(response.body).to include("CA_SEARCH")
+      expect(response.body).not_to include("CA_OTHER")
+    end
+
     it "filters by direction" do
       outbound_call = TwilioCallLogService::Record.new(business: business, direction: "outbound", sid: "CA1")
       inbound_call = TwilioCallLogService::Record.new(business: create(:business, name: "Inbound Co"), direction: "inbound", sid: "CA2")

@@ -217,5 +217,23 @@ RSpec.describe Commission, type: :model do
         expect(comm.percentage).to eq(15.0)
       end
     end
+
+    context "when no commission rates exist" do
+      before do
+        CommissionRate.delete_all
+        EmployeeCommissionRate.delete_all
+        BusinessCommissionRate.delete_all
+      end
+
+      let(:invoice) { create(:payment_invoice, business: business, kind: "one_time", amount_cents: 10_000, status: "draft") }
+
+      it "falls back to 0.0" do
+        invoice.update!(status: "paid", paid_at: Time.current)
+        commission = described_class.find_by(payment_invoice: invoice)
+
+        expect(commission.percentage).to eq(0.0)
+        expect(commission.commission_amount).to eq(0.0)
+      end
+    end
   end
 end

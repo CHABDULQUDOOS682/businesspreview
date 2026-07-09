@@ -139,7 +139,7 @@ RSpec.describe "Admin::Businesses", type: :request do
           post admin_businesses_path, params: { business: { name: "", phone: "" } }
         }.not_to change(Business, :count)
 
-        expect(response).to have_http_status(:success) # render :new returns 200 OK
+        expect(response).to have_http_status(:unprocessable_entity)
       end
     end
   end
@@ -220,7 +220,7 @@ RSpec.describe "Admin::Businesses", type: :request do
       it "does not update the business and renders edit" do
         patch admin_business_path(business), params: { business: { name: "" } }
         expect(business.reload.name).not_to eq("")
-        expect(response).to have_http_status(:success)
+        expect(response).to have_http_status(:unprocessable_entity)
       end
     end
   end

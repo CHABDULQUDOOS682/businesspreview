@@ -16,11 +16,16 @@ class Business < ApplicationRecord
   validates :phone, presence: true
   validates :phone, uniqueness: { case_sensitive: false }, if: -> { phone.present? }
 
+  SUBSCRIPTION_PAYMENT_STATUSES = %w[inactive current past_due suspended].freeze
+  SUBSCRIPTION_BILLING_CYCLE = 30.days
+
   SEGMENTS = {
     "nurture" => "Neutral",
     "purchased" => "Purchased Website",
     "subscriptions" => "Subscriptions"
   }.freeze
+
+  validates :subscription_payment_status, inclusion: { in: SUBSCRIPTION_PAYMENT_STATUSES }
 
   scope :with_active_subscription, -> {
     where("subscription = ? OR subscription_fee IS NOT NULL", true)
@@ -41,6 +46,21 @@ class Business < ApplicationRecord
   }
   scope :subscriptions_pipeline, -> {
     with_active_subscription
+  }
+  scope :subscription_billing_due, -> {
+    with_active_subscription
+      .where(subscription_payment_status: %w[current past_due])
+      .where.not(subscription_fee: nil)
+      .where("sold_price_paid_at IS NOT NULL OR sold_price IS NULL")
+      .where("next_subscription_invoice_at IS NOT NULL AND next_subscription_invoice_at <= ?", Time.current)
+      .where(<<~SQL.squish)
+        NOT EXISTS (
+          SELECT 1 FROM payment_invoices
+          WHERE payment_invoices.business_id = businesses.id
+            AND payment_invoices.kind = 'subscription'
+            AND payment_invoices.status IN ('invoice_sent', 'opened')
+        )
+      SQL
   }
 
   def self.normalize_segment(segment)
@@ -82,6 +102,65 @@ class Business < ApplicationRecord
     scope = payment_invoices.where(kind: "subscription").where.not(status: %w[draft failed])
     scope = scope.where.not(id: excluding.id) if excluding&.id
     scope.none?
+  end
+
+  def sold_price_collected?
+    sold_price.blank? || sold_price_paid_at.present? || payment_invoices.where(kind: "one_time", status: "paid").exists?
+  end
+
+  def needs_initial_sold_price_invoice?
+    subscription_active? && sold_price.present? && !sold_price_collected?
+  end
+
+  def manual_invoice_available?
+    if subscription_active?
+      needs_initial_sold_price_invoice?
+    else
+      sold_price.present? && !payment_invoices.where(kind: "one_time", status: "paid").exists?
+    end
+  end
+
+  def due_for_subscription_billing?
+    return false unless subscription_active?
+    return false unless sold_price_collected?
+    return false if subscription_fee.blank?
+    return false if next_subscription_invoice_at.blank? || next_subscription_invoice_at > Time.current
+    return false if payment_invoices.where(kind: "subscription", status: %w[invoice_sent opened]).exists?
+
+    true
+  end
+
+  def subscription_payment_current?
+    subscription_payment_status == "current"
+  end
+
+  def subscription_payment_past_due?
+    subscription_payment_status == "past_due"
+  end
+
+  def subscription_suspended?
+    subscription_payment_status == "suspended"
+  end
+
+  def subscription_payment_status_label
+    case subscription_payment_status
+    when "current" then "Payment Current"
+    when "past_due" then "Payment Overdue"
+    when "suspended" then "Suspended"
+    else "Inactive"
+    end
+  end
+
+  def activate_subscription_billing!(anchor_at: Time.current)
+    return unless subscription_active?
+    return unless sold_price_collected?
+    return if subscription_fee.blank?
+
+    update!(
+      subscription_billing_anchor_at: anchor_at,
+      next_subscription_invoice_at: anchor_at + SUBSCRIPTION_BILLING_CYCLE,
+      subscription_payment_status: "current"
+    )
   end
 
   def task_source_name

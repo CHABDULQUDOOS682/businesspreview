@@ -15,6 +15,8 @@
     <p class="mt-2 text-sm text-slate-600 ml-9">Update the business profile fields below.</p>
   </div>
 
+  <%= render "admin/businesses/form_errors", business: @business %>
+
   <div class="bg-white shadow-sm ring-1 ring-slate-900/5 sm:rounded-xl overflow-hidden">
     <div class="px-4 py-6 sm:p-8">
       <%= form_with model: @business, url: admin_business_path(@business), method: :patch, local: true, class: "space-y-6" do |f| %>
@@ -136,6 +138,36 @@
                   <%= f.label :task_secret, "Task API Secret", class: "block text-sm font-medium leading-6 text-slate-900" %>
                   <div class="mt-2">
                     <%= f.text_field :task_secret, class: field_class, placeholder: "Enter shared secret" %>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="sm:col-span-6 pt-4">
+            <div class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-4">
+              <h2 class="text-base font-semibold text-slate-900">Site Lifecycle API</h2>
+              <p class="mt-1 text-sm text-slate-600">Used to deactivate or reactivate the customer site when subscription payments are overdue or paid.</p>
+
+              <div class="mt-4 grid grid-cols-1 gap-x-6 gap-y-6 sm:grid-cols-6">
+                <div class="sm:col-span-6">
+                  <%= f.label :site_api_base_url, "Site API Base URL", class: "block text-sm font-medium leading-6 text-slate-900" %>
+                  <div class="mt-2">
+                    <%= f.url_field :site_api_base_url, class: field_class, placeholder: "https://sites.example.com" %>
+                  </div>
+                </div>
+
+                <div class="sm:col-span-3">
+                  <%= f.label :site_external_id, "Site External ID", class: "block text-sm font-medium leading-6 text-slate-900" %>
+                  <div class="mt-2">
+                    <%= f.text_field :site_external_id, class: field_class, placeholder: "tonys-barbershop" %>
+                  </div>
+                </div>
+
+                <div class="sm:col-span-3">
+                  <%= f.label :site_api_secret, "Site API Secret", class: "block text-sm font-medium leading-6 text-slate-900" %>
+                  <div class="mt-2">
+                    <%= f.text_field :site_api_secret, class: field_class, placeholder: "Shared secret" %>
                   </div>
                 </div>
               </div>

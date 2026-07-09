@@ -30,4 +30,19 @@ RSpec.describe PaymentInvoiceMailer, type: :mailer do
       expect(mail.body.encoded).to include(payment_invoice.payment_token)
     end
   end
+
+  describe "subscription_overdue_reminder" do
+    let(:mail) do
+      PaymentInvoiceMailer.with(payment_invoice: payment_invoice, reminder_number: 1).subscription_overdue_reminder
+    end
+
+    it "renders the headers" do
+      expect(mail.subject).to include("Overdue subscription payment")
+      expect(mail.to).to eq([ business.email ])
+    end
+
+    it "renders the body" do
+      expect(mail.body.encoded).to include(payment_invoice.payment_token)
+    end
+  end
 end

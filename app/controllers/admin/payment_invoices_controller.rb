@@ -23,6 +23,11 @@ class Admin::PaymentInvoicesController < ApplicationController
   def create
     @payment_invoice = PaymentInvoice.build_for_business(@business)
 
+    unless @payment_invoice.manual_send_available?
+      redirect_to admin_business_path(@business), alert: "No manual invoice is available for this business right now."
+      return
+    end
+
     if params[:payment_invoice] && params[:payment_invoice][:delivery_method]
       @payment_invoice.delivery_method = params[:payment_invoice][:delivery_method]
     end

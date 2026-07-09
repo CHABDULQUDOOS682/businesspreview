@@ -29,6 +29,16 @@ RSpec.describe "Admin::PaymentInvoices", type: :request do
       expect(response.body).to include(business.name)
     end
 
+    it "filters invoices by search query" do
+      invoice = create(:payment_invoice, business: business, sent_to_email: "billing@example.com")
+      other_invoice = create(:payment_invoice, business: create(:business, name: "Hidden Co"))
+
+      get admin_payment_invoices_path, params: { q: business.name }
+
+      expect(response.body).to include(invoice.business.name)
+      expect(response.body).not_to include(other_invoice.business.name)
+    end
+
     it "filters invoices by status" do
       paid_invoice = create(:payment_invoice, business: business, status: "paid")
       draft_invoice = create(:payment_invoice, business: create(:business, name: "Draft Co"), status: "draft")
@@ -56,6 +66,15 @@ RSpec.describe "Admin::PaymentInvoices", type: :request do
     before do
       allow(StripePaymentInvoiceService).to receive(:new).and_return(service_mock)
       allow(service_mock).to receive(:create_and_send!)
+    end
+
+    it "redirects when no manual invoice is available" do
+      business.update!(subscription: true, sold_price: 500, subscription_fee: 99, sold_price_paid_at: Time.current)
+
+      post admin_business_payment_invoices_path(business)
+
+      expect(response).to redirect_to(admin_business_path(business))
+      expect(flash[:alert]).to include("No manual invoice is available")
     end
 
     it "creates an invoice and redirects" do

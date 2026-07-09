@@ -1,36 +1,58 @@
 <div class="bg-white shadow-sm ring-1 ring-slate-900/5 sm:rounded-xl overflow-hidden">
   <div class="border-b border-slate-200 px-4 py-5 sm:px-6">
-    <h3 class="text-base font-semibold leading-6 text-slate-900">Stripe Invoices</h3>
-    <p class="mt-1 text-sm text-slate-500">Create a hosted Stripe invoice and send the payment link by email, SMS, or both.</p>
-  </div>
-
-  <div class="px-4 py-5 sm:p-6 bg-slate-50/50 border-b border-slate-100 flex items-center justify-between gap-4">
-    <div class="grid grid-cols-1 gap-3 text-sm sm:grid-cols-3 lg:flex-1 max-w-2xl">
+    <div class="flex flex-wrap items-center justify-between gap-3">
       <div>
-        <dt class="font-medium text-slate-500">Next Invoice Type</dt>
-        <dd class="mt-1 font-semibold text-slate-900"><%= payment_invoice.kind_label %></dd>
+        <h3 class="text-base font-semibold leading-6 text-slate-900">Stripe Invoices</h3>
+        <p class="mt-1 text-sm text-slate-500">Create a hosted Stripe invoice and send the payment link by email, SMS, or both.</p>
       </div>
-      <div>
-        <dt class="font-medium text-slate-500">Amount to Charge</dt>
-        <dd class="mt-1 font-semibold text-slate-900"><%= payment_invoice.amount_cents.to_i.positive? ? number_to_currency(payment_invoice.amount, unit: payment_invoice.currency.upcase == "USD" ? "$" : "#{payment_invoice.currency.upcase} ") : "-" %></dd>
-      </div>
-      <div>
-        <dt class="font-medium text-slate-500">Terms</dt>
-        <dd class="mt-1 font-semibold text-slate-900">Due in 7 days</dd>
-      </div>
-    </div>
-
-    <div class="flex-shrink-0">
-      <button type="button" 
-              class="rounded-md bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 transition-colors disabled:cursor-not-allowed disabled:opacity-60" 
-              <%= 'disabled' unless payment_invoice.amount_cents.to_i.positive? %>
-              onclick="document.getElementById('stripe-invoice-modal-<%= business.id %>').classList.remove('hidden')">
-        Create & Send Invoice
-      </button>
+      <% if business.subscription_active? %>
+        <%= business_payment_status_badge(business) %>
+      <% end %>
     </div>
   </div>
 
-  <%= render "admin/shared/stripe_invoice_modal", business: business, payment_invoice: payment_invoice %>
+  <div class="px-4 py-5 sm:p-6 bg-slate-50/50 border-b border-slate-100">
+    <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+      <div class="grid grid-cols-1 gap-3 text-sm sm:grid-cols-3 lg:flex-1 max-w-3xl">
+        <div>
+          <dt class="font-medium text-slate-500">Next Invoice Type</dt>
+          <dd class="mt-1 font-semibold text-slate-900"><%= payment_invoice.kind_label %></dd>
+        </div>
+        <div>
+          <dt class="font-medium text-slate-500">Amount to Charge</dt>
+          <dd class="mt-1 font-semibold text-slate-900">
+            <%= payment_invoice.amount_cents.to_i.positive? ? number_to_currency(payment_invoice.amount, unit: payment_invoice.currency.upcase == "USD" ? "$" : "#{payment_invoice.currency.upcase} ") : "-" %>
+          </dd>
+        </div>
+        <div>
+          <dt class="font-medium text-slate-500">Terms</dt>
+          <dd class="mt-1 font-semibold text-slate-900">Due in 7 days</dd>
+        </div>
+        <% if business.subscription_active? && business.sold_price_collected? %>
+          <div>
+            <dt class="font-medium text-slate-500">Next Subscription Bill</dt>
+            <dd class="mt-1 font-semibold text-slate-900">
+              <%= business.next_subscription_invoice_at.present? ? l(business.next_subscription_invoice_at.to_date, format: :long) : "Scheduled after setup" %>
+            </dd>
+          </div>
+        <% end %>
+      </div>
+
+      <% if payment_invoice.manual_send_available? %>
+        <div class="flex-shrink-0">
+          <button type="button"
+                  class="rounded-md bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 transition-colors"
+                  onclick="document.getElementById('stripe-invoice-modal-<%= business.id %>').classList.remove('hidden')">
+            Create & Send Invoice
+          </button>
+        </div>
+      <% elsif business.subscription_active? && business.sold_price_collected? %>
+        <p class="text-sm text-slate-600">Monthly subscription invoices are sent automatically every 30 days.</p>
+      <% end %>
+    </div>
+  </div>
+
+  <%= render "admin/shared/stripe_invoice_modal", business: business, payment_invoice: payment_invoice if payment_invoice.manual_send_available? %>
 
   <div class="overflow-x-auto">
     <table class="min-w-full divide-y divide-slate-300">

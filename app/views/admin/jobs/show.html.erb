@@ -1,0 +1,81 @@
+<% content_for :page_header do %>
+  <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+    <div>
+      <p class="portal-kicker">Operations</p>
+      <h1 class="portal-page-title mt-2"><%= Admin::JobQueueBrowser.short_class_name(@job) %></h1>
+      <p class="mt-2 text-sm text-sand-600">Job #<%= @job.id %></p>
+    </div>
+    <div>
+      <%= link_to "← Back to jobs", admin_jobs_path, class: "btn-base btn-sand px-3 py-2 text-sm shadow-sm" %>
+    </div>
+  </div>
+<% end %>
+
+<div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
+  <div class="space-y-6 lg:col-span-2">
+    <div class="portal-panel p-6">
+      <div class="mb-4 flex flex-wrap items-center justify-between gap-3">
+        <h2 class="text-lg font-semibold text-sand-900">Overview</h2>
+        <%= admin_job_status_badge(@job) %>
+      </div>
+
+      <dl class="grid grid-cols-1 gap-4 text-sm sm:grid-cols-2">
+        <div>
+          <dt class="text-sand-500">Job ID</dt>
+          <dd class="mt-1 font-mono text-sand-900">#<%= @job.id %></dd>
+        </div>
+        <div>
+          <dt class="text-sand-500">Active Job ID</dt>
+          <dd class="mt-1 break-all font-mono text-xs text-sand-900"><%= @job.active_job_id || "—" %></dd>
+        </div>
+        <div>
+          <dt class="text-sand-500">Queue</dt>
+          <dd class="mt-1 text-sand-900"><%= @job.queue_name %></dd>
+        </div>
+        <div>
+          <dt class="text-sand-500">Priority</dt>
+          <dd class="mt-1 text-sand-900"><%= @job.priority %></dd>
+        </div>
+        <div>
+          <dt class="text-sand-500">Created</dt>
+          <dd class="mt-1 text-sand-900"><%= @job.created_at.to_fs(:long) %></dd>
+        </div>
+        <div>
+          <dt class="text-sand-500">Scheduled at</dt>
+          <dd class="mt-1 text-sand-900"><%= @job.scheduled_at&.to_fs(:long) || "Immediately" %></dd>
+        </div>
+        <div>
+          <dt class="text-sand-500">Finished at</dt>
+          <dd class="mt-1 text-sand-900"><%= @job.finished_at&.to_fs(:long) || "—" %></dd>
+        </div>
+        <div>
+          <dt class="text-sand-500">Concurrency key</dt>
+          <dd class="mt-1 break-all font-mono text-xs text-sand-900"><%= @job.concurrency_key.presence || "—" %></dd>
+        </div>
+      </dl>
+    </div>
+
+    <div class="portal-panel p-6">
+      <h3 class="mb-3 font-semibold text-sand-900">Arguments</h3>
+      <%= admin_job_arguments(@job) %>
+    </div>
+
+    <% if @job.failed_execution.present? %>
+      <div class="portal-panel p-6">
+        <h3 class="mb-3 font-semibold text-red-700">Error</h3>
+        <%= admin_job_error(@job) %>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="space-y-4">
+    <div class="portal-panel p-6">
+      <h3 class="mb-3 font-semibold text-sand-900">Actions</h3>
+      <% if @job.failed? && !@job.finished? %>
+        <%= button_to "Retry job", retry_admin_job_path(@job), method: :post, class: "btn-base btn-accent-blue w-full px-3 py-2 text-sm shadow-sm" %>
+      <% else %>
+        <p class="text-sm text-sand-500">No actions available for this job.</p>
+      <% end %>
+    </div>
+  </div>
+</div>

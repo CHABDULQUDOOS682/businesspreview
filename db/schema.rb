@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_07_02_000100) do
+ActiveRecord::Schema[8.0].define(version: 2026_07_09_000100) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -89,14 +89,25 @@ ActiveRecord::Schema[8.0].define(version: 2026_07_02_000100) do
     t.string "review_token"
     t.bigint "sold_by_id"
     t.string "business_location"
+    t.datetime "sold_price_paid_at"
+    t.datetime "subscription_billing_anchor_at"
+    t.datetime "next_subscription_invoice_at"
+    t.string "subscription_payment_status", default: "inactive", null: false
+    t.datetime "subscription_grace_ends_at"
+    t.datetime "site_deactivated_at"
+    t.string "site_api_base_url"
+    t.string "site_api_secret"
+    t.string "site_external_id"
     t.index "lower((phone)::text)", name: "index_businesses_on_lower_phone", unique: true
     t.index ["last_invoice_id"], name: "index_businesses_on_last_invoice_id"
+    t.index ["next_subscription_invoice_at"], name: "index_businesses_on_next_subscription_invoice_at"
     t.index ["review_token"], name: "index_businesses_on_review_token", unique: true
     t.index ["sold_by_id"], name: "index_businesses_on_sold_by_id"
     t.index ["stripe_checkout_session_id"], name: "index_businesses_on_stripe_checkout_session_id"
     t.index ["stripe_customer_id"], name: "index_businesses_on_stripe_customer_id"
     t.index ["stripe_payment_intent_id"], name: "index_businesses_on_stripe_payment_intent_id"
     t.index ["stripe_subscription_id"], name: "index_businesses_on_stripe_subscription_id"
+    t.index ["subscription_payment_status"], name: "index_businesses_on_subscription_payment_status"
   end
 
   create_table "call_logs", force: :cascade do |t|
@@ -211,6 +222,11 @@ ActiveRecord::Schema[8.0].define(version: 2026_07_02_000100) do
     t.datetime "opened_at"
     t.string "receipt_url"
     t.datetime "followup_sent_at"
+    t.date "billing_period_start"
+    t.date "billing_period_end"
+    t.integer "reminder_count", default: 0, null: false
+    t.datetime "last_reminder_sent_at"
+    t.index ["business_id", "billing_period_start"], name: "index_payment_invoices_on_business_id_and_billing_period_start", unique: true, where: "(billing_period_start IS NOT NULL)"
     t.index ["business_id"], name: "index_payment_invoices_on_business_id"
     t.index ["kind"], name: "index_payment_invoices_on_kind"
     t.index ["payment_token"], name: "index_payment_invoices_on_payment_token", unique: true
