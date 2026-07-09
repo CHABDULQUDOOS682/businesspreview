@@ -1,0 +1,12 @@
+<section class="mt-8">
+  <div class="mb-4 flex items-center justify-between gap-4">
+    <div>
+      <p class="portal-kicker">Feedback</p>
+      <h2 class="portal-page-title mt-2">Issue tracker overview</h2>
+      <p class="portal-muted mt-2 text-sm">Global totals across all internal feedback submissions.</p>
+    </div>
+    <%= link_to "View feedback", admin_feedbacks_path, class: "text-sm font-semibold text-indigo-600 hover:text-indigo-500" %>
+  </div>
+
+  <%= render "admin/feedbacks/stats", stats: @feedback_stats %>
+</section>

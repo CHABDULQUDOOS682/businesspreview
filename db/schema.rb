@@ -10,9 +10,37 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_07_10_010800) do
+ActiveRecord::Schema[8.0].define(version: 2026_07_10_010802) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "active_storage_attachments", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "record_type", null: false
+    t.bigint "record_id", null: false
+    t.bigint "blob_id", null: false
+    t.datetime "created_at", null: false
+    t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
+    t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
+  end
+
+  create_table "active_storage_blobs", force: :cascade do |t|
+    t.string "key", null: false
+    t.string "filename", null: false
+    t.string "content_type"
+    t.text "metadata"
+    t.string "service_name", null: false
+    t.bigint "byte_size", null: false
+    t.string "checksum"
+    t.datetime "created_at", null: false
+    t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
+  end
+
+  create_table "active_storage_variant_records", force: :cascade do |t|
+    t.bigint "blob_id", null: false
+    t.string "variation_digest", null: false
+    t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
+  end
 
   create_table "business_commission_rates", force: :cascade do |t|
     t.bigint "business_id", null: false
@@ -170,6 +198,30 @@ ActiveRecord::Schema[8.0].define(version: 2026_07_10_010800) do
     t.index ["user_id", "kind", "month_number"], name: "index_employee_rates_on_user_kind_month", unique: true
     t.index ["user_id", "kind"], name: "index_employee_rates_on_one_time_kind", unique: true, where: "(month_number IS NULL)"
     t.index ["user_id"], name: "index_employee_commission_rates_on_user_id"
+  end
+
+  create_table "feedbacks", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "title", null: false
+    t.text "description", null: false
+    t.string "feedback_type", default: "general", null: false
+    t.string "priority", default: "medium", null: false
+    t.string "status", default: "pending", null: false
+    t.string "browser"
+    t.string "operating_system"
+    t.string "page_url"
+    t.text "steps_to_reproduce"
+    t.text "expected_result"
+    t.text "actual_result"
+    t.text "admin_notes"
+    t.datetime "resolved_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["created_at"], name: "index_feedbacks_on_created_at"
+    t.index ["feedback_type"], name: "index_feedbacks_on_feedback_type"
+    t.index ["priority"], name: "index_feedbacks_on_priority"
+    t.index ["status"], name: "index_feedbacks_on_status"
+    t.index ["user_id"], name: "index_feedbacks_on_user_id"
   end
 
   create_table "google_calendar_channels", force: :cascade do |t|
@@ -441,6 +493,8 @@ ActiveRecord::Schema[8.0].define(version: 2026_07_10_010800) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "business_commission_rates", "businesses"
   add_foreign_key "business_import_rows", "business_imports"
   add_foreign_key "business_import_rows", "businesses"
@@ -452,6 +506,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_07_10_010800) do
   add_foreign_key "commissions", "users"
   add_foreign_key "commissions", "users", column: "approved_by_id"
   add_foreign_key "employee_commission_rates", "users"
+  add_foreign_key "feedbacks", "users"
   add_foreign_key "meetings", "businesses"
   add_foreign_key "meetings", "users"
   add_foreign_key "messages", "businesses"

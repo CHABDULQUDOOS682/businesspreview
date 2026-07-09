@@ -1,0 +1,19 @@
+<h1 style="font-family: sans-serif; color: #111827;">Feedback status updated</h1>
+
+<p style="font-family: sans-serif; color: #374151;">
+  Hi <%= @feedback.user.display_name %>,
+</p>
+
+<p style="font-family: sans-serif; color: #374151;">
+  Your feedback <strong><%= @feedback.title %></strong> is now
+  <strong><%= @feedback.status.humanize %></strong>.
+</p>
+
+<p style="font-family: sans-serif; color: #374151;">
+  Type: <%= @feedback.feedback_type.humanize %><br>
+  Priority: <%= @feedback.priority.humanize %>
+</p>
+
+<p style="font-family: sans-serif; color: #374151;">
+  <%= link_to "View feedback", admin_feedback_url(@feedback) %>
+</p>

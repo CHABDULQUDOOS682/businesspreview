@@ -1,0 +1,16 @@
+<div class="grid grid-cols-2 gap-3 sm:grid-cols-4 xl:grid-cols-7">
+  <% [
+    [ "Total", stats[:total], "text-slate-900" ],
+    [ "Pending", stats[:pending], "text-slate-700" ],
+    [ "In Progress", stats[:in_progress], "text-amber-700" ],
+    [ "Completed", stats[:completed], "text-green-700" ],
+    [ "Critical", stats[:critical], "text-red-700" ],
+    [ "Feature Requests", stats[:feature_requests], "text-indigo-700" ],
+    [ "Bugs", stats[:bugs], "text-orange-700" ]
+  ].each do |label, count, color_class| %>
+    <div class="rounded-lg bg-white px-4 py-3 shadow-sm ring-1 ring-slate-900/5">
+      <p class="text-xs font-medium uppercase tracking-wide text-slate-500"><%= label %></p>
+      <p class="mt-1 text-lg font-semibold <%= color_class %>"><%= number_with_delimiter(count) %></p>
+    </div>
+  <% end %>
+</div>

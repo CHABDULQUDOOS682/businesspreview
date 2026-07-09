@@ -47,6 +47,12 @@ Rails.application.routes.draw do
         patch :cancel
       end
     end
+    resources :feedbacks do
+      member do
+        patch :resolve
+        patch :close
+      end
+    end
     resources :businesses do
       collection do
         post :import

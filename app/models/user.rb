@@ -7,6 +7,7 @@ class User < ApplicationRecord
   has_many :notes, dependent: :nullify
   has_many :commissions, dependent: :nullify
   has_many :meetings, dependent: :destroy
+  has_many :feedbacks, dependent: :destroy
   has_many :employee_commission_rates, dependent: :destroy
   has_many :businesses_sold, class_name: "Business", foreign_key: :sold_by_id, dependent: :nullify
 

@@ -1,0 +1,10 @@
+Feedback status updated
+
+Hi <%= @feedback.user.display_name %>,
+
+Your feedback "<%= @feedback.title %>" is now <%= @feedback.status.humanize %>.
+
+Type: <%= @feedback.feedback_type.humanize %>
+Priority: <%= @feedback.priority.humanize %>
+
+View feedback: <%= admin_feedback_url(@feedback) %>
