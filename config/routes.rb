@@ -42,6 +42,11 @@ Rails.application.routes.draw do
       end
     end
     resources :notes, only: [ :index, :create, :edit, :update, :destroy ]
+    resources :meetings, except: [ :show, :destroy ] do
+      member do
+        patch :cancel
+      end
+    end
     resources :businesses do
       collection do
         post :import
@@ -95,6 +100,7 @@ Rails.application.routes.draw do
   post "twilio/connect", to: "twilio#connect_call"
 
   post "webhooks/stripe", to: "stripe_webhooks#create"
+  post "webhooks/google_calendar", to: "google_calendar_webhooks#create"
 
 
   get "up" => "rails/health#show", as: :rails_health_check

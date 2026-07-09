@@ -16,6 +16,9 @@ development:
   subscription_payment_reminders:
     class: SubscriptionPaymentReminderJob
     schedule: every day at 10am
+  google_calendar_watch_renewal:
+    class: GoogleCalendar::RenewWatchJob
+    schedule: every day at 6am
 
 production:
   clear_solid_queue_finished_jobs:
@@ -27,6 +30,9 @@ production:
   subscription_payment_reminders:
     class: SubscriptionPaymentReminderJob
     schedule: every day at 10am
+  google_calendar_watch_renewal:
+    class: GoogleCalendar::RenewWatchJob
+    schedule: every day at 6am
 
 staging:
   subscription_billing:
@@ -35,3 +41,6 @@ staging:
   subscription_payment_reminders:
     class: SubscriptionPaymentReminderJob
     schedule: every day at 10am
+  google_calendar_watch_renewal:
+    class: GoogleCalendar::RenewWatchJob
+    schedule: every day at 6am

@@ -1,0 +1,59 @@
+<% field_class = "mt-1 block w-full rounded-lg border-0 px-3 py-2.5 text-slate-900 shadow-sm ring-1 ring-inset ring-slate-300 placeholder:text-slate-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" %>
+<% select_class = "mt-1 block w-full rounded-lg border-0 px-3 py-2.5 text-slate-900 shadow-sm ring-1 ring-inset ring-slate-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" %>
+
+<% content_for :page_header do %>
+  <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+    <div>
+      <h1 class="text-2xl font-bold tracking-tight text-slate-900"><%= employee_role? ? "My Calendar" : "Meeting Calendar" %></h1>
+      <p class="mt-1 text-sm text-slate-600">Click a day to schedule. Events sync to <%= Meeting.company_email %>.</p>
+    </div>
+    <div class="flex flex-wrap items-center gap-3">
+      <div class="rounded-lg bg-white px-4 py-3 shadow-sm ring-1 ring-slate-900/5">
+        <p class="text-slate-500">Upcoming</p>
+        <p class="mt-1 text-lg font-semibold text-slate-900"><%= number_with_delimiter(@upcoming_count) %></p>
+      </div>
+      <div class="rounded-lg bg-white px-4 py-3 shadow-sm ring-1 ring-slate-900/5">
+        <p class="text-slate-500">Total</p>
+        <p class="mt-1 text-lg font-semibold text-slate-900"><%= number_with_delimiter(@total_count) %></p>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+<div class="mb-6 rounded-xl bg-white px-4 py-4 shadow-sm ring-1 ring-slate-900/5 sm:px-6">
+  <%= form_with url: admin_meetings_path, method: :get, local: true, class: "grid grid-cols-1 gap-4 md:grid-cols-5 md:items-end" do |f| %>
+    <%= hidden_field_tag :month, @calendar_month.strftime("%Y-%m") %>
+    <%= hidden_field_tag :date, @selected_date %>
+
+    <div class="md:col-span-2">
+      <%= f.label :q, "Search", class: "block text-sm font-medium text-slate-900" %>
+      <%= f.text_field :q, value: params[:q], class: field_class, placeholder: "Client, business, or title" %>
+    </div>
+
+    <% if filterable_employee? %>
+      <div>
+        <%= f.label :employee_id, "Employee", class: "block text-sm font-medium text-slate-900" %>
+        <%= f.select :employee_id, options_for_select([ [ "All employees", "" ] ] + @users.map { |user| [ user.display_name, user.id ] }, params[:employee_id]), {}, class: select_class %>
+      </div>
+    <% end %>
+
+    <div>
+      <%= f.label :status, "Status", class: "block text-sm font-medium text-slate-900" %>
+      <%= f.select :status, options_for_select([ [ "All statuses", "" ] ] + Meeting::STATUSES.map { |status| [ status.humanize, status ] }, params[:status]), {}, class: select_class %>
+    </div>
+
+    <div class="flex gap-2">
+      <%= f.submit "Apply", class: "inline-flex w-full items-center justify-center rounded-lg bg-slate-900 px-4 py-2.5 text-sm font-semibold text-white hover:bg-slate-800" %>
+      <%= link_to "Reset", admin_meetings_path, class: "inline-flex w-full items-center justify-center rounded-lg bg-white px-4 py-2.5 text-sm font-semibold text-slate-900 ring-1 ring-inset ring-slate-300 hover:bg-slate-50" %>
+    </div>
+  <% end %>
+</div>
+
+<div class="grid grid-cols-1 gap-6 xl:grid-cols-3">
+  <div class="xl:col-span-2">
+    <%= render "calendar" %>
+  </div>
+  <div class="xl:col-span-1">
+    <%= render "sidebar" %>
+  </div>
+</div>
