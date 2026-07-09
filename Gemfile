@@ -71,3 +71,5 @@ gem "dotenv-rails"
 gem "pagy", "~> 9.0"
 
 gem "sendgrid-actionmailer", "~> 3.2"
+gem "google-apis-calendar_v3"
+gem "googleauth"

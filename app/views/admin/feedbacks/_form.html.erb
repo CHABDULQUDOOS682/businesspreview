@@ -1,0 +1,108 @@
+<% field_class = "mt-1 block w-full rounded-lg border-0 px-3 py-2.5 text-slate-900 shadow-sm ring-1 ring-inset ring-slate-300 placeholder:text-slate-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" %>
+<% select_class = "mt-1 block w-full rounded-lg border-0 px-3 py-2.5 text-slate-900 shadow-sm ring-1 ring-inset ring-slate-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" %>
+<% mode = local_assigns.fetch(:mode, :full) %>
+
+<div data-controller="feedback-form" data-feedback-form-bug-type-value="bug">
+  <%= form_with model: feedback, url: feedback.persisted? ? admin_feedback_path(feedback) : admin_feedbacks_path, class: "space-y-6" do |f| %>
+    <% if feedback.errors.any? %>
+      <div class="rounded-lg bg-red-50 p-3 text-sm text-red-700 ring-1 ring-inset ring-red-200">
+        <%= feedback.errors.full_messages.to_sentence %>
+      </div>
+    <% end %>
+
+    <% if mode.in?([ :full, :employee ]) %>
+      <div>
+        <%= f.label :feedback_type, "Type", class: "block text-sm font-medium text-slate-900" %>
+        <%= f.select :feedback_type, options_for_select(feedback_type_options, feedback.feedback_type), {}, class: select_class, required: true, data: { action: "change->feedback-form#toggleBugFields" } %>
+      </div>
+
+      <div>
+        <%= f.label :title, class: "block text-sm font-medium text-slate-900" %>
+        <%= f.text_field :title, class: field_class, required: true %>
+      </div>
+
+      <div>
+        <%= f.label :description, class: "block text-sm font-medium text-slate-900" %>
+        <%= f.text_area :description, rows: 5, class: field_class, required: true %>
+      </div>
+
+      <div data-feedback-form-target="bugFields" class="<%= feedback.bug? ? "" : "hidden" %> space-y-4 rounded-lg bg-slate-50 p-4 ring-1 ring-inset ring-slate-200">
+        <h3 class="text-sm font-semibold text-slate-900">Bug details</h3>
+        <div>
+          <%= f.label :steps_to_reproduce, class: "block text-sm font-medium text-slate-900" %>
+          <%= f.text_area :steps_to_reproduce, rows: 4, class: field_class %>
+        </div>
+        <div>
+          <%= f.label :expected_result, class: "block text-sm font-medium text-slate-900" %>
+          <%= f.text_area :expected_result, rows: 3, class: field_class %>
+        </div>
+        <div>
+          <%= f.label :actual_result, class: "block text-sm font-medium text-slate-900" %>
+          <%= f.text_area :actual_result, rows: 3, class: field_class %>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <div>
+          <%= f.label :page_url, "Page URL", class: "block text-sm font-medium text-slate-900" %>
+          <%= f.url_field :page_url, class: field_class, data: { feedback_form_target: "pageUrl" } %>
+        </div>
+        <div>
+          <%= f.label :browser, class: "block text-sm font-medium text-slate-900" %>
+          <%= f.text_field :browser, class: field_class, data: { feedback_form_target: "browser" } %>
+        </div>
+        <div class="sm:col-span-2">
+          <%= f.label :operating_system, "Operating System", class: "block text-sm font-medium text-slate-900" %>
+          <%= f.text_field :operating_system, class: field_class, data: { feedback_form_target: "operatingSystem" } %>
+        </div>
+      </div>
+
+      <div>
+        <%= f.label :screenshots, "Screenshots", class: "block text-sm font-medium text-slate-900" %>
+        <%= f.file_field :screenshots, multiple: true, accept: "image/png,image/jpeg,image/webp,image/gif", class: "mt-2 block w-full text-sm text-slate-600" %>
+        <p class="mt-1 text-xs text-slate-500">Up to <%= Feedback::MAX_SCREENSHOTS %> images (PNG, JPG, WEBP, GIF).</p>
+      </div>
+
+      <% if feedback.screenshots.attached? %>
+        <div class="grid grid-cols-2 gap-3 sm:grid-cols-3">
+          <% feedback.screenshots.each do |screenshot| %>
+            <div class="rounded-lg border border-slate-200 p-2">
+              <%= image_tag screenshot, class: "h-24 w-full rounded object-cover" %>
+              <% if feedback.editable_by?(current_user) %>
+                <label class="mt-2 flex items-center gap-2 text-xs text-slate-600">
+                  <%= check_box_tag "feedback[remove_screenshot_ids][]", screenshot.id, false %>
+                  Remove
+                </label>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+    <% end %>
+
+    <% if mode.in?([ :full, :admin ]) && (admin_role? || super_admin?) %>
+      <div class="rounded-lg bg-indigo-50 p-4 ring-1 ring-inset ring-indigo-100 space-y-4">
+        <h3 class="text-sm font-semibold text-indigo-900">Admin triage</h3>
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div>
+            <%= f.label :priority, class: "block text-sm font-medium text-slate-900" %>
+            <%= f.select :priority, options_for_select(feedback_priority_options, feedback.priority), {}, class: select_class %>
+          </div>
+          <div>
+            <%= f.label :status, class: "block text-sm font-medium text-slate-900" %>
+            <%= f.select :status, options_for_select(feedback_status_options, feedback.status), {}, class: select_class %>
+          </div>
+        </div>
+        <div>
+          <%= f.label :admin_notes, "Admin notes", class: "block text-sm font-medium text-slate-900" %>
+          <%= f.text_area :admin_notes, rows: 4, class: field_class %>
+        </div>
+      </div>
+    <% end %>
+
+    <div class="flex items-center gap-3">
+      <%= f.submit feedback.persisted? ? "Save Changes" : "Submit Feedback", class: "inline-flex items-center justify-center rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-indigo-500" %>
+      <%= link_to "Cancel", feedback.persisted? ? admin_feedback_path(feedback) : admin_feedbacks_path, class: "text-sm font-semibold text-slate-600 hover:text-slate-900" %>
+    </div>
+  <% end %>
+</div>

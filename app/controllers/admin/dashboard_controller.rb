@@ -15,6 +15,7 @@ class Admin::DashboardController < ApplicationController
 
     @recent_businesses = Business.order(created_at: :desc).limit(5)
     @recent_clicks = PreviewLink.where("visit_count > 0").order(updated_at: :desc).limit(5)
+    @feedback_stats = Admin::FeedbackStats.call
   end
 
   private

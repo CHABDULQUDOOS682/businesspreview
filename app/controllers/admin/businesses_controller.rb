@@ -62,7 +62,7 @@ class Admin::BusinessesController < ApplicationController
     @business = Business.find(params[:id])
     if @business.update(business_params)
       @business.activate_subscription_billing! if @business.subscription_active? && @business.sold_price_collected? && @business.next_subscription_invoice_at.blank?
-      redirect_to admin_business_path(@business), notice: "Business updated!"
+      redirect_to admin_business_path(@business), notice: employee_role? ? "Business email updated!" : "Business updated!"
     else
       flash.now[:alert] = @business.errors.full_messages.to_sentence
       render :edit, status: :unprocessable_entity
@@ -114,6 +114,10 @@ class Admin::BusinessesController < ApplicationController
   end
 
   def business_params
+    if employee_role?
+      return params.require(:business).permit(:email)
+    end
+
     permitted = params.require(:business)
                       .permit(
                         :name,

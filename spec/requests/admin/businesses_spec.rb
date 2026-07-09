@@ -83,6 +83,37 @@ RSpec.describe "Admin::Businesses", type: :request do
     end
   end
 
+  describe "employee business email editing" do
+    before do
+      sign_in employee
+    end
+
+    it "renders the email edit form" do
+      get edit_admin_business_path(business)
+
+      expect(response).to have_http_status(:success)
+      expect(response.body).to include("Edit Business Email")
+      expect(response.body).not_to include("Sold Price")
+    end
+
+    it "updates only the business email" do
+      patch admin_business_path(business), params: {
+        business: {
+          email: "updated-client@example.com",
+          name: "Hacked Name",
+          sold_price: 9999
+        }
+      }
+
+      business.reload
+      expect(business.email).to eq("updated-client@example.com")
+      expect(business.name).not_to eq("Hacked Name")
+      expect(business.sold_price).not_to eq(9999)
+      expect(response).to redirect_to(admin_business_path(business))
+      expect(flash[:notice]).to eq("Business email updated!")
+    end
+  end
+
   describe "GET /admin/businesses/new" do
     it "renders the new form" do
       get new_admin_business_path

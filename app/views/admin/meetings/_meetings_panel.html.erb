@@ -1,0 +1,51 @@
+<% meetings = business.meetings.includes(:user).recent_first %>
+<% meetings = meetings.for_employee(current_user) if employee_role? %>
+<% meetings = meetings.limit(10) %>
+
+<div class="bg-white px-4 py-5 shadow-sm ring-1 ring-slate-900/5 sm:rounded-xl sm:px-6">
+  <div class="mb-4 flex items-center justify-between gap-3">
+    <div>
+      <h3 class="text-base font-semibold leading-6 text-slate-900">Meetings</h3>
+      <p class="mt-1 text-sm text-slate-600">Scheduled client meetings linked to this business.</p>
+    </div>
+    <%= link_to "Schedule Meeting", new_admin_meeting_path(business_id: business.id), class: "inline-flex items-center rounded-lg bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500" %>
+  </div>
+
+  <% if meetings.any? %>
+    <div class="overflow-x-auto">
+      <table class="min-w-full divide-y divide-slate-200">
+        <thead class="bg-slate-50">
+          <tr>
+            <th class="px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">When</th>
+            <th class="px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Title</th>
+            <th class="px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Employee</th>
+            <th class="px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Status</th>
+            <th class="px-3 py-2 text-right text-xs font-semibold uppercase tracking-wide text-slate-500">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-100">
+          <% meetings.each do |meeting| %>
+            <tr>
+              <td class="px-3 py-3 text-sm text-slate-700"><%= meeting_datetime(meeting) %></td>
+              <td class="px-3 py-3 text-sm text-slate-900"><%= meeting.title %></td>
+              <td class="px-3 py-3 text-sm text-slate-700"><%= meeting.user.display_name %></td>
+              <td class="px-3 py-3 text-sm"><%= meeting_status_badge(meeting) %></td>
+              <td class="px-3 py-3 text-right text-sm">
+                <div class="flex items-center justify-end gap-2">
+                  <% if meeting.google_meet_url.present? %>
+                    <%= link_to "Meet", meeting.google_meet_url, target: "_blank", rel: "noopener", class: "text-green-700 hover:text-green-800" %>
+                  <% end %>
+                  <% if meeting.editable? && (employee_role? ? meeting.user_id == current_user.id : true) %>
+                    <%= link_to "Edit", edit_admin_meeting_path(meeting), class: "text-indigo-600 hover:text-indigo-500" %>
+                  <% end %>
+                </div>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% else %>
+    <p class="text-sm text-slate-500">No meetings scheduled for this business yet.</p>
+  <% end %>
+</div>

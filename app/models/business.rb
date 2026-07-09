@@ -2,6 +2,7 @@ class Business < ApplicationRecord
   has_many :preview_links, dependent: :destroy
   has_many :messages, dependent: :destroy
   has_many :notes, dependent: :destroy
+  has_many :meetings, dependent: :destroy
   has_many :payment_invoices, dependent: :destroy
   has_many :reviews, dependent: :destroy
   belongs_to :sold_by, class_name: "User", optional: true
