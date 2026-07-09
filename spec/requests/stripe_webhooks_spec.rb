@@ -76,6 +76,24 @@ RSpec.describe "StripeWebhooks", type: :request do
       expect(payment_invoice.reload.status).to eq("opened")
     end
 
+    it "handles unpaid subscription invoices through the lifecycle service" do
+      subscription_invoice = create(
+        :payment_invoice,
+        business: business,
+        kind: "subscription",
+        stripe_invoice_id: "in_sub",
+        status: "invoice_sent",
+        sent_at: 10.days.ago
+      )
+      payload = { id: "evt_sub", type: "invoice.payment_failed", data: { object: { id: "in_sub", status: "open" } } }
+
+      post webhooks_stripe_path, params: payload, as: :json
+
+      expect(response).to have_http_status(:success)
+      expect(business.reload.subscription_payment_status).to eq("past_due")
+      expect(subscription_invoice.reload.status).to eq("opened")
+    end
+
     it "handles invoice.voided" do
       payload = { id: "evt_123", type: "invoice.voided", data: { object: { id: "in_123", status: "void" } } }
       post webhooks_stripe_path, params: payload, as: :json
@@ -143,12 +161,65 @@ RSpec.describe "StripeWebhooks", type: :request do
       expect(response).to have_http_status(:success)
     end
 
+    it "returns nil when metadata references a missing business" do
+      payload = {
+        id: "evt_123",
+        type: "invoice.paid",
+        data: { object: { id: "in_missing", status: "paid", metadata: { business_id: "999999" } } }
+      }
+
+      expect {
+        post webhooks_stripe_path, params: payload, as: :json
+      }.not_to raise_error
+      expect(response).to have_http_status(:success)
+    end
+
+    it "reads metadata values stored with symbol keys" do
+      business.update!(stripe_customer_id: "cus_meta")
+      invoice = create(
+        :payment_invoice,
+        business: business,
+        stripe_invoice_id: "in_meta",
+        status: "invoice_sent"
+      )
+      payload = {
+        id: "evt_meta",
+        type: "invoice.paid",
+        data: { object: { id: "in_meta", status: "paid", metadata: { business_id: business.id } } }
+      }
+
+      post webhooks_stripe_path, params: payload, as: :json
+
+      expect(response).to have_http_status(:success)
+      expect(invoice.reload.status).to eq("paid")
+    end
+
     it "handles missing payment intent during receipt retrieval" do
       payload = { id: "evt_123", type: "invoice.paid", data: { object: { id: "in_123", status: "paid" } } }
       allow(Stripe::PaymentIntent).to receive(:list).and_return(double(data: []))
       post webhooks_stripe_path, params: payload, as: :json
       expect(response).to have_http_status(:success)
       expect(payment_invoice.reload.receipt_url).to be_nil
+    end
+
+    it "handles payment intent list failures during receipt retrieval" do
+      payload = { id: "evt_123", type: "invoice.paid", data: { object: { id: "in_123", status: "paid" } } }
+      allow(Stripe::PaymentIntent).to receive(:list).and_raise(Stripe::StripeError.new("API down"))
+      post webhooks_stripe_path, params: payload, as: :json
+      expect(response).to have_http_status(:success)
+      expect(payment_invoice.reload.status).to eq("paid")
+    end
+
+    it "handles stripe_value KeyError fallbacks" do
+      payload = { id: "evt_123", type: "invoice.paid", data: { object: { id: "in_123", status: "paid" } } }
+      stripe_object = double("StripeInvoice", id: "in_123", blank?: false)
+      allow(stripe_object).to receive(:[]).and_return(nil)
+      allow(stripe_object).to receive(:respond_to?).with(anything).and_return(false)
+      allow(stripe_object).to receive(:respond_to?).with(:hosted_invoice_url).and_return(true)
+      allow(stripe_object).to receive(:public_send).with(:hosted_invoice_url).and_raise(KeyError.new("key"))
+      allow(Stripe::Invoice).to receive(:retrieve).and_return(stripe_object)
+      post webhooks_stripe_path, params: payload, as: :json
+      expect(response).to have_http_status(:success)
     end
 
     it "handles stripe_value with nil object" do

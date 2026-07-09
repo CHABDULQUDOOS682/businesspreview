@@ -24,6 +24,15 @@ RSpec.describe "Admin::Jobs", type: :request, solid_queue: true do
 
       expect(response).to have_http_status(:ok)
     end
+
+    it "filters by queue and class name" do
+      SolidQueueTestHelper.enqueue_job(SubscriptionBillingJob)
+
+      get admin_jobs_path(queue_name: "default", class_name: "SubscriptionBillingJob")
+
+      expect(response).to have_http_status(:ok)
+      expect(response.body).to include("SubscriptionBillingJob")
+    end
   end
 
   describe "GET /admin/jobs/:id" do
@@ -39,7 +48,38 @@ RSpec.describe "Admin::Jobs", type: :request, solid_queue: true do
     end
   end
 
+  describe "POST /admin/jobs/:id/retry" do
+    it "retries a failed job" do
+      SolidQueueTestHelper.enqueue_job(SubscriptionBillingJob)
+      job = SolidQueue::Job.includes(:failed_execution).last
+      job.failed_with(RuntimeError.new("boom"))
+
+      post retry_admin_job_path(job)
+
+      expect(response).to redirect_to(admin_job_path(job))
+      expect(flash[:notice]).to include("queued for retry")
+    end
+
+    it "redirects when the job is not failed" do
+      SolidQueueTestHelper.enqueue_job(SubscriptionBillingJob)
+      job = SolidQueue::Job.last
+
+      post retry_admin_job_path(job)
+
+      expect(response).to redirect_to(admin_job_path(job))
+      expect(flash[:alert]).to include("Only failed jobs can be retried")
+    end
+  end
+
   describe "authorization" do
+    it "allows admins" do
+      sign_in create(:user, :admin)
+
+      get admin_jobs_path
+
+      expect(response).to have_http_status(:ok)
+    end
+
     it "redirects employees" do
       sign_in create(:user, role: "employee")
 

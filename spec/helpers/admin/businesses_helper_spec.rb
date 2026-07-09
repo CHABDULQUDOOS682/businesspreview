@@ -52,6 +52,20 @@ RSpec.describe Admin::BusinessesHelper, type: :helper do
       it "returns inactive when billing has not started" do
         expect(helper.business_payment_status_badge(business)).to include("Inactive")
       end
+
+      it "returns past due status" do
+        business.update!(subscription_payment_status: "past_due")
+
+        expect(helper.business_payment_status_badge(business)).to include("Payment Overdue")
+        expect(helper.business_payment_status_badge(business)).to include("bg-amber-50")
+      end
+
+      it "returns suspended status" do
+        business.update!(subscription_payment_status: "suspended")
+
+        expect(helper.business_payment_status_badge(business)).to include("Suspended")
+        expect(helper.business_payment_status_badge(business)).to include("bg-red-50")
+      end
     end
   end
 

@@ -24,5 +24,61 @@ RSpec.describe StripePaymentInvoiceService do
       expect(Stripe::InvoiceItem).to have_received(:create).with(hash_including(amount: payment_invoice.amount_cents))
       expect(payment_invoice.reload.status).to eq("invoice_sent")
     end
+
+    it "marks the invoice failed and re-raises Stripe errors" do
+      allow(Stripe::Invoice).to receive(:create).and_raise(Stripe::StripeError.new("Stripe down"))
+
+      expect { service.create_and_send! }.to raise_error(Stripe::StripeError, "Stripe down")
+      expect(payment_invoice.reload.status).to eq("failed")
+      expect(payment_invoice.last_error).to eq("Stripe down")
+    end
+
+    it "raises when Stripe invoice attributes cannot be persisted" do
+      errors = payment_invoice.errors
+      allow(payment_invoice).to receive(:update).and_call_original
+      allow(payment_invoice).to receive(:update).with(hash_including(:stripe_invoice_id)).and_return(false)
+      allow(payment_invoice).to receive(:errors).and_return(errors)
+
+      expect { service.create_and_send! }.to raise_error(
+        StripePaymentInvoiceService::ConfigurationError,
+        /Failed to update invoice/
+      )
+    end
+
+    it "wraps SMS delivery failures" do
+      payment_invoice.update!(delivery_method: "sms")
+      allow(SmsService).to receive(:send_sms).and_raise(StandardError.new("SMS gateway down"))
+
+      expect { service.create_and_send! }.to raise_error(
+        StripePaymentInvoiceService::ConfigurationError,
+        "SMS Error: SMS gateway down"
+      )
+    end
+
+    it "wraps email delivery failures" do
+      allow(PaymentInvoiceMailer).to receive_message_chain(:with, :invoice_link, :deliver_later)
+        .and_raise(StandardError.new("mailer down"))
+
+      expect { service.create_and_send! }.to raise_error(
+        StripePaymentInvoiceService::ConfigurationError,
+        "Email Error: mailer down"
+      )
+    end
+  end
+
+  describe "#stripe_object_value" do
+    it "falls back to public_send and returns nil when access fails" do
+      stripe_object = double("StripeObject", blank?: false)
+      allow(stripe_object).to receive(:[]).and_return(nil)
+      allow(stripe_object).to receive(:respond_to?).with(anything).and_return(false)
+      allow(stripe_object).to receive(:respond_to?).with(:customer).and_return(true)
+      allow(stripe_object).to receive(:public_send).with(:customer).and_raise(StandardError, "boom")
+
+      expect(service.send(:stripe_object_value, stripe_object, :customer)).to be_nil
+    end
+
+    it "returns nil when the object does not respond to the key" do
+      expect(service.send(:stripe_object_value, Object.new, :missing)).to be_nil
+    end
   end
 end

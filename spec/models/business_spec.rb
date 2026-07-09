@@ -103,5 +103,54 @@ RSpec.describe Business, type: :model do
       expect(business.review_url).to include("/reviews/new/")
       expect(business.review_url).to include(business.review_token)
     end
+
+    describe "subscription billing helpers" do
+      let(:business) { create(:business, subscription: true, sold_price: 500, subscription_fee: 99) }
+
+      it "detects the first subscription invoice" do
+        expect(business.subscription_first_invoice?).to be(true)
+
+        invoice = create(:payment_invoice, business: business, kind: "subscription", status: "invoice_sent")
+        expect(business.subscription_first_invoice?).to be(false)
+        expect(business.subscription_first_invoice?(excluding: invoice)).to be(true)
+      end
+
+      it "reports subscription payment status helpers" do
+        business.update!(subscription_payment_status: "current")
+        expect(business.subscription_payment_current?).to be(true)
+        expect(business.subscription_payment_past_due?).to be(false)
+        expect(business.subscription_suspended?).to be(false)
+
+        business.update!(subscription_payment_status: "past_due")
+        expect(business.subscription_payment_past_due?).to be(true)
+
+        business.update!(subscription_payment_status: "suspended")
+        expect(business.subscription_suspended?).to be(true)
+      end
+
+      it "activates subscription billing when prerequisites are met" do
+        business.update!(sold_price_paid_at: Time.current)
+        anchor = Time.zone.parse("2026-07-01 12:00:00")
+
+        business.activate_subscription_billing!(anchor_at: anchor)
+
+        expect(business.reload).to have_attributes(
+          subscription_billing_anchor_at: anchor,
+          subscription_payment_status: "current"
+        )
+        expect(business.next_subscription_invoice_at).to be_within(1.second).of(anchor + 30.days)
+      end
+
+      it "skips activation when prerequisites are missing" do
+        non_subscription = create(:business, subscription: false)
+        expect { non_subscription.activate_subscription_billing! }.not_to change { non_subscription.reload.subscription_billing_anchor_at }
+
+        unpaid = create(:business, subscription: true, sold_price: 500, subscription_fee: 99)
+        expect { unpaid.activate_subscription_billing! }.not_to change { unpaid.reload.subscription_billing_anchor_at }
+
+        no_fee = create(:business, subscription: true, sold_price_paid_at: Time.current, subscription_fee: nil)
+        expect { no_fee.activate_subscription_billing! }.not_to change { no_fee.reload.subscription_billing_anchor_at }
+      end
+    end
   end
 end

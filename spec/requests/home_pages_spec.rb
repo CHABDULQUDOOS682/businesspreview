@@ -58,6 +58,25 @@ RSpec.describe "HomePages", type: :request do
     end
   end
 
+  describe "POST /contact" do
+    it "queues a lead alert email and redirects with a notice" do
+      mailer = instance_double(ActionMailer::MessageDelivery, deliver_later: true)
+      expect(ContactMailer).to receive(:new_lead_alert).and_return(mailer)
+
+      post contact_submissions_path, params: {
+        first_name: "Jane",
+        last_name: "Doe",
+        email: "jane@example.com",
+        company: "Acme",
+        service_interest: "Website",
+        message: "Hello"
+      }
+
+      expect(response).to redirect_to(contact_path)
+      expect(flash[:notice]).to include("inquiry was sent successfully")
+    end
+  end
+
   describe "GET /privacy" do
     it "returns http success" do
       get privacy_path
