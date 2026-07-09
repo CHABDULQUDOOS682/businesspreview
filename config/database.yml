@@ -21,12 +21,11 @@ default: &default
 
 
 development:
-  primary:
+  primary: &primary_development
     <<: *default
     database: preview_app_development
   queue:
-    <<: *default
-    database: preview_app_development
+    <<: *primary_development
 
   # The specified database role being used to connect to PostgreSQL.
   # To create additional roles in PostgreSQL see `$ createuser --help`.
@@ -59,12 +58,12 @@ development:
 # re-generated from your development database when you run "rake".
 # Do not set this db to the same as development or production.
 test:
-  primary:
+  primary: &primary_test
     <<: *default
     database: preview_app_test
+    url: <%= ENV["DATABASE_URL"] %>
   queue:
-    <<: *default
-    database: preview_app_test
+    <<: *primary_test
 
 # As with config/credentials.yml, you never want to store sensitive information,
 # like your database password, in your source code. If your source code is
