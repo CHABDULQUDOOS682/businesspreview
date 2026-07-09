@@ -51,6 +51,30 @@ RSpec.describe "Admin::Meetings", type: :request do
       expect(response.body).to include("My Client")
       expect(response.body).to include("Other Co")
     end
+
+    it "filters meetings for admins" do
+      sign_in admin
+      get admin_meetings_path, params: {
+        q: "My Client",
+        employee_id: employee.id,
+        status: "scheduled",
+        business_id: business.id,
+        month: my_meeting.starts_at.strftime("%Y-%m"),
+        date: my_meeting.starts_at.to_date
+      }
+
+      expect(response).to have_http_status(:ok)
+      expect(response.body).to include("My Client")
+    end
+
+    it "falls back safely for invalid calendar params" do
+      sign_in admin
+      get admin_meetings_path, params: { month: "invalid", date: "invalid" }
+
+      expect(response).to have_http_status(:ok)
+      expect(assigns(:calendar_month)).to eq(Date.current.beginning_of_month)
+      expect(assigns(:selected_date)).to eq(Date.current)
+    end
   end
 
   describe "POST /admin/meetings" do
@@ -75,6 +99,50 @@ RSpec.describe "Admin::Meetings", type: :request do
       expect(response).to redirect_to(admin_meetings_path(month: 2.days.from_now.strftime("%Y-%m"), date: 2.days.from_now.to_date))
       expect(flash[:notice]).to include("Meeting scheduled")
     end
+
+    it "renders the calendar when validation fails" do
+      sign_in employee
+      allow(manager).to receive(:create!) do |meeting|
+        meeting.errors.add(:title, "can't be blank")
+        raise ActiveRecord::RecordInvalid.new(meeting)
+      end
+
+      post admin_meetings_path, params: {
+        meeting: {
+          business_id: business.id,
+          client_name: "",
+          client_email: "",
+          title: "",
+          meeting_date: 2.days.from_now.to_date,
+          meeting_time: "11:00",
+          duration_minutes: 30
+        }
+      }
+
+      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response.body).to include("My Calendar")
+    end
+
+    it "redirects with an alert when Google sync fails" do
+      sign_in employee
+      allow(manager).to receive(:create!).and_raise(MeetingManager::SyncError.new("sync failed"))
+
+      post admin_meetings_path, params: {
+        meeting: {
+          business_id: business.id,
+          client_name: "Jane",
+          client_email: "jane@example.com",
+          client_phone: "+1234567890",
+          title: "Kickoff",
+          meeting_date: 2.days.from_now.to_date,
+          meeting_time: "11:00",
+          duration_minutes: 30
+        }
+      }
+
+      expect(response).to redirect_to(admin_meetings_path(date: 2.days.from_now.to_date))
+      expect(flash[:alert]).to include("sync failed")
+    end
   end
 
   describe "PATCH /admin/meetings/:id/cancel" do
@@ -94,6 +162,26 @@ RSpec.describe "Admin::Meetings", type: :request do
 
       expect(response).to redirect_to(admin_meetings_path(month: my_meeting.starts_at.strftime("%Y-%m"), date: my_meeting.starts_at.to_date))
       expect(flash[:notice]).to include("cancelled")
+    end
+
+    it "redirects when the meeting is not cancellable" do
+      my_meeting.update!(status: "completed")
+      sign_in employee
+
+      patch cancel_admin_meeting_path(my_meeting)
+
+      expect(response).to redirect_to(admin_meetings_path(month: my_meeting.starts_at.strftime("%Y-%m"), date: my_meeting.starts_at.to_date))
+      expect(flash[:alert]).to include("Only scheduled meetings can be cancelled")
+    end
+
+    it "redirects with an alert when Google cancel fails" do
+      sign_in employee
+      allow(manager).to receive(:cancel!).and_raise(MeetingManager::SyncError.new("cancel failed"))
+
+      patch cancel_admin_meeting_path(my_meeting)
+
+      expect(response).to redirect_to(admin_meetings_path(month: my_meeting.starts_at.strftime("%Y-%m"), date: my_meeting.starts_at.to_date))
+      expect(flash[:alert]).to include("cancel failed")
     end
   end
 
@@ -128,6 +216,77 @@ RSpec.describe "Admin::Meetings", type: :request do
       }
 
       expect(response).to redirect_to(admin_meetings_path(month: 2.days.from_now.strftime("%Y-%m"), date: 2.days.from_now.to_date))
+    end
+
+    it "renders edit when validation fails" do
+      sign_in employee
+      allow(manager).to receive(:update!).and_raise(ActiveRecord::RecordInvalid.new(my_meeting))
+
+      patch admin_meeting_path(my_meeting), params: {
+        meeting: {
+          business_id: business.id,
+          client_name: "",
+          client_email: "jane@example.com",
+          title: "",
+          meeting_date: 2.days.from_now.to_date,
+          meeting_time: "12:00",
+          duration_minutes: 45
+        }
+      }
+
+      expect(response).to have_http_status(:unprocessable_entity)
+    end
+
+    it "renders edit when Google sync fails" do
+      sign_in employee
+      allow(manager).to receive(:update!).and_raise(MeetingManager::SyncError.new("update failed"))
+
+      patch admin_meeting_path(my_meeting), params: {
+        meeting: {
+          business_id: business.id,
+          client_name: "Jane",
+          client_email: "jane@example.com",
+          client_phone: "+1234567890",
+          title: "Updated",
+          meeting_date: 2.days.from_now.to_date,
+          meeting_time: "12:00",
+          duration_minutes: 45
+        }
+      }
+
+      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response.body).to include("update failed")
+    end
+  end
+
+  describe "GET /admin/meetings/:id/edit" do
+    it "blocks employees from editing another employee's meeting" do
+      sign_in employee
+      get edit_admin_meeting_path(other_meeting)
+
+      expect(response).to redirect_to(admin_meetings_path)
+      expect(flash[:alert]).to include("do not have access")
+    end
+
+    it "blocks employees even when the meeting exists outside their scope" do
+      sign_in employee
+      allow_any_instance_of(Admin::MeetingsController).to receive(:scoped_meetings).and_return(Meeting.all)
+
+      patch admin_meeting_path(other_meeting), params: {
+        meeting: {
+          business_id: business.id,
+          client_name: "Jane",
+          client_email: "jane@example.com",
+          client_phone: "+1234567890",
+          title: "Blocked",
+          meeting_date: 2.days.from_now.to_date,
+          meeting_time: "12:00",
+          duration_minutes: 45
+        }
+      }
+
+      expect(response).to redirect_to(admin_meetings_path)
+      expect(flash[:alert]).to include("do not have access")
     end
   end
 end

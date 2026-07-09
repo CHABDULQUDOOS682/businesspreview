@@ -49,5 +49,29 @@ RSpec.describe MeetingManager do
       expect(meeting.reload).to be_cancelled
       expect(google_calendar).to have_received(:cancel_event!).with(meeting)
     end
+
+    it "raises SyncError when Google Calendar fails" do
+      meeting.save!
+      meeting.update!(google_event_id: "evt_123")
+      allow(google_calendar).to receive(:cancel_event!).and_raise(Google::Apis::Error.new("fail"))
+
+      expect { manager.cancel!(meeting) }.to raise_error(MeetingManager::SyncError, "fail")
+    end
+  end
+
+  describe "sync failures" do
+    it "raises SyncError when create fails" do
+      allow(google_calendar).to receive(:create_event!).and_raise(GoogleCalendarService::ConfigurationError.new("missing config"))
+
+      expect { manager.create!(meeting) }.to raise_error(MeetingManager::SyncError, "missing config")
+    end
+
+    it "raises SyncError when update fails" do
+      meeting.save!
+      meeting.update!(google_event_id: "evt_123")
+      allow(google_calendar).to receive(:update_event!).and_raise(Google::Apis::Error.new("update failed"))
+
+      expect { manager.update!(meeting, title: "Broken") }.to raise_error(MeetingManager::SyncError, "update failed")
+    end
   end
 end

@@ -194,6 +194,20 @@ RSpec.describe "StripeWebhooks", type: :request do
       expect(invoice.reload.status).to eq("paid")
     end
 
+    it "returns nil when metadata business exists but no invoice is found" do
+      payload = {
+        id: "evt_missing_invoice",
+        type: "invoice.paid",
+        data: { object: { id: "in_missing_invoice", status: "paid", metadata: { business_id: business.id } } }
+      }
+
+      expect {
+        post webhooks_stripe_path, params: payload, as: :json
+      }.not_to change(PaymentInvoice, :count)
+
+      expect(response).to have_http_status(:success)
+    end
+
     it "handles missing payment intent during receipt retrieval" do
       payload = { id: "evt_123", type: "invoice.paid", data: { object: { id: "in_123", status: "paid" } } }
       allow(Stripe::PaymentIntent).to receive(:list).and_return(double(data: []))

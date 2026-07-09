@@ -61,4 +61,48 @@ RSpec.describe Meeting, type: :model do
       expect(meeting.attendee_emails).not_to include("super_admin@example.com")
     end
   end
+
+  describe "scopes and helpers" do
+    it "filters meetings on a specific date" do
+      day = 2.days.from_now.to_date
+      meeting = create(:meeting, user: employee, business: business, starts_at: day.change(hour: 9))
+      create(:meeting, user: employee, business: create(:business), starts_at: (day + 1.day).change(hour: 9))
+
+      expect(Meeting.on_date(day)).to contain_exactly(meeting)
+    end
+
+    it "excludes a meeting from overlapping lookup when excluding_id is provided" do
+      meeting = create(:meeting, user: employee, business: business, starts_at: 2.days.from_now.change(hour: 10), duration_minutes: 60)
+      overlap = Meeting.overlapping(meeting.starts_at, meeting.ends_at, excluding_id: meeting.id)
+
+      expect(overlap).not_to include(meeting)
+    end
+  end
+
+  describe "instance helpers" do
+    it "returns ends_at based on duration" do
+      meeting = build(:meeting, starts_at: Time.zone.local(2026, 7, 15, 10, 0), duration_minutes: 45)
+      expect(meeting.ends_at).to eq(meeting.starts_at + 45.minutes)
+    end
+
+    it "reports cancellable and editable state" do
+      scheduled = build(:meeting, status: "scheduled", google_event_id: "evt_1")
+      completed = build(:meeting, status: "completed", google_event_id: "evt_2")
+
+      expect(scheduled.cancellable?).to be(true)
+      expect(scheduled.editable?).to be(true)
+      expect(completed.cancellable?).to be(false)
+      expect(completed.editable?).to be(false)
+    end
+  end
+
+  describe "update validations" do
+    it "rejects moving a meeting into the past on update" do
+      meeting = create(:meeting, user: employee, business: business, starts_at: 2.days.from_now.change(hour: 10))
+      meeting.starts_at = 1.hour.ago
+
+      expect(meeting).not_to be_valid
+      expect(meeting.errors[:starts_at]).to include("cannot be in the past")
+    end
+  end
 end
