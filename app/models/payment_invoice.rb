@@ -31,41 +31,40 @@ class PaymentInvoice < ApplicationRecord
   before_validation :normalize_currency
 
   scope :recent, -> { order(created_at: :desc) }
+  scope :subscription_fee_reminder_candidates, -> {
+    where(kind: "subscription")
+      .where.not(status: %w[paid void expired draft failed])
+      .where.not(sent_at: nil)
+  }
 
   after_update :create_commission_if_paid, if: -> { saved_change_to_status? && status == "paid" }
 
 
   def self.build_for_business(business)
-    kind = business.subscription_active? ? "subscription" : "one_time"
-    invoice = business.payment_invoices.new(
+    if business.manual_invoice_available?
+      kind = "one_time"
+      amount_cents = dollars_to_cents(business.sold_price).to_i
+    else
+      kind = business.subscription_active? ? "subscription" : "one_time"
+      amount_cents = 0
+    end
+
+    business.payment_invoices.new(
       kind: kind,
+      amount_cents: amount_cents,
       currency: "usd",
       delivery_method: default_delivery_method_for(business),
       days_until_due: DEFAULT_DAYS_UNTIL_DUE,
       billing_interval: DEFAULT_BILLING_INTERVAL
     )
-    invoice.amount_cents = default_amount_for(business, kind, excluding: invoice).to_i
-    invoice
   end
 
   def self.default_amount_for(business, kind, excluding: nil)
     case kind.to_s
     when "subscription"
-      subscription_invoice_amount_cents(business, excluding: excluding)
+      dollars_to_cents(business.subscription_fee)
     else
       dollars_to_cents(business.sold_price)
-    end
-  end
-
-  def self.subscription_invoice_amount_cents(business, excluding: nil)
-    fee_cents = dollars_to_cents(business.subscription_fee)
-    sold_cents = dollars_to_cents(business.sold_price)
-
-    if business.subscription_first_invoice?(excluding: excluding)
-      total = (fee_cents || 0) + (sold_cents || 0)
-      total.positive? ? total : nil
-    else
-      fee_cents
     end
   end
 
@@ -80,6 +79,22 @@ class PaymentInvoice < ApplicationRecord
     return "email" if business.email.present?
 
     "sms"
+  end
+
+  def manual_send_available?
+    business.manual_invoice_available? && amount_cents.to_i.positive?
+  end
+
+  def due_at
+    return nil if sent_at.blank?
+
+    sent_at + DEFAULT_DAYS_UNTIL_DUE.days
+  end
+
+  def overdue?
+    return false if paid? || due_at.blank?
+
+    Time.current > due_at
   end
 
   def kind_label
@@ -168,12 +183,5 @@ class PaymentInvoice < ApplicationRecord
     Commission.build_for_paid_invoice!(self)
   rescue => e
     Rails.logger.error("[Commission] failed to build for invoice #{id}: #{e.message}")
-  end
-
-
-
-  def format_amount(cents)
-    amount = cents.to_i.to_d / 100
-    "#{currency.upcase} #{format('%.2f', amount)}"
   end
 end

@@ -1,0 +1,7 @@
+Hello <%= @business.owner_name.presence || @business.name %>,
+
+Your monthly subscription invoice for <%= @business.name %> remains unpaid.
+
+Amount due: <%= number_to_currency(@payment_invoice.amount) %>
+
+Pay here: <%= @payment_url %>

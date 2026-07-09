@@ -18,12 +18,7 @@ class StripePaymentInvoiceService
     ensure_configured!
 
     payment_invoice.update!(status: "draft", last_error: nil)
-
-    if payment_invoice.kind == "subscription"
-      create_subscription_invoice!
-    else
-      create_one_time_invoice!
-    end
+    create_one_time_invoice!
 
     send_email! if payment_invoice.email_delivery?
     send_sms! if payment_invoice.sms_delivery?
@@ -54,7 +49,7 @@ class StripePaymentInvoiceService
       invoice: invoice.id,
       amount: payment_invoice.amount_cents,
       currency: payment_invoice.currency,
-      description: payment_invoice.kind_label,
+      description: invoice_description,
       metadata: stripe_metadata
     )
 
@@ -62,72 +57,8 @@ class StripePaymentInvoiceService
     update_from_stripe_invoice!(finalized_invoice)
   end
 
-  def create_subscription_invoice!
-    business = payment_invoice.business
-    subscription_cents = PaymentInvoice.dollars_to_cents(business.subscription_fee)
-
-    if subscription_cents.blank? || subscription_cents <= 0
-      raise ConfigurationError, "Subscription fee is required to create a subscription invoice"
-    end
-
-    customer_id = ensure_customer!
-    product = ::Stripe::Product.create(
-      name: "#{business.name} #{DEFAULT_PRODUCT_NAMES.fetch(payment_invoice.kind)}",
-      metadata: stripe_metadata
-    )
-    price = ::Stripe::Price.create(
-      product: product.id,
-      unit_amount: subscription_cents,
-      currency: payment_invoice.currency,
-      recurring: { interval: payment_invoice.billing_interval },
-      metadata: stripe_metadata
-    )
-
-    subscription = ::Stripe::Subscription.create(
-      customer: customer_id,
-      items: [ { price: price.id } ],
-      collection_method: "send_invoice",
-      days_until_due: payment_invoice.days_until_due,
-      metadata: stripe_metadata,
-      expand: [ "latest_invoice" ]
-    )
-
-    latest_invoice = stripe_object_value(subscription, :latest_invoice)
-    latest_invoice = ::Stripe::Invoice.retrieve(latest_invoice) if latest_invoice.is_a?(String)
-
-    add_initial_sold_price_line_item!(customer_id, latest_invoice) if latest_invoice.present?
-
-    sent_invoice = latest_invoice
-    if latest_invoice.present? && stripe_object_value(latest_invoice, :status) == "draft"
-      sent_invoice = ::Stripe::Invoice.finalize_invoice(latest_invoice.id)
-    end
-
-    payment_invoice.update!(
-      stripe_subscription_id: subscription.id,
-      stripe_product_id: product.id,
-      stripe_price_id: price.id
-    )
-    update_from_stripe_invoice!(sent_invoice) if sent_invoice.present?
-  end
-
-  def add_initial_sold_price_line_item!(customer_id, invoice)
-    business = payment_invoice.business
-    return unless business.subscription_first_invoice?(excluding: payment_invoice)
-
-    sold_cents = PaymentInvoice.dollars_to_cents(business.sold_price)
-    return if sold_cents.blank? || sold_cents <= 0
-
-    invoice_id = stripe_object_value(invoice, :id)
-    return if invoice_id.blank?
-
-    ::Stripe::InvoiceItem.create(
-      customer: customer_id,
-      invoice: invoice_id,
-      amount: sold_cents,
-      currency: payment_invoice.currency,
-      description: DEFAULT_PRODUCT_NAMES.fetch("one_time"),
-      metadata: stripe_metadata
-    )
+  def invoice_description
+    payment_invoice.kind_label
   end
 
   def ensure_customer!
@@ -231,11 +162,9 @@ class StripePaymentInvoiceService
   def stripe_object_value(object, key)
     return nil if object.blank?
 
-    # Try hash access first as it's more reliable for Stripe objects
     value = object[key.to_s] || object[key.to_sym]
     return value if value.present?
 
-    # Fallback to public_send if hash access fails
     if object.respond_to?(key)
       object.public_send(key)
     else

@@ -60,10 +60,14 @@ class StripeWebhooksController < ApplicationController
         paid_at: attrs[:paid_at].presence || payment_invoice.paid_at
       }.compact
     )
+
+    if payment_invoice.kind == "subscription" && !payment_invoice.paid?
+      Billing::InvoiceLifecycleService.new(payment_invoice).handle_unpaid_state!(status: new_status)
+    end
   end
 
   def update_paid_invoice(stripe_invoice)
-    payment_invoice = PaymentInvoice.find_by(stripe_invoice_id: stripe_invoice.id)
+    payment_invoice = find_or_build_payment_invoice(stripe_invoice)
     return if payment_invoice.blank?
 
     full_invoice = retrieve_invoice_for_receipt(stripe_invoice)
@@ -77,6 +81,27 @@ class StripeWebhooksController < ApplicationController
       receipt_url: receipt_url
     )
     payment_invoice.store_paid_documents!(stripe_invoice: full_invoice, receipt_url: receipt_url)
+    Billing::InvoiceLifecycleService.new(payment_invoice).handle_paid!(paid_at: payment_invoice.paid_at)
+  end
+
+  def find_or_build_payment_invoice(stripe_invoice)
+    payment_invoice = PaymentInvoice.find_by(stripe_invoice_id: stripe_invoice.id)
+    return payment_invoice if payment_invoice.present?
+
+    business_id = stripe_metadata_value(stripe_invoice, :business_id)
+    return nil if business_id.blank?
+
+    business = Business.find_by(id: business_id)
+    return nil if business.blank?
+
+    PaymentInvoice.find_by(stripe_invoice_id: stripe_invoice.id, business_id: business.id)
+  end
+
+  def stripe_metadata_value(stripe_invoice, key)
+    metadata = stripe_value(stripe_invoice, :metadata)
+    return nil if metadata.blank?
+
+    metadata[key.to_s] || metadata[key.to_sym]
   end
 
   def retrieve_invoice_for_receipt(stripe_invoice)

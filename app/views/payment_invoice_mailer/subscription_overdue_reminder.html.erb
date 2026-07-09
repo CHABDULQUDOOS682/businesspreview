@@ -1,0 +1,21 @@
+<h1 style="margin: 0 0 16px 0; font-size: 22px; font-weight: 800; color: #081849;">Your subscription payment is overdue</h1>
+
+<p style="margin: 0 0 20px 0; font-size: 15px; line-height: 1.6; color: #334155;">
+  Hello <%= @business.owner_name.presence || @business.name %>,
+</p>
+
+<p style="margin: 0 0 24px 0; font-size: 15px; line-height: 1.6; color: #334155;">
+  Your monthly subscription invoice remains unpaid. Please complete payment using the secure link below to keep your website active.
+</p>
+
+<p style="margin: 0 0 24px 0; font-size: 15px; line-height: 1.6; color: #334155;">
+  <strong>Amount due:</strong> <%= number_to_currency(@payment_invoice.amount) %>
+</p>
+
+<p style="margin: 0 0 24px 0;">
+  <a href="<%= @payment_url %>" style="color: #213885; font-weight: bold;">Pay subscription invoice</a>
+</p>
+
+<p style="margin: 0; font-size: 13px; color: rgba(8, 24, 73, 0.5); word-break: break-all;">
+  <%= @payment_url %>
+</p>

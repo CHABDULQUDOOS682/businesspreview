@@ -1,0 +1,10 @@
+<% if business.errors.any? %>
+  <div class="mb-6 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">
+    <p class="font-semibold">Please fix the following:</p>
+    <ul class="mt-2 list-disc space-y-1 pl-5">
+      <% business.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>

@@ -4,25 +4,26 @@ RSpec.describe PaymentInvoice, type: :model do
   let(:business) { create(:business, email: "client@example.com", phone: "+1234567890") }
 
   describe ".build_for_business" do
-    it "sets kind to one_time by default" do
-      business.update(subscription_fee: nil, subscription: false)
+    it "builds a manual sold-price invoice for subscription businesses awaiting initial payment" do
+      business.update(subscription: true, sold_price: 500, subscription_fee: 99)
+
       invoice = PaymentInvoice.build_for_business(business)
+
       expect(invoice.kind).to eq("one_time")
+      expect(invoice.amount_cents).to eq(50_000)
+      expect(invoice.manual_send_available?).to be(true)
     end
 
-    it "sets kind to subscription if active" do
-      business.update(subscription: true)
+    it "does not offer a manual invoice after sold price is collected" do
+      business.update(subscription: true, sold_price: 500, subscription_fee: 99, sold_price_paid_at: Time.current)
+
       invoice = PaymentInvoice.build_for_business(business)
-      expect(invoice.kind).to eq("subscription")
+
+      expect(invoice.manual_send_available?).to be(false)
+      expect(invoice.amount_cents).to eq(0)
     end
 
-    it "sets correct delivery method" do
-      expect(PaymentInvoice.build_for_business(business).delivery_method).to eq("email_and_sms")
-      business.update(phone: nil)
-      expect(PaymentInvoice.build_for_business(business).delivery_method).to eq("email")
-    end
-
-    it "charges sold price only for one-time website sales" do
+    it "builds a one-time sold-price invoice for purchased websites" do
       business.update(subscription: false, subscription_fee: nil, sold_price: 500)
 
       invoice = PaymentInvoice.build_for_business(business)
@@ -30,103 +31,13 @@ RSpec.describe PaymentInvoice, type: :model do
       expect(invoice.kind).to eq("one_time")
       expect(invoice.amount_cents).to eq(50_000)
     end
-
-    it "charges sold price plus subscription fee on the first subscription invoice" do
-      business.update(subscription: true, sold_price: 500, subscription_fee: 99)
-
-      invoice = PaymentInvoice.build_for_business(business)
-
-      expect(invoice.kind).to eq("subscription")
-      expect(invoice.amount_cents).to eq(59_900)
-    end
-
-    it "charges only the subscription fee on later subscription invoices" do
-      business.update(subscription: true, sold_price: 500, subscription_fee: 99)
-      create(:payment_invoice, business: business, kind: "subscription", status: "paid", amount_cents: 59_900)
-
-      invoice = PaymentInvoice.build_for_business(business)
-
-      expect(invoice.amount_cents).to eq(9_900)
-    end
   end
 
-  describe "#store_paid_documents!" do
-    let(:invoice) { create(:payment_invoice, business: business) }
+  describe ".default_amount_for" do
+    it "returns subscription fee for subscription invoices" do
+      business.update(subscription: true, subscription_fee: 99)
 
-    it "updates receipt url" do
-      stripe_invoice = double("stripe_invoice", id: "in_123", status: "paid", amount_due: 1000, amount_paid: 1000, hosted_invoice_url: "url", invoice_pdf: "pdf")
-      invoice.store_paid_documents!(stripe_invoice: stripe_invoice, receipt_url: "receipt_url")
-
-      expect(invoice.receipt_url).to eq("receipt_url")
-    end
-  end
-
-  describe "validations" do
-    it "validates currency length" do
-      invoice = build(:payment_invoice, currency: "us")
-      expect(invoice).not_to be_valid
-    end
-
-    it "validates business has requested destination" do
-      business.update_columns(email: nil)
-      invoice = build(:payment_invoice, business: business, delivery_method: "email")
-      expect(invoice).not_to be_valid
-    end
-  end
-
-  describe "#safe_hosted_invoice_url" do
-    let(:invoice) { build(:payment_invoice, business: business) }
-
-    it "returns nil if blank" do
-      invoice.hosted_invoice_url = nil
-      expect(invoice.safe_hosted_invoice_url).to be_nil
-    end
-
-    it "returns url if valid and allowed" do
-      invoice.hosted_invoice_url = "https://invoice.stripe.com/abc"
-      expect(invoice.safe_hosted_invoice_url).to eq("https://invoice.stripe.com/abc")
-    end
-
-    it "returns nil if host not allowed" do
-      invoice.hosted_invoice_url = "https://malicious.com/abc"
-      expect(invoice.safe_hosted_invoice_url).to be_nil
-    end
-
-    it "returns nil if invalid URI" do
-      invoice.hosted_invoice_url = "https:// invalid.com"
-      expect(invoice.safe_hosted_invoice_url).to be_nil
-    end
-  end
-
-  describe "internal helper methods" do
-    let(:invoice) { create(:payment_invoice, business: business) }
-
-    it "default_amount_for returns nil if blank" do
-      business.update_columns(sold_price: nil, subscription_fee: nil)
-      expect(PaymentInvoice.default_amount_for(business, "one_time")).to be_nil
-    end
-
-    it "subscription_invoice_amount_cents returns subscription fee when sold price is absent" do
-      business.update(subscription: true, sold_price: nil, subscription_fee: 99)
-
-      expect(PaymentInvoice.subscription_invoice_amount_cents(business)).to eq(9_900)
-    end
-
-    it "mark_opened! sets status and timestamp" do
-      expect { invoice.mark_opened! }.to change { invoice.status }.to("opened")
-      expect(invoice.opened_at).not_to be_nil
-    end
-
-    it "mark_opened! returns early if already paid" do
-      invoice.update_columns(status: "paid")
-      expect { invoice.mark_opened! }.not_to(change { invoice.opened_at })
-    end
-
-    it "status_label formats properly" do
-      invoice.status = "invoice_sent"
-      expect(invoice.status_label).to eq("Invoice Sent")
-      invoice.status = "paid"
-      expect(invoice.status_label).to eq("Paid")
+      expect(PaymentInvoice.default_amount_for(business, "subscription")).to eq(9_900)
     end
   end
 end

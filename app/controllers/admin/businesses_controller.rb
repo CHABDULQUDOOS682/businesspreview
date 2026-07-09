@@ -43,7 +43,8 @@ class Admin::BusinessesController < ApplicationController
     if @business.save
       redirect_to admin_businesses_path, notice: "Business created!"
     else
-      render :new
+      flash.now[:alert] = @business.errors.full_messages.to_sentence
+      render :new, status: :unprocessable_entity
     end
   end
 
@@ -60,9 +61,11 @@ class Admin::BusinessesController < ApplicationController
   def update
     @business = Business.find(params[:id])
     if @business.update(business_params)
+      @business.activate_subscription_billing! if @business.subscription_active? && @business.sold_price_collected? && @business.next_subscription_invoice_at.blank?
       redirect_to admin_business_path(@business), notice: "Business updated!"
     else
-      render :edit, alert: "Update failed."
+      flash.now[:alert] = @business.errors.full_messages.to_sentence
+      render :edit, status: :unprocessable_entity
     end
   end
 
@@ -132,7 +135,10 @@ class Admin::BusinessesController < ApplicationController
                         :task_source_enabled,
                         :task_base_url,
                         :task_secret,
-                        :task_endpoint_path
+                        :task_endpoint_path,
+                        :site_api_base_url,
+                        :site_api_secret,
+                        :site_external_id
                       )
 
     permitted[:sold_by_id] = nil if permitted[:sold_by_id].blank?

@@ -1,0 +1,173 @@
+<% content_for :page_header do %>
+  <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+    <div>
+      <p class="portal-kicker">Operations</p>
+      <h1 class="portal-page-title mt-2">Background Jobs</h1>
+      <p class="mt-2 text-sm text-sand-600">Monitor Solid Queue workers, enqueued jobs, and failures.</p>
+    </div>
+  </div>
+<% end %>
+
+<div class="space-y-6">
+  <div class="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-6">
+    <% [
+      ["Pending", @stats[:pending], "pending"],
+      ["Running", @stats[:running], "running"],
+      ["Scheduled", @stats[:scheduled], "scheduled"],
+      ["Blocked", @stats[:blocked], "blocked"],
+      ["Failed", @stats[:failed], "failed"],
+      ["Finished", @stats[:finished], "finished"]
+    ].each do |label, count, status| %>
+      <div class="portal-stat-card">
+        <dt class="text-sm font-medium text-sand-500"><%= label %></dt>
+        <dd class="mt-2 text-2xl font-bold text-sand-900"><%= count %></dd>
+        <%= link_to "View",
+                    admin_jobs_path(status: status, queue_name: @browser.queue_name, class_name: @browser.class_name),
+                    class: "mt-2 inline-block text-xs font-medium text-accent-blue hover:underline" %>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="flex flex-wrap gap-2">
+    <%= admin_job_filter_link("All", "all", @browser) %>
+    <%= admin_job_filter_link("Pending", "pending", @browser) %>
+    <%= admin_job_filter_link("Running", "running", @browser) %>
+    <%= admin_job_filter_link("Scheduled", "scheduled", @browser) %>
+    <%= admin_job_filter_link("Blocked", "blocked", @browser) %>
+    <%= admin_job_filter_link("Failed", "failed", @browser) %>
+    <%= admin_job_filter_link("Finished", "finished", @browser) %>
+  </div>
+
+  <%= form_with url: admin_jobs_path, method: :get, class: "flex flex-wrap items-end gap-3" do %>
+    <%= hidden_field_tag :status, @browser.filter %>
+    <div>
+      <label class="mb-1 block text-xs font-medium text-sand-500">Queue</label>
+      <%= select_tag :queue_name,
+            options_for_select([["All queues", ""]] + @browser.queue_names.map { |q| [q, q] }, @browser.queue_name),
+            class: "rounded-lg border-0 px-3 py-2 text-sm text-sand-900 shadow-sm ring-1 ring-inset ring-sand-300 focus:ring-2 focus:ring-inset focus:ring-accent-blue" %>
+    </div>
+    <div>
+      <label class="mb-1 block text-xs font-medium text-sand-500">Job class</label>
+      <%= select_tag :class_name,
+            options_for_select([["All jobs", ""]] + @browser.class_names.map { |c| [c.demodulize, c] }, @browser.class_name),
+            class: "rounded-lg border-0 px-3 py-2 text-sm text-sand-900 shadow-sm ring-1 ring-inset ring-sand-300 focus:ring-2 focus:ring-inset focus:ring-accent-blue" %>
+    </div>
+    <%= submit_tag "Filter", class: "btn-base btn-sand px-3 py-2 text-sm shadow-sm" %>
+    <% if @browser.queue_name.present? || @browser.class_name.present? %>
+      <%= link_to "Clear", admin_jobs_path(status: @browser.filter), class: "text-sm font-medium text-accent-blue hover:underline" %>
+    <% end %>
+  <% end %>
+
+  <div class="portal-panel overflow-hidden">
+    <div class="overflow-x-auto">
+      <table class="min-w-full divide-y divide-sand-200">
+        <thead class="bg-sand-50">
+          <tr>
+            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-sand-500">ID</th>
+            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-sand-500">Job</th>
+            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-sand-500">Queue</th>
+            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-sand-500">Status</th>
+            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-sand-500">Arguments</th>
+            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-sand-500">Scheduled</th>
+            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-sand-500">Created</th>
+            <th class="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-sand-500"></th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-sand-200 bg-white">
+          <% @jobs.each do |job| %>
+            <tr>
+              <td class="px-4 py-4 font-mono text-xs text-sand-700">#<%= job.id %></td>
+              <td class="px-4 py-4 text-sm font-medium text-sand-900"><%= Admin::JobQueueBrowser.short_class_name(job) %></td>
+              <td class="px-4 py-4 text-sm text-sand-700"><%= job.queue_name %></td>
+              <td class="px-4 py-4 text-sm"><%= admin_job_status_badge(job) %></td>
+              <td class="max-w-xs truncate px-4 py-4 text-xs text-sand-500"><%= Admin::JobQueueBrowser.arguments_summary(job) %></td>
+              <td class="px-4 py-4 text-xs text-sand-700"><%= job.scheduled_at&.to_fs(:short) || "—" %></td>
+              <td class="px-4 py-4 text-xs text-sand-700"><%= job.created_at.to_fs(:short) %></td>
+              <td class="px-4 py-4 text-right text-sm">
+                <%= link_to "View", admin_job_path(job), class: "font-medium text-accent-blue hover:underline" %>
+              </td>
+            </tr>
+          <% end %>
+
+          <% if @jobs.empty? %>
+            <tr>
+              <td colspan="8" class="px-4 py-10 text-center text-sm text-sand-500">No jobs match this filter.</td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <% if @pagy.pages > 1 %>
+    <div class="flex justify-center">
+      <%== pagy_nav(@pagy) %>
+    </div>
+  <% end %>
+
+  <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
+    <section class="portal-panel overflow-hidden">
+      <div class="border-b border-sand-200 px-5 py-4">
+        <h2 class="text-base font-semibold text-sand-900">Workers</h2>
+      </div>
+      <% if @worker_processes.any? %>
+        <div class="overflow-x-auto">
+          <table class="min-w-full divide-y divide-sand-200">
+            <thead class="bg-sand-50">
+              <tr>
+                <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-sand-500">Process</th>
+                <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-sand-500">Kind</th>
+                <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-sand-500">Last heartbeat</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-sand-200 bg-white">
+              <% @worker_processes.each do |process| %>
+                <tr>
+                  <td class="px-4 py-4 font-mono text-xs text-sand-700"><%= process.name %></td>
+                  <td class="px-4 py-4 text-sm text-sand-700"><%= process.kind %></td>
+                  <td class="px-4 py-4 text-xs text-sand-700"><%= process.last_heartbeat_at&.to_fs(:short) || "—" %></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      <% else %>
+        <p class="px-5 py-6 text-sm text-sand-500">
+          No worker processes registered. Start <code class="rounded bg-sand-100 px-1">bin/jobs</code> or enable <code class="rounded bg-sand-100 px-1">SOLID_QUEUE_IN_PUMA</code>.
+        </p>
+      <% end %>
+    </section>
+
+    <section class="portal-panel overflow-hidden">
+      <div class="border-b border-sand-200 px-5 py-4">
+        <h2 class="text-base font-semibold text-sand-900">Recurring tasks</h2>
+      </div>
+      <% if @recurring_tasks.any? %>
+        <div class="overflow-x-auto">
+          <table class="min-w-full divide-y divide-sand-200">
+            <thead class="bg-sand-50">
+              <tr>
+                <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-sand-500">Key</th>
+                <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-sand-500">Schedule</th>
+                <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-sand-500">Class / command</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-sand-200 bg-white">
+              <% @recurring_tasks.each do |task| %>
+                <tr>
+                  <td class="px-4 py-4 font-mono text-xs text-sand-700"><%= task.key %></td>
+                  <td class="px-4 py-4 text-xs text-sand-700"><%= task.schedule %></td>
+                  <td class="px-4 py-4 text-xs text-sand-700"><%= task.class_name.presence || task.command.to_s.truncate(40) %></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      <% else %>
+        <p class="px-5 py-6 text-sm text-sand-500">
+          No recurring tasks configured. See <code class="rounded bg-sand-100 px-1">config/recurring.yml</code>.
+        </p>
+      <% end %>
+    </section>
+  </div>
+</div>
