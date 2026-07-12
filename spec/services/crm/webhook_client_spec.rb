@@ -53,4 +53,19 @@ RSpec.describe Crm::WebhookClient do
       described_class.new(business).deliver!(event: "payment_received")
     }.to raise_error(Crm::WebhookClient::ConfigurationError)
   end
+
+  it "raises when the CRM webhook returns an error" do
+    http = instance_double(Net::HTTP)
+    response = Net::HTTPBadRequest.new("1.1", "400", "Bad Request")
+    allow(response).to receive(:body).and_return("nope")
+    allow(Net::HTTP).to receive(:new).and_return(http)
+    allow(http).to receive(:use_ssl=)
+    allow(http).to receive(:open_timeout=)
+    allow(http).to receive(:read_timeout=)
+    allow(http).to receive(:request).and_return(response)
+
+    expect {
+      described_class.new(business).deliver!(event: "payment_received")
+    }.to raise_error(Crm::WebhookClient::Error, /400/)
+  end
 end

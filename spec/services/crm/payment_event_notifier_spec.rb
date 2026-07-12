@@ -65,4 +65,12 @@ RSpec.describe Crm::PaymentEventNotifier do
     expect(client).not_to receive(:deliver!)
     expect(described_class.new(payment_invoice: invoice).call).to eq(:skipped)
   end
+
+  it "skips unknown invoice kinds" do
+    invoice = create(:payment_invoice, business: business, kind: "one_time", status: "paid")
+    invoice.update_column(:kind, "legacy")
+
+    expect(client).not_to receive(:deliver!)
+    expect(described_class.new(payment_invoice: invoice).call).to eq(:skipped)
+  end
 end

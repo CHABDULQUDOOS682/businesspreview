@@ -70,4 +70,42 @@ RSpec.describe ContentUpdateWebhookService do
     expect(result.success?).to eq(false)
     expect(result.http_status).to eq(:not_found)
   end
+
+  it "rejects when the business has no site API secret configured" do
+    business.update!(site_api_secret: nil)
+    result = described_class.call(payload: payload, secret: "shared-secret")
+
+    expect(result.success?).to eq(false)
+    expect(result.http_status).to eq(:unauthorized)
+    expect(result.error).to include("not configured")
+  end
+
+  it "returns unprocessable when the task cannot be saved" do
+    allow_any_instance_of(AgencyTask).to receive(:save!).and_raise(
+      ActiveRecord::RecordInvalid.new(AgencyTask.new)
+    )
+
+    result = described_class.call(payload: payload, secret: "shared-secret")
+
+    expect(result.success?).to eq(false)
+    expect(result.http_status).to eq(:unprocessable_entity)
+  end
+
+  it "ignores invalid created_at values" do
+    payload["content_update"]["created_at"] = "not-a-time"
+
+    result = described_class.call(payload: payload, secret: "shared-secret")
+
+    expect(result.success?).to eq(true)
+    expect(result.task.requested_at).to be_present
+  end
+
+  it "rescues parse errors from created_at" do
+    allow(Time.zone).to receive(:parse).and_raise(ArgumentError)
+
+    result = described_class.call(payload: payload, secret: "shared-secret")
+
+    expect(result.success?).to eq(true)
+    expect(result.task.requested_at).to be_present
+  end
 end

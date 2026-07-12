@@ -62,4 +62,26 @@ RSpec.describe SiteLifecycle::Client do
       expect(response).to be_a(Net::HTTPSuccess)
     end
   end
+
+  describe "#ping!" do
+    it "posts to the ping endpoint with the site id" do
+      stub_request(:post, "https://sites.example.com/api/site_status/ping")
+        .with(
+          headers: { "X-Site-Api-Secret" => "secret" },
+          body: hash_including("site_id" => "site-123")
+        )
+        .to_return(status: 200, body: { ok: true }.to_json)
+
+      response = client.ping!
+      expect(response).to be_a(Net::HTTPSuccess)
+    end
+
+    it "allows an explicit site_id override" do
+      stub_request(:post, "https://sites.example.com/api/site_status/ping")
+        .with(body: hash_including("site_id" => "custom-id"))
+        .to_return(status: 200, body: "{}")
+
+      expect(client.ping!(site_id: "custom-id")).to be_a(Net::HTTPSuccess)
+    end
+  end
 end

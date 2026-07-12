@@ -76,4 +76,30 @@ RSpec.describe Crm::BillingEventNotifier do
       )
     )
   end
+
+  it "skips when CRM is not configured" do
+    allow(client).to receive(:configured?).and_return(false)
+
+    expect(described_class.new(payment_invoice: payment_invoice).call("invoice_sent")).to eq(:skipped)
+    expect(client).not_to have_received(:deliver!)
+  end
+
+  it "uses a generic overdue message when grace end is blank" do
+    business.update!(subscription_grace_ends_at: nil)
+
+    described_class.new(payment_invoice: payment_invoice).call("payment_overdue")
+
+    expect(client).to have_received(:deliver!).with(
+      hash_including(
+        event: "payment_overdue",
+        billing_message: a_string_including("Please pay your subscription invoice")
+      )
+    )
+  end
+
+  it "raises for unsupported events" do
+    expect {
+      described_class.new(payment_invoice: payment_invoice).call("nope")
+    }.to raise_error(ArgumentError, /Unsupported billing event/)
+  end
 end

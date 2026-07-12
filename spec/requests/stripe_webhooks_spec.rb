@@ -161,6 +161,32 @@ RSpec.describe "StripeWebhooks", type: :request do
       expect(response).to have_http_status(:success)
     end
 
+    it "links a stripe invoice id from payment_invoice_id metadata on paid events" do
+      orphan = create(
+        :payment_invoice,
+        business: business,
+        stripe_invoice_id: nil,
+        status: "invoice_sent"
+      )
+      payload = {
+        id: "evt_meta",
+        type: "invoice.paid",
+        data: {
+          object: {
+            id: "in_from_meta",
+            status: "paid",
+            metadata: { payment_invoice_id: orphan.id.to_s }
+          }
+        }
+      }
+
+      post webhooks_stripe_path, params: payload, as: :json
+
+      expect(response).to have_http_status(:success)
+      expect(orphan.reload.stripe_invoice_id).to eq("in_from_meta")
+      expect(orphan.status).to eq("paid")
+    end
+
     it "returns nil when metadata references a missing business" do
       payload = {
         id: "evt_123",
