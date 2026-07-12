@@ -1,15 +1,28 @@
 require "rails_helper"
 
 RSpec.describe Billing::InvoiceLifecycleService do
+  include ActiveJob::TestHelper
+
   let(:business) { create(:business, subscription: true, sold_price: 500, subscription_fee: 99) }
   let(:invoice) { create(:payment_invoice, business: business, kind: "one_time", amount_cents: 50_000, status: "invoice_sent") }
   let(:service) { described_class.new(invoice) }
+
+  around do |example|
+    original_adapter = ActiveJob::Base.queue_adapter
+    ActiveJob::Base.queue_adapter = :test
+    clear_enqueued_jobs
+    example.run
+  ensure
+    ActiveJob::Base.queue_adapter = original_adapter
+  end
 
   describe "#handle_paid!" do
     it "starts the subscription billing cycle after the sold-price invoice is paid" do
       paid_at = Time.zone.parse("2026-07-01 12:00:00")
 
-      service.handle_paid!(paid_at: paid_at)
+      expect {
+        service.handle_paid!(paid_at: paid_at)
+      }.to have_enqueued_job(Crm::NotifyPaymentJob).with(invoice.id)
 
       expect(business.reload).to have_attributes(
         sold_price_paid_at: paid_at,
@@ -33,12 +46,21 @@ RSpec.describe Billing::InvoiceLifecycleService do
       expect {
         described_class.new(subscription_invoice).handle_paid!(paid_at: paid_at)
       }.to have_enqueued_job(SiteReactivationJob).with(business.id, subscription_invoice.id)
+        .and have_enqueued_job(Crm::NotifyPaymentJob).with(subscription_invoice.id)
 
       expect(business.reload).to have_attributes(
         subscription_payment_status: "current",
         subscription_grace_ends_at: nil,
         last_payment_failed_at: nil
       )
+    end
+
+    it "reactivates the site after a one-time invoice is paid when the site was deactivated" do
+      business.update!(site_deactivated_at: 1.day.ago, subscription_payment_status: "suspended")
+
+      expect {
+        service.handle_paid!(paid_at: Time.current)
+      }.to have_enqueued_job(SiteReactivationJob).with(business.id, invoice.id)
     end
   end
 
@@ -55,10 +77,20 @@ RSpec.describe Billing::InvoiceLifecycleService do
     end
 
     it "marks the business past due after the invoice due date" do
-      service.handle_unpaid_state!(status: "invoice_sent")
+      expect {
+        service.handle_unpaid_state!(status: "invoice_sent")
+      }.to have_enqueued_job(Crm::NotifyBillingJob).with(invoice.id, "payment_overdue")
 
       expect(business.reload.subscription_payment_status).to eq("past_due")
       expect(business.subscription_grace_ends_at).to be_present
+    end
+
+    it "does not re-notify payment_overdue when already past due" do
+      business.update!(subscription_payment_status: "past_due", subscription_grace_ends_at: 2.days.from_now)
+
+      expect {
+        service.handle_unpaid_state!(status: "invoice_sent")
+      }.not_to have_enqueued_job(Crm::NotifyBillingJob)
     end
 
     it "enqueues site deactivation when the grace period has expired" do

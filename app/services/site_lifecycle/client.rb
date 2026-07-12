@@ -18,6 +18,11 @@ module SiteLifecycle
       post("/api/site_status/reactivate", payload(payment_invoice, reason))
     end
 
+    def ping!(site_id: nil)
+      body = { site_id: site_id.presence || self.site_id }.compact
+      post("/api/site_status/ping", body)
+    end
+
     def configured?
       base_url.present? && secret.present?
     end
@@ -25,11 +30,11 @@ module SiteLifecycle
     private
 
     def base_url
-      @business.site_api_base_url.presence || @business.task_base_url
+      @business.site_api_base_url.presence
     end
 
     def secret
-      @business.site_api_secret.presence || @business.task_secret
+      @business.site_api_secret.presence
     end
 
     def site_id

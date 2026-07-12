@@ -8,14 +8,17 @@ class Business < ApplicationRecord
   belongs_to :sold_by, class_name: "User", optional: true
   has_many :commissions, dependent: :destroy
   has_many :business_commission_rates, dependent: :destroy
+  has_many :agency_tasks, dependent: :destroy
   alias_attribute :website, :website_url
 
   before_validation :normalize_phone
+  before_validation :normalize_business_number
   before_create :generate_review_token
 
   validates :name, presence: true
   validates :phone, presence: true
   validates :phone, uniqueness: { case_sensitive: false }, if: -> { phone.present? }
+  validates :business_number, uniqueness: { case_sensitive: false }, allow_nil: true
 
   SUBSCRIPTION_PAYMENT_STATUSES = %w[inactive current past_due suspended].freeze
   SUBSCRIPTION_BILLING_CYCLE = 30.days
@@ -30,11 +33,6 @@ class Business < ApplicationRecord
 
   scope :with_active_subscription, -> {
     where("subscription = ? OR subscription_fee IS NOT NULL", true)
-  }
-  scope :task_sources, -> {
-    where(task_source_enabled: true)
-      .where.not(task_base_url: [ nil, "" ])
-      .where.not(task_secret: [ nil, "" ])
   }
   scope :with_purchased_website, -> {
     where.not(sold_price: nil)
@@ -164,10 +162,6 @@ class Business < ApplicationRecord
     )
   end
 
-  def task_source_name
-    website_name.presence || name
-  end
-
   def review_url
     Rails.application.routes.url_helpers.new_review_submission_url(
       token: review_token,
@@ -184,6 +178,11 @@ class Business < ApplicationRecord
     digits = phone.to_s.gsub(/[^\d+]/, "")
     digits = "+#{digits.delete('+')}" if digits.present?
     self.phone = digits
+  end
+
+  def normalize_business_number
+    value = business_number.to_s.strip.upcase
+    self.business_number = value.presence
   end
 
   def generate_review_token

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_07_10_010802) do
+ActiveRecord::Schema[8.0].define(version: 2026_07_12_221001) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -40,6 +40,27 @@ ActiveRecord::Schema[8.0].define(version: 2026_07_10_010802) do
     t.bigint "blob_id", null: false
     t.string "variation_digest", null: false
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
+  end
+
+  create_table "agency_tasks", force: :cascade do |t|
+    t.bigint "business_id", null: false
+    t.string "source", default: "content_update", null: false
+    t.string "external_id", null: false
+    t.string "business_number"
+    t.string "title", null: false
+    t.text "description"
+    t.string "status", default: "pending", null: false
+    t.string "external_url"
+    t.string "requester_name"
+    t.string "requester_email"
+    t.datetime "requested_at"
+    t.jsonb "raw_payload", default: {}, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["business_id"], name: "index_agency_tasks_on_business_id"
+    t.index ["business_number"], name: "index_agency_tasks_on_business_number"
+    t.index ["source", "external_id"], name: "index_agency_tasks_on_source_and_external_id", unique: true
+    t.index ["status"], name: "index_agency_tasks_on_status"
   end
 
   create_table "business_commission_rates", force: :cascade do |t|
@@ -96,10 +117,6 @@ ActiveRecord::Schema[8.0].define(version: 2026_07_10_010802) do
     t.integer "visit_count", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.boolean "task_source_enabled", default: false, null: false
-    t.string "task_base_url"
-    t.string "task_secret"
-    t.string "task_endpoint_path", default: "/api/developer_tasks", null: false
     t.string "billing_email"
     t.string "stripe_customer_id"
     t.string "stripe_checkout_session_id"
@@ -126,7 +143,9 @@ ActiveRecord::Schema[8.0].define(version: 2026_07_10_010802) do
     t.string "site_api_base_url"
     t.string "site_api_secret"
     t.string "site_external_id"
+    t.string "business_number"
     t.index "lower((phone)::text)", name: "index_businesses_on_lower_phone", unique: true
+    t.index ["business_number"], name: "index_businesses_on_business_number", unique: true
     t.index ["last_invoice_id"], name: "index_businesses_on_last_invoice_id"
     t.index ["next_subscription_invoice_at"], name: "index_businesses_on_next_subscription_invoice_at"
     t.index ["review_token"], name: "index_businesses_on_review_token", unique: true
@@ -495,6 +514,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_07_10_010802) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "agency_tasks", "businesses"
   add_foreign_key "business_commission_rates", "businesses"
   add_foreign_key "business_import_rows", "business_imports"
   add_foreign_key "business_import_rows", "businesses"

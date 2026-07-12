@@ -4,25 +4,11 @@
 %>
 
 <% content_for :page_header do %>
-  <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-    <div>
-      <h1 class="text-2xl font-bold tracking-tight text-slate-900">Tasks</h1>
-      <p class="mt-1 text-sm text-slate-600">
-        Review developer tasks coming from connected businesses and update their status.
-      </p>
-    </div>
-    <%= link_to "Refresh tasks", admin_tasks_path(q: @query.presence, source: @source_filter.presence, status: @status_filter.presence), class: "inline-flex items-center justify-center rounded-md bg-white px-3 py-2.5 text-sm font-semibold text-slate-900 shadow-sm ring-1 ring-inset ring-slate-300 hover:bg-slate-50" %>
-  </div>
-<% end %>
-
-<% if @source_errors.any? %>
-  <div class="mb-6 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-4 shadow-sm">
-    <h2 class="text-sm font-semibold text-amber-900">Some task sources could not be reached</h2>
-    <div class="mt-2 space-y-1 text-sm text-amber-800">
-      <% @source_errors.each do |error| %>
-        <p><%= error %></p>
-      <% end %>
-    </div>
+  <div>
+    <h1 class="text-2xl font-bold tracking-tight text-slate-900">Tasks</h1>
+    <p class="mt-1 text-sm text-slate-600">
+      Content update requests synced from SitePilot.
+    </p>
   </div>
 <% end %>
 
@@ -30,12 +16,7 @@
   <%= form_with url: admin_tasks_path, method: :get, local: true, class: "grid grid-cols-1 gap-4 lg:grid-cols-4 lg:items-end" do |f| %>
     <div class="lg:col-span-2">
       <%= f.label :q, "Search", class: "block text-sm font-medium leading-6 text-slate-900" %>
-      <%= f.text_field :q, value: @query, class: field_class, placeholder: "Search by task title, description, business, or app" %>
-    </div>
-
-    <div>
-      <%= f.label :source, "Source app", class: "block text-sm font-medium leading-6 text-slate-900" %>
-      <%= f.select :source, options_for_select([ [ "All apps", "" ] ] + @task_sources.map { |source| [ source.name, source.key ] }, @source_filter), {}, class: select_class %>
+      <%= f.text_field :q, value: @query, class: field_class, placeholder: "Search by title, description, business number, or requester" %>
     </div>
 
     <div>
@@ -43,9 +24,9 @@
       <%= f.select :status, options_for_select([ [ "All statuses", "" ] ] + @status_options.map { |status| [ status.humanize, status ] }, @status_filter), {}, class: select_class %>
     </div>
 
-    <div class="flex flex-wrap gap-2 lg:col-span-4">
+    <div class="flex flex-wrap gap-2">
       <%= f.submit "Apply filters", class: "rounded-md bg-blue-600 px-3 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-500" %>
-      <% if @query.present? || @source_filter.present? || @status_filter.present? %>
+      <% if @query.present? || @status_filter.present? %>
         <%= link_to "Clear", admin_tasks_path, class: "rounded-md bg-white px-3 py-2.5 text-sm font-semibold text-slate-900 shadow-sm ring-1 ring-inset ring-slate-300 hover:bg-slate-50" %>
       <% end %>
     </div>
@@ -56,69 +37,51 @@
   <% if @tasks.any? %>
     <% @tasks.each do |task| %>
       <article class="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-900/5">
-        <div class="flex flex-col gap-5 xl:flex-row xl:items-start xl:justify-between">
+        <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
           <div class="min-w-0 flex-1">
             <div class="flex flex-wrap items-center gap-2">
               <span class="inline-flex items-center rounded-full bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-700 ring-1 ring-inset ring-slate-200">
-                <%= task.source_name %>
+                Content update
               </span>
-              <span class="inline-flex items-center rounded-full px-2.5 py-1 text-xs font-medium ring-1 ring-inset <%= task.status_classes %>">
-                <%= task.status_label %>
-              </span>
-              <% if task.priority.present? %>
-                <span class="inline-flex items-center rounded-full bg-purple-50 px-2.5 py-1 text-xs font-medium text-purple-700 ring-1 ring-inset ring-purple-200">
-                  Priority: <%= task.priority.to_s.humanize %>
-                </span>
-              <% end %>
+              <%= agency_task_status_badge(task) %>
             </div>
 
-            <div class="mt-3">
-              <h2 class="text-lg font-semibold tracking-tight text-slate-900 break-words">
-                <%= task.title %>
-              </h2>
-              <% if task.description.present? %>
-                <p class="mt-2 text-sm leading-6 text-slate-600 whitespace-pre-wrap break-words">
-                  <%= task.description %>
-                </p>
-              <% end %>
-            </div>
+            <h2 class="mt-3 text-lg font-semibold tracking-tight text-slate-900 break-words">
+              <%= task.title %>
+            </h2>
+
+            <% if task.description.present? %>
+              <p class="mt-2 text-sm leading-6 text-slate-600 whitespace-pre-wrap break-words">
+                <%= task.description %>
+              </p>
+            <% end %>
 
             <div class="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-xs text-slate-500">
-              <span>Task ID: <%= task.id %></span>
-              <% if task.business_name.present? %>
-                <span>Business: <%= task.business_name %></span>
+              <span>External ID: <%= task.external_id %></span>
+              <% if task.business.present? %>
+                <span>
+                  Business:
+                  <%= link_to task.business.name, admin_business_path(task.business), class: "font-medium text-blue-600 hover:text-blue-500" %>
+                </span>
               <% end %>
-              <% if task.assignee.present? %>
-                <span>Assigned to: <%= task.assignee %></span>
+              <% if task.business_number.present? %>
+                <span>Number: <%= task.business_number %></span>
               <% end %>
-              <% if task.created_at.present? %>
-                <span>Created: <%= l(task.created_at, format: :short) %></span>
+              <% if task.requester_name.present? || task.requester_email.present? %>
+                <span>
+                  Requested by:
+                  <%= [ task.requester_name, task.requester_email ].compact_blank.join(" · ") %>
+                </span>
               <% end %>
-              <% if task.updated_at.present? %>
-                <span>Updated: <%= time_ago_in_words(task.updated_at) %> ago</span>
+              <% if task.requested_at.present? %>
+                <span>Requested: <%= l(task.requested_at, format: :short) %></span>
               <% end %>
             </div>
 
             <% if task.external_url.present? %>
               <div class="mt-4">
-                <%= link_to "Open source task", task.external_url, target: "_blank", rel: "noopener", class: "text-sm font-semibold text-blue-600 hover:text-blue-500" %>
+                <%= link_to "Open in SitePilot", task.external_url, target: "_blank", rel: "noopener", class: "text-sm font-semibold text-blue-600 hover:text-blue-500" %>
               </div>
-            <% end %>
-          </div>
-
-          <div class="w-full rounded-2xl bg-slate-50 p-4 ring-1 ring-inset ring-slate-200 xl:w-80">
-            <%= form_with url: admin_task_path(task.id), method: :patch, local: true, class: "space-y-3" do |f| %>
-              <%= hidden_field_tag :source_key, task.source_key %>
-              <%= hidden_field_tag :q, @query %>
-              <%= hidden_field_tag :source_filter, @source_filter %>
-              <%= hidden_field_tag :status_filter, @status_filter %>
-
-              <div>
-                <%= f.label :status, "Update status", class: "block text-sm font-medium leading-6 text-slate-900" %>
-                <%= f.select :status, options_for_select(task.status_options.map { |status| [ status.humanize, status ] }, task.status), {}, class: select_class %>
-              </div>
-
-              <%= f.submit "Save status", class: "w-full rounded-md bg-blue-600 px-3 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-500" %>
             <% end %>
           </div>
         </div>
@@ -126,12 +89,12 @@
     <% end %>
   <% else %>
     <div class="rounded-2xl bg-white px-6 py-12 text-center shadow-sm ring-1 ring-slate-900/5">
-      <h2 class="text-base font-semibold text-slate-900">No tasks found</h2>
+      <h2 class="text-base font-semibold text-slate-900">No tasks yet</h2>
       <p class="mt-2 text-sm text-slate-500">
-        <% if @query.present? || @source_filter.present? || @status_filter.present? %>
-          Try clearing the filters or refresh once the source app is online.
+        <% if @query.present? || @status_filter.present? %>
+          Try clearing the filters.
         <% else %>
-          Tasks will appear here once you enable task sync on a business and point it to an app that exposes the developer task API.
+          When a client submits a content update in SitePilot, it will show up here with details and a link.
         <% end %>
       </p>
     </div>

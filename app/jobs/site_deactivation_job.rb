@@ -14,6 +14,8 @@ class SiteDeactivationJob < ApplicationJob
       subscription_payment_status: "suspended",
       site_deactivated_at: Time.current
     )
+
+    Crm::NotifyBillingJob.perform_later(payment_invoice.id, "site_suspended")
   rescue SiteLifecycle::Client::ConfigurationError => e
     Rails.logger.error("[SiteDeactivationJob] business ##{business_id}: #{e.message}")
     business.update!(subscription_payment_status: "past_due") if business.subscription_payment_status != "suspended"

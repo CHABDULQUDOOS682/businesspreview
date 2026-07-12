@@ -3,6 +3,8 @@
 require "rails_helper"
 
 RSpec.describe SiteDeactivationJob, type: :job do
+  include ActiveJob::TestHelper
+
   let(:business) do
     create(
       :business,
@@ -20,8 +22,19 @@ RSpec.describe SiteDeactivationJob, type: :job do
     allow(SiteLifecycle::Client).to receive(:new).with(business).and_return(client)
   end
 
+  around do |example|
+    original_adapter = ActiveJob::Base.queue_adapter
+    ActiveJob::Base.queue_adapter = :test
+    clear_enqueued_jobs
+    example.run
+  ensure
+    ActiveJob::Base.queue_adapter = original_adapter
+  end
+
   it "deactivates the site and suspends the business" do
-    described_class.perform_now(business.id, payment_invoice.id)
+    expect {
+      described_class.perform_now(business.id, payment_invoice.id)
+    }.to have_enqueued_job(Crm::NotifyBillingJob).with(payment_invoice.id, "site_suspended")
 
     expect(client).to have_received(:deactivate!).with(payment_invoice: payment_invoice)
     expect(business.reload).to have_attributes(

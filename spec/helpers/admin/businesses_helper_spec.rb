@@ -4,8 +4,8 @@ RSpec.describe Admin::BusinessesHelper, type: :helper do
   describe "#business_payment_status_badge" do
     let(:business) { create(:business, subscription: false, subscription_fee: nil) }
 
-    it "returns 'No Invoice' if no invoice exists" do
-      expect(helper.business_payment_status_badge(business)).to include("No Invoice")
+    it "returns 'No invoice' if no invoice exists" do
+      expect(helper.business_payment_status_badge(business)).to include("No invoice")
     end
 
     it "returns a green badge for paid status" do

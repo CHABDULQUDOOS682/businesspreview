@@ -20,7 +20,7 @@ RSpec.describe SiteLifecycle::Client do
     end
 
     it "is false when credentials are missing" do
-      business.update!(site_api_base_url: nil, site_api_secret: nil, task_base_url: nil, task_secret: nil)
+      business.update!(site_api_base_url: nil, site_api_secret: nil)
       expect(described_class.new(business)).not_to be_configured
     end
   end
@@ -36,7 +36,7 @@ RSpec.describe SiteLifecycle::Client do
     end
 
     it "raises when the site api is not configured" do
-      business.update!(site_api_base_url: nil, site_api_secret: nil, task_base_url: nil, task_secret: nil)
+      business.update!(site_api_base_url: nil, site_api_secret: nil)
       expect {
         described_class.new(business).deactivate!(payment_invoice: payment_invoice)
       }.to raise_error(SiteLifecycle::Client::ConfigurationError, /not configured/)

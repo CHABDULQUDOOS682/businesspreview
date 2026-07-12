@@ -17,6 +17,8 @@ module Billing
       when "subscription"
         handle_subscription_fee_paid!(paid_at)
       end
+
+      Crm::NotifyPaymentJob.perform_later(@payment_invoice.id)
     end
 
     def handle_unpaid_state!(status:)
@@ -46,6 +48,7 @@ module Billing
       end
 
       @business.update!(attrs)
+      enqueue_site_reactivation_if_needed!
     end
 
     def handle_subscription_fee_paid!(paid_at)
@@ -56,20 +59,28 @@ module Billing
         last_payment_failed_at: nil
       )
 
-      if @business.site_deactivated_at.present?
-        SiteReactivationJob.perform_later(@business.id, @payment_invoice.id)
-      end
+      enqueue_site_reactivation_if_needed!
+    end
+
+    def enqueue_site_reactivation_if_needed!
+      return if @business.site_deactivated_at.blank?
+
+      SiteReactivationJob.perform_later(@business.id, @payment_invoice.id)
     end
 
     def mark_past_due!
       grace_ends_at = due_at + GRACE_PERIOD
       return if @business.subscription_payment_status == "suspended"
 
+      already_past_due = @business.subscription_payment_status == "past_due"
+
       @business.update!(
         subscription_payment_status: "past_due",
         subscription_grace_ends_at: grace_ends_at,
         last_payment_failed_at: Time.current
       )
+
+      Crm::NotifyBillingJob.perform_later(@payment_invoice.id, "payment_overdue") unless already_past_due
     end
 
     def overdue?
