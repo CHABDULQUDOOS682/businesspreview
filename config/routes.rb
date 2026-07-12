@@ -31,7 +31,7 @@ Rails.application.routes.draw do
   namespace :admin do
     get "dashboard/index"
     root "dashboard#index"
-    resources :tasks, only: [ :index, :update ]
+    resources :tasks, only: [ :index ]
     resources :call_logs, only: [ :index ]
     resources :payment_invoices, only: [ :index ]
     resources :preview_links, only: [ :index, :create, :destroy ]
@@ -107,6 +107,8 @@ Rails.application.routes.draw do
 
   post "webhooks/stripe", to: "stripe_webhooks#create"
   post "webhooks/google_calendar", to: "google_calendar_webhooks#create"
+  post "webhooks/content_updates", to: "content_update_webhooks#create"
+  post "webhooks/sitepilot/connection_status", to: "sitepilot_connection_status#create"
 
 
   get "up" => "rails/health#show", as: :rails_health_check

@@ -64,6 +64,24 @@ RSpec.describe StripePaymentInvoiceService do
         "Email Error: mailer down"
       )
     end
+
+    it "enqueues a CRM invoice_sent billing job for unpaid subscription invoices" do
+      payment_invoice.update!(kind: "subscription", status: "draft")
+      allow(Crm::NotifyBillingJob).to receive(:perform_later)
+
+      service.create_and_send!
+
+      expect(Crm::NotifyBillingJob).to have_received(:perform_later).with(payment_invoice.id, "invoice_sent")
+    end
+
+    it "does not enqueue CRM billing when the subscription invoice is already paid" do
+      payment_invoice.update!(kind: "subscription", status: "paid", paid_at: Time.current)
+      allow(Crm::NotifyBillingJob).to receive(:perform_later)
+
+      service.send(:notify_crm_invoice_sent!)
+
+      expect(Crm::NotifyBillingJob).not_to have_received(:perform_later)
+    end
   end
 
   describe "#stripe_object_value" do

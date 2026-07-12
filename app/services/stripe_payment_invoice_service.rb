@@ -23,6 +23,7 @@ class StripePaymentInvoiceService
     send_email! if payment_invoice.email_delivery?
     send_sms! if payment_invoice.sms_delivery?
     schedule_followup_email!
+    notify_crm_invoice_sent!
     payment_invoice
   rescue ::Stripe::StripeError, ConfigurationError => e
     payment_invoice.update(status: "failed", last_error: e.message)
@@ -30,6 +31,13 @@ class StripePaymentInvoiceService
   end
 
   private
+
+  def notify_crm_invoice_sent!
+    return unless payment_invoice.kind == "subscription"
+    return if payment_invoice.paid?
+
+    Crm::NotifyBillingJob.perform_later(payment_invoice.id, "invoice_sent")
+  end
 
   def ensure_configured!
     raise ConfigurationError, "STRIPE_SECRET_KEY is not configured" if ::Stripe.api_key.blank?

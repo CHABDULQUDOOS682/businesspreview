@@ -1,0 +1,41 @@
+<div class="bg-white px-4 py-5 shadow-sm ring-1 ring-slate-900/5 sm:rounded-xl sm:px-6">
+  <div class="mb-4 flex flex-wrap items-center justify-between gap-2">
+    <div>
+      <h3 class="text-base font-semibold leading-6 text-slate-900">SitePilot connection</h3>
+      <p class="mt-1 text-xs text-slate-500">API link to pause/resume the public site — not payment status.</p>
+    </div>
+    <div class="flex flex-wrap gap-2">
+      <%= sitepilot_connection_badge(business) %>
+      <%= sitepilot_website_control_badge(business) %>
+    </div>
+  </div>
+
+  <dl class="space-y-4 text-sm leading-6">
+    <div class="flex justify-between gap-x-4 border-b border-slate-100 pb-4">
+      <dt class="text-slate-500">Business number</dt>
+      <dd class="text-slate-900 font-medium"><%= business.business_number.presence || "—" %></dd>
+    </div>
+    <div class="flex justify-between gap-x-4 border-b border-slate-100 pb-4">
+      <dt class="text-slate-500">Site external ID</dt>
+      <dd class="text-slate-900 font-medium"><%= business.site_external_id.presence || "—" %></dd>
+    </div>
+    <div class="flex justify-between gap-x-4 border-b border-slate-100 pb-4">
+      <dt class="text-slate-500">Site API base URL</dt>
+      <dd class="text-slate-900 font-medium break-all text-right max-w-[60%]"><%= business.site_api_base_url.presence || "—" %></dd>
+    </div>
+    <div class="flex justify-between gap-x-4 border-b border-slate-100 pb-4">
+      <dt class="text-slate-500">Site API secret</dt>
+      <dd class="text-slate-900 font-medium"><%= business.site_api_secret.present? ? "Configured" : "—" %></dd>
+    </div>
+    <div class="flex justify-between gap-x-4">
+      <dt class="text-slate-500">Last CRM site action</dt>
+      <dd class="text-slate-900 font-medium">
+        <% if business.site_deactivated_at.present? %>
+          Paused <%= l(business.site_deactivated_at, format: :long) %>
+        <% else %>
+          Not paused
+        <% end %>
+      </dd>
+    </div>
+  </dl>
+</div>

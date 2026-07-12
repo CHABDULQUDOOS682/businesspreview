@@ -136,10 +136,7 @@ class Admin::BusinessesController < ApplicationController
                         :subscription_fee,
                         :subscription,
                         :sold_by_id,
-                        :task_source_enabled,
-                        :task_base_url,
-                        :task_secret,
-                        :task_endpoint_path,
+                        :business_number,
                         :site_api_base_url,
                         :site_api_secret,
                         :site_external_id

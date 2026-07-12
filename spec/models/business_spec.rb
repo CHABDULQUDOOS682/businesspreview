@@ -36,12 +36,6 @@ RSpec.describe Business, type: :model do
   end
 
   describe "scopes" do
-    it "filters task sources" do
-      create(:business, task_source_enabled: true, task_base_url: "http://api.com", task_secret: "secret")
-      create(:business, task_source_enabled: false)
-      expect(Business.task_sources.count).to eq(1)
-    end
-
     it "filters nurture pipeline" do
       create(:business, sold_price: nil, subscription_fee: nil)
       expect(Business.nurture_pipeline.count).to eq(1)
@@ -83,14 +77,6 @@ RSpec.describe Business, type: :model do
 
       business.sold_price = nil
       expect(business.business_segment).to eq("nurture")
-    end
-
-    it "returns task source name" do
-      business = build(:business, name: "Acme", website_name: "Acme Web")
-      expect(business.task_source_name).to eq("Acme Web")
-
-      business.website_name = nil
-      expect(business.task_source_name).to eq("Acme")
     end
 
     it "generates a review token before create" do

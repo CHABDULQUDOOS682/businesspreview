@@ -7,6 +7,7 @@ FactoryBot.define do
     business_location { "https://www.google.com/maps/place/Acme+Corp" }
     sequence(:email) { |n| "contact#{n}@acmecorp.com" }
     sequence(:phone) { |n| "+123456789#{n}" }
+    sequence(:business_number) { |n| format("B%06d", n) }
     visit_count { 0 }
     subscription { false }
     sold_price { 500 }

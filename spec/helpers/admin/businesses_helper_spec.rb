@@ -4,8 +4,8 @@ RSpec.describe Admin::BusinessesHelper, type: :helper do
   describe "#business_payment_status_badge" do
     let(:business) { create(:business, subscription: false, subscription_fee: nil) }
 
-    it "returns 'No Invoice' if no invoice exists" do
-      expect(helper.business_payment_status_badge(business)).to include("No Invoice")
+    it "returns 'No invoice' if no invoice exists" do
+      expect(helper.business_payment_status_badge(business)).to include("No invoice")
     end
 
     it "returns a green badge for paid status" do
@@ -66,6 +66,56 @@ RSpec.describe Admin::BusinessesHelper, type: :helper do
         expect(helper.business_payment_status_badge(business)).to include("Suspended")
         expect(helper.business_payment_status_badge(business)).to include("bg-red-50")
       end
+    end
+  end
+
+  describe "#sitepilot_connection_badge" do
+    let(:business) do
+      create(
+        :business,
+        business_number: "B000006",
+        site_external_id: "slug",
+        site_api_base_url: "http://dashboard.lvh.me:3001",
+        site_api_secret: "secret"
+      )
+    end
+
+    it "shows ready when connection fields are present" do
+      expect(helper.sitepilot_connection_badge(business)).to include("Connection ready")
+    end
+
+    it "shows incomplete when connection fields are missing" do
+      business.update!(site_external_id: nil)
+
+      expect(helper.sitepilot_connection_badge(business)).to include("Connection incomplete")
+    end
+  end
+
+  describe "#sitepilot_website_control_badge" do
+    let(:business) do
+      create(
+        :business,
+        business_number: "B000006",
+        site_external_id: "slug",
+        site_api_base_url: "http://dashboard.lvh.me:3001",
+        site_api_secret: "secret"
+      )
+    end
+
+    it "shows paused when site_deactivated_at is set" do
+      business.update!(site_deactivated_at: Time.current)
+
+      expect(helper.sitepilot_website_control_badge(business)).to include("Website paused via CRM")
+    end
+
+    it "shows controllable when linked and not paused" do
+      expect(helper.sitepilot_website_control_badge(business)).to include("Website controllable")
+    end
+
+    it "shows not linked when connection is incomplete" do
+      business.update!(site_api_secret: nil)
+
+      expect(helper.sitepilot_website_control_badge(business)).to include("Not linked")
     end
   end
 

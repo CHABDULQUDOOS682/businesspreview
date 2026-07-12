@@ -20,7 +20,7 @@ RSpec.describe SiteLifecycle::Client do
     end
 
     it "is false when credentials are missing" do
-      business.update!(site_api_base_url: nil, site_api_secret: nil, task_base_url: nil, task_secret: nil)
+      business.update!(site_api_base_url: nil, site_api_secret: nil)
       expect(described_class.new(business)).not_to be_configured
     end
   end
@@ -36,7 +36,7 @@ RSpec.describe SiteLifecycle::Client do
     end
 
     it "raises when the site api is not configured" do
-      business.update!(site_api_base_url: nil, site_api_secret: nil, task_base_url: nil, task_secret: nil)
+      business.update!(site_api_base_url: nil, site_api_secret: nil)
       expect {
         described_class.new(business).deactivate!(payment_invoice: payment_invoice)
       }.to raise_error(SiteLifecycle::Client::ConfigurationError, /not configured/)
@@ -60,6 +60,28 @@ RSpec.describe SiteLifecycle::Client do
 
       response = client.reactivate!(payment_invoice: payment_invoice)
       expect(response).to be_a(Net::HTTPSuccess)
+    end
+  end
+
+  describe "#ping!" do
+    it "posts to the ping endpoint with the site id" do
+      stub_request(:post, "https://sites.example.com/api/site_status/ping")
+        .with(
+          headers: { "X-Site-Api-Secret" => "secret" },
+          body: hash_including("site_id" => "site-123")
+        )
+        .to_return(status: 200, body: { ok: true }.to_json)
+
+      response = client.ping!
+      expect(response).to be_a(Net::HTTPSuccess)
+    end
+
+    it "allows an explicit site_id override" do
+      stub_request(:post, "https://sites.example.com/api/site_status/ping")
+        .with(body: hash_including("site_id" => "custom-id"))
+        .to_return(status: 200, body: "{}")
+
+      expect(client.ping!(site_id: "custom-id")).to be_a(Net::HTTPSuccess)
     end
   end
 end

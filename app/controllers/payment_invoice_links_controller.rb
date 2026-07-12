@@ -7,10 +7,14 @@ class PaymentInvoiceLinksController < ApplicationController
   def show
     @payment_invoice = PaymentInvoice.find_by!(payment_token: params[:token])
 
-    target_url = @payment_invoice.safe_hosted_invoice_url
-
-    if @payment_invoice.payment_link_expired? || target_url.blank?
+    if @payment_invoice.payment_link_expired?
       render :expired, status: :gone
+      return
+    end
+
+    target_url = @payment_invoice.safe_hosted_invoice_url
+    if target_url.blank?
+      render :unavailable, status: :unprocessable_content
       return
     end
 

@@ -32,12 +32,13 @@ RSpec.describe "PaymentInvoiceLinks", type: :request do
       expect(response).to render_template(:expired)
     end
 
-    it "renders expired if hosted_invoice_url is blank" do
+    it "renders unavailable if hosted_invoice_url is blank" do
       payment_invoice.update(hosted_invoice_url: nil)
 
       get payment_invoice_link_path(payment_invoice.payment_token)
 
-      expect(response).to have_http_status(:gone)
+      expect(response).to have_http_status(:unprocessable_content)
+      expect(response).to render_template(:unavailable)
     end
   end
 end

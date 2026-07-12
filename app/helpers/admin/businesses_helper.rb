@@ -28,8 +28,55 @@ module Admin
 
           content_tag(:span, display_status, class: "inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset #{badge_class}")
         else
-          content_tag(:span, "No Invoice", class: "text-slate-400 text-xs")
+          content_tag(:span, "No invoice", class: "inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset bg-slate-50 text-slate-500 ring-slate-500/10")
         end
+      end
+    end
+
+    def sitepilot_connection_configured?(business)
+      business.business_number.present? &&
+        business.site_external_id.present? &&
+        business.site_api_base_url.present? &&
+        business.site_api_secret.present?
+    end
+
+    def sitepilot_connection_badge(business)
+      if sitepilot_connection_configured?(business)
+        content_tag(
+          :span,
+          "Connection ready",
+          class: "inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset bg-emerald-50 text-emerald-700 ring-emerald-600/20"
+        )
+      else
+        content_tag(
+          :span,
+          "Connection incomplete",
+          class: "inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset bg-amber-50 text-amber-800 ring-amber-600/20"
+        )
+      end
+    end
+
+    def sitepilot_website_control_badge(business)
+      if business.site_deactivated_at.present?
+        content_tag(
+          :span,
+          "Website paused via CRM",
+          class: "inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset bg-red-50 text-red-700 ring-red-600/20",
+          title: "site_deactivated_at is set — SitePilot public site should be paused"
+        )
+      elsif sitepilot_connection_configured?(business)
+        content_tag(
+          :span,
+          "Website controllable",
+          class: "inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset bg-slate-50 text-slate-700 ring-slate-500/10",
+          title: "CRM can pause/resume the SitePilot public website"
+        )
+      else
+        content_tag(
+          :span,
+          "Not linked",
+          class: "inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset bg-slate-50 text-slate-500 ring-slate-500/10"
+        )
       end
     end
 

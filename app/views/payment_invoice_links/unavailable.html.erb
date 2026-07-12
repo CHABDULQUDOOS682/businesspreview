@@ -1,0 +1,15 @@
+<section class="min-h-screen bg-slate-950 px-6 py-16 text-white">
+  <div class="mx-auto max-w-xl">
+    <p class="text-sm font-semibold uppercase tracking-[0.2em] text-amber-300">Invoice Not Ready</p>
+    <h1 class="mt-4 text-4xl font-bold tracking-tight">This payment link is not ready yet.</h1>
+    <p class="mt-4 text-base leading-7 text-slate-300">
+      A Stripe hosted invoice URL has not been attached to this invoice yet.
+      Send the invoice from the CRM (Stripe) first, then open this link again.
+    </p>
+    <% if @payment_invoice %>
+      <p class="mt-6 text-sm text-slate-400">
+        Invoice #<%= @payment_invoice.id %> · <%= @payment_invoice.kind_label %> · <%= @payment_invoice.status_label %>
+      </p>
+    <% end %>
+  </div>
+</section>

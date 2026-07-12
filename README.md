@@ -102,10 +102,12 @@ In development, emails open through `letter_opener` unless you set `SMTP_ADDRESS
 Configure Stripe to post invoice events to:
 
 ```text
-https://your-domain.com/stripe/webhooks
+https://your-ngrok-or-domain/webhooks/stripe
 ```
 
-Important events include invoice finalized/sent, paid, failed, voided, and marked uncollectible.
+Example local: `https://chieko-hydrazo-thurman.ngrok-free.dev/webhooks/stripe`
+
+Important events: `invoice.paid`, `invoice.payment_succeeded`, `invoice.payment_failed`, `invoice.finalized`, `invoice.updated`, `invoice.voided`, `invoice.marked_uncollectible`.
 
 ## Tests
 
@@ -118,7 +120,7 @@ bundle exec rspec
 Run focused service specs:
 
 ```bash
-bundle exec rspec spec/services/stripe_payment_invoice_service_spec.rb spec/services/developer_tasks/client_spec.rb
+bundle exec rspec spec/services/stripe_payment_invoice_service_spec.rb
 ```
 
 SimpleCov writes coverage output to `coverage/index.html`.

@@ -41,7 +41,12 @@ class StripeWebhooksController < ApplicationController
     when "invoice.finalized", "invoice.sent"
       update_invoice(event.data.object, status: "invoice_sent")
     when "invoice.updated"
-      update_invoice(event.data.object)
+      stripe_invoice = event.data.object
+      if stripe_value(stripe_invoice, :status).to_s == "paid"
+        update_paid_invoice(stripe_invoice)
+      else
+        update_invoice(stripe_invoice)
+      end
     end
   end
 
@@ -68,7 +73,15 @@ class StripeWebhooksController < ApplicationController
 
   def update_paid_invoice(stripe_invoice)
     payment_invoice = find_or_build_payment_invoice(stripe_invoice)
-    return if payment_invoice.blank?
+    if payment_invoice.blank?
+      Rails.logger.warn(
+        "[StripeWebhooks] paid event for #{stripe_value(stripe_invoice, :id)} " \
+        "could not be matched to a local PaymentInvoice " \
+        "(metadata business_id=#{stripe_metadata_value(stripe_invoice, :business_id).inspect} " \
+        "payment_invoice_id=#{stripe_metadata_value(stripe_invoice, :payment_invoice_id).inspect})"
+      )
+      return
+    end
 
     full_invoice = retrieve_invoice_for_receipt(stripe_invoice)
     receipt_url = receipt_url_for(full_invoice)
@@ -85,8 +98,18 @@ class StripeWebhooksController < ApplicationController
   end
 
   def find_or_build_payment_invoice(stripe_invoice)
-    payment_invoice = PaymentInvoice.find_by(stripe_invoice_id: stripe_invoice.id)
+    stripe_id = stripe_value(stripe_invoice, :id)
+    payment_invoice = PaymentInvoice.find_by(stripe_invoice_id: stripe_id)
     return payment_invoice if payment_invoice.present?
+
+    payment_invoice_id = stripe_metadata_value(stripe_invoice, :payment_invoice_id)
+    if payment_invoice_id.present?
+      by_id = PaymentInvoice.find_by(id: payment_invoice_id)
+      if by_id
+        by_id.update!(stripe_invoice_id: stripe_id) if by_id.stripe_invoice_id.blank?
+        return by_id
+      end
+    end
 
     business_id = stripe_metadata_value(stripe_invoice, :business_id)
     return nil if business_id.blank?
@@ -94,7 +117,7 @@ class StripeWebhooksController < ApplicationController
     business = Business.find_by(id: business_id)
     return nil if business.blank?
 
-    PaymentInvoice.find_by(stripe_invoice_id: stripe_invoice.id, business_id: business.id)
+    PaymentInvoice.find_by(stripe_invoice_id: stripe_id, business_id: business.id)
   end
 
   def stripe_metadata_value(stripe_invoice, key)
