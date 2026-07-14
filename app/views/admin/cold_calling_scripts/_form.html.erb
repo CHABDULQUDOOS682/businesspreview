@@ -1,0 +1,35 @@
+<% field_class = "mt-1 block w-full rounded-lg border-0 px-3 py-2.5 text-slate-900 shadow-sm ring-1 ring-inset ring-slate-300 placeholder:text-slate-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" %>
+
+<%= form_with model: script, url: script.persisted? ? admin_cold_calling_script_path(script) : admin_cold_calling_scripts_path, class: "space-y-5" do |f| %>
+  <% if script.errors.any? %>
+    <div class="rounded-lg bg-red-50 p-3 text-sm text-red-700 ring-1 ring-inset ring-red-200">
+      <%= script.errors.full_messages.to_sentence %>
+    </div>
+  <% end %>
+
+  <div>
+    <%= f.label :title, class: "block text-sm font-medium leading-6 text-slate-900" %>
+    <%= f.text_field :title, class: field_class, required: true, placeholder: "e.g. Intro cold call" %>
+  </div>
+
+  <div>
+    <%= f.label :category, class: "block text-sm font-medium leading-6 text-slate-900" %>
+    <%= f.text_field :category, class: field_class, placeholder: "e.g. Opening, Objection handling, Closing" %>
+  </div>
+
+  <div>
+    <%= f.label :body, "Script", class: "block text-sm font-medium leading-6 text-slate-900" %>
+    <%= f.text_area :body, rows: 14, class: field_class, required: true, placeholder: "Write the script exactly as it should be spoken..." %>
+  </div>
+
+  <div class="flex items-center gap-2">
+    <%= f.check_box :active, class: "h-4 w-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-600" %>
+    <%= f.label :active, "Active (visible to employees)", class: "text-sm font-medium text-slate-900" %>
+  </div>
+
+  <div class="flex items-center gap-3 pt-1">
+    <%= f.submit script.persisted? ? "Update Script" : "Create Script",
+                 class: "inline-flex items-center justify-center rounded-md bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500" %>
+    <%= link_to "Cancel", admin_cold_calling_scripts_path, class: "text-sm font-semibold text-slate-600 hover:text-slate-900" %>
+  </div>
+<% end %>

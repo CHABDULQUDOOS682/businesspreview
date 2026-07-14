@@ -62,4 +62,10 @@ class ApplicationController < ActionController::Base
 
     redirect_to admin_root_path, alert: "You do not have permission to access that page."
   end
+
+  def require_admin_or_super_admin!
+    return if super_admin? || admin_role?
+
+    redirect_to admin_root_path, alert: "You do not have permission to access that page."
+  end
 end

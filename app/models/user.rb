@@ -5,8 +5,10 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable
 
   has_many :notes, dependent: :nullify
+  has_many :cold_calling_scripts, foreign_key: :created_by_id, dependent: :nullify, inverse_of: :created_by
   has_many :commissions, dependent: :nullify
   has_many :meetings, dependent: :destroy
+  has_many :availability_rules, dependent: :destroy
   has_many :feedbacks, dependent: :destroy
   has_many :employee_commission_rates, dependent: :destroy
   has_many :businesses_sold, class_name: "Business", foreign_key: :sold_by_id, dependent: :nullify

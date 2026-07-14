@@ -353,6 +353,12 @@ RSpec.describe "Admin::Businesses", type: :request do
   end
 
   describe "POST /admin/businesses/:id/send_review_link" do
+    around do |example|
+      original_adapter = ActiveJob::Base.queue_adapter
+      ActiveJob::Base.queue_adapter = :test
+      example.run
+      ActiveJob::Base.queue_adapter = original_adapter
+    end
     context "with email delivery method" do
       context "when business has an email" do
         it "sends an email and redirects" do
@@ -417,6 +423,15 @@ RSpec.describe "Admin::Businesses", type: :request do
         post send_review_link_admin_business_path(business), params: { delivery_method: 'carrier_pigeon' }
         expect(response).to redirect_to(admin_business_path(business))
         expect(flash[:alert]).to eq("Invalid delivery method.")
+      end
+    end
+
+    context "when logged in as an employee" do
+      before { sign_in employee }
+
+      it "redirects employees away from send_review_link" do
+        post send_review_link_admin_business_path(business), params: { delivery_method: "email" }
+        expect(response).to redirect_to(admin_root_path)
       end
     end
   end

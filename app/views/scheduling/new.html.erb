@@ -1,0 +1,83 @@
+<% content_for :title, "Schedule a Call | DevDeBizz" %>
+
+<%= render "home_pages/page_header",
+  eyebrow: "Book a Discovery Call",
+  title_html: 'Let&apos;s map out your <br><span class="home-display-accent">growth system.</span>'.html_safe,
+  subtitle: "Choose a time that works for you, fill in your details, and we'll send over a Google Meet invite instantly." %>
+
+<section class="py-12 sm:py-16 md:py-20">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 min-w-0 w-full">
+    <%= form_with url: schedule_bookings_path, method: :post, local: true, id: "booking-form", data: { controller: "slot-picker", action: "submit->slot-picker#validate" }, class: "home-card-3d relative overflow-hidden rounded-[32px] border border-[#081849]/10 bg-white/70 p-5 sm:p-8 shadow-[0_18px_45px_rgba(8,24,73,0.06)] md:p-10 w-full" do |f| %>
+      <div class="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-[#5F3475]/10"></div>
+      <div class="absolute -left-20 -bottom-20 h-64 w-64 rounded-full bg-[#213885]/10"></div>
+
+      <div class="relative grid gap-8 lg:grid-cols-5 w-full min-w-0">
+        <!-- Left Column: Lead Info Form -->
+        <div class="lg:col-span-2 min-w-0 w-full space-y-5">
+          <h3 class="text-xl font-bold text-[#081849]">Your Details</h3>
+          
+          <label class="block">
+            <span class="mb-2 block text-xs font-bold uppercase tracking-[0.18em] text-[#213885]">Full Name</span>
+            <%= f.text_field :name, class: "home-input", placeholder: "Jane Doe", required: true %>
+          </label>
+
+          <label class="block">
+            <span class="mb-2 block text-xs font-bold uppercase tracking-[0.18em] text-[#213885]">Work Email</span>
+            <%= f.email_field :email, class: "home-input", placeholder: "you@company.com", required: true %>
+          </label>
+
+          <label class="block">
+            <span class="mb-2 block text-xs font-bold uppercase tracking-[0.18em] text-[#213885]">Phone Number</span>
+            <%= f.telephone_field :phone, class: "home-input", placeholder: "+1 (555) 000-0000", required: true %>
+          </label>
+
+          <label class="block">
+            <span class="mb-2 block text-xs font-bold uppercase tracking-[0.18em] text-[#213885]">Company</span>
+            <%= f.text_field :company, class: "home-input", placeholder: "Acme Inc." %>
+          </label>
+
+          <label class="block">
+            <span class="mb-2 block text-xs font-bold uppercase tracking-[0.18em] text-[#213885]">Goals / Message</span>
+            <%= f.text_area :message, class: "home-input", placeholder: "Tell us about your business goals, target timeline, or what you'd like to discuss…", rows: 4 %>
+          </label>
+        </div>
+
+        <!-- Right Column: Date & Slot Picker + Submit Button -->
+        <div class="lg:col-span-3 min-w-0 w-full space-y-6 lg:border-l lg:border-[#081849]/10 lg:pl-8 flex flex-col justify-between">
+          <div class="space-y-6">
+            <div>
+              <h3 class="text-xl font-bold text-[#081849]">Select Date & Time</h3>
+              <p class="mt-2 text-sm text-[#081849]/65">Choose a day and then pick one of the available times.</p>
+            </div>
+
+            <!-- Date Navigation -->
+            <div class="flex gap-2 overflow-x-auto pb-2 scrollbar-thin min-w-0 w-full">
+              <% bookable_dates.each do |date| %>
+                <%= link_to schedule_slots_path(date: date),
+                      data: { turbo_frame: "slot_list", action: "click->slot-picker#selectDate" },
+                      class: "date-link shrink-0 rounded-xl px-4 py-3 text-center transition-all duration-200 #{date == @selected_date ? 'bg-[#213885] text-white shadow-lg shadow-[#213885]/20' : 'bg-[#081849]/5 text-[#081849] hover:bg-[#081849]/10'}" do %>
+                  <span class="block text-xs uppercase opacity-75 font-semibold"><%= date.strftime("%a") %></span>
+                  <span class="block text-lg font-bold"><%= date.strftime("%-d") %></span>
+                <% end %>
+              <% end %>
+            </div>
+
+            <!-- Slots List in Turbo Frame -->
+            <%= turbo_frame_tag "slot_list", class: "block min-h-[220px] w-full" do %>
+              <%= render "scheduling/slots", date: @selected_date, slots: @slots %>
+            <% end %>
+          </div>
+
+          <%= hidden_field_tag :starts_at, "", data: { slot_picker_target: "input" } %>
+
+          <div class="pt-4">
+            <button type="submit" class="group relative w-full overflow-hidden rounded-full bg-[#213885] px-6 py-4 text-sm font-bold text-[#ECDFD2] shadow-2xl shadow-[#213885]/30 transition hover:scale-[1.02] cursor-pointer">
+              <span class="relative z-10">Confirm Booking →</span>
+              <span class="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-[#081849]/45 to-transparent transition-transform duration-700 group-hover:translate-x-full"></span>
+            </button>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</section>

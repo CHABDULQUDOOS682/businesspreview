@@ -1,0 +1,95 @@
+<%
+  field_class = "mt-1 block w-full rounded-lg border-0 px-3 py-2.5 text-slate-900 shadow-sm ring-1 ring-inset ring-slate-300 placeholder:text-slate-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+  select_class = "mt-1 block w-full rounded-lg border-0 px-3 py-2.5 text-slate-900 shadow-sm ring-1 ring-inset ring-slate-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+%>
+
+<% content_for :page_header do %>
+  <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+    <div>
+      <h1 class="text-2xl font-bold tracking-tight text-slate-900">Cold Calling Scripts</h1>
+      <p class="mt-1 text-sm text-slate-600">
+        <%= can_manage_scripts? ? "Create and manage scripts for the team to use on calls." : "Read scripts during calls — ask an admin if something needs updating." %>
+      </p>
+    </div>
+    <% if can_manage_scripts? %>
+      <%= link_to "New Script",
+                  new_admin_cold_calling_script_path,
+                  class: "inline-flex items-center justify-center rounded-md bg-indigo-600 px-3 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500" %>
+    <% end %>
+  </div>
+<% end %>
+
+<div class="mb-6 rounded-xl bg-white px-4 py-4 shadow-sm ring-1 ring-slate-900/5 sm:px-6">
+  <%= form_with url: admin_cold_calling_scripts_path, method: :get, local: true, class: "grid grid-cols-1 gap-4 lg:grid-cols-4 lg:items-end" do |f| %>
+    <div class="lg:col-span-2">
+      <%= f.label :q, "Search", class: "block text-sm font-medium leading-6 text-slate-900" %>
+      <%= f.text_field :q, value: params[:q], class: field_class, placeholder: "Search by title or script body" %>
+    </div>
+
+    <div>
+      <%= f.label :category, "Category", class: "block text-sm font-medium leading-6 text-slate-900" %>
+      <%= f.select :category,
+            options_for_select([["All categories", ""]] + @categories.map { |c| [c, c] }, params[:category]),
+            {},
+            class: select_class %>
+    </div>
+
+    <div class="flex flex-wrap gap-2">
+      <%= f.submit "Apply filters", class: "rounded-md bg-indigo-600 px-3 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500" %>
+      <% if params[:q].present? || params[:category].present? %>
+        <%= link_to "Clear", admin_cold_calling_scripts_path, class: "rounded-md bg-white px-3 py-2.5 text-sm font-semibold text-slate-900 shadow-sm ring-1 ring-inset ring-slate-300 hover:bg-slate-50" %>
+      <% end %>
+    </div>
+  <% end %>
+</div>
+
+<div class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-slate-900/5">
+  <ul class="divide-y divide-slate-100">
+    <% if @scripts.any? %>
+      <% @scripts.each do |script| %>
+        <li class="px-4 py-4 sm:px-6">
+          <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+            <div class="min-w-0 flex-1">
+              <div class="flex flex-wrap items-center gap-2">
+                <%= link_to script.title, admin_cold_calling_script_path(script), class: "text-base font-semibold text-slate-900 hover:text-indigo-600" %>
+                <% if script.category.present? %>
+                  <span class="inline-flex items-center rounded-md bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-700 ring-1 ring-inset ring-slate-200">
+                    <%= script.category %>
+                  </span>
+                <% end %>
+                <% if can_manage_scripts? && !script.active? %>
+                  <span class="inline-flex items-center rounded-md bg-amber-50 px-2 py-0.5 text-xs font-medium text-amber-800 ring-1 ring-inset ring-amber-200">
+                    Archived
+                  </span>
+                <% end %>
+              </div>
+              <p class="mt-1 text-sm text-slate-600"><%= truncate(script.body, length: 140) %></p>
+            </div>
+
+            <div class="flex shrink-0 flex-wrap items-center gap-3 text-sm">
+              <%= link_to "Read", admin_cold_calling_script_path(script), class: "font-semibold text-indigo-600 hover:text-indigo-500" %>
+              <% if can_manage_scripts? %>
+                <%= link_to "Edit", edit_admin_cold_calling_script_path(script), class: "font-semibold text-slate-700 hover:text-slate-900" %>
+                <%= button_to "Delete",
+                              admin_cold_calling_script_path(script),
+                              method: :delete,
+                              data: { turbo_confirm: "Delete this script?" },
+                              class: "font-semibold text-red-600 hover:text-red-900 bg-transparent border-0 p-0 cursor-pointer" %>
+              <% end %>
+            </div>
+          </div>
+        </li>
+      <% end %>
+    <% else %>
+      <li class="px-4 py-10 text-center text-sm text-slate-500 sm:px-6">
+        No scripts found.
+      </li>
+    <% end %>
+  </ul>
+</div>
+
+<% if @pagy.pages > 1 %>
+  <div class="mt-6">
+    <%== pagy_nav(@pagy) %>
+  </div>
+<% end %>

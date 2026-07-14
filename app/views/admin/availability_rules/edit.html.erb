@@ -1,0 +1,50 @@
+<% content_for :page_header do %>
+  <div>
+    <h1 class="text-2xl font-bold tracking-tight text-slate-900">Manage Availability</h1>
+    <p class="mt-1 text-sm text-slate-600">Company-wide hours used by public /schedule and all dashboard meeting forms. Owner: <%= @owner.email %>.</p>
+  </div>
+<% end %>
+
+<div class="mx-auto max-w-4xl rounded-xl bg-white px-4 py-6 shadow-sm ring-1 ring-slate-900/5 sm:px-6">
+  <%= form_with url: admin_availability_rules_path, method: :put, local: true, class: "space-y-6" do %>
+    <div class="overflow-x-auto">
+      <table class="min-w-full divide-y divide-slate-200">
+        <thead>
+          <tr>
+            <th scope="col" class="px-4 py-3.5 text-left text-sm font-semibold text-slate-900">Day</th>
+            <th scope="col" class="px-4 py-3.5 class text-left text-sm font-semibold text-slate-900">Enabled</th>
+            <th scope="col" class="px-4 py-3.5 class text-left text-sm font-semibold text-slate-900">Start Time</th>
+            <th scope="col" class="px-4 py-3.5 class text-left text-sm font-semibold text-slate-900">End Time</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-100 bg-white">
+          <% Admin::AvailabilityRulesController::DAY_NAMES.each_with_index do |day_name, wday| %>
+            <% rule = @rules_by_day[wday] %>
+            <% enabled = rule.present? %>
+            <% start_val = rule ? (Time.current.beginning_of_day + rule.start_minute.minutes).strftime("%H:%M") : "09:00" %>
+            <% end_val = rule ? (Time.current.beginning_of_day + rule.end_minute.minutes).strftime("%H:%M") : "17:00" %>
+            <tr>
+              <td class="whitespace-nowrap px-4 py-4 text-sm font-medium text-slate-900">
+                <%= day_name %>
+              </td>
+              <td class="whitespace-nowrap px-4 py-4 text-sm text-slate-500">
+                <%= hidden_field_tag "days[#{wday}][enabled]", "0" %>
+                <%= check_box_tag "days[#{wday}][enabled]", "1", enabled, class: "h-4 w-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-600" %>
+              </td>
+              <td class="whitespace-nowrap px-4 py-4 text-sm text-slate-500">
+                <%= time_field_tag "days[#{wday}][start_time]", start_val, class: "block w-full rounded-md border-0 py-1.5 text-slate-900 shadow-sm ring-1 ring-inset ring-slate-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" %>
+              </td>
+              <td class="whitespace-nowrap px-4 py-4 text-sm text-slate-500">
+                <%= time_field_tag "days[#{wday}][end_time]", end_val, class: "block w-full rounded-md border-0 py-1.5 text-slate-900 shadow-sm ring-1 ring-inset ring-slate-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="flex items-center justify-end gap-x-6 border-t border-slate-900/10 pt-6">
+      <%= submit_tag "Save Availability", class: "rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 cursor-pointer" %>
+    </div>
+  <% end %>
+</div>

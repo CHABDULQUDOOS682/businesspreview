@@ -22,6 +22,11 @@ Rails.application.routes.draw do
   get "gdpr", to: "home_pages#gdpr"
   get "accessibility", to: "home_pages#accessibility"
 
+  get "schedule", to: "scheduling#new", as: :schedule
+  get "schedule/slots", to: "scheduling#slots", as: :schedule_slots
+  post "schedule", to: "scheduling#create", as: :schedule_bookings
+  get "schedule/confirmation/:token", to: "scheduling#confirmation", as: :schedule_confirmation
+
   get "landing_pages/show"
   get "/lp/:uuid", to: "landing_pages#show", as: :landing_page
   get "/pay/:token", to: "payment_invoice_links#show", as: :payment_invoice_link
@@ -42,11 +47,16 @@ Rails.application.routes.draw do
       end
     end
     resources :notes, only: [ :index, :create, :edit, :update, :destroy ]
+    resources :cold_calling_scripts
     resources :meetings, except: [ :show, :destroy ] do
+      collection do
+        get :slots
+      end
       member do
         patch :cancel
       end
     end
+    resource :availability_rules, only: [ :edit, :update ]
     resources :feedbacks do
       member do
         patch :resolve

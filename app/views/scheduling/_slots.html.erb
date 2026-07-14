@@ -1,0 +1,21 @@
+<%= turbo_frame_tag "slot_list" do %>
+  <p class="text-xs uppercase tracking-[0.18em] text-[#213885] font-bold mb-4">Available times for <%= date.strftime("%B %-d, %Y") %></p>
+  <% if slots.empty? %>
+    <div class="text-center py-8">
+      <i class="fa-regular fa-calendar-xmark text-3xl text-[#081849]/30 mb-3 block"></i>
+      <p class="text-sm text-[#081849]/60 font-medium">No open times on this day. Please try another date.</p>
+    </div>
+  <% else %>
+    <div class="grid grid-cols-2 gap-3 sm:grid-cols-3">
+      <% slots.each do |slot| %>
+        <button type="button"
+                data-action="slot-picker#choose"
+                data-slot-picker-value-param="<%= slot.iso8601 %>"
+                data-slot-option
+                class="rounded-xl border border-[#213885]/20 bg-white/50 px-3 py-3 text-sm font-semibold text-[#081849] hover:bg-[#213885]/10 hover:border-[#213885]/40 transition-all duration-200">
+          <%= slot.strftime("%-l:%M %p") %>
+        </button>
+      <% end %>
+    </div>
+  <% end %>
+<% end %>
