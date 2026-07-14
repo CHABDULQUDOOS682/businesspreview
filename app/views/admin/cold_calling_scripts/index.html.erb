@@ -63,7 +63,7 @@
                   </span>
                 <% end %>
               </div>
-              <p class="mt-1 text-sm text-slate-600"><%= truncate(script.body, length: 140) %></p>
+              <p class="mt-1 text-sm text-slate-600"><%= truncate(script.body.to_plain_text, length: 140) %></p>
             </div>
 
             <div class="flex shrink-0 flex-wrap items-center gap-3 text-sm">

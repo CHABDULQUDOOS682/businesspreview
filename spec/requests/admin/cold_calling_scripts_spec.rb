@@ -23,8 +23,8 @@ RSpec.describe "Admin::ColdCallingScripts", type: :request do
       get admin_cold_calling_script_path(active_script)
 
       expect(response).to have_http_status(:ok)
-      expect(response.body).to include(active_script.body)
-      expect(response.body).not_to include("Edit")
+      expect(response.body).to include(active_script.body.to_plain_text)
+      expect(response.body).not_to include(edit_admin_cold_calling_script_path(active_script))
     end
 
     it "blocks show for archived scripts" do

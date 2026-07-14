@@ -5,13 +5,16 @@ class Admin::ColdCallingScriptsController < ApplicationController
   before_action :set_script, only: %i[show edit update destroy]
 
   def index
-    scope = ColdCallingScript.alphabetical
+    scope = ColdCallingScript.with_rich_body.alphabetical
     scope = scope.active unless can_manage_scripts?
     scope = scope.by_category(params[:category])
 
     if params[:q].present?
       q = "%#{params[:q]}%"
-      scope = scope.where("title ILIKE :q OR body ILIKE :q", q: q)
+      scope = scope.left_joins(:rich_text_body).where(
+        "cold_calling_scripts.title ILIKE :q OR action_text_rich_texts.body ILIKE :q",
+        q: q
+      )
     end
 
     category_scope = can_manage_scripts? ? ColdCallingScript.all : ColdCallingScript.active
