@@ -12,7 +12,9 @@ module Admin::SidebarHelper
     call_logs: :orange,
     preview_links: :indigo,
     notes: :indigo,
+    cold_calling_scripts: :green,
     meetings: :blue,
+    availability_rules: :blue,
     feedbacks: :purple,
     import_reports: :blue,
     jobs: :blue
@@ -144,8 +146,12 @@ module Admin::SidebarHelper
         '<path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" stroke-linecap="round" stroke-linejoin="round" /><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" stroke-linecap="round" stroke-linejoin="round" />'
       when :notes
         '<path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2m-6 9h4m-4 4h6" stroke-linecap="round" stroke-linejoin="round" />'
+      when :cold_calling_scripts
+        '<path d="M2 3h6.5l2 5-2.5 1.5a11 11 0 0 0 5 5L14.5 12l5 2V20a2 2 0 0 1-2 2A17 17 0 0 1 2 5a2 2 0 0 1 2-2h-2Z" stroke-linecap="round" stroke-linejoin="round" />'
       when :meetings
         '<path d="M8 3v3m8-3v3M4 9h16M5 5h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Z" stroke-linecap="round" stroke-linejoin="round" />'
+      when :availability_rules
+        '<path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" />'
       when :feedbacks
         '<path d="M7 8h10M7 12h6m-6 4h8M5 4h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z" stroke-linecap="round" stroke-linejoin="round" />'
       when :import_reports

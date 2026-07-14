@@ -1,6 +1,7 @@
 class Admin::BusinessesController < ApplicationController
   layout "admin"
   before_action :require_super_admin!, only: [ :import ]
+  before_action :require_admin_or_super_admin!, only: [ :send_review_link ]
   before_action :set_seller_options, only: [ :new, :create, :edit, :update ]
 
   def index

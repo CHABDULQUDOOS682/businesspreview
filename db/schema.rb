@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_07_12_221001) do
+ActiveRecord::Schema[8.0].define(version: 2026_07_14_195434) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -61,6 +61,18 @@ ActiveRecord::Schema[8.0].define(version: 2026_07_12_221001) do
     t.index ["business_number"], name: "index_agency_tasks_on_business_number"
     t.index ["source", "external_id"], name: "index_agency_tasks_on_source_and_external_id", unique: true
     t.index ["status"], name: "index_agency_tasks_on_status"
+  end
+
+  create_table "availability_rules", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.integer "day_of_week", null: false
+    t.integer "start_minute", null: false
+    t.integer "end_minute", null: false
+    t.boolean "active", default: true, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id", "day_of_week"], name: "index_availability_rules_on_user_id_and_day_of_week"
+    t.index ["user_id"], name: "index_availability_rules_on_user_id"
   end
 
   create_table "business_commission_rates", force: :cascade do |t|
@@ -173,6 +185,19 @@ ActiveRecord::Schema[8.0].define(version: 2026_07_12_221001) do
     t.index ["twilio_call_sid"], name: "index_call_logs_on_twilio_call_sid", unique: true, where: "(twilio_call_sid IS NOT NULL)"
   end
 
+  create_table "cold_calling_scripts", force: :cascade do |t|
+    t.string "title", null: false
+    t.text "body", null: false
+    t.string "category"
+    t.boolean "active", default: true, null: false
+    t.bigint "created_by_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["active"], name: "index_cold_calling_scripts_on_active"
+    t.index ["category"], name: "index_cold_calling_scripts_on_category"
+    t.index ["created_by_id"], name: "index_cold_calling_scripts_on_created_by_id"
+  end
+
   create_table "commission_rates", force: :cascade do |t|
     t.string "kind", null: false
     t.integer "month_number"
@@ -268,9 +293,11 @@ ActiveRecord::Schema[8.0].define(version: 2026_07_12_221001) do
     t.string "status", default: "scheduled", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "public_token"
     t.index ["business_id", "starts_at"], name: "index_meetings_on_business_id_and_starts_at"
     t.index ["business_id"], name: "index_meetings_on_business_id"
     t.index ["google_event_id"], name: "index_meetings_on_google_event_id", unique: true, where: "(google_event_id IS NOT NULL)"
+    t.index ["public_token"], name: "index_meetings_on_public_token", unique: true
     t.index ["starts_at"], name: "index_meetings_on_starts_at"
     t.index ["status"], name: "index_meetings_on_status"
     t.index ["user_id", "starts_at"], name: "index_meetings_on_user_id_and_starts_at"
@@ -515,12 +542,14 @@ ActiveRecord::Schema[8.0].define(version: 2026_07_12_221001) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "agency_tasks", "businesses"
+  add_foreign_key "availability_rules", "users"
   add_foreign_key "business_commission_rates", "businesses"
   add_foreign_key "business_import_rows", "business_imports"
   add_foreign_key "business_import_rows", "businesses"
   add_foreign_key "business_imports", "users", column: "imported_by_id"
   add_foreign_key "businesses", "users", column: "sold_by_id"
   add_foreign_key "call_logs", "businesses"
+  add_foreign_key "cold_calling_scripts", "users", column: "created_by_id"
   add_foreign_key "commissions", "businesses"
   add_foreign_key "commissions", "payment_invoices"
   add_foreign_key "commissions", "users"

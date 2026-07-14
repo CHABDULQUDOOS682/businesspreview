@@ -1,0 +1,42 @@
+<% content_for :page_header do %>
+  <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+    <div class="min-w-0">
+      <div class="flex flex-wrap items-center gap-2">
+        <h1 class="text-2xl font-bold tracking-tight text-slate-900"><%= @script.title %></h1>
+        <% if @script.category.present? %>
+          <span class="inline-flex items-center rounded-md bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-700 ring-1 ring-inset ring-slate-200">
+            <%= @script.category %>
+          </span>
+        <% end %>
+        <% if can_manage_scripts? && !@script.active? %>
+          <span class="inline-flex items-center rounded-md bg-amber-50 px-2 py-0.5 text-xs font-medium text-amber-800 ring-1 ring-inset ring-amber-200">
+            Archived
+          </span>
+        <% end %>
+      </div>
+      <p class="mt-1 text-sm text-slate-600">Read this aloud during the call. Keep it open while you dial.</p>
+    </div>
+
+    <div class="flex flex-wrap items-center gap-2">
+      <%= link_to "Back to scripts",
+                  admin_cold_calling_scripts_path,
+                  class: "inline-flex items-center justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-slate-900 shadow-sm ring-1 ring-inset ring-slate-300 hover:bg-slate-50" %>
+      <% if can_manage_scripts? %>
+        <%= link_to "Edit",
+                    edit_admin_cold_calling_script_path(@script),
+                    class: "inline-flex items-center justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500" %>
+        <%= button_to "Delete",
+                      admin_cold_calling_script_path(@script),
+                      method: :delete,
+                      data: { turbo_confirm: "Delete this script?" },
+                      class: "inline-flex items-center justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500" %>
+      <% end %>
+    </div>
+  </div>
+<% end %>
+
+<div class="mx-auto max-w-3xl rounded-xl bg-white px-5 py-8 shadow-sm ring-1 ring-slate-900/5 sm:px-8">
+  <div class="text-base leading-relaxed text-slate-800">
+    <%= simple_format(@script.body) %>
+  </div>
+</div>

@@ -3,14 +3,24 @@
 <% compact = local_assigns.fetch(:compact, false) %>
 <% businesses = local_assigns.fetch(:businesses, Business.order(:name)) %>
 <% form_url = local_assigns.fetch(:form_url, admin_meetings_path) %>
+<% slot_date = local_assigns.fetch(:slot_date, @slot_date || (meeting.starts_at || Time.current).to_date) %>
+<% slot_duration = local_assigns.fetch(:slot_duration, @slot_duration || meeting.duration_minutes || Meeting::DEFAULT_DURATION_MINUTES) %>
+<% slot_excluding_id = local_assigns.fetch(:slot_excluding_id, @slot_excluding_id) %>
+<% slot_selected = local_assigns.fetch(:slot_selected, @slot_selected) %>
+<% available_slots = local_assigns.fetch(:available_slots, @available_slots || []) %>
 
 <div <%= tag.attributes(
   data: {
-    controller: "meeting-schedule",
-    meeting_schedule_businesses_value: meeting_businesses_hash(businesses)
+    controller: "meeting-schedule slot-picker",
+    meeting_schedule_businesses_value: meeting_businesses_hash(businesses),
+    meeting_schedule_slots_url_value: slots_admin_meetings_path,
+    meeting_schedule_excluding_id_value: slot_excluding_id.to_s,
+    slot_picker_selected_class: "bg-indigo-600 text-white ring-indigo-600",
+    slot_picker_idle_class: "bg-white text-slate-900 ring-slate-300"
   }
 ) %>>
-  <%= form_with model: meeting, url: form_url, scope: :meeting, class: "space-y-4" do |f| %>
+  <%= form_with model: meeting, url: form_url, scope: :meeting, class: "space-y-4",
+                data: { action: "submit->slot-picker#validate" } do |f| %>
     <% if meeting.errors.any? %>
       <div class="rounded-lg bg-red-50 p-3 text-sm text-red-700 ring-1 ring-inset ring-red-200">
         <%= meeting.errors.full_messages.to_sentence %>
@@ -26,15 +36,16 @@
             data: { meeting_schedule_target: "businessSelect", action: "change->meeting-schedule#fillBusiness" } %>
     </div>
 
-    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-      <div>
-        <%= f.label :meeting_date, "Date", class: "block text-sm font-medium text-slate-900" %>
-        <%= f.date_field :meeting_date, value: (meeting.starts_at || Time.current).to_date, class: field_class, required: true %>
-      </div>
-      <div>
-        <%= f.label :meeting_time, "Time", class: "block text-sm font-medium text-slate-900" %>
-        <%= f.time_field :meeting_time, value: (meeting.starts_at || Time.current).in_time_zone.strftime("%H:%M"), class: field_class, required: true %>
-      </div>
+    <div>
+      <%= f.label :meeting_date, "Date", class: "block text-sm font-medium text-slate-900" %>
+      <%= f.date_field :meeting_date,
+            value: slot_date,
+            class: field_class,
+            required: true,
+            data: {
+              meeting_schedule_target: "date",
+              action: "change->meeting-schedule#reloadSlots"
+            } %>
     </div>
 
     <div>
@@ -49,7 +60,30 @@
           </button>
         <% end %>
       </div>
-      <%= f.number_field :duration_minutes, min: 1, step: 1, class: "#{field_class} mt-2", required: true, data: { meeting_schedule_target: "duration" } %>
+      <%= f.number_field :duration_minutes,
+            value: slot_duration,
+            min: 1,
+            step: 1,
+            class: "#{field_class} mt-2",
+            required: true,
+            data: {
+              meeting_schedule_target: "duration",
+              action: "change->meeting-schedule#reloadSlots"
+            } %>
+    </div>
+
+    <div>
+      <p class="block text-sm font-medium text-slate-900">Available time</p>
+      <p class="mt-1 text-xs text-slate-500">Same open slots as public /schedule — pick one to avoid conflicts.</p>
+      <%= turbo_frame_tag "admin_meeting_slots",
+            data: { meeting_schedule_target: "slotsFrame" },
+            class: "mt-2 block min-h-[5rem]" do %>
+        <%= render "admin/meetings/slots", date: slot_date, slots: available_slots, selected: slot_selected %>
+      <% end %>
+      <%= f.hidden_field :starts_at,
+            value: slot_selected,
+            data: { slot_picker_target: "input" },
+            required: true %>
     </div>
 
     <div>

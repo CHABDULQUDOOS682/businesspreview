@@ -86,6 +86,7 @@ env:
     APP_PROTOCOL: https
     APP_HOSTS: devdebizz.com,www.devdebizz.com
     PORT: 80
+    SCHEDULING_OWNER_EMAIL: devdebizz@gmail.com
 
 # Aliases are triggered with "bin/kamal <alias>". You can overwrite arguments on invocation:
 # "bin/kamal logs -r job" will tail logs from the first server in the job section.

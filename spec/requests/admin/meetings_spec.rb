@@ -90,8 +90,7 @@ RSpec.describe "Admin::Meetings", type: :request do
           client_phone: "+1234567890",
           title: "Kickoff",
           description: "Intro",
-          meeting_date: 2.days.from_now.to_date,
-          meeting_time: "11:00",
+          starts_at: 2.days.from_now.change(hour: 11).iso8601,
           duration_minutes: 30
         }
       }
@@ -113,8 +112,7 @@ RSpec.describe "Admin::Meetings", type: :request do
           client_name: "",
           client_email: "",
           title: "",
-          meeting_date: 2.days.from_now.to_date,
-          meeting_time: "11:00",
+          starts_at: 2.days.from_now.change(hour: 11).iso8601,
           duration_minutes: 30
         }
       }
@@ -135,13 +133,36 @@ RSpec.describe "Admin::Meetings", type: :request do
           client_phone: "+1234567890",
           title: "Kickoff",
           meeting_date: 2.days.from_now.to_date,
-          meeting_time: "11:00",
+          starts_at: 2.days.from_now.change(hour: 11).iso8601,
           duration_minutes: 30
         }
       }
 
       expect(response).to redirect_to(admin_meetings_path(date: 2.days.from_now.to_date))
       expect(flash[:alert]).to include("sync failed")
+    end
+  end
+
+  describe "GET /admin/meetings/slots" do
+    let!(:super_admin) { create(:user, :super_admin) }
+    let(:slot_date) { Date.new(2026, 7, 22) }
+
+    before do
+      AvailabilityRule.create!(
+        user: super_admin,
+        day_of_week: 3,
+        start_minute: 540,
+        end_minute: 660
+      )
+      sign_in employee
+    end
+
+    it "returns available company slots for the selected date" do
+      get slots_admin_meetings_path, params: { date: slot_date, duration_minutes: 30 }
+
+      expect(response).to have_http_status(:ok)
+      expect(response.body).to include("Available times for")
+      expect(response.body).to include("9:00 AM")
     end
   end
 
@@ -260,6 +281,14 @@ RSpec.describe "Admin::Meetings", type: :request do
   end
 
   describe "GET /admin/meetings/:id/edit" do
+    it "renders edit for the employee's own meeting" do
+      sign_in employee
+      get edit_admin_meeting_path(my_meeting)
+
+      expect(response).to have_http_status(:ok)
+      expect(response.body).to include("Edit Meeting")
+    end
+
     it "blocks employees from editing another employee's meeting" do
       sign_in employee
       get edit_admin_meeting_path(other_meeting)
@@ -287,6 +316,17 @@ RSpec.describe "Admin::Meetings", type: :request do
 
       expect(response).to redirect_to(admin_meetings_path)
       expect(flash[:alert]).to include("do not have access")
+    end
+  end
+
+  describe "GET /admin/meetings/slots with invalid date" do
+    before { sign_in employee }
+
+    it "falls back to today when date is invalid" do
+      get slots_admin_meetings_path, params: { date: "not-a-date", duration_minutes: 30 }
+
+      expect(response).to have_http_status(:ok)
+      expect(response.body).to include("Available times for")
     end
   end
 end

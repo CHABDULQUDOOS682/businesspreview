@@ -1,0 +1,38 @@
+<% content_for :title, "Booking Confirmed | DevDeBizz" %>
+
+<%= render "home_pages/page_header",
+  eyebrow: "Meeting Scheduled",
+  title_html: 'You&apos;re <span class="home-display-accent">all set!</span>'.html_safe,
+  subtitle: "We've sent a Google Calendar invitation with a Meet link to your inbox." %>
+
+<section class="py-16">
+  <div class="mx-auto max-w-xl px-2 md:px-0">
+    <div class="home-card-3d relative overflow-hidden rounded-[32px] border border-[#081849]/10 bg-white/70 p-8 shadow-[0_18px_45px_rgba(8,24,73,0.06)] md:p-10 text-center space-y-6">
+      <div class="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-[#5F3475]/10"></div>
+      <div class="absolute -left-20 -bottom-20 h-64 w-64 rounded-full bg-[#213885]/10"></div>
+
+      <div class="relative space-y-4">
+        <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-[#213885]/15 ring-1 ring-[#213885]/30">
+          <i class="fa-solid fa-calendar-check text-2xl text-[#5F3475]"></i>
+        </div>
+
+        <h3 class="text-2xl font-bold text-[#081849]"><%= @meeting.title %></h3>
+        
+        <div class="py-4 border-y border-[#081849]/10 space-y-2">
+          <p class="text-sm text-[#081849]/70">
+            <span class="font-bold text-[#081849]">Date:</span> <%= @meeting.starts_at.strftime("%A, %B %-d, %Y") %>
+          </p>
+          <p class="text-sm text-[#081849]/70">
+            <span class="font-bold text-[#081849]">Time:</span> <%= @meeting.starts_at.strftime("%-l:%M %p") %> - <%= @meeting.ends_at.strftime("%-l:%M %p") %> (<%= @meeting.starts_at.strftime("%Z") %>)
+          </p>
+        </div>
+
+        <p class="text-sm text-[#081849]/60 italic pt-2">A calendar invitation with a Google Meet link has been sent to your email.</p>
+
+        <div class="pt-6">
+          <%= link_to "← Back to Home", root_path, class: "text-sm font-semibold text-[#5F3475] hover:text-[#213885] transition-colors" %>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

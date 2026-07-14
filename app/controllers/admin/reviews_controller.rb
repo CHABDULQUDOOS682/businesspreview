@@ -1,6 +1,7 @@
 module Admin
   class ReviewsController < ApplicationController
     layout "admin"
+    before_action :require_admin_or_super_admin!
     before_action :set_review, only: [ :show, :edit, :update, :destroy ]
 
     def index

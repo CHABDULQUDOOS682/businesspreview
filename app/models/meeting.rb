@@ -13,6 +13,8 @@ class Meeting < ApplicationRecord
     no_show: "no_show"
   }, validate: true
 
+  before_validation :generate_public_token, on: :create
+
   validates :client_name, :client_email, :title, :starts_at, :duration_minutes, presence: true
   validates :client_email, format: { with: URI::MailTo::EMAIL_REGEXP }
   validates :duration_minutes, numericality: { only_integer: true, greater_than: 0 }
@@ -59,6 +61,10 @@ class Meeting < ApplicationRecord
   end
 
   private
+
+  def generate_public_token
+    self.public_token ||= SecureRandom.hex(12)
+  end
 
   def overlap_validation_needed?
     scheduled? && starts_at.present? && duration_minutes.present?

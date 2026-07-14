@@ -17,7 +17,7 @@ RSpec.describe ContactMailer, type: :mailer do
 
     it "renders the headers" do
       expect(mail.subject).to eq("🔥 New Lead Inbound: Jane Doe - Web Design")
-      expect(mail.to).to eq([ "devdebizz@gmail.com" ])
+      expect(mail.to).to eq([ ENV.fetch("CONTACT_EMAIL", "devdebizz@gmail.com") ])
       expect(mail.from).to eq([ ApplicationMailer.default[:from] ])
     end
 

@@ -16,11 +16,13 @@ class Admin::MeetingsController < ApplicationController
     @meeting = Meeting.new(default_meeting_attributes(date: @selected_date))
     @total_count = scoped_meetings.count
     @upcoming_count = scoped_meetings.upcoming.count
+    assign_slot_picker_locals(@meeting, date: @selected_date)
   end
 
   def new
     date = params[:date].present? ? Date.parse(params[:date]) : Date.current
     @meeting = Meeting.new(default_meeting_attributes(date: date))
+    assign_slot_picker_locals(@meeting, date: date)
   end
 
   def create
@@ -38,21 +40,25 @@ class Admin::MeetingsController < ApplicationController
     @day_meetings = @calendar.meetings_on(@selected_date)
     @total_count = scoped_meetings.count
     @upcoming_count = scoped_meetings.upcoming.count
+    assign_slot_picker_locals(@meeting)
     render :index, status: :unprocessable_entity
   rescue MeetingManager::SyncError => e
     redirect_to admin_meetings_path(date: params.dig(:meeting, :meeting_date)), alert: "Meeting could not be synced to Google Calendar: #{e.message}"
   end
 
   def edit
+    assign_slot_picker_locals(@meeting)
   end
 
   def update
     MeetingManager.new.update!(@meeting, normalized_meeting_params)
     redirect_to admin_meetings_path(calendar_redirect_params(@meeting)), notice: "Meeting updated."
   rescue ActiveRecord::RecordInvalid
+    assign_slot_picker_locals(@meeting)
     render :edit, status: :unprocessable_entity
   rescue MeetingManager::SyncError => e
     flash.now[:alert] = "Meeting could not be synced to Google Calendar: #{e.message}"
+    assign_slot_picker_locals(@meeting)
     render :edit, status: :unprocessable_entity
   end
 
@@ -68,7 +74,40 @@ class Admin::MeetingsController < ApplicationController
     redirect_to admin_meetings_path(calendar_redirect_params(@meeting)), alert: "Meeting could not be cancelled in Google Calendar: #{e.message}"
   end
 
+  def slots
+    date = parse_slots_date
+    duration = params[:duration_minutes].presence&.to_i || Meeting::DEFAULT_DURATION_MINUTES
+    excluding_id = params[:excluding_id].presence
+    selected = params[:selected].presence
+    owner = SlotFinder.scheduling_owner
+    slots = SlotFinder.new(
+      user: owner,
+      duration_minutes: duration,
+      excluding_id: excluding_id
+    ).slots_for(date)
+
+    render partial: "admin/meetings/slots", locals: { date: date, slots: slots, selected: selected }
+  end
+
   private
+
+  def assign_slot_picker_locals(meeting, date: nil)
+    @slot_date = meeting.starts_at&.to_date || date || Date.current
+    @slot_duration = meeting.duration_minutes.presence || Meeting::DEFAULT_DURATION_MINUTES
+    @slot_excluding_id = meeting.persisted? ? meeting.id : nil
+    @slot_selected = meeting.starts_at&.iso8601
+    @available_slots = SlotFinder.new(
+      user: SlotFinder.scheduling_owner,
+      duration_minutes: @slot_duration,
+      excluding_id: @slot_excluding_id
+    ).slots_for(@slot_date)
+  end
+
+  def parse_slots_date
+    Date.parse(params[:date])
+  rescue ArgumentError, TypeError
+    Date.current
+  end
 
   def scoped_meetings
     scope = Meeting.all
@@ -141,7 +180,7 @@ class Admin::MeetingsController < ApplicationController
     business = Business.find_by(id: params[:business_id])
     attrs = {
       duration_minutes: Meeting::DEFAULT_DURATION_MINUTES,
-      starts_at: default_starts_at(date)
+      starts_at: nil
     }
 
     if business.present?
@@ -157,19 +196,18 @@ class Admin::MeetingsController < ApplicationController
     attrs
   end
 
-  def default_starts_at(date)
-    scheduled_at = date.in_time_zone.change(hour: 10, min: 0)
-    if date == Date.current && scheduled_at <= Time.current
-      scheduled_at = 1.hour.from_now.change(min: 0)
-    end
-    scheduled_at
-  end
-
   def normalized_meeting_params
     attrs = meeting_params.to_h
     date = attrs.delete("meeting_date")
-    time = attrs.delete("meeting_time").presence || "10:00"
-    attrs[:starts_at] = Time.zone.parse("#{date} #{time}") if date.present?
+    time = attrs.delete("meeting_time")
+    raw_starts_at = attrs.delete("starts_at")
+
+    if raw_starts_at.present?
+      attrs[:starts_at] = Time.zone.parse(raw_starts_at.to_s)
+    elsif date.present?
+      attrs[:starts_at] = Time.zone.parse("#{date} #{time.presence || '10:00'}")
+    end
+
     attrs
   end
 

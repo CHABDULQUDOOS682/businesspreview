@@ -87,4 +87,15 @@ RSpec.describe "Admin::Reviews", type: :request do
       expect(response).to redirect_to(admin_reviews_path)
     end
   end
+
+  describe "employee access" do
+    let(:employee) { create(:user, role: "employee") }
+
+    before { sign_in employee }
+
+    it "redirects employees away from reviews index" do
+      get admin_reviews_path
+      expect(response).to redirect_to(admin_root_path)
+    end
+  end
 end

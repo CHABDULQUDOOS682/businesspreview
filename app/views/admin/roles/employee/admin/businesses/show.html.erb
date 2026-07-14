@@ -9,13 +9,10 @@
       <h2 class="text-2xl font-bold leading-7 text-slate-900 sm:truncate"><%= @business.name %></h2>
     </div>
     <div class="mt-4 flex flex-wrap items-center gap-2 md:mt-0">
+      <%= render "admin/shared/business_call_button", business: @business %>
       <%= render "admin/shared/business_chat_button", business: @business %>
-      <button type="button" class="inline-flex h-9 shrink-0 items-center justify-center rounded-md bg-white px-3 text-sm font-semibold text-slate-900 shadow-sm ring-1 ring-inset ring-slate-300 hover:bg-slate-50 whitespace-nowrap" onclick="document.getElementById('review-link-modal-<%= @business.id %>').classList.remove('hidden')">
-        Request Review
-      </button>
     </div>
   </div>
-  <%= render "admin/shared/review_link_modal", business: @business %>
 <% end %>
 
 <div>
