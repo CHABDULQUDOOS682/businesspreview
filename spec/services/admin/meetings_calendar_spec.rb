@@ -1,6 +1,12 @@
 require "rails_helper"
 
 RSpec.describe Admin::MeetingsCalendar do
+  include ActiveSupport::Testing::TimeHelpers
+
+  around do |example|
+    travel_to(Time.zone.local(2026, 7, 1, 9, 0)) { example.run }
+  end
+
   let(:month) { Date.new(2026, 7, 1) }
   let(:employee) { create(:user, role: "employee") }
   let(:business) { create(:business) }
