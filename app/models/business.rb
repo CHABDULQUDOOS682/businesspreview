@@ -82,6 +82,12 @@ class Business < ApplicationRecord
     SEGMENTS.keys.index_with { |segment| for_segment(segment).count }
   end
 
+  def self.segment_unread_counts
+    SEGMENTS.keys.index_with do |segment|
+      Message.inbound.unread.where(business_id: for_segment(segment).select(:id)).count
+    end
+  end
+
   def business_segment
     return "subscriptions" if subscription_active?
     return "purchased" if sold_price.present?

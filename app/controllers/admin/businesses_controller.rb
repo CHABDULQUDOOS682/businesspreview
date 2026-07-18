@@ -7,6 +7,7 @@ class Admin::BusinessesController < ApplicationController
   def index
     @segment = employee_role? ? "nurture" : Business.normalize_segment(params[:segment])
     @segment_counts = Business.segment_counts
+    @segment_unread_counts = Business.segment_unread_counts
 
     segment_scope = Business.for_segment(@segment)
     @pagy, @businesses = pagy(apply_filters(segment_scope).order(created_at: :desc))

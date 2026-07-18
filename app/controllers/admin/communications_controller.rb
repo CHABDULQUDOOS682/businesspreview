@@ -6,6 +6,7 @@ class Admin::CommunicationsController < ApplicationController
     # Plus any conversations that aren't linked to a business yet
     @segment = employee_role? ? "nurture" : Business.normalize_segment(params[:segment])
     @segment_counts = Business.segment_counts
+    @segment_unread_counts = Business.segment_unread_counts
     @pagy, @businesses = pagy(Business.for_segment(@segment).order(name: :asc))
 
     # Get latest message for each number that isn't already associated with a business
@@ -45,33 +46,11 @@ class Admin::CommunicationsController < ApplicationController
           partial: "admin/communications/business_conversation",
           locals: { business: @business }
         )
-        Turbo::StreamsChannel.broadcast_update_to(
-          "unread_messages",
-          target: "unread_messages_badge",
-          partial: "admin/communications/unread_badge",
-          locals: { count: Message.inbound.unread.count }
-        )
-        Turbo::StreamsChannel.broadcast_update_to(
-          "unread_messages",
-          target: "unread_inbound_count",
-          partial: "admin/dashboard/unread_inbound_count",
-          locals: { count: Message.inbound.unread.count }
-        )
+        UnreadMessagesBroadcaster.broadcast!(business: @business)
       else
         Message.inbound.unread.where("from_number LIKE ? OR to_number LIKE ?", "%#{last_10}", "%#{last_10}")
                .update_all(read_at: Time.current)
-        Turbo::StreamsChannel.broadcast_update_to(
-          "unread_messages",
-          target: "unread_messages_badge",
-          partial: "admin/communications/unread_badge",
-          locals: { count: Message.inbound.unread.count }
-        )
-        Turbo::StreamsChannel.broadcast_update_to(
-          "unread_messages",
-          target: "unread_inbound_count",
-          partial: "admin/dashboard/unread_inbound_count",
-          locals: { count: Message.inbound.unread.count }
-        )
+        UnreadMessagesBroadcaster.broadcast!
       end
     else
       @messages = Message.none

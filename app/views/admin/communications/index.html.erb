@@ -4,6 +4,7 @@
       key: key,
       label: label,
       count: @segment_counts.fetch(key, 0),
+      unread_count: (@segment_unread_counts || {}).fetch(key, 0),
       path: admin_communications_path(segment: key)
     }
   end
