@@ -4,6 +4,7 @@
       key: key,
       label: label,
       count: @segment_counts.fetch(key, 0),
+      unread_count: (@segment_unread_counts || {}).fetch(key, 0),
       path: admin_businesses_path(segment: key)
     }
   end
@@ -88,7 +89,7 @@
                 <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
                   <div class="flex justify-end gap-3">
                     <% if b.phone.present? %>
-                      <%= link_to "Chat<span class='sr-only'>, #{b.name}</span>".html_safe, admin_communication_path(b.phone), class: "text-green-700 hover:text-green-600" %>
+                      <%= render "admin/shared/business_chat_button", business: b, variant: :link %>
                     <% end %>
                     <%= link_to "View<span class='sr-only'>, #{b.name}</span>".html_safe, admin_business_path(b), class: "text-blue-600 hover:text-blue-900" %>
                   </div>

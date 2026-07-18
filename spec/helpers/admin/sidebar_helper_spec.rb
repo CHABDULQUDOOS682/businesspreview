@@ -73,8 +73,12 @@ RSpec.describe Admin::SidebarHelper, type: :helper do
       def helper.unread_message_count; 5; end
     end
 
-    it "renders mobile badge" do
-      expect(helper.admin_sidebar_unread_badge(mobile: true)).to include("5")
+    it "renders mobile badge with turbo target" do
+      html = helper.admin_sidebar_unread_badge(mobile: true)
+      expect(html).to include("5")
+      expect(html).to include('id="unread_messages_badge_mobile"')
+      expect(html).to include("unread-badge-dot")
+      expect(html).to include("bg-red-500").or include("unread-badge-count")
     end
 
     it "renders desktop badge" do

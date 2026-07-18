@@ -86,6 +86,7 @@ module Admin::SidebarHelper
 
     wrapper_classes = [
       "sidebar-item",
+      ("sidebar-item--with-badge" if badge.present?),
       (active ? "sidebar-item--current #{admin_sidebar_current_bg_class(accent)}" : nil)
     ].compact.join(" ")
 
@@ -110,12 +111,9 @@ module Admin::SidebarHelper
   end
 
   def admin_sidebar_unread_badge(mobile: false)
-    if mobile
+    badge_id = mobile ? "unread_messages_badge_mobile" : "unread_messages_badge"
+    content_tag(:span, id: badge_id) do
       render("admin/communications/unread_badge", count: unread_message_count)
-    else
-      content_tag(:span, id: "unread_messages_badge") do
-        render("admin/communications/unread_badge", count: unread_message_count)
-      end
     end
   end
 

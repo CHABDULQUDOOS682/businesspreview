@@ -1,0 +1,7 @@
+<% unread = unread.to_i %>
+<% if unread.positive? %>
+  <span class="relative inline-flex h-2.5 w-2.5" title="<%= unread %> unread message<%= unread == 1 ? "" : "s" %>" aria-label="<%= unread %> unread">
+    <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-400 opacity-75"></span>
+    <span class="relative inline-flex h-2.5 w-2.5 rounded-full bg-red-500"></span>
+  </span>
+<% end %>

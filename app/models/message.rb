@@ -32,23 +32,12 @@ class Message < ApplicationRecord
       locals: { msg: self }
     )
 
-    if direction == "inbound"
-      Turbo::StreamsChannel.broadcast_update_to(
-        "unread_messages",
-        target: "unread_messages_badge",
-        partial: "admin/communications/unread_badge",
-        locals: { count: Message.inbound.unread.count }
-      )
+    business_for_broadcast = business || Business.find_by("phone LIKE ?", "%#{key}")
 
-      Turbo::StreamsChannel.broadcast_update_to(
-        "unread_messages",
-        target: "unread_inbound_count",
-        partial: "admin/dashboard/unread_inbound_count",
-        locals: { count: Message.inbound.unread.count }
-      )
+    if direction == "inbound"
+      UnreadMessagesBroadcaster.broadcast!(business: business_for_broadcast)
     end
 
-    business_for_broadcast = business || Business.find_by("phone LIKE ?", "%#{key}")
     return unless business_for_broadcast
 
     Turbo::StreamsChannel.broadcast_replace_to(

@@ -33,9 +33,15 @@ Rails.application.routes.draw do
   get "/reviews/new/:token", to: "reviews#new", as: :new_review_submission
   post "/reviews", to: "reviews#create", as: :review_submissions
 
+  # Root-scoped PWA worker (required for Chrome/Oppo installability).
+  get "service-worker.js", to: "admin/pwa#service_worker", as: :service_worker
+
   namespace :admin do
     get "dashboard/index"
     root "dashboard#index"
+    get "manifest.webmanifest", to: "pwa#manifest", as: :manifest
+    get "service-worker.js", to: "pwa#service_worker", as: :legacy_service_worker
+    post "pwa/install_click", to: "pwa#install_click", as: :pwa_install_click
     resources :tasks, only: [ :index ]
     resources :call_logs, only: [ :index ]
     resources :payment_invoices, only: [ :index ]

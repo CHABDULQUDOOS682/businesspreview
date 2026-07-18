@@ -13,6 +13,7 @@
 <div class="mx-auto max-w-4xl">
   <div class="overflow-hidden rounded-[24px] border border-sand-200 bg-white shadow-[0_8px_24px_rgba(26,25,24,0.04)] p-6 md:p-8">
     <%= form_with url: admin_commission_rate_path("bulk"), method: :patch, local: true, class: "space-y-6" do |f| %>
+      <div class="overflow-x-auto">
       <table class="min-w-full divide-y divide-slate-200">
         <thead class="bg-slate-50">
           <tr>
@@ -44,6 +45,7 @@
           <% end %>
         </tbody>
       </table>
+      </div>
 
       <div class="flex items-center justify-end gap-3 border-t border-slate-200 pt-6">
         <%= link_to "Cancel", admin_root_path, class: "rounded-md bg-white px-3 py-2 text-sm font-semibold text-slate-900 shadow-sm ring-1 ring-inset ring-slate-300 hover:bg-slate-50" %>
