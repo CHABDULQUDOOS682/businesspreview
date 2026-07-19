@@ -1,6 +1,7 @@
 class TwilioController < ApplicationController
-  skip_before_action :verify_authenticity_token
-  skip_before_action :authenticate_user!
+  skip_before_action :verify_authenticity_token, only: [ :voice, :sms, :connect_call, :dial_status ]
+  skip_before_action :authenticate_user!, only: [ :voice, :sms, :connect_call, :dial_status ]
+  skip_before_action :set_unread_message_count, only: [ :voice, :sms, :connect_call, :dial_status ]
 
   def voice
     response = Twilio::TwiML::VoiceResponse.new
@@ -41,17 +42,16 @@ class TwilioController < ApplicationController
     render xml: response.to_s
   end
 
-  # --- NEW BROWSER CALLING METHODS ---
+  # --- Browser calling ---
 
   # Generates an Access Token with Voice grant for the Twilio Voice JS SDK
   def access_token
-    # Require API Key/Secret for Voice SDK
     unless ENV["TWILIO_API_KEY"].present? && ENV["TWILIO_API_SECRET"].present? && ENV["TWILIO_TWIML_APP_SID"].present?
       render json: { error: "Missing Twilio API Key, Secret, or TwiML App SID in .env" }, status: :unprocessable_entity
       return
     end
 
-    identity = "admin-browser-user"
+    identity = "user-#{current_user.id}"
     grant = Twilio::JWT::AccessToken::VoiceGrant.new
     grant.outgoing_application_sid = ENV["TWILIO_TWIML_APP_SID"]
     grant.incoming_allow = true
@@ -72,11 +72,25 @@ class TwilioController < ApplicationController
   def connect_call
     response = Twilio::TwiML::VoiceResponse.new
 
-    # The browser sends the phone number to call in the 'number' parameter
-    to_number = params[:number] || params[:To]
+    to_number = params[:number].presence || params[:To].presence
+    user = find_caller_user
+    business = find_business_from_params(to_number)
 
     if to_number.present?
-      response.dial(caller_id: ENV["TWILIO_PHONE_NUMBER"]) do |dial|
+      CallLogRecorder.record_outbound!(
+        user: user,
+        business: business,
+        to_number: to_number,
+        from_number: ENV["TWILIO_PHONE_NUMBER"],
+        twilio_call_sid: params[:CallSid],
+        status: "initiated"
+      )
+
+      response.dial(
+        caller_id: ENV["TWILIO_PHONE_NUMBER"],
+        action: dial_status_url,
+        method: "POST"
+      ) do |dial|
         dial.number(to_number)
       end
     else
@@ -84,5 +98,40 @@ class TwilioController < ApplicationController
     end
 
     render xml: response.to_s
+  end
+
+  # Dial action callback — update duration/status when the dialed leg finishes
+  def dial_status
+    call_log = CallLog.find_by(twilio_call_sid: params[:CallSid])
+    if call_log
+      call_log.update(
+        status: params[:DialCallStatus].presence || params[:CallStatus].presence || call_log.status,
+        duration_seconds: params[:DialCallDuration].presence&.to_i || call_log.duration_seconds
+      )
+    end
+
+    head :ok
+  end
+
+  private
+
+  def find_caller_user
+    if params[:UserId].present?
+      User.find_by(id: params[:UserId])
+    elsif params[:Caller].to_s.start_with?("client:user-")
+      User.find_by(id: params[:Caller].to_s.delete_prefix("client:user-"))
+    end
+  end
+
+  def find_business_from_params(to_number)
+    if params[:BusinessId].present?
+      Business.find_by(id: params[:BusinessId])
+    else
+      CallLogRecorder.find_business_for_phone(to_number)
+    end
+  end
+
+  def dial_status_url
+    "#{request.base_url}/twilio/dial_status"
   end
 end

@@ -7,7 +7,7 @@
   <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
     <div>
       <h1 class="text-2xl font-bold tracking-tight text-slate-900">Call Logs</h1>
-      <p class="mt-1 text-sm text-slate-600">Track inbound and outbound phone activity across businesses.</p>
+      <p class="mt-1 text-sm text-slate-600">See which employee called which business, with direction, status, and duration.</p>
     </div>
     <div class="grid grid-cols-1 gap-3 text-sm sm:grid-cols-3">
       <div class="rounded-lg bg-white px-4 py-3 shadow-sm ring-1 ring-slate-900/5">
@@ -27,10 +27,18 @@
 <% end %>
 
 <div class="mb-6 rounded-xl bg-white px-4 py-4 shadow-sm ring-1 ring-slate-900/5 sm:px-6">
-  <%= form_with url: admin_call_logs_path, method: :get, local: true, class: "grid grid-cols-1 gap-4 lg:grid-cols-4 lg:items-end" do |f| %>
+  <%= form_with url: admin_call_logs_path, method: :get, local: true, class: "grid grid-cols-1 gap-4 lg:grid-cols-5 lg:items-end" do |f| %>
     <div class="lg:col-span-2">
       <%= f.label :q, "Search", class: "block text-sm font-medium leading-6 text-slate-900" %>
-      <%= f.text_field :q, value: params[:q], class: field_class, placeholder: "Search by business or phone number" %>
+      <%= f.text_field :q, value: params[:q], class: field_class, placeholder: "Business, employee, phone, or SID" %>
+    </div>
+
+    <div>
+      <%= f.label :user_id, "Employee", class: "block text-sm font-medium leading-6 text-slate-900" %>
+      <%= f.select :user_id,
+            options_from_collection_for_select(@employee_options, :id, :display_name, params[:user_id]),
+            { include_blank: "All employees" },
+            class: select_class %>
     </div>
 
     <div>
@@ -40,25 +48,20 @@
 
     <div class="flex flex-wrap gap-2">
       <%= f.submit "Apply filters", class: "rounded-md bg-orange-600 px-3 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-orange-500" %>
-      <% if params[:q].present? || params[:direction].present? %>
+      <% if params[:q].present? || params[:direction].present? || params[:user_id].present? %>
         <%= link_to "Clear", admin_call_logs_path, class: "rounded-md bg-white px-3 py-2.5 text-sm font-semibold text-slate-900 shadow-sm ring-1 ring-inset ring-slate-300 hover:bg-slate-50" %>
       <% end %>
     </div>
   <% end %>
 </div>
 
-<% if @call_logs_error.present? %>
-  <div class="mb-6 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700">
-    Twilio call records could not be loaded: <%= @call_logs_error %>
-  </div>
-<% end %>
-
 <div class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-slate-900/5">
   <div class="overflow-x-auto">
     <table class="min-w-full divide-y divide-slate-300">
       <thead class="bg-slate-50">
         <tr>
-          <th class="py-3.5 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-600 sm:pl-6">Business</th>
+          <th class="py-3.5 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-600 sm:pl-6">Employee</th>
+          <th class="px-3 py-3.5 text-left text-xs font-semibold uppercase tracking-wide text-slate-600">Business</th>
           <th class="px-3 py-3.5 text-left text-xs font-semibold uppercase tracking-wide text-slate-600">Direction</th>
           <th class="px-3 py-3.5 text-left text-xs font-semibold uppercase tracking-wide text-slate-600">From</th>
           <th class="px-3 py-3.5 text-left text-xs font-semibold uppercase tracking-wide text-slate-600">To</th>
@@ -71,7 +74,10 @@
       <tbody class="divide-y divide-slate-200 bg-white">
         <% @call_logs.each do |call_log| %>
           <tr class="hover:bg-slate-50">
-            <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium sm:pl-6">
+            <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-slate-900 sm:pl-6">
+              <%= call_log.employee_name %>
+            </td>
+            <td class="whitespace-nowrap px-3 py-4 text-sm font-medium">
               <% if call_log.business.present? %>
                 <%= link_to call_log.business.name, admin_business_path(call_log.business), class: "text-orange-700 hover:text-orange-600 hover:underline" %>
               <% else %>
@@ -95,7 +101,7 @@
         <% end %>
         <% if @call_logs.empty? %>
           <tr>
-            <td colspan="8" class="px-3 py-12 text-center text-sm text-slate-500">No call logs found.</td>
+            <td colspan="9" class="px-3 py-12 text-center text-sm text-slate-500">No call logs found.</td>
           </tr>
         <% end %>
       </tbody>

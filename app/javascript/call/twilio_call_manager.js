@@ -39,7 +39,7 @@ function scheduleTokenRefresh() {
 }
 
 async function fetchToken() {
-  const response = await fetch("/twilio/token")
+  const response = await fetch("/twilio/token", { credentials: "same-origin" })
   if (!response.ok) throw new Error("Failed to fetch token")
 
   const data = await response.json()
@@ -137,7 +137,7 @@ export function getCallState() {
   return { ...state }
 }
 
-export async function startCall({ phoneNumber, label = null }) {
+export async function startCall({ phoneNumber, label = null, businessId = null }) {
   if (!phoneNumber) return
 
   setState({
@@ -152,9 +152,13 @@ export async function startCall({ phoneNumber, label = null }) {
     const twilioDevice = await ensureDevice()
     setState({ status: "connecting" })
 
-    activeCall = await twilioDevice.connect({
-      params: { To: phoneNumber }
-    })
+    const params = { To: phoneNumber }
+    if (businessId) params.BusinessId = String(businessId)
+
+    const metaUserId = document.querySelector('meta[name="current-user-id"]')?.content
+    if (metaUserId) params.UserId = metaUserId
+
+    activeCall = await twilioDevice.connect({ params })
   } catch (error) {
     setState({
       status: "error",

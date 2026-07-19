@@ -119,7 +119,14 @@ class Admin::CommunicationsController < ApplicationController
     @number = params[:id]
 
     begin
-      CallService.call(to: @number)
+      twilio_call = CallService.call(to: @number)
+      CallLogRecorder.record_outbound!(
+        user: current_user,
+        to_number: @number,
+        twilio_call_sid: twilio_call.sid,
+        from_number: ENV["TWILIO_PHONE_NUMBER"],
+        status: twilio_call.status.presence || "initiated"
+      )
       redirect_to admin_communication_path(@number), notice: "Call initiated successfully."
     rescue => e
       redirect_to admin_communication_path(@number), alert: "Failed to initiate call: #{e.message}"

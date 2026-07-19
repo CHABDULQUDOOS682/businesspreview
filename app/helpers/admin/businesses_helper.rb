@@ -89,5 +89,26 @@ module Admin
 
       link_to "Open location", href, target: "_blank", rel: "noopener", class: "text-blue-600 hover:text-blue-500"
     end
+
+    def phone_line_type_badge(business)
+      if business.phone_lookup_checked_at.blank?
+        return content_tag(:span, "Not checked", class: "text-xs text-slate-400")
+      end
+
+      if business.phone_lookup_error.present?
+        return content_tag(:span, "Lookup failed",
+                           class: "inline-flex items-center rounded-md bg-red-50 px-2 py-0.5 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/20")
+      end
+
+      badge_class = case business.phone_line_type
+      when "mobile" then "bg-emerald-50 text-emerald-700 ring-emerald-600/20"
+      when "landline" then "bg-red-50 text-red-700 ring-red-600/20"
+      when "fixedVoip", "nonFixedVoip" then "bg-amber-50 text-amber-800 ring-amber-600/20"
+      else "bg-slate-50 text-slate-600 ring-slate-500/10"
+      end
+
+      content_tag(:span, business.phone_line_type&.titleize || "Unknown",
+                  class: "inline-flex items-center rounded-md px-2 py-0.5 text-xs font-medium ring-1 ring-inset #{badge_class}")
+    end
   end
 end

@@ -1,6 +1,6 @@
 class Admin::BusinessesController < ApplicationController
   layout "admin"
-  before_action :require_super_admin!, only: [ :import ]
+  before_action :require_super_admin!, only: [ :import, :verify_phone ]
   before_action :require_admin_or_super_admin!, only: [ :send_review_link ]
   before_action :set_seller_options, only: [ :new, :create, :edit, :update ]
 
@@ -103,6 +103,12 @@ class Admin::BusinessesController < ApplicationController
     else
       redirect_to admin_business_path(@business), alert: "Invalid delivery method."
     end
+  end
+
+  def verify_phone
+    business = Business.find(params[:id])
+    PhoneLookupJob.perform_later(business.id)
+    redirect_to admin_business_path(business), notice: "Number verification queued."
   end
 
   private

@@ -11,6 +11,9 @@
     <link rel="icon" href="<%= asset_path('logo/Fav-Icon 49x49.svg') %>" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/apple-touch-icon.png">
     <%= csrf_meta_tags %>
+    <% if user_signed_in? %>
+      <meta name="current-user-id" content="<%= current_user.id %>">
+    <% end %>
     <%= csp_meta_tag %>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

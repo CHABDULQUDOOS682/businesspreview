@@ -4,7 +4,8 @@ import { startCall } from "call/twilio_call_manager"
 export default class extends Controller {
   static values = {
     phoneNumber: String,
-    label: String
+    label: String,
+    businessId: Number
   }
 
   call(event) {
@@ -14,7 +15,8 @@ export default class extends Controller {
 
     startCall({
       phoneNumber: this.phoneNumberValue,
-      label: this.hasLabelValue ? this.labelValue : this.phoneNumberValue
+      label: this.hasLabelValue ? this.labelValue : this.phoneNumberValue,
+      businessId: this.hasBusinessIdValue ? this.businessIdValue : null
     })
   }
 }
