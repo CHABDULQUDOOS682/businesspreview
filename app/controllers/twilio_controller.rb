@@ -1,5 +1,5 @@
 class TwilioController < ApplicationController
-  skip_before_action :verify_authenticity_token, except: [ :access_token ]
+  skip_before_action :verify_authenticity_token, only: [ :voice, :sms, :connect_call, :dial_status ]
   skip_before_action :authenticate_user!, only: [ :voice, :sms, :connect_call, :dial_status ]
   skip_before_action :set_unread_message_count, only: [ :voice, :sms, :connect_call, :dial_status ]
 
