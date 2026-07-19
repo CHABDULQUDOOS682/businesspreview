@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_07_14_204000) do
+ActiveRecord::Schema[8.0].define(version: 2026_07_19_120000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -166,6 +166,9 @@ ActiveRecord::Schema[8.0].define(version: 2026_07_14_204000) do
     t.string "site_api_secret"
     t.string "site_external_id"
     t.string "business_number"
+    t.string "phone_line_type"
+    t.datetime "phone_lookup_checked_at"
+    t.string "phone_lookup_error"
     t.index "lower((phone)::text)", name: "index_businesses_on_lower_phone", unique: true
     t.index ["business_number"], name: "index_businesses_on_business_number", unique: true
     t.index ["last_invoice_id"], name: "index_businesses_on_last_invoice_id"
@@ -189,10 +192,12 @@ ActiveRecord::Schema[8.0].define(version: 2026_07_14_204000) do
     t.string "twilio_call_sid"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "user_id"
     t.index ["business_id"], name: "index_call_logs_on_business_id"
     t.index ["created_at"], name: "index_call_logs_on_created_at"
     t.index ["direction"], name: "index_call_logs_on_direction"
     t.index ["twilio_call_sid"], name: "index_call_logs_on_twilio_call_sid", unique: true, where: "(twilio_call_sid IS NOT NULL)"
+    t.index ["user_id"], name: "index_call_logs_on_user_id"
   end
 
   create_table "cold_calling_scripts", force: :cascade do |t|
@@ -558,6 +563,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_07_14_204000) do
   add_foreign_key "business_imports", "users", column: "imported_by_id"
   add_foreign_key "businesses", "users", column: "sold_by_id"
   add_foreign_key "call_logs", "businesses"
+  add_foreign_key "call_logs", "users"
   add_foreign_key "cold_calling_scripts", "users", column: "created_by_id"
   add_foreign_key "commissions", "businesses"
   add_foreign_key "commissions", "payment_invoices"

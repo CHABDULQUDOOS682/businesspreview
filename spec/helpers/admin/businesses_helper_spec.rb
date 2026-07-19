@@ -155,4 +155,54 @@ RSpec.describe Admin::BusinessesHelper, type: :helper do
       expect(helper.business_location_link(business)).to eq("-")
     end
   end
+
+  describe "#phone_line_type_badge" do
+    let(:business) { build(:business) }
+
+    it "returns Not checked when lookup has never run" do
+      business.phone_lookup_checked_at = nil
+
+      expect(helper.phone_line_type_badge(business)).to include("Not checked")
+    end
+
+    it "returns Lookup failed when an error is present" do
+      business.phone_lookup_checked_at = Time.current
+      business.phone_lookup_error = "Invalid number"
+
+      expect(helper.phone_line_type_badge(business)).to include("Lookup failed")
+      expect(helper.phone_line_type_badge(business)).to include("bg-red-50")
+    end
+
+    it "returns a green badge for mobile" do
+      business.phone_lookup_checked_at = Time.current
+      business.phone_line_type = "mobile"
+
+      expect(helper.phone_line_type_badge(business)).to include("Mobile")
+      expect(helper.phone_line_type_badge(business)).to include("bg-emerald-50")
+    end
+
+    it "returns a red badge for landline" do
+      business.phone_lookup_checked_at = Time.current
+      business.phone_line_type = "landline"
+
+      expect(helper.phone_line_type_badge(business)).to include("Landline")
+      expect(helper.phone_line_type_badge(business)).to include("bg-red-50")
+    end
+
+    it "returns an amber badge for voip types" do
+      business.phone_lookup_checked_at = Time.current
+      business.phone_line_type = "fixedVoip"
+
+      expect(helper.phone_line_type_badge(business)).to include("Fixed Voip").or include("Fixedvoip")
+      expect(helper.phone_line_type_badge(business)).to include("bg-amber-50")
+    end
+
+    it "returns a slate badge for unknown types" do
+      business.phone_lookup_checked_at = Time.current
+      business.phone_line_type = nil
+
+      expect(helper.phone_line_type_badge(business)).to include("Unknown")
+      expect(helper.phone_line_type_badge(business)).to include("bg-slate-50")
+    end
+  end
 end

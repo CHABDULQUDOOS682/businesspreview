@@ -435,4 +435,69 @@ RSpec.describe "Admin::Businesses", type: :request do
       end
     end
   end
+
+  describe "POST /admin/businesses/:id/verify_phone" do
+    include ActiveJob::TestHelper
+
+    around do |example|
+      original_adapter = ActiveJob::Base.queue_adapter
+      ActiveJob::Base.queue_adapter = :test
+      clear_enqueued_jobs
+      example.run
+    ensure
+      ActiveJob::Base.queue_adapter = original_adapter
+    end
+
+    context "when logged in as super_admin" do
+      before { sign_in super_admin }
+
+      it "queues PhoneLookupJob and redirects with notice" do
+        expect {
+          post verify_phone_admin_business_path(business)
+        }.to have_enqueued_job(PhoneLookupJob).with(business.id)
+
+        expect(response).to redirect_to(admin_business_path(business))
+        follow_redirect!
+        expect(response.body).to include("Number verification queued.")
+      end
+
+      it "shows the verify button and badge on the show page" do
+        get admin_business_path(business)
+        expect(response).to have_http_status(:success)
+        expect(response.body).to include("Verify Number")
+        expect(response.body).to include("Phone Line Type")
+        expect(response.body).to include("Not checked")
+      end
+    end
+
+    context "when logged in as admin" do
+      before { sign_in admin }
+
+      it "denies access" do
+        expect {
+          post verify_phone_admin_business_path(business)
+        }.not_to have_enqueued_job(PhoneLookupJob)
+
+        expect(response).to redirect_to(admin_root_path)
+      end
+
+      it "does not show the verify button on the show page" do
+        get admin_business_path(business)
+        expect(response.body).not_to include("Verify Number")
+        expect(response.body).not_to include("Phone Line Type")
+      end
+    end
+
+    context "when logged in as employee" do
+      before { sign_in employee }
+
+      it "denies access" do
+        expect {
+          post verify_phone_admin_business_path(business)
+        }.not_to have_enqueued_job(PhoneLookupJob)
+
+        expect(response).to redirect_to(admin_root_path)
+      end
+    end
+  end
 end

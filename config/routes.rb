@@ -76,6 +76,7 @@ Rails.application.routes.draw do
       resources :payment_invoices, only: [ :create ]
       member do
         post :send_review_link
+        post :verify_phone
       end
     end
     resources :business_imports, only: [ :index, :show ] do
@@ -120,6 +121,7 @@ Rails.application.routes.draw do
   # Browser-to-phone calling
   get "twilio/token", to: "twilio#access_token"
   post "twilio/connect", to: "twilio#connect_call"
+  post "twilio/dial_status", to: "twilio#dial_status"
 
   post "webhooks/stripe", to: "stripe_webhooks#create"
   post "webhooks/google_calendar", to: "google_calendar_webhooks#create"

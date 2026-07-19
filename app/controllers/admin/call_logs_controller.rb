@@ -4,34 +4,26 @@ class Admin::CallLogsController < ApplicationController
   before_action :require_call_log_access!
 
   def index
-    calls = TwilioCallLogService.new.recent_calls
+    scope = CallLog.recent_first.includes(:user, :business)
 
-    @total_calls = calls.size
-    @outbound_count = calls.count { |call| call.direction == "outbound" }
-    @inbound_count = calls.count { |call| call.direction == "inbound" }
+    @total_calls = scope.count
+    @outbound_count = scope.outbound.count
+    @inbound_count = scope.inbound.count
 
-    calls = calls.select { |call| call.direction == params[:direction] } if params[:direction].present?
+    scope = scope.where(direction: params[:direction]) if params[:direction].present?
+    scope = scope.where(user_id: params[:user_id]) if params[:user_id].present?
 
     if params[:q].present?
-      query = params[:q].to_s.downcase
-      calls = calls.select do |call|
-        [
-          call.business&.name,
-          call.from_number,
-          call.to_number,
-          call.sid,
-          call.status
-        ].compact.any? { |value| value.to_s.downcase.include?(query) }
-      end
+      query = "%#{params[:q].to_s.strip}%"
+      scope = scope.left_joins(:user, :business).where(
+        "businesses.name ILIKE :q OR call_logs.from_number ILIKE :q OR call_logs.to_number ILIKE :q OR call_logs.twilio_call_sid ILIKE :q OR call_logs.status ILIKE :q OR users.name ILIKE :q OR users.email ILIKE :q",
+        q: query
+      )
     end
 
-    @pagy, @call_logs = pagy_array(calls, limit: 25)
-  rescue StandardError => e
-    @call_logs_error = e.message
-    @total_calls = 0
-    @outbound_count = 0
-    @inbound_count = 0
-    @pagy, @call_logs = pagy_array([], limit: 25)
+    @employee_options = User.where(id: CallLog.select(:user_id).where.not(user_id: nil).distinct)
+                            .order(:email)
+    @pagy, @call_logs = pagy(scope, limit: 25)
   end
 
   private
