@@ -48,6 +48,7 @@ RSpec.describe TwilioCallLogService do
 
       expect(record.direction).to eq("inbound")
       expect(record.duration_label).to eq("-")
+      expect(record.direction_label).to eq("Inbound")
       expect(record.logged_at).to eq(Time.zone.local(2026, 6, 14, 10, 29))
     end
   end

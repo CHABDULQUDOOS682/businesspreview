@@ -12,6 +12,17 @@ RSpec.describe "Seo", type: :request do
       expect(response.body).to include("Sitemap:")
       expect(response.body).to include("/sitemap.xml")
     end
+
+    it "disallows everything in staging" do
+      host! "example.com"
+      allow(Rails.env).to receive(:staging?).and_return(true)
+
+      get robots_path
+
+      expect(response).to have_http_status(:success)
+      expect(response.body).to include("Disallow: /")
+      expect(response.body).not_to include("Sitemap:")
+    end
   end
 
   describe "GET /sitemap.xml" do
