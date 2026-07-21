@@ -27,6 +27,7 @@ module Admin
 
     def update
       if @blog_post.update(blog_post_params)
+        purge_featured_image_if_requested!
         redirect_to admin_blog_posts_path, notice: "Blog post was successfully updated."
       else
         render :edit, status: :unprocessable_entity
@@ -52,8 +53,16 @@ module Admin
     def blog_post_params
       params.require(:blog_post).permit(
         :title, :slug, :category, :excerpt, :read_time_label, :published_on,
-        :active, :meta_title, :meta_description, :body
+        :active, :meta_title, :meta_description, :body, :featured_image
       )
+    end
+
+    def purge_featured_image_if_requested!
+      return if params.dig(:blog_post, :featured_image).present?
+      return unless ActiveModel::Type::Boolean.new.cast(params.dig(:blog_post, :remove_featured_image))
+      return unless @blog_post.featured_image.attached?
+
+      @blog_post.featured_image.purge
     end
   end
 end

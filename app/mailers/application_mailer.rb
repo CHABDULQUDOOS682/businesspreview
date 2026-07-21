@@ -7,19 +7,22 @@ class ApplicationMailer < ActionMailer::Base
 
   private
 
-  LOGO_CANDIDATES = [
-    "public/brand/logo.png",
-    "app/assets/images/logo/Website Logo PNG.png",
-    "public/icon.png"
+  LOGO_SVG_CANDIDATES = [
+    "public/brand/logo.svg",
+    "app/assets/images/logo/Website Icon logo SVG 512x512.svg",
+    "app/assets/images/logo/Normal Icon SVG.svg"
   ].freeze
 
   def attach_logo
-    logo_path = LOGO_CANDIDATES
+    logo_path = LOGO_SVG_CANDIDATES
       .map { |relative| Rails.root.join(relative) }
       .find { |path| File.exist?(path) }
 
     return if logo_path.blank?
 
-    attachments.inline["logo.png"] = File.read(logo_path)
+    attachments.inline["logo.svg"] = {
+      mime_type: "image/svg+xml",
+      content: File.read(logo_path)
+    }
   end
 end

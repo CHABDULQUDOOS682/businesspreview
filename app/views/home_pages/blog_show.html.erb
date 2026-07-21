@@ -2,10 +2,15 @@
 <% content_for :meta_description, (@blog_post.meta_description.presence || @blog_post.excerpt) %>
 <% content_for :og_type, "article" %>
 <% content_for :canonical_url, blog_post_url(@blog_post.slug) %>
+<% if @blog_post.featured_image.attached? %>
+  <% content_for :og_image, rails_blob_url(@blog_post.featured_image) %>
+<% end %>
 
 <article class="py-16">
   <div class="mx-auto max-w-3xl px-2 md:px-0">
-    <p class="text-xs font-bold uppercase tracking-[0.18em] text-[#081849]/50"><%= @blog_post.category.presence || "Insight" %></p>
+    <%= link_to "← Back to blog", blog_path, class: "inline-flex text-sm font-bold text-[#213885] hover:text-[#5F3475]" %>
+
+    <p class="mt-8 text-xs font-bold uppercase tracking-[0.18em] text-[#081849]/50"><%= @blog_post.category.presence || "Insight" %></p>
     <h1 class="mt-4 text-4xl font-extrabold leading-tight text-[#081849] md:text-5xl"><%= @blog_post.title %></h1>
     <div class="mt-4 flex flex-wrap items-center gap-3 text-sm text-[#081849]/55">
       <span><%= @blog_post.display_date %></span>
@@ -13,12 +18,16 @@
       <span><%= @blog_post.display_read_time %></span>
     </div>
 
-    <div class="prose prose-slate mt-10 max-w-none text-[#081849]/80">
-      <%= @blog_post.body %>
-    </div>
+    <% if @blog_post.featured_image.attached? %>
+      <div class="mt-10 overflow-hidden rounded-[28px]">
+        <%= image_tag @blog_post.featured_image,
+              class: "h-auto w-full object-cover",
+              alt: @blog_post.title %>
+      </div>
+    <% end %>
 
-    <div class="mt-12 border-t border-[#081849]/10 pt-8">
-      <%= link_to "← Back to blog", blog_path, class: "text-sm font-bold text-[#213885] hover:text-[#5F3475]" %>
+    <div class="blog-article-body prose prose-slate mt-10 max-w-none text-[#081849]/80">
+      <%= @blog_post.body %>
     </div>
   </div>
 </article>

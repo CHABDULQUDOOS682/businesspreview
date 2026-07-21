@@ -31,12 +31,35 @@ RSpec.describe "Admin::PortfolioItems", type: :request do
             metric: "Appointments",
             accent_color: "from-cyan-400/30",
             position: 10,
+            link_url: "https://example.com/clinic",
             active: true
           }
         }
       }.to change(PortfolioItem, :count).by(1)
 
+      expect(PortfolioItem.order(:id).last.link_url).to eq("https://example.com/clinic")
       expect(response).to redirect_to(admin_portfolio_items_path)
+    end
+
+    it "creates a portfolio item with an image" do
+      image = fixture_file_upload(
+        Rails.root.join("spec/fixtures/files/blog_feature.png"),
+        "image/png"
+      )
+
+      expect {
+        post admin_portfolio_items_path, params: {
+          portfolio_item: {
+            title: "Salon Site",
+            category: "Salon",
+            description: "Booking-ready salon website.",
+            image: image,
+            active: true
+          }
+        }
+      }.to change(PortfolioItem, :count).by(1)
+
+      expect(PortfolioItem.order(:id).last.image).to be_attached
     end
 
     it "renders new on validation failure" do
@@ -57,10 +80,25 @@ RSpec.describe "Admin::PortfolioItems", type: :request do
   describe "PATCH /admin/portfolio_items/:id" do
     it "updates the portfolio item" do
       patch admin_portfolio_item_path(portfolio_item), params: {
-        portfolio_item: { title: "Updated Build" }
+        portfolio_item: { title: "Updated Build", link_url: "https://example.com/updated" }
       }
       expect(portfolio_item.reload.title).to eq("Updated Build")
+      expect(portfolio_item.link_url).to eq("https://example.com/updated")
       expect(response).to redirect_to(admin_portfolio_items_path)
+    end
+
+    it "removes the image when requested" do
+      portfolio_item.image.attach(
+        io: File.open(Rails.root.join("spec/fixtures/files/blog_feature.png")),
+        filename: "blog_feature.png",
+        content_type: "image/png"
+      )
+
+      patch admin_portfolio_item_path(portfolio_item), params: {
+        portfolio_item: { remove_image: "1" }
+      }
+
+      expect(portfolio_item.reload.image).not_to be_attached
     end
 
     it "renders edit on validation failure" do

@@ -59,12 +59,13 @@
   color: #334155;
 }
 
-/* Trix editor chrome for script form */
+/* Trix editor chrome for script form — hide attach (scripts are text-only) */
 .script-editor trix-toolbar .trix-button-group--file-tools {
   display: none;
 }
 
-.script-editor trix-editor {
+.script-editor trix-editor,
+.blog-editor trix-editor {
   min-height: 18rem;
   border-radius: 0.5rem;
   border: 1px solid #cbd5e1;
@@ -72,6 +73,15 @@
   background: #fff;
 }
 
-.script-editor trix-toolbar {
+.script-editor trix-toolbar,
+.blog-editor trix-toolbar {
   margin-bottom: 0.25rem;
+}
+
+/* Public blog article body images */
+.blog-article-body.trix-content img,
+.blog-article-body .trix-content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 1rem;
 }

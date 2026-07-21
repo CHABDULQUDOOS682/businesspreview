@@ -27,6 +27,7 @@ module Admin
 
     def update
       if @portfolio_item.update(portfolio_item_params)
+        purge_image_if_requested!
         redirect_to admin_portfolio_items_path, notice: "Portfolio item was successfully updated."
       else
         render :edit, status: :unprocessable_entity
@@ -51,8 +52,17 @@ module Admin
 
     def portfolio_item_params
       params.require(:portfolio_item).permit(
-        :title, :category, :description, :metric, :accent_color, :position, :active
+        :title, :category, :description, :metric, :accent_color, :position, :active,
+        :link_url, :image
       )
+    end
+
+    def purge_image_if_requested!
+      return if params.dig(:portfolio_item, :image).present?
+      return unless ActiveModel::Type::Boolean.new.cast(params.dig(:portfolio_item, :remove_image))
+      return unless @portfolio_item.image.attached?
+
+      @portfolio_item.image.purge
     end
   end
 end

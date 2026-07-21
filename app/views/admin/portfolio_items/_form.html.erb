@@ -1,4 +1,6 @@
-<%= form_with(model: [:admin, portfolio_item], class: "space-y-6") do |f| %>
+<% field_class = "block w-full rounded-xl border-0 px-3.5 py-2.5 text-slate-900 shadow-sm ring-1 ring-inset ring-slate-300 placeholder:text-slate-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6" %>
+
+<%= form_with(model: [:admin, portfolio_item], class: "space-y-6", html: { multipart: true }) do |f| %>
   <% if portfolio_item.errors.any? %>
     <div class="rounded-xl bg-red-50 p-4 ring-1 ring-inset ring-red-200">
       <h3 class="text-sm font-medium text-red-800">There were errors with your submission</h3>
@@ -13,35 +15,57 @@
   <div class="grid gap-6 md:grid-cols-2">
     <div class="space-y-2">
       <%= f.label :title, class: "block text-sm font-semibold text-slate-900" %>
-      <%= f.text_field :title, class: "block w-full rounded-xl border-0 py-2.5 text-slate-900 shadow-sm ring-1 ring-inset ring-slate-300 placeholder:text-slate-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm", placeholder: "e.g. Neighborhood Barbershop" %>
+      <%= f.text_field :title, class: field_class, placeholder: "e.g. Neighborhood Barbershop" %>
     </div>
 
     <div class="space-y-2">
       <%= f.label :category, class: "block text-sm font-semibold text-slate-900" %>
-      <%= f.text_field :category, class: "block w-full rounded-xl border-0 py-2.5 text-slate-900 shadow-sm ring-1 ring-inset ring-slate-300 placeholder:text-slate-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm", placeholder: "e.g. Barbershop" %>
+      <%= f.text_field :category, class: field_class, placeholder: "e.g. Barbershop" %>
       <p class="text-xs text-slate-500">Used by the public portfolio filter chips.</p>
     </div>
   </div>
 
   <div class="space-y-2">
     <%= f.label :description, class: "block text-sm font-semibold text-slate-900" %>
-    <%= f.text_area :description, rows: 3, class: "block w-full rounded-xl border-0 py-2.5 text-slate-900 shadow-sm ring-1 ring-inset ring-slate-300 placeholder:text-slate-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm" %>
+    <%= f.text_area :description, rows: 3, class: field_class, placeholder: "What was built and the outcome for the business" %>
+  </div>
+
+  <div class="space-y-2">
+    <%= f.label :image, "Project image", class: "block text-sm font-semibold text-slate-900" %>
+    <%= f.file_field :image, accept: "image/png,image/jpeg,image/webp,image/gif", class: "block w-full text-sm text-slate-600 file:mr-4 file:rounded-full file:border-0 file:bg-blue-50 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-blue-700 hover:file:bg-blue-100" %>
+    <p class="text-xs text-slate-500">Shown on the public portfolio card. PNG, JPG, WEBP, or GIF up to 5 MB.</p>
+
+    <% if portfolio_item.image.attached? %>
+      <div class="mt-3 flex items-start gap-4 rounded-xl border border-slate-200 bg-slate-50 p-3">
+        <%= image_tag portfolio_item.image, class: "h-24 w-40 rounded-lg object-cover ring-1 ring-slate-200", alt: "" %>
+        <label class="flex items-center gap-2 pt-1 text-sm text-slate-700">
+          <%= check_box_tag "portfolio_item[remove_image]", "1", false %>
+          Remove current image
+        </label>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="space-y-2">
+    <%= f.label :link_url, "Project link", class: "block text-sm font-semibold text-slate-900" %>
+    <%= f.url_field :link_url, class: field_class, placeholder: "https://example.com" %>
+    <p class="text-xs text-slate-500">Optional live site or demo URL. Shown as a “View project” link on the public portfolio.</p>
   </div>
 
   <div class="grid gap-6 md:grid-cols-3">
     <div class="space-y-2">
       <%= f.label :metric, class: "block text-sm font-semibold text-slate-900" %>
-      <%= f.text_field :metric, class: "block w-full rounded-xl border-0 py-2.5 text-slate-900 shadow-sm ring-1 ring-inset ring-slate-300 placeholder:text-slate-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm", placeholder: "Booking-ready" %>
+      <%= f.text_field :metric, class: field_class, placeholder: "Booking-ready" %>
     </div>
 
     <div class="space-y-2">
       <%= f.label :position, class: "block text-sm font-semibold text-slate-900" %>
-      <%= f.number_field :position, class: "block w-full rounded-xl border-0 py-2.5 text-slate-900 shadow-sm ring-1 ring-inset ring-slate-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm", min: 0 %>
+      <%= f.number_field :position, class: field_class, min: 0 %>
     </div>
 
     <div class="space-y-2">
       <%= f.label :accent_color, class: "block text-sm font-semibold text-slate-900" %>
-      <%= f.select :accent_color, PortfolioItem::ACCENT_COLORS, {}, class: "block w-full rounded-xl border-0 py-2.5 text-slate-900 shadow-sm ring-1 ring-inset ring-slate-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm" %>
+      <%= f.select :accent_color, PortfolioItem::ACCENT_COLORS, {}, class: field_class %>
     </div>
   </div>
 

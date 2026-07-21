@@ -27,7 +27,7 @@ RSpec.describe StripeBrandingSyncService do
       result = described_class.call!
 
       expect(result[:account_id]).to eq("acct_123")
-      expect(result[:public_logo_url]).to include("/brand/logo.png")
+      expect(result[:public_logo_url]).to include("/brand/logo.svg")
     end
   end
 end

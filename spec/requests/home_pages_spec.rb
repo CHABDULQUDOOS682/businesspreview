@@ -67,6 +67,27 @@ RSpec.describe "HomePages", type: :request do
       expect(response.body).not_to include("Hidden Build")
       expect(response.body).not_to include("Norvik Apparel")
     end
+
+    it "renders project image and link when present" do
+      item = create(
+        :portfolio_item,
+        title: "Linked Salon",
+        link_url: "https://example.com/salon",
+        active: true
+      )
+      item.image.attach(
+        io: File.open(Rails.root.join("spec/fixtures/files/blog_feature.png")),
+        filename: "blog_feature.png",
+        content_type: "image/png"
+      )
+
+      get portfolio_path
+
+      expect(response.body).to include("Linked Salon")
+      expect(response.body).to include("View project")
+      expect(response.body).to include("https://example.com/salon")
+      expect(response.body).to include("blog_feature")
+    end
   end
 
   describe "GET /blog" do
@@ -96,6 +117,22 @@ RSpec.describe "HomePages", type: :request do
       expect(response).to have_http_status(:success)
       expect(response.body).to include("Follow-up systems")
       expect(response.body).to include("Write the sequence within five minutes.")
+      expect(response.body).to match(/Back to blog[\s\S]*Follow-up systems/)
+    end
+
+    it "shows the feature image when attached" do
+      post = create(:blog_post, title: "Image post", slug: "image-post", active: true)
+      post.update!(body: "<p>Body copy.</p>")
+      post.featured_image.attach(
+        io: File.open(Rails.root.join("spec/fixtures/files/blog_feature.png")),
+        filename: "blog_feature.png",
+        content_type: "image/png"
+      )
+
+      get blog_post_path(post.slug)
+
+      expect(response).to have_http_status(:success)
+      expect(response.body).to include("blog_feature")
     end
 
     it "returns not found for coming soon cards without body" do
