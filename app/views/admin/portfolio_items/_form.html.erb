@@ -1,0 +1,57 @@
+<%= form_with(model: [:admin, portfolio_item], class: "space-y-6") do |f| %>
+  <% if portfolio_item.errors.any? %>
+    <div class="rounded-xl bg-red-50 p-4 ring-1 ring-inset ring-red-200">
+      <h3 class="text-sm font-medium text-red-800">There were errors with your submission</h3>
+      <ul class="mt-2 list-disc space-y-1 pl-5 text-sm text-red-700">
+        <% portfolio_item.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="grid gap-6 md:grid-cols-2">
+    <div class="space-y-2">
+      <%= f.label :title, class: "block text-sm font-semibold text-slate-900" %>
+      <%= f.text_field :title, class: "block w-full rounded-xl border-0 py-2.5 text-slate-900 shadow-sm ring-1 ring-inset ring-slate-300 placeholder:text-slate-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm", placeholder: "e.g. Neighborhood Barbershop" %>
+    </div>
+
+    <div class="space-y-2">
+      <%= f.label :category, class: "block text-sm font-semibold text-slate-900" %>
+      <%= f.text_field :category, class: "block w-full rounded-xl border-0 py-2.5 text-slate-900 shadow-sm ring-1 ring-inset ring-slate-300 placeholder:text-slate-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm", placeholder: "e.g. Barbershop" %>
+      <p class="text-xs text-slate-500">Used by the public portfolio filter chips.</p>
+    </div>
+  </div>
+
+  <div class="space-y-2">
+    <%= f.label :description, class: "block text-sm font-semibold text-slate-900" %>
+    <%= f.text_area :description, rows: 3, class: "block w-full rounded-xl border-0 py-2.5 text-slate-900 shadow-sm ring-1 ring-inset ring-slate-300 placeholder:text-slate-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm" %>
+  </div>
+
+  <div class="grid gap-6 md:grid-cols-3">
+    <div class="space-y-2">
+      <%= f.label :metric, class: "block text-sm font-semibold text-slate-900" %>
+      <%= f.text_field :metric, class: "block w-full rounded-xl border-0 py-2.5 text-slate-900 shadow-sm ring-1 ring-inset ring-slate-300 placeholder:text-slate-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm", placeholder: "Booking-ready" %>
+    </div>
+
+    <div class="space-y-2">
+      <%= f.label :position, class: "block text-sm font-semibold text-slate-900" %>
+      <%= f.number_field :position, class: "block w-full rounded-xl border-0 py-2.5 text-slate-900 shadow-sm ring-1 ring-inset ring-slate-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm", min: 0 %>
+    </div>
+
+    <div class="space-y-2">
+      <%= f.label :accent_color, class: "block text-sm font-semibold text-slate-900" %>
+      <%= f.select :accent_color, PortfolioItem::ACCENT_COLORS, {}, class: "block w-full rounded-xl border-0 py-2.5 text-slate-900 shadow-sm ring-1 ring-inset ring-slate-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm" %>
+    </div>
+  </div>
+
+  <div class="flex items-center gap-3">
+    <%= f.check_box :active, class: "h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-600" %>
+    <%= f.label :active, "Show this item on the website", class: "text-sm font-medium text-slate-900" %>
+  </div>
+
+  <div class="flex items-center justify-end gap-3 border-t border-slate-100 pt-6">
+    <%= link_to "Cancel", admin_portfolio_items_path, class: "text-sm font-semibold text-slate-600 hover:text-slate-900" %>
+    <%= f.submit class: "rounded-full bg-blue-600 px-6 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-500" %>
+  </div>
+<% end %>

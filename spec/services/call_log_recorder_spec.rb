@@ -34,4 +34,15 @@ RSpec.describe CallLogRecorder do
 
     expect(call_log.business).to eq(business)
   end
+
+  it "creates a call log without a Twilio SID" do
+    call_log = described_class.record_outbound!(
+      user: user,
+      business: business,
+      to_number: business.phone
+    )
+
+    expect(call_log.twilio_call_sid).to be_nil
+    expect(call_log.direction).to eq("outbound")
+  end
 end

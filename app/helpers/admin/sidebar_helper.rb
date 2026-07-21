@@ -6,6 +6,8 @@ module Admin::SidebarHelper
     tasks: :blue,
     users: :purple,
     reviews: :indigo,
+    blog_posts: :purple,
+    portfolio_items: :orange,
     commissions: :amber,
     commission_rates: :amber,
     invoices: :green,
@@ -132,6 +134,10 @@ module Admin::SidebarHelper
         '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2m19 0v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75M12 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0Z" stroke-linecap="round" stroke-linejoin="round" />'
       when :reviews
         '<path d="M11 5H6a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2v-5m-1.414-9.414a2 2 0 1 1 2.828 2.828L11.828 15H9v-2.828l8.586-8.586Z" stroke-linecap="round" stroke-linejoin="round" />'
+      when :blog_posts
+        '<path d="M4 5h16v14H4V5Zm4 4h8M8 13h8M8 17h5" stroke-linecap="round" stroke-linejoin="round" />'
+      when :portfolio_items
+        '<path d="M4 6h7v7H4V6Zm9 0h7v4h-7V6Zm0 6h7v7h-7v-7ZM4 15h7v3H4v-3Z" stroke-linecap="round" stroke-linejoin="round" />'
       when :commissions
         '<path d="M12 6v12m3-9.5H10.5a2.5 2.5 0 0 0 0 5H13.5a2.5 2.5 0 0 1 0 5H9" stroke-linecap="round" stroke-linejoin="round" /><path d="M4 4h16v16H4z" stroke-linecap="round" stroke-linejoin="round" />'
       when :commission_rates

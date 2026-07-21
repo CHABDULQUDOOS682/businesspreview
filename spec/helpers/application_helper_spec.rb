@@ -33,4 +33,36 @@ RSpec.describe ApplicationHelper, type: :helper do
       expect(helper.visible_business_segment_tabs(tabs)).to eq([ { key: "nurture" } ])
     end
   end
+
+  describe "#contact_email" do
+    it "returns the configured contact email" do
+      stub_const("ENV", ENV.to_hash.merge("CONTACT_EMAIL" => "hello@devdebizz.com"))
+      expect(helper.contact_email).to eq("hello@devdebizz.com")
+    end
+
+    it "falls back to the default contact email" do
+      stub_const("ENV", ENV.to_hash.except("CONTACT_EMAIL"))
+      expect(helper.contact_email).to eq("devdebizz@gmail.com")
+    end
+  end
+
+  describe "#seo_meta_tags" do
+    before do
+      allow(helper).to receive(:request).and_return(
+        instance_double(ActionDispatch::Request, host: "devdebizz.com", path: "/", ssl?: true, protocol: "https://", original_url: "https://devdebizz.com/")
+      )
+      allow(helper).to receive(:content_for?).and_return(false)
+      allow(helper).to receive(:content_for).and_return(nil)
+      allow(helper).to receive(:image_url).and_return("https://devdebizz.com/logo.svg")
+    end
+
+    it "includes google site verification when configured" do
+      stub_const("ENV", ENV.to_hash.merge("GOOGLE_SITE_VERIFICATION" => "verify-token", "APP_HOST" => "devdebizz.com", "APP_PROTOCOL" => "https"))
+
+      result = helper.seo_meta_tags
+
+      expect(result).to include('name="google-site-verification"')
+      expect(result).to include("verify-token")
+    end
+  end
 end

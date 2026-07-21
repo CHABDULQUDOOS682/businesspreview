@@ -1,0 +1,63 @@
+<% content_for :page_header do %>
+  <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+    <div>
+      <p class="portal-kicker">Marketing</p>
+      <h1 class="portal-page-title mt-2">Blog posts</h1>
+      <p class="mt-2 text-sm text-sand-600">
+        Manage insight cards and full articles shown on the public blog page.
+      </p>
+    </div>
+
+    <%= link_to "Add blog post", new_admin_blog_post_path, class: "btn-base btn-accent-blue px-4 py-3 text-sm shadow-sm" %>
+  </div>
+<% end %>
+
+<div class="overflow-hidden rounded-[24px] border border-sand-200 bg-white shadow-[0_8px_24px_rgba(26,25,24,0.04)]">
+  <table class="min-w-full divide-y divide-slate-200">
+    <thead class="bg-slate-50">
+      <tr>
+        <th class="px-4 py-3.5 text-left text-sm font-semibold text-slate-900">Title</th>
+        <th class="px-4 py-3.5 text-left text-sm font-semibold text-slate-900">Category</th>
+        <th class="px-4 py-3.5 text-left text-sm font-semibold text-slate-900">Published</th>
+        <th class="px-4 py-3.5 text-left text-sm font-semibold text-slate-900">Status</th>
+        <th class="px-4 py-3.5 text-right text-sm font-semibold text-slate-900">Actions</th>
+      </tr>
+    </thead>
+    <tbody class="divide-y divide-slate-200 bg-white">
+      <% @blog_posts.each do |post| %>
+        <tr class="hover:bg-slate-50">
+          <td class="px-4 py-4 text-sm text-slate-900">
+            <div class="font-medium"><%= post.title %></div>
+            <div class="mt-1 text-xs text-slate-500 truncate max-w-md"><%= post.excerpt %></div>
+            <div class="mt-1 text-[10px] font-bold uppercase tracking-wider text-slate-400">
+              <%= post.readable? ? "Article ready" : "Coming soon card" %>
+            </div>
+          </td>
+          <td class="px-4 py-4 text-sm text-slate-600"><%= post.category.presence || "—" %></td>
+          <td class="px-4 py-4 text-sm text-slate-600"><%= post.display_date %></td>
+          <td class="px-4 py-4 text-sm text-slate-600">
+            <% status_badge_classes = post.active? ? "bg-emerald-50 text-emerald-700 ring-emerald-200" : "bg-amber-50 text-amber-700 ring-amber-200" %>
+            <span class="inline-flex items-center rounded-full px-2.5 py-1 text-xs font-medium ring-1 ring-inset <%= status_badge_classes %>">
+              <%= post.active? ? "Visible" : "Hidden" %>
+            </span>
+          </td>
+          <td class="px-4 py-4 text-right text-sm">
+            <div class="flex justify-end gap-2">
+              <%= button_to toggle_active_admin_blog_post_path(post), method: :patch, class: "rounded-md #{post.active? ? 'bg-amber-50 text-amber-700 ring-amber-200 hover:bg-amber-100' : 'bg-emerald-50 text-emerald-700 ring-emerald-200 hover:bg-emerald-100'} px-3 py-1.5 text-xs font-semibold shadow-sm ring-1 ring-inset" do %>
+                <%= post.active? ? "Hide" : "Show" %>
+              <% end %>
+              <%= link_to "Edit", edit_admin_blog_post_path(post), class: "rounded-md bg-white px-3 py-1.5 text-xs font-semibold text-slate-900 shadow-sm ring-1 ring-inset ring-slate-300 hover:bg-slate-50" %>
+              <%= button_to "Delete", admin_blog_post_path(post), method: :delete, data: { turbo_confirm: "Delete this blog post?" }, class: "rounded-md bg-red-50 px-3 py-1.5 text-xs font-semibold text-red-700 shadow-sm ring-1 ring-inset ring-red-200 hover:bg-red-100" %>
+            </div>
+          </td>
+        </tr>
+      <% end %>
+
+      <% if @blog_posts.empty? %>
+        <tr>
+          <td colspan="5" class="px-4 py-10 text-center text-sm text-slate-500">No blog posts yet. Add one to populate /blog.</td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

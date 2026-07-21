@@ -7,10 +7,19 @@ class ApplicationMailer < ActionMailer::Base
 
   private
 
+  LOGO_CANDIDATES = [
+    "public/brand/logo.png",
+    "app/assets/images/logo/Website Logo PNG.png",
+    "public/icon.png"
+  ].freeze
+
   def attach_logo
-    logo_path = Rails.root.join("public/icon.png")
-    if File.exist?(logo_path)
-      attachments.inline["logo.png"] = File.read(logo_path)
-    end
+    logo_path = LOGO_CANDIDATES
+      .map { |relative| Rails.root.join(relative) }
+      .find { |path| File.exist?(path) }
+
+    return if logo_path.blank?
+
+    attachments.inline["logo.png"] = File.read(logo_path)
   end
 end

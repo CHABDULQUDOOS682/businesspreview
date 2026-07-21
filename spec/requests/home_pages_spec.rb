@@ -15,6 +15,13 @@ RSpec.describe "HomePages", type: :request do
     end
   end
 
+  describe "GET /about" do
+    it "returns http success" do
+      get about_path
+      expect(response).to have_http_status(:success)
+    end
+  end
+
   describe "GET /workflow" do
     it "returns http success and renders process" do
       get process_path
@@ -48,6 +55,55 @@ RSpec.describe "HomePages", type: :request do
     it "returns http success" do
       get portfolio_path
       expect(response).to have_http_status(:success)
+    end
+
+    it "renders active portfolio items from the database" do
+      create(:portfolio_item, title: "Neighborhood Barbershop", active: true)
+      create(:portfolio_item, title: "Hidden Build", active: false)
+
+      get portfolio_path
+
+      expect(response.body).to include("Neighborhood Barbershop")
+      expect(response.body).not_to include("Hidden Build")
+      expect(response.body).not_to include("Norvik Apparel")
+    end
+  end
+
+  describe "GET /blog" do
+    it "returns http success" do
+      get blog_path
+      expect(response).to have_http_status(:success)
+    end
+
+    it "renders active blog posts and coming soon when body is blank" do
+      create(:blog_post, title: "Mobile homepage tips", active: true)
+
+      get blog_path
+
+      expect(response.body).to include("Mobile homepage tips")
+      expect(response.body).to include("Coming soon")
+      expect(response.body).not_to include("Read UX Guide")
+    end
+  end
+
+  describe "GET /blog/:slug" do
+    it "shows a readable published post" do
+      post = create(:blog_post, title: "Follow-up systems", slug: "follow-up-systems", active: true)
+      post.update!(body: "<p>Write the sequence within five minutes.</p>")
+
+      get blog_post_path(post.slug)
+
+      expect(response).to have_http_status(:success)
+      expect(response.body).to include("Follow-up systems")
+      expect(response.body).to include("Write the sequence within five minutes.")
+    end
+
+    it "returns not found for coming soon cards without body" do
+      post = create(:blog_post, title: "Draft card", slug: "draft-card", active: true)
+
+      get blog_post_path(post.slug)
+
+      expect(response).to have_http_status(:not_found)
     end
   end
 
@@ -101,13 +157,6 @@ RSpec.describe "HomePages", type: :request do
   describe "GET /partners" do
     it "returns http success" do
       get partners_path
-      expect(response).to have_http_status(:success)
-    end
-  end
-
-  describe "GET /blog" do
-    it "returns http success" do
-      get blog_path
       expect(response).to have_http_status(:success)
     end
   end

@@ -2,6 +2,10 @@ Rails.application.routes.draw do
   devise_for :users, skip: [ :registrations ], controllers: { passwords: "users/passwords" }
   # root "admin/dashboard#index"
   root "home_pages#index"
+
+  get "robots.txt", to: "seo#robots", as: :robots
+  get "sitemap.xml", to: "seo#sitemap", as: :sitemap, defaults: { format: :xml }
+
   get "services", to: "home_pages#services"
   get "about", to: "home_pages#about"
   get "process", to: "home_pages#workflow"
@@ -14,6 +18,7 @@ Rails.application.routes.draw do
   get "press", to: "home_pages#press"
   get "partners", to: "home_pages#partners"
   get "blog", to: "home_pages#blog"
+  get "blog/:slug", to: "home_pages#blog_show", as: :blog_post
   get "help_center", to: "home_pages#help_center"
   get "documentation", to: "home_pages#documentation"
   get "brand_kit", to: "home_pages#brand_kit"
@@ -93,6 +98,16 @@ Rails.application.routes.draw do
       end
     end
     resources :reviews do
+      member do
+        patch :toggle_active
+      end
+    end
+    resources :blog_posts do
+      member do
+        patch :toggle_active
+      end
+    end
+    resources :portfolio_items do
       member do
         patch :toggle_active
       end

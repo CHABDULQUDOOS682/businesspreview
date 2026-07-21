@@ -1,4 +1,5 @@
 <% content_for :title, "Blog | DevDeBizz" %>
+<% content_for :meta_description, "Practical DevDeBizz insights for service businesses on mobile websites, follow-up sequences, booking flows, and local digital systems." %>
 
 <%= render "page_header",
   eyebrow: "Blog",
@@ -7,29 +8,36 @@
 
 <section class="py-20">
   <div class="mx-auto max-w-7xl px-2 md:px-0">
-    <div class="grid gap-8 md:grid-cols-3">
-      <% [
-        { tag: "Design", time: "5 min read", date: "June 15, 2026", title: "How to Optimize Your Service Homepage for Mobile Visitors", desc: "Most local service inquiries happen on mobile screens. Learn to organize elements, place booking buttons, and write clear headlines that fit smaller displays.", link_text: "Read UX Guide" },
-        { tag: "Automation", time: "7 min read", date: "May 28, 2026", title: "The 3-Step Follow-Up Sequence That Prevents Lead Leakage", desc: "When a potential client fills out a contact form, timing is everything. Here is the exact email and SMS dispatch blueprint that stops leads from going cold.", link_text: "Read Strategy" },
-        { tag: "Integrations", time: "6 min read", date: "May 10, 2026", title: "Connecting Stripe Invoices Directly to Your Client Booking Flow", desc: "Stop chasing checks. Discover how connecting automated billing milestones directly into your client handoff saves hours of admin work weekly.", link_text: "Read Technical Guide" }
-      ].each do |post| %>
-        <div class="home-glass home-card-3d flex flex-col justify-between overflow-hidden rounded-[28px] p-8">
-          <div>
-            <div class="flex items-center justify-between text-xs font-bold text-[#081849]/50">
-              <span class="bg-[#213885]/8 text-[#213885] px-3 py-1 rounded-full"><%= post[:tag] %></span>
-              <span><%= post[:time] %></span>
+    <% if @blog_posts.any? %>
+      <div class="grid gap-8 md:grid-cols-3">
+        <% @blog_posts.each do |post| %>
+          <div class="home-glass home-card-3d flex flex-col justify-between overflow-hidden rounded-[28px] p-8">
+            <div>
+              <div class="flex items-center justify-between text-xs font-bold text-[#081849]/50">
+                <span class="bg-[#213885]/8 text-[#213885] px-3 py-1 rounded-full"><%= post.category.presence || "Insight" %></span>
+                <span><%= post.display_read_time %></span>
+              </div>
+              <h3 class="mt-6 text-2xl font-bold leading-snug text-[#081849]"><%= post.title %></h3>
+              <p class="mt-4 text-sm leading-relaxed text-[#081849]/66"><%= post.excerpt %></p>
             </div>
-            <h3 class="mt-6 text-2xl font-bold leading-snug text-[#081849] hover:text-[#5F3475] transition-colors"><%= post[:title] %></h3>
-            <p class="mt-4 text-sm leading-relaxed text-[#081849]/66"><%= post[:desc] %></p>
+            <div class="mt-8 border-t border-[#081849]/8 pt-4 flex items-center justify-between text-xs text-[#081849]/50">
+              <span><%= post.display_date %></span>
+              <% if post.readable? %>
+                <%= link_to blog_post_path(post.slug), class: "text-sm font-bold text-[#213885] hover:text-[#5F3475] inline-flex items-center gap-1" do %>
+                  Read article &rarr;
+                <% end %>
+              <% else %>
+                <span class="text-sm font-bold text-[#081849]/45">Coming soon</span>
+              <% end %>
+            </div>
           </div>
-          <div class="mt-8 border-t border-[#081849]/8 pt-4 flex items-center justify-between text-xs text-[#081849]/50">
-            <span><%= post[:date] %></span>
-            <%= link_to "#", class: "text-sm font-bold text-[#213885] hover:text-[#5F3475] inline-flex items-center gap-1" do %>
-              <%= post[:link_text] %> &rarr;
-            <% end %>
-          </div>
-        </div>
-      <% end %>
-    </div>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="home-glass mx-auto max-w-2xl rounded-[28px] p-10 text-center">
+        <p class="text-lg font-semibold text-[#081849]">New insights are on the way.</p>
+        <p class="mt-3 text-sm text-[#081849]/66">Check back soon for practical guides for service businesses.</p>
+      </div>
+    <% end %>
   </div>
 </section>

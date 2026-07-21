@@ -116,6 +116,18 @@ RSpec.describe "Twilios", type: :request do
       post twilio_connect_path
       expect(response.body).to include("Error")
     end
+
+    it "resolves the caller from the Twilio client identity" do
+      expect {
+        post twilio_connect_path, params: {
+          number: "+1234567890",
+          CallSid: "CA_CONNECT_CLIENT",
+          Caller: "client:user-#{user.id}"
+        }
+      }.to change(CallLog, :count).by(1)
+
+      expect(CallLog.last.user).to eq(user)
+    end
   end
 
   describe "POST /twilio/dial_status" do
