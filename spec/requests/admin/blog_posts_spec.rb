@@ -38,6 +38,26 @@ RSpec.describe "Admin::BlogPosts", type: :request do
       expect(response).to redirect_to(admin_blog_posts_path)
     end
 
+    it "creates a blog post with a feature image" do
+      image = fixture_file_upload(
+        Rails.root.join("spec/fixtures/files/blog_feature.png"),
+        "image/png"
+      )
+
+      expect {
+        post admin_blog_posts_path, params: {
+          blog_post: {
+            title: "Post with image",
+            excerpt: "Has a feature image",
+            featured_image: image,
+            active: true
+          }
+        }
+      }.to change(BlogPost, :count).by(1)
+
+      expect(BlogPost.order(:id).last.featured_image).to be_attached
+    end
+
     it "renders new on validation failure" do
       post admin_blog_posts_path, params: { blog_post: { title: "", excerpt: "" } }
       expect(response).to have_http_status(:unprocessable_entity)
@@ -56,6 +76,20 @@ RSpec.describe "Admin::BlogPosts", type: :request do
       patch admin_blog_post_path(blog_post), params: { blog_post: { title: "Updated title" } }
       expect(blog_post.reload.title).to eq("Updated title")
       expect(response).to redirect_to(admin_blog_posts_path)
+    end
+
+    it "removes the feature image when requested" do
+      blog_post.featured_image.attach(
+        io: File.open(Rails.root.join("spec/fixtures/files/blog_feature.png")),
+        filename: "blog_feature.png",
+        content_type: "image/png"
+      )
+
+      patch admin_blog_post_path(blog_post), params: {
+        blog_post: { remove_featured_image: "1" }
+      }
+
+      expect(blog_post.reload.featured_image).not_to be_attached
     end
 
     it "renders edit on validation failure" do

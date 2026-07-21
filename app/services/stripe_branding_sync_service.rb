@@ -2,11 +2,13 @@ require "stripe"
 
 # Uploads the DevDeBizz logo to Stripe account branding so hosted invoices,
 # invoice PDFs, and Stripe's own invoice emails show the correct mark.
+# Stripe File API accepts PNG/JPEG only (not SVG) for business_logo / business_icon.
 class StripeBrandingSyncService
   class Error < StandardError; end
 
   LOGO_PATH = Rails.root.join("public/brand/logo.png")
   FALLBACK_LOGO_PATH = Rails.root.join("app/assets/images/logo/Website Logo PNG.png")
+  PUBLIC_LOGO_SVG_PATH = "/brand/logo.svg"
 
   def self.call!
     new.call!
@@ -65,6 +67,6 @@ class StripeBrandingSyncService
   def public_logo_url
     host = ENV.fetch("APP_HOST", "devdebizz.com")
     protocol = ENV.fetch("APP_PROTOCOL", "https")
-    "#{protocol}://#{host}/brand/logo.png"
+    "#{protocol}://#{host}#{PUBLIC_LOGO_SVG_PATH}"
   end
 end

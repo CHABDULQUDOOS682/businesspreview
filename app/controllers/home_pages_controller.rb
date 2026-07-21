@@ -21,7 +21,7 @@ class HomePagesController < ApplicationController
     end
 
     def portfolio
-        @portfolio_items = PortfolioItem.published
+        @portfolio_items = PortfolioItem.published.with_attached_image
         @portfolio_categories = [ "All" ] + @portfolio_items.map(&:category).uniq
     end
 
@@ -53,11 +53,11 @@ class HomePagesController < ApplicationController
     end
 
     def blog
-        @blog_posts = BlogPost.published
+        @blog_posts = BlogPost.published.with_attached_featured_image
     end
 
     def blog_show
-        @blog_post = BlogPost.published.find_by!(slug: params[:slug])
+        @blog_post = BlogPost.published.with_attached_featured_image.find_by!(slug: params[:slug])
         raise ActiveRecord::RecordNotFound unless @blog_post.readable?
     end
 

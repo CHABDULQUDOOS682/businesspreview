@@ -11,24 +11,32 @@
     <% if @blog_posts.any? %>
       <div class="grid gap-8 md:grid-cols-3">
         <% @blog_posts.each do |post| %>
-          <div class="home-glass home-card-3d flex flex-col justify-between overflow-hidden rounded-[28px] p-8">
-            <div>
-              <div class="flex items-center justify-between text-xs font-bold text-[#081849]/50">
-                <span class="bg-[#213885]/8 text-[#213885] px-3 py-1 rounded-full"><%= post.category.presence || "Insight" %></span>
-                <span><%= post.display_read_time %></span>
+          <div class="home-glass home-card-3d flex flex-col justify-between overflow-hidden rounded-[28px]">
+            <% if post.featured_image.attached? %>
+              <%= image_tag post.featured_image,
+                    class: "h-44 w-full object-cover",
+                    alt: post.title %>
+            <% end %>
+
+            <div class="flex flex-1 flex-col justify-between p-8">
+              <div>
+                <div class="flex items-center justify-between text-xs font-bold text-[#081849]/50">
+                  <span class="bg-[#213885]/8 text-[#213885] px-3 py-1 rounded-full"><%= post.category.presence || "Insight" %></span>
+                  <span><%= post.display_read_time %></span>
+                </div>
+                <h3 class="mt-6 text-2xl font-bold leading-snug text-[#081849]"><%= post.title %></h3>
+                <p class="mt-4 text-sm leading-relaxed text-[#081849]/66"><%= post.excerpt %></p>
               </div>
-              <h3 class="mt-6 text-2xl font-bold leading-snug text-[#081849]"><%= post.title %></h3>
-              <p class="mt-4 text-sm leading-relaxed text-[#081849]/66"><%= post.excerpt %></p>
-            </div>
-            <div class="mt-8 border-t border-[#081849]/8 pt-4 flex items-center justify-between text-xs text-[#081849]/50">
-              <span><%= post.display_date %></span>
-              <% if post.readable? %>
-                <%= link_to blog_post_path(post.slug), class: "text-sm font-bold text-[#213885] hover:text-[#5F3475] inline-flex items-center gap-1" do %>
-                  Read article &rarr;
+              <div class="mt-8 border-t border-[#081849]/8 pt-4 flex items-center justify-between text-xs text-[#081849]/50">
+                <span><%= post.display_date %></span>
+                <% if post.readable? %>
+                  <%= link_to blog_post_path(post.slug), class: "text-sm font-bold text-[#213885] hover:text-[#5F3475] inline-flex items-center gap-1" do %>
+                    Read article &rarr;
+                  <% end %>
+                <% else %>
+                  <span class="text-sm font-bold text-[#081849]/45">Coming soon</span>
                 <% end %>
-              <% else %>
-                <span class="text-sm font-bold text-[#081849]/45">Coming soon</span>
-              <% end %>
+              </div>
             </div>
           </div>
         <% end %>

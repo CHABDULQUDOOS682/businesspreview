@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_07_21_180200) do
+ActiveRecord::Schema[8.0].define(version: 2026_07_22_004930) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -407,6 +407,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_07_21_180200) do
     t.boolean "active", default: true, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "link_url"
     t.index ["active", "position"], name: "index_portfolio_items_on_active_and_position"
     t.index ["active"], name: "index_portfolio_items_on_active"
   end
