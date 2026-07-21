@@ -10,6 +10,9 @@ class HomePagesController < ApplicationController
     def services
     end
 
+    def about
+    end
+
     def workflow
         render :process
     end
@@ -18,6 +21,8 @@ class HomePagesController < ApplicationController
     end
 
     def portfolio
+        @portfolio_items = PortfolioItem.published
+        @portfolio_categories = [ "All" ] + @portfolio_items.map(&:category).uniq
     end
 
     def contact
@@ -48,6 +53,12 @@ class HomePagesController < ApplicationController
     end
 
     def blog
+        @blog_posts = BlogPost.published
+    end
+
+    def blog_show
+        @blog_post = BlogPost.published.find_by!(slug: params[:slug])
+        raise ActiveRecord::RecordNotFound unless @blog_post.readable?
     end
 
     def help_center

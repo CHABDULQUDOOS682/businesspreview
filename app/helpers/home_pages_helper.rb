@@ -5,7 +5,7 @@ module HomePagesHelper
       [ "Services", services_path ],
       [ "About", about_path ],
       [ "Process", process_path ],
-      # [ "Portfolio", portfolio_path ],
+      [ "Portfolio", portfolio_path ],
       [ "Pricing", pricing_path ]
     ]
   end

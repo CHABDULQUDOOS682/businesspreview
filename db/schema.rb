@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_07_19_120000) do
+ActiveRecord::Schema[8.0].define(version: 2026_07_21_180200) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -83,6 +83,22 @@ ActiveRecord::Schema[8.0].define(version: 2026_07_19_120000) do
     t.datetime "updated_at", null: false
     t.index ["user_id", "day_of_week"], name: "index_availability_rules_on_user_id_and_day_of_week"
     t.index ["user_id"], name: "index_availability_rules_on_user_id"
+  end
+
+  create_table "blog_posts", force: :cascade do |t|
+    t.string "title", null: false
+    t.string "slug", null: false
+    t.string "category"
+    t.text "excerpt"
+    t.string "read_time_label"
+    t.date "published_on"
+    t.boolean "active", default: true, null: false
+    t.string "meta_title"
+    t.string "meta_description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["active"], name: "index_blog_posts_on_active"
+    t.index ["slug"], name: "index_blog_posts_on_slug", unique: true
   end
 
   create_table "business_commission_rates", force: :cascade do |t|
@@ -379,6 +395,20 @@ ActiveRecord::Schema[8.0].define(version: 2026_07_19_120000) do
     t.index ["status"], name: "index_payment_invoices_on_status"
     t.index ["stripe_invoice_id"], name: "index_payment_invoices_on_stripe_invoice_id", unique: true
     t.index ["stripe_subscription_id"], name: "index_payment_invoices_on_stripe_subscription_id"
+  end
+
+  create_table "portfolio_items", force: :cascade do |t|
+    t.string "title", null: false
+    t.string "category", null: false
+    t.text "description"
+    t.string "metric"
+    t.string "accent_color", default: "from-[#213885]/30"
+    t.integer "position", default: 0, null: false
+    t.boolean "active", default: true, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["active", "position"], name: "index_portfolio_items_on_active_and_position"
+    t.index ["active"], name: "index_portfolio_items_on_active"
   end
 
   create_table "preview_links", force: :cascade do |t|

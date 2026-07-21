@@ -1,20 +1,21 @@
 <% content_for :title, "Services | DevDeBizz" %>
+<% content_for :meta_description, "DevDeBizz builds mobile-ready websites, managed hosting, SEO foundations, booking flows, and follow-up systems for local service businesses." %>
 
 <%= render "page_header",
   eyebrow: "Our Services",
-  title_html: 'Everything you need <br><span class="home-display-accent">to grow online</span>'.html_safe,
-  subtitle: "Six core practices, one accountable team. Engage on a single service or hire us as your full-stack growth partner." %>
+  title_html: 'Websites and systems that <br><span class="home-display-accent">help you book more work</span>'.html_safe,
+  subtitle: "We help service businesses clarify their offer online, stay findable, and turn interest into booked calls — without a pile of disconnected tools." %>
 
 <section class="py-20">
   <div class="mx-auto max-w-7xl px-2 md:px-0">
     <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
     <% [
-      { icon: "fa-code", title: "Web Development", description: "High-performance websites and web apps built with React, Next.js, and Node — engineered for speed, scale, and SEO.", features: ["Custom CMS", "Headless e-commerce", "Web apps & SaaS", "API development"] },
-      { icon: "fa-star", title: "Branding & Identity", description: "Distinctive logos, type systems, and brand guidelines that give your company a voice customers remember.", features: ["Logo design", "Visual identity", "Brand guidelines", "Packaging & print"] },
-      { icon: "fa-desktop", title: "UI / UX Design", description: "Research-driven product design that turns complex flows into intuitive, conversion-focused experiences.", features: ["User research", "Wireframing", "Design systems", "Prototyping"] },
-      { icon: "fa-magnifying-glass", title: "SEO & Content", description: "Technical SEO, keyword strategy, and editorial content that earn rankings, traffic, and qualified leads.", features: ["Technical SEO audit", "Content strategy", "Link building", "Local SEO"] },
-      { icon: "fa-chart-line", title: "Performance Marketing", description: "Data-driven Google, Meta, and LinkedIn ad campaigns optimized weekly for ROAS with transparent dashboards.", features: ["Google Ads", "Meta Ads", "LinkedIn Ads", "Analytics & reporting"] },
-      { icon: "fa-cloud", title: "Cloud & DevOps", description: "Scalable AWS, GCP, and Vercel infrastructure with CI/CD, monitoring, and zero-downtime deployments.", features: ["Cloud architecture", "CI/CD pipelines", "Monitoring & alerts", "Cost optimization"] }
+      { icon: "fa-laptop", title: "Website builds", description: "Mobile-ready sites that explain what you do, build trust quickly, and guide visitors to contact or book.", features: ["Landing pages & multi-page sites", "Clear service and offer pages", "Mobile-first layouts", "Contact and booking CTAs"] },
+      { icon: "fa-server", title: "Managed hosting", description: "Reliable hosting with monitoring so your site stays fast, secure, and available for local customers.", features: ["Managed hosting & SSL", "Uptime monitoring", "Security monitoring", "Domain launch support"] },
+      { icon: "fa-magnifying-glass", title: "SEO foundations", description: "On-page structure and local SEO setup so service pages can earn visibility for the searches that matter.", features: ["On-page SEO setup", "Local SEO structure", "Google Analytics & Search Console", "Ongoing SEO support on higher plans"] },
+      { icon: "fa-calendar-check", title: "Booking & contact flows", description: "Forms, appointment paths, and handoff flows that make it easy for customers to take the next step.", features: ["Contact form management", "Appointment booking systems", "Service and staff pages", "Lead capture paths"] },
+      { icon: "fa-comments", title: "Follow-up systems", description: "Practical follow-up so inquiries do not go cold after someone fills out a form or books a call.", features: ["Lead handoff clarity", "Review collection links", "CRM-friendly workflows", "Client journey support"] },
+      { icon: "fa-arrows-rotate", title: "Ongoing partnership", description: "Monthly content updates, monitoring, and support so your site keeps matching how the business actually runs.", features: ["Monthly content updates", "Performance monitoring", "Priority support options", "Strategy check-ins on Pro"] }
     ].each_with_index do |service, index| %>
       <div class="home-glass home-card-3d rounded-[28px] p-8 animate-fade-up" style="animation-delay: <%= index * 0.06 %>s;">
         <div class="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-[#213885]/18 to-[#893172]/10 ring-1 ring-[#213885]/20">
@@ -41,12 +42,12 @@
 <section class="relative overflow-hidden border-y border-[#081849]/8 bg-[#CCCACC]/45 py-24">
   <div class="home-grid-bg absolute inset-0 opacity-30"></div>
   <div class="relative mx-auto max-w-7xl px-2 md:px-0 text-center">
-    <h2 class="text-4xl font-extrabold text-[#081849] md:text-5xl">Built for outcomes, not <span class="text-[#5F3475]">deliverables.</span></h2>
+    <h2 class="text-4xl font-extrabold text-[#081849] md:text-5xl">Built for outcomes, not <span class="text-[#5F3475]">busywork.</span></h2>
     <p class="mt-6 text-lg text-[#081849]/70">
-      Every engagement starts with a clear KPI — traffic, signups, revenue, retention. We don't ship features; we ship results, measured weekly and reported transparently.
+      Every engagement starts with a clear goal — clearer offer pages, better local visibility, or more booked calls. We measure what matters for service businesses and keep the process visible.
     </p>
     <div class="mt-12 grid gap-6 md:grid-cols-3">
-      <% [["Weekly", "Reporting"], ["Quarterly", "Strategy reviews"], ["24h", "Response SLA"]].each do |number, label| %>
+      <% [["Weekly", "Progress updates"], ["Clear", "Scope & handoffs"], ["Practical", "Support after launch"]].each do |number, label| %>
         <div class="home-glass home-card-3d rounded-[28px] p-8">
           <p class="bg-gradient-to-br from-[#213885] to-[#893172] bg-clip-text text-4xl font-extrabold text-transparent"><%= number %></p>
           <p class="mt-2 text-sm text-[#081849]/68"><%= label %></p>

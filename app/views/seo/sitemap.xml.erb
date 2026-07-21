@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<% @urls.each do |entry| %>
+  <url>
+    <loc><%= entry[:loc] %></loc>
+    <% if entry[:lastmod].present? %>
+    <lastmod><%= entry[:lastmod].utc.iso8601 %></lastmod>
+    <% end %>
+    <changefreq><%= entry[:changefreq] %></changefreq>
+    <priority><%= entry[:priority] %></priority>
+  </url>
+<% end %>
+</urlset>

@@ -1,17 +1,45 @@
 class ApplicationController < ActionController::Base
   include Pagy::Backend
   # Only allow modern browsers supporting webp images, web push, badges, import maps, CSS nesting, and CSS :has.
+  before_action :redirect_www_to_canonical_host
+  before_action :set_staging_robots_header
   before_action :authenticate_user!
   before_action :set_unread_message_count, if: :user_signed_in?
   before_action :prepend_role_specific_admin_views, if: :role_specific_admin_views?
   helper_method :unread_message_count, :current_role_label, :can_manage_users?,
                 :super_admin?, :admin_role?, :employee_role?
-  allow_browser versions: :modern
+  allow_browser versions: :modern, if: :enforce_modern_browser?
 
   private
 
   def after_sign_in_path_for(_resource)
     admin_root_path
+  end
+
+  def redirect_www_to_canonical_host
+    return unless Rails.env.production? || Rails.env.staging?
+    return unless request.get? || request.head?
+    return unless request.host.start_with?("www.")
+
+    canonical_host = ENV.fetch("APP_HOST", request.host.delete_prefix("www."))
+    protocol = ENV.fetch("APP_PROTOCOL", request.ssl? ? "https" : "http")
+    redirect_to "#{protocol}://#{canonical_host}#{request.fullpath}",
+                status: :moved_permanently,
+                allow_other_host: true
+  end
+
+  def set_staging_robots_header
+    return unless Rails.env.staging?
+
+    response.headers["X-Robots-Tag"] = "noindex, nofollow"
+  end
+
+  def enforce_modern_browser?
+    !search_engine_bot?
+  end
+
+  def search_engine_bot?
+    request.user_agent.to_s.match?(/Googlebot|Google-InspectionTool|bingbot|Slurp|DuckDuckBot|Baiduspider|YandexBot|facebookexternalhit|Twitterbot|LinkedInBot/i)
   end
 
   def set_unread_message_count

@@ -1,70 +1,80 @@
 <% content_for :title, "Portfolio | DevDeBizz" %>
+<% content_for :meta_description, "See example DevDeBizz builds for local service businesses — barbershops, salons, clinics, and consultants — with mobile-ready sites, booking, and SEO foundations." %>
 
 <%= render "page_header",
   eyebrow: "Selected Work",
-  title_html: 'Real brands.<br><span class="home-display-accent">Real results.</span>'.html_safe,
-  subtitle: "A snapshot of brands we've helped launch, scale, and reinvent — across SaaS, retail, fintech, healthcare, and beyond." %>
+  title_html: 'Built for <span class="home-display-accent">local service businesses</span>'.html_safe,
+  subtitle: "Example sites and systems we design for barbershops, salons, clinics, and other service-led teams — focused on clarity, mobile visitors, and booked work." %>
 
 <section class="py-16" data-controller="portfolio-filter">
   <div class="mx-auto max-w-7xl px-2 md:px-0">
-    <div class="mb-12 flex flex-wrap items-center justify-center gap-2">
-      <% ["All", "E-commerce", "SaaS", "Branding", "Fintech", "Healthcare", "Marketing"].each_with_index do |label, index| %>
-        <button 
-          data-portfolio-filter-target="button" 
-          data-action="click->portfolio-filter#filter" 
-          data-category="<%= label %>"
-          class="<%= index.zero? ? 'rounded-full border border-[#213885] bg-[#213885] px-5 py-2 text-sm font-medium text-[#ECDFD2]' : 'rounded-full border border-[#081849]/15 bg-[#081849]/5 px-5 py-2 text-sm font-medium text-[#081849]/70' %> transition-all duration-300"
-        >
-          <%= label %>
-        </button>
-      <% end %>
-    </div>
+    <% if @portfolio_items.any? %>
+      <div class="mb-12 flex flex-wrap items-center justify-center gap-2">
+        <% @portfolio_categories.each_with_index do |label, index| %>
+          <button
+            data-portfolio-filter-target="button"
+            data-action="click->portfolio-filter#filter"
+            data-category="<%= label %>"
+            class="<%= index.zero? ? 'rounded-full border border-[#213885] bg-[#213885] px-5 py-2 text-sm font-medium text-[#ECDFD2]' : 'rounded-full border border-[#081849]/15 bg-[#081849]/5 px-5 py-2 text-sm font-medium text-[#081849]/70' %> transition-all duration-300"
+          >
+            <%= label %>
+          </button>
+        <% end %>
+      </div>
 
-    <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-      <% [
-        { tag: "E-commerce", title: "Norvik Apparel", description: "Headless Shopify rebuild that lifted conversion by 38% and cut load time in half.", metric: "+38% conv.", color: "from-[#213885]/30" },
-        { tag: "SaaS", title: "PulseMetric", description: "Analytics dashboard for 12k+ B2B teams, redesigned around a single source of truth.", metric: "12k teams", color: "from-emerald-400/30" },
-        { tag: "Branding", title: "Cedar & Co.", description: "Full identity refresh — wordmark, packaging, and motion system for a craft coffee chain.", metric: "32 stores", color: "from-amber-300/30" },
-        { tag: "Fintech", title: "Kavari Pay", description: "Onboarding flow redesign that doubled signup completion across 7 markets.", metric: "2× signups", color: "from-cyan-400/30" },
-        { tag: "Healthcare", title: "MediLoop", description: "HIPAA-compliant patient portal with native iOS and Android companion apps.", metric: "HIPAA", color: "from-rose-400/30" },
-        { tag: "Marketing", title: "Orbit Studios", description: "12-month SEO program that grew organic traffic from 4k to 180k monthly visits.", metric: "+4400%", color: "from-violet-400/30" }
-      ].each do |project| %>
-        <div 
-          class="home-card-3d group overflow-hidden rounded-[28px] border border-[#081849]/10 bg-[#ECDFD2]" 
-          data-portfolio-filter-target="item" 
-          data-category="<%= project[:tag] %>"
-          style="view-transition-name: project-<%= project[:title].parameterize %>"
-        >
-          <div class="relative aspect-[4/3] overflow-hidden bg-[#CCCACC]">
-            <div class="home-grid-bg absolute inset-0 opacity-50"></div>
-            <div class="absolute inset-0 bg-gradient-to-br <%= project[:color] %> to-transparent"></div>
-            <div class="absolute left-4 top-4 rounded-full border border-[#081849]/15 bg-white/70 px-3 py-1 text-xs font-semibold text-[#081849]">
-              <%= project[:tag] %>
-            </div>
-            <div class="absolute right-4 top-4 rounded-full bg-[#213885] px-3 py-1 text-xs font-bold text-[#ECDFD2]">
-              <%= project[:metric] %>
-            </div>
-            <div class="absolute inset-0 flex items-center justify-center">
-              <div class="flex h-28 w-28 items-center justify-center rounded-[28px] border border-[#5F3475]/30 bg-white/30 text-3xl font-extrabold text-[#5F3475] shadow-[0_20px_50px_rgba(95,52,117,0.18)]">
-                <%= project[:title].split.map { |word| word.first }.join.first(2) %>
+      <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <% @portfolio_items.each do |project| %>
+          <div
+            class="home-card-3d group overflow-hidden rounded-[28px] border border-[#081849]/10 bg-[#ECDFD2]"
+            data-portfolio-filter-target="item"
+            data-category="<%= project.category %>"
+            style="view-transition-name: project-<%= project.title.parameterize %>"
+          >
+            <div class="relative aspect-[4/3] overflow-hidden bg-[#CCCACC]">
+              <div class="home-grid-bg absolute inset-0 opacity-50"></div>
+              <div class="absolute inset-0 bg-gradient-to-br <%= project.accent_color.presence || 'from-[#213885]/30' %> to-transparent"></div>
+              <div class="absolute left-4 top-4 rounded-full border border-[#081849]/15 bg-white/70 px-3 py-1 text-xs font-semibold text-[#081849]">
+                <%= project.category %>
+              </div>
+              <% if project.metric.present? %>
+                <div class="absolute right-4 top-4 rounded-full bg-[#213885] px-3 py-1 text-xs font-bold text-[#ECDFD2]">
+                  <%= project.metric %>
+                </div>
+              <% end %>
+              <div class="absolute inset-0 flex items-center justify-center">
+                <div class="flex h-28 w-28 items-center justify-center rounded-[28px] border border-[#5F3475]/30 bg-white/30 text-3xl font-extrabold text-[#5F3475] shadow-[0_20px_50px_rgba(95,52,117,0.18)]">
+                  <%= project.initials %>
+                </div>
               </div>
             </div>
+            <div class="p-6">
+              <h3 class="text-2xl font-bold text-[#081849] transition group-hover:text-[#5F3475]"><%= project.title %></h3>
+              <p class="mt-2 text-sm leading-relaxed text-[#081849]/64"><%= project.description %></p>
+            </div>
           </div>
-          <div class="p-6">
-            <h3 class="text-2xl font-bold text-[#081849] transition group-hover:text-[#5F3475]"><%= project[:title] %></h3>
-            <p class="mt-2 text-sm leading-relaxed text-[#081849]/64"><%= project[:description] %></p>
-          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="home-glass mx-auto max-w-2xl rounded-[28px] p-10 text-center">
+        <p class="text-lg font-semibold text-[#081849]">Portfolio launching soon</p>
+        <p class="mt-3 text-sm text-[#081849]/66">Book a call to see examples of what we build for local service businesses.</p>
+        <div class="mt-8">
+          <%= link_to schedule_path, class: "home-button-primary" do %>
+            Book a call →
+          <% end %>
         </div>
-      <% end %>
-    </div>
-  </div>
-</section>
-
-<section class="pt-24 text-center">
-  <h2 class="text-4xl font-extrabold text-[#081849] md:text-5xl">Could the next case study be <span class="text-[#5F3475]">yours?</span></h2>
-  <div class="mt-8">
-    <%= link_to contact_path, class: "home-button-primary" do %>
-      Start a project →
+      </div>
     <% end %>
   </div>
 </section>
+
+<% if @portfolio_items.any? %>
+  <section class="pt-24 text-center">
+    <h2 class="text-4xl font-extrabold text-[#081849] md:text-5xl">Could the next build be <span class="text-[#5F3475]">yours?</span></h2>
+    <div class="mt-8">
+      <%= link_to schedule_path, class: "home-button-primary" do %>
+        Book a call →
+      <% end %>
+    </div>
+  </section>
+<% end %>

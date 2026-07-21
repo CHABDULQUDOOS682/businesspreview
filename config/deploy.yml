@@ -85,6 +85,8 @@ env:
     APP_HOST: devdebizz.com
     APP_PROTOCOL: https
     APP_HOSTS: devdebizz.com,www.devdebizz.com
+    # Optional Google Search Console HTML-tag verification token.
+    # GOOGLE_SITE_VERIFICATION: your-token-here
     PORT: 80
     SCHEDULING_OWNER_EMAIL: devdebizz@gmail.com
 

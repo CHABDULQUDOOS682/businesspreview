@@ -1,9 +1,10 @@
 <% content_for :title, "Pricing | DevDeBizz" %>
+<% content_for :meta_description, "DevDeBizz pricing for local service businesses: monthly website plans from $30 and one-time project builds with clear scope, hosting, SEO, and support." %>
 
 <%= render "page_header",
   eyebrow: "Pricing",
   title_html: 'Plans that match <br><span class="home-display-accent">your stage.</span>'.html_safe,
-  subtitle: "Choose a monthly website partner or a one-time project build. Clear scope, practical support, and no surprise invoices." %>
+  subtitle: "Choose a monthly website partner for hosting, SEO, and updates — or a one-time project build for your next site. Clear scope for local service businesses, with no surprise invoices." %>
 
 <%
   subscription_plans = [
@@ -83,7 +84,7 @@
         "Priority emergency support",
         "CRM integration support"
       ],
-      perfect_for: ["Multi-location businesses", "Growing startups", "Established service companies"],
+      perfect_for: ["Multi-location service businesses", "Established clinics and studios", "Teams that need booking and reviews"],
       highlight: false,
       badge: nil,
       cta: "Start Business Pro"
@@ -95,7 +96,7 @@
       name: "Starter Website",
       price: "$499",
       cadence: "/ project",
-      description: "Perfect for startups, local businesses, and personal brands launching their first professional website.",
+      description: "Perfect for local service businesses launching their first professional website with clear services and a simple contact path.",
       pages: ["Up to 5 pages", "Home", "About", "Services", "Portfolio/Gallery", "Contact"],
       included: [
         "Custom UI design",
@@ -119,7 +120,7 @@
       name: "Business Growth",
       price: "$999",
       cadence: "/ project",
-      description: "Built for businesses that need more than a brochure website and want to generate leads consistently.",
+      description: "Built for service businesses that need more than a brochure site and want clearer service pages plus stronger lead capture.",
       pages: ["Up to 12 pages"],
       included_intro: "Everything in Starter, plus:",
       included: [
@@ -137,7 +138,7 @@
       ],
       additional_features: ["Admin dashboard", "Blog management", "Lead collection system", "Analytics dashboard"],
       delivery: "4-6 weeks",
-      best_for: ["Growing companies", "Agencies", "Real estate businesses", "Healthcare clinics", "Service providers"],
+      best_for: ["Growing salons and studios", "Clinics", "Home service companies", "Local agencies", "Multi-service providers"],
       highlight: true,
       badge: "Most Popular",
       cta: "Choose Growth"
@@ -146,7 +147,7 @@
       name: "Custom Web Application",
       price: "Starting at $1,999",
       cadence: "",
-      description: "For businesses requiring custom software, SaaS products, portals, dashboards, booking systems, or complex integrations.",
+      description: "For service businesses that need custom booking, dashboards, client portals, or integrations beyond a standard marketing site.",
       pages: ["Unlimited, based on requirements"],
       included_intro: "Everything in Growth, plus:",
       included: [
@@ -165,16 +166,15 @@
         "90 days support"
       ],
       example_projects: [
-        "Barber booking platform",
-        "CRM systems",
-        "SaaS products",
-        "Customer portals",
-        "Membership platforms",
-        "Learning management systems",
-        "Marketplace platforms"
+        "Barber or salon booking systems",
+        "Clinic appointment portals",
+        "Staff and service dashboards",
+        "Client follow-up workflows",
+        "Review and lead management tools",
+        "Payment and invoice handoffs"
       ],
       delivery: "6-12+ weeks",
-      best_for: ["Startups", "SaaS founders", "Enterprises", "Businesses requiring automation"],
+      best_for: ["Multi-location service teams", "Clinics with complex scheduling", "Agencies needing custom ops tools", "Businesses automating bookings and follow-up"],
       highlight: false,
       badge: nil,
       cta: "Talk to Sales"
@@ -480,10 +480,10 @@
       <h2 class="text-center text-3xl font-extrabold text-[#081849] md:text-4xl">Frequently asked <span class="text-[#5F3475]">questions</span></h2>
       <div class="mt-10 space-y-3">
         <% [
-          ["Which option should I choose first?", "Choose Subscription if you want hosting, updates, monitoring, and gradual monthly growth. Choose Project if you need a new website or custom web app built from the ground up."],
+          ["Which option should I choose first?", "Choose Subscription if you want hosting, updates, monitoring, SEO support, and ongoing partnership. Choose Project if you need a new website or custom booking system built from the ground up."],
           ["Can I start with a project and move to a subscription?", "Yes. Many clients launch with a project package, then move into a subscription for hosting, updates, SEO, and continuous improvements."],
           ["Do monthly subscriptions include new pages?", "Essential focuses on maintenance and content updates. Growth and Business Pro include monthly development hours that can be used for smaller enhancements or landing page improvements."],
-          ["How long does a typical project take?", "Starter websites usually take 2-3 weeks. Business Growth projects take 4-6 weeks. Custom web applications usually take 6-12+ weeks depending on scope and integrations."],
+          ["How long does a typical project take?", "Starter websites usually take 2-3 weeks. Business Growth projects take 4-6 weeks. Custom booking systems and portals usually take 6-12+ weeks depending on scope and integrations."],
           ["Do you handle hosting and domains?", "Yes. Subscription plans include managed hosting, SSL, backups, monitoring, and support. Project plans include domain and hosting assistance for launch."],
           ["Can I upgrade between plans?", "Absolutely. You can move from Essential to Growth or Business Pro as your website and business needs grow."]
         ].each_with_index do |(question, answer), index| %>

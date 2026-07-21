@@ -21,4 +21,9 @@ Rails.application.configure do
 
   # Optional: disable SSL enforcement in staging if needed for local/dev testing
   # config.force_ssl = false
+
+  # Keep staging out of Google's index even if the host is publicly reachable.
+  config.action_dispatch.default_headers = config.action_dispatch.default_headers.merge(
+    "X-Robots-Tag" => "noindex, nofollow"
+  )
 end
