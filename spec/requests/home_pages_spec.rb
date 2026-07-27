@@ -313,7 +313,7 @@ RSpec.describe "HomePages", type: :request do
     it "shows the contact email helper and omits placeholder phone" do
       get contact_path
 
-      expect(response.body).to include(ENV.fetch("CONTACT_EMAIL", "devdebizz@gmail.com"))
+      expect(response.body).to include(ENV.fetch("CONTACT_EMAIL", "team@devdebizz.com"))
       expect(response.body).to include("+1 (406) 479-2002")
       expect(response.body).to include("tel:+14064792002")
       expect(response.body).not_to include(">NA<")

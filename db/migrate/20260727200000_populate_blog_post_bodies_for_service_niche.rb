@@ -22,7 +22,7 @@ class PopulateBlogPostBodiesForServiceNiche < ActiveRecord::Migration[8.0]
       <h2>Track the handoff</h2>
       <p>Log every lead in one place so nothing sits in an inbox. The goal is simple: every inquiry gets a timed response until it books, declines, or goes quiet.</p>
     HTML
-    "connecting-stripe-invoices-directly-to-your-client-booking-flow" => <<~HTML,
+    "connecting-stripe-invoices-directly-to-your-client-booking-flow" => <<~HTML
       <p>Chasing deposits and milestone payments slows delivery. Connecting Stripe invoices to your booking and project handoff keeps cash flow and client communication in sync.</p>
       <h2>Invoice at decision points</h2>
       <p>Send a deposit invoice when the project is approved, then milestone invoices as work ships. Clients pay from a secure Stripe link—no paper checks or awkward reminders.</p>

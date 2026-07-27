@@ -48,7 +48,7 @@ RSpec.describe ApplicationHelper, type: :helper do
 
     it "falls back to the default contact email" do
       stub_const("ENV", ENV.to_hash.except("CONTACT_EMAIL"))
-      expect(helper.contact_email).to eq("devdebizz@gmail.com")
+      expect(helper.contact_email).to eq("team@devdebizz.com")
     end
   end
 

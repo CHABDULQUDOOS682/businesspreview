@@ -16,7 +16,7 @@ module ApplicationHelper
   end
 
   def contact_email
-    ENV.fetch("CONTACT_EMAIL", "devdebizz@gmail.com")
+    ENV.fetch("CONTACT_EMAIL", "team@devdebizz.com")
   end
 
   # Public phone on Contact. Override with CONTACT_PHONE, or set blank to hide.
