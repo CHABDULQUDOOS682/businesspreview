@@ -5,7 +5,7 @@ module ApplicationHelper
   FOUNDED_YEAR = 2024
   DEFAULT_OG_IMAGE = "logo/Website Logo PNG.png".freeze
   DEFAULT_CONTACT_PHONE = "+1 (406) 479-2002".freeze
-  DEFAULT_META_DESCRIPTION = "DevDeBizz builds mobile-ready websites, client-friendly funnels, SEO foundations, and follow-up systems for service businesses that want more qualified leads.".freeze
+  DEFAULT_META_DESCRIPTION = "DevDeBizz builds mobile-first websites, SEO, and booking systems that turn visitors into inquiries. Book a discovery call for your service business.".freeze
 
   def app_name
     APP_NAME
