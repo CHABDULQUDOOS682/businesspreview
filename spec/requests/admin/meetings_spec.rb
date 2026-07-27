@@ -145,7 +145,11 @@ RSpec.describe "Admin::Meetings", type: :request do
 
   describe "GET /admin/meetings/slots" do
     let!(:super_admin) { create(:user, :super_admin) }
-    let(:slot_date) { Date.new(2026, 7, 22) }
+    let(:slot_date) do
+      d = Date.current + 1
+      d += 1 until d.wday == 3
+      d
+    end
 
     before do
       AvailabilityRule.create!(

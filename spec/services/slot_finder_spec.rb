@@ -3,7 +3,12 @@ require "rails_helper"
 RSpec.describe SlotFinder, type: :service do
   let(:owner) { create(:user, :super_admin) }
   let(:other_user) { create(:user, role: "employee") }
-  let(:date) { Date.new(2026, 7, 22) } # Wednesday
+  # Always a future Wednesday so morning slots are not filtered as past.
+  let(:date) do
+    d = Date.current + 1
+    d += 1 until d.wday == 3
+    d
+  end
 
   before do
     AvailabilityRule.create!(
