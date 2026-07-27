@@ -1,5 +1,5 @@
 <% content_for :title, "Contact | DevDeBizz" %>
-<% content_for :meta_description, "Contact DevDeBizz to talk about your website, hosting, SEO, booking flows, or monthly partnership for your local service business." %>
+<% content_for :meta_description, "Contact DevDeBizz to talk about your website, hosting, SEO, booking flows, or monthly partnership for your service business." %>
 
 <%= render "page_header",
   eyebrow: "Get in Touch",
@@ -11,21 +11,31 @@
     <div class="grid gap-8 lg:grid-cols-5">
     <div class="space-y-6 lg:col-span-2">
       <div class="home-glass home-card-3d space-y-6 rounded-[28px] p-8">
-        <% [
-          { icon: "fa-envelope", label: "Email", value: "devdebizz@gmail.com", href: "mailto:devdebizz@gmail.com" },
-          { icon: "fa-phone", label: "Phone", value: "NA", href: "tel:+111111111" },
-          { icon: "fa-location-dot", label: "Office", value: "1001 S. Main St. STE 500 Kalispell, MT 59901", href: "https://www.google.com/maps/place/1001+S+Main+St+%23500,+Kalispell,+MT+59901,+USA/@48.1888896,-114.31241,17z/data=!3m1!4b1!4m6!3m5!1s0x536650c2d7e25017:0x2306ba598ba234da!8m2!3d48.1888861!4d-114.3098297!16s%2Fg%2F11mhk0p7_f?authuser=0&hl=en&entry=ttu&g_ep=EgoyMDI2MDYxMy4wIKXMDSoASAFQAw%3D%3D" },
-          { icon: "fa-clock", label: "Hours", value: "Mon–Fri · 24/7", href: "#" }
-        ].each do |contact| %>
+        <% contact_rows = [
+          { icon: "fa-envelope", label: "Email", value: contact_email, href: "mailto:#{contact_email}" },
+          (
+            if contact_phone.present?
+              { icon: "fa-phone", label: "Phone", value: contact_phone, href: contact_phone_href }
+            end
+          ),
+          { icon: "fa-location-dot", label: "Office", value: "1001 S. Main St. STE 500 Kalispell, MT 59901", href: "https://www.google.com/maps/place/1001+S+Main+St+%23500,+Kalispell,+MT+59901,+USA/@48.1888896,-114.31241,17z/data=!3m1!4b1!4m6!3m5!1s0x536650c2d7e25017:0x2306ba598ba234da!8m2!3d48.1888861!4d-114.3098297!16s%2Fg%2F11mhk0p7_f?authuser=0&hl=en&entry=ttu&g_ep=EgoyMDI2MDYxMy4wIKXMDSoASAFQAw%3D%3D", external: true },
+          { icon: "fa-clock", label: "Hours", value: "Mon–Fri · responses within one business day", href: nil }
+        ].compact %>
 
-          <a
-            href="<%= contact[:href] %>"
-            class="group flex items-start gap-4"
-            <% if contact[:label] == "Office" %>
-              target="_blank"
-              rel="noopener noreferrer"
-            <% end %>
-          >
+        <% contact_rows.each do |contact| %>
+          <% row_classes = "group flex items-start gap-4" %>
+          <% if contact[:href].present? %>
+            <a
+              href="<%= contact[:href] %>"
+              class="<%= row_classes %>"
+              <% if contact[:external] %>
+                target="_blank"
+                rel="noopener noreferrer"
+              <% end %>
+            >
+          <% else %>
+            <div class="<%= row_classes %>">
+          <% end %>
 
             <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-[#213885]/20 to-[#213885]/5 ring-1 ring-[#213885]/30 transition group-hover:scale-110">
               <i class="fa-solid <%= contact[:icon] %> text-lg text-[#5F3475]"></i>
@@ -38,8 +48,11 @@
               </p>
             </div>
 
-          </a>
-
+          <% if contact[:href].present? %>
+            </a>
+          <% else %>
+            </div>
+          <% end %>
         <% end %>
       </div>
 
@@ -58,12 +71,11 @@
       <div class="home-glass home-card-3d rounded-[28px] p-8 space-y-4">
         <h3 class="font-bold text-[#081849]">Book a Call Directly</h3>
         <p class="text-sm text-[#081849]/65">Want to skip email back-and-forth? Choose a slot on our calendar right now for a Google Meet call.</p>
-        <%= link_to "Schedule a Call →", schedule_path, class: "inline-flex w-full items-center justify-center rounded-full bg-[#213885] px-5 py-3 text-center text-sm font-bold text-[#ECDFD2] shadow-md shadow-[#213885]/20 hover:shadow-[#213885]/35 transition" %>
+        <%= link_to "Book a discovery call", schedule_path, class: "inline-flex w-full items-center justify-center rounded-full bg-[#213885] px-5 py-3 text-center text-sm font-bold text-[#ECDFD2] shadow-md shadow-[#213885]/20 hover:shadow-[#213885]/35 transition" %>
       </div>
     </div>
 
     <div class="lg:col-span-3">
-      <%# 1. Converted to form_with pointing to your desired route %>
       <%= form_with url: contact_submissions_path, method: :post, local: true, class: "home-card-3d relative overflow-hidden rounded-[32px] border border-[#081849]/10 bg-white/70 p-8 shadow-[0_18px_45px_rgba(8,24,73,0.06)] md:p-10" do |f| %>
         <div class="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-[#5F3475]/10"></div>
         <div class="absolute -left-20 -bottom-20 h-64 w-64 rounded-full bg-[#213885]/10"></div>
@@ -94,12 +106,13 @@
           <label class="block">
             <span class="mb-2 block text-xs font-bold uppercase tracking-[0.18em] text-[#213885]">Service interest</span>
             <%= f.select :service_interest, [
-              ["Web Development", "Web Development"],
-              ["Branding & Identity", "Branding & Identity"],
-              ["UI / UX Design", "UI / UX Design"],
-              ["SEO & Content", "SEO & Content"],
-              ["Performance Marketing", "Performance Marketing"],
-              ["Cloud & DevOps", "Cloud & DevOps"]
+              ["Website builds", "Website builds"],
+              ["Managed hosting", "Managed hosting"],
+              ["SEO foundations", "SEO foundations"],
+              ["Booking & contact flows", "Booking & contact flows"],
+              ["Follow-up systems", "Follow-up systems"],
+              ["Ongoing partnership", "Ongoing partnership"],
+              ["Custom Rails application", "Custom Rails application"]
             ], {}, { class: "home-input" } %>
           </label>
 
@@ -108,7 +121,6 @@
             <%= f.text_area :message, class: "home-input", placeholder: "Tell us about your goals, timeline, and anything else we should know…", rows: 4 %>
           </label>
 
-          <%# 2. Changed type to "submit" %>
           <button type="submit" class="group relative w-full overflow-hidden rounded-full bg-[#213885] px-8 py-4 text-sm font-bold text-[#ECDFD2] shadow-2xl shadow-[#213885]/30 transition hover:scale-[1.02]">
             <span class="relative z-10">Send Message →</span>
             <span class="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-[#081849]/45 to-transparent transition-transform duration-700 group-hover:translate-x-full"></span>

@@ -37,12 +37,26 @@ RSpec.describe "Seo", type: :request do
       expect(response.media_type).to eq("application/xml")
       expect(response.body).to include(root_url)
       expect(response.body).to include(services_url)
+      expect(response.body).to include(website_design_url)
+      expect(response.body).to include(seo_url)
+      expect(response.body).to include(booking_systems_url)
+      expect(response.body).to include(follow_up_systems_url)
       expect(response.body).to include(portfolio_url)
       expect(response.body).to include(blog_url)
       expect(response.body).to include(blog_post_url("readable-post"))
       expect(response.body).not_to include(blog_post_url("coming-soon-card"))
       expect(response.body).not_to include("/lp/")
       expect(response.body).not_to include("/admin")
+    end
+
+    it "includes every marketed legal and resource URL" do
+      get sitemap_path
+
+      expect(response.body).to include(help_center_url)
+      expect(response.body).to include(documentation_url)
+      expect(response.body).to include(brand_kit_url)
+      expect(response.body).to include(press_url)
+      expect(response.body).to include(privacy_url)
     end
   end
 end

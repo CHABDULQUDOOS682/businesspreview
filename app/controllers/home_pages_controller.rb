@@ -10,6 +10,18 @@ class HomePagesController < ApplicationController
     def services
     end
 
+    def website_design
+    end
+
+    def seo
+    end
+
+    def booking_systems
+    end
+
+    def follow_up_systems
+    end
+
     def about
     end
 

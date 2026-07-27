@@ -1,0 +1,67 @@
+<%# locals: (eyebrow:, title_html:, subtitle:, outcomes:, includes:, proof_points:) %>
+<%= render "page_header",
+  eyebrow: eyebrow,
+  title_html: title_html,
+  subtitle: subtitle %>
+
+<section class="py-16">
+  <div class="mx-auto max-w-7xl px-2 md:px-0">
+    <div class="grid gap-6 lg:grid-cols-5">
+      <div class="home-glass home-card-3d rounded-[28px] p-8 lg:col-span-3 md:p-10">
+        <p class="text-xs font-bold uppercase tracking-[0.2em] text-[#081849]/58">What you get</p>
+        <h2 class="mt-3 text-3xl font-extrabold text-[#081849]">Outcomes first. Deliverables second.</h2>
+        <ul class="mt-8 space-y-5">
+          <% outcomes.each do |outcome| %>
+            <li class="flex gap-4">
+              <span class="mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#213885]/10 text-sm font-bold text-[#213885]">✓</span>
+              <div>
+                <p class="font-bold text-[#081849]"><%= outcome[:title] %></p>
+                <p class="mt-1 text-sm leading-relaxed text-[#081849]/66"><%= outcome[:text] %></p>
+              </div>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+
+      <div class="space-y-6 lg:col-span-2">
+        <div class="home-card-3d overflow-hidden rounded-[28px] bg-gradient-to-br from-[#123b56] to-[#11255f] p-8 text-[#ECDFD2]">
+          <p class="text-xs font-bold uppercase tracking-[0.2em] text-[#ECDFD2]/65">Included</p>
+          <ul class="mt-5 space-y-3">
+            <% includes.each do |item| %>
+              <li class="flex items-start gap-2 text-sm leading-relaxed text-[#ECDFD2]/85">
+                <span class="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-[#ECDFD2]"></span>
+                <%= item %>
+              </li>
+            <% end %>
+          </ul>
+        </div>
+        <div class="home-glass home-card-3d rounded-[28px] p-8">
+          <p class="text-xs font-bold uppercase tracking-[0.2em] text-[#081849]/58">Best for</p>
+          <ul class="mt-4 space-y-2">
+            <% proof_points.each do |point| %>
+              <li class="text-sm font-semibold text-[#081849]"><%= point %></li>
+            <% end %>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="relative overflow-hidden border-y border-[#081849]/8 bg-[#CCCACC]/45 py-20">
+  <div class="home-grid-bg absolute inset-0 opacity-30"></div>
+  <div class="relative mx-auto max-w-7xl px-2 md:px-0 text-center">
+    <h2 class="text-3xl font-extrabold text-[#081849] md:text-4xl">Ready to talk through scope?</h2>
+    <p class="mx-auto mt-4 max-w-2xl text-lg text-[#081849]/70">
+      Tell us what you’re trying to book more of — calls, appointments, or follow-ups — and we’ll recommend the right starting point.
+    </p>
+    <div class="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
+      <%= link_to schedule_path, class: "home-button-primary" do %>
+        Book a discovery call
+      <% end %>
+      <%= link_to services_path, class: "home-button-secondary" do %>
+        All services →
+      <% end %>
+    </div>
+  </div>
+</section>

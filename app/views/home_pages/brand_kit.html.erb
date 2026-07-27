@@ -1,72 +1,51 @@
 <% content_for :title, "Brand Kit | DevDeBizz" %>
-<% content_for :meta_description, "Download DevDeBizz brand assets, logos, and usage guidelines for press, partners, and approved collaborations." %>
+<% content_for :meta_description, "Download official DevDeBizz logos and brand assets for partner and press use." %>
 
 <%= render "page_header",
-  eyebrow: "Brand kit",
-  title_html: 'Download official <span class="home-display-accent">assets</span>'.html_safe,
-  subtitle: "Visual styles, logo vectors, color codes, and assets for co-marketing partnerships." %>
+  eyebrow: "Brand",
+  title_html: 'Official logos and <span class="home-display-accent">brand assets</span>'.html_safe,
+  subtitle: "Use these files for partnerships, directories, and media mentions. Do not alter colors or proportions." %>
 
 <section class="py-20">
   <div class="mx-auto max-w-7xl px-2 md:px-0">
-    <div class="grid gap-8 lg:grid-cols-3">
-      <div class="home-glass home-card-3d rounded-[28px] p-8 lg:col-span-2">
-        <h2 class="text-2xl font-bold text-[#081849]">Our Colors</h2>
-        <p class="mt-2 text-sm text-[#081849]/66">Use the following color values to maintain visual consistency:</p>
-        
-        <div class="mt-6 grid gap-4 grid-cols-2 sm:grid-cols-4">
-          <% [
-            { name: "Deep Navy", hex: "#081849", bg: "bg-[#081849]", text: "text-white" },
-            { name: "Brand Blue", hex: "#213885", bg: "bg-[#213885]", text: "text-white" },
-            { name: "Dark Purple", hex: "#5F3475", bg: "bg-[#5F3475]", text: "text-white" },
-            { name: "Warm Cream", hex: "#ECDFD2", bg: "bg-[#ECDFD2]", text: "text-[#081849]" }
-          ].each do |color| %>
-            <div class="rounded-2xl border border-[#081849]/8 overflow-hidden bg-white text-center">
-              <div class="h-16 <%= color[:bg] %>"></div>
-              <div class="p-3">
-                <p class="font-bold text-sm text-[#081849]"><%= color[:name] %></p>
-                <p class="text-xs font-mono text-[#081849]/50 mt-1"><%= color[:hex] %></p>
-              </div>
-            </div>
-          <% end %>
-        </div>
-
-        <h2 class="mt-10 text-2xl font-bold text-[#081849]">Typography</h2>
-        <p class="mt-2 text-sm text-[#081849]/66">Our primary typeface is <strong>Plus Jakarta Sans</strong>, a modern sans-serif designed for clean layouts.</p>
-        <div class="mt-4 p-6 rounded-2xl bg-[#FAF8F5] border border-[#081849]/8 font-sans">
-          <p class="text-xl font-extrabold text-[#081849]">Plus Jakarta Sans (ExtraBold) - Headlines</p>
-          <p class="text-base font-semibold text-[#081849]/70 mt-2">Plus Jakarta Sans (SemiBold) - Subtitles</p>
-          <p class="text-sm leading-relaxed text-[#081849]/66 mt-2">Plus Jakarta Sans (Regular) - Body text is styled at 15px/16px for high legibility across mobile and desktop screens.</p>
-        </div>
+    <div class="grid gap-6 md:grid-cols-3">
+      <div class="home-glass home-card-3d rounded-[28px] p-6">
+        <p class="text-xs font-bold uppercase tracking-[0.18em] text-[#213885]">Primary mark</p>
+        <h2 class="mt-3 text-xl font-bold text-[#081849]">Website icon SVG</h2>
+        <p class="mt-2 text-sm text-[#081849]/65">Primary brand mark for web and digital use.</p>
+        <%= link_to "Download SVG",
+              asset_path("logo/Website Icon logo SVG 512x512.svg"),
+              download: "devdebizz-icon-512.svg",
+              class: "mt-5 inline-flex text-sm font-semibold text-[#213885] underline" %>
       </div>
-
-      <div class="space-y-6">
-        <div class="home-glass home-card-3d rounded-[28px] p-8">
-          <h3 class="text-2xl font-bold text-[#081849]">Logo Downloads</h3>
-          <p class="mt-2 text-sm text-[#081849]/66">Download clean logo files for digital and print media.</p>
-          
-          <div class="mt-6 p-4 rounded-xl border border-[#081849]/8 bg-white flex items-center justify-center">
-            <%= image_tag "logo/Website Icon logo SVG 512x512.svg", class: "h-16 w-auto", alt: "DevDeBizz Logo" %>
-          </div>
-
-          <ul class="mt-6 space-y-3">
-            <li>
-              <%= link_to "#", class: "flex items-center gap-2 text-sm font-semibold text-[#213885] hover:text-[#5F3475]" do %>
-                <i class="fa-solid fa-download"></i> SVG Logo Mark
-              <% end %>
-            </li>
-            <li>
-              <%= link_to "#", class: "flex items-center gap-2 text-sm font-semibold text-[#213885] hover:text-[#5F3475]" do %>
-                <i class="fa-solid fa-download"></i> PNG Logo (Dark Text)
-              <% end %>
-            </li>
-            <li>
-              <%= link_to "#", class: "flex items-center gap-2 text-sm font-semibold text-[#213885] hover:text-[#5F3475]" do %>
-                <i class="fa-solid fa-download"></i> PNG Logo (White Text)
-              <% end %>
-            </li>
-          </ul>
-        </div>
+      <div class="home-glass home-card-3d rounded-[28px] p-6">
+        <p class="text-xs font-bold uppercase tracking-[0.18em] text-[#213885]">Alternate</p>
+        <h2 class="mt-3 text-xl font-bold text-[#081849]">Normal icon SVG</h2>
+        <p class="mt-2 text-sm text-[#081849]/65">Alternate icon for compact placements.</p>
+        <%= link_to "Download SVG",
+              asset_path("logo/Normal Icon SVG.svg"),
+              download: "devdebizz-icon.svg",
+              class: "mt-5 inline-flex text-sm font-semibold text-[#213885] underline" %>
       </div>
+      <div class="home-glass home-card-3d rounded-[28px] p-6">
+        <p class="text-xs font-bold uppercase tracking-[0.18em] text-[#213885]">Favicon</p>
+        <h2 class="mt-3 text-xl font-bold text-[#081849]">Favicon SVG</h2>
+        <p class="mt-2 text-sm text-[#081849]/65">Small mark for browser tabs and app icons.</p>
+        <%= link_to "Download SVG",
+              asset_path("logo/Fav-Icon 49x49.svg"),
+              download: "devdebizz-favicon.svg",
+              class: "mt-5 inline-flex text-sm font-semibold text-[#213885] underline" %>
+      </div>
+    </div>
+
+    <div class="mt-10 home-glass home-card-3d rounded-[32px] p-8 md:p-10">
+      <h2 class="text-2xl font-bold text-[#081849]">Usage notes</h2>
+      <ul class="mt-4 space-y-2 text-sm text-[#081849]/70 list-disc pl-5">
+        <li>Keep clear space around the mark equal to the icon height.</li>
+        <li>Do not recolor, stretch, or add effects to the logo.</li>
+        <li>Prefer the primary mark on light backgrounds.</li>
+        <li>Questions? Email <%= mail_to contact_email, contact_email, class: "font-semibold underline text-[#213885]" %>.</li>
+      </ul>
     </div>
   </div>
 </section>

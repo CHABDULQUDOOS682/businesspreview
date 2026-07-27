@@ -1,0 +1,24 @@
+<% content_for :title, "Booking Systems for Service Businesses | DevDeBizz" %>
+<% content_for :meta_description, "Online booking and contact flows for service businesses — appointment paths, forms, and handoffs that make it easy for customers to take the next step." %>
+
+<%= render "service_detail",
+  eyebrow: "Booking & contact flows",
+  title_html: 'Booking systems that turn interest into <span class="home-display-accent">scheduled work.</span>'.html_safe,
+  subtitle: "We build the forms, appointment paths, and handoffs that remove friction between “I’m interested” and “I’m booked.”",
+  outcomes: [
+    { title: "Fewer dropped inquiries", text: "Clear contact and booking paths reduce the back-and-forth that loses busy customers." },
+    { title: "Smoother scheduling", text: "Appointment flows and service/staff pages help visitors pick a time without calling twice." },
+    { title: "Cleaner handoffs to your team", text: "Leads arrive with the details your desk needs — so follow-up starts faster." }
+  ],
+  includes: [
+    "Contact form management",
+    "Appointment booking paths",
+    "Service and staff page support",
+    "Lead capture routing",
+    "Handoff into your existing tools where possible"
+  ],
+  proof_points: [
+    "Salons & clinics with appointment volume",
+    "Teams tired of phone-tag booking",
+    "Businesses adding online booking for the first time"
+  ] %>

@@ -11,8 +11,7 @@
 
     <%= yield :head %>
 
-    <link rel="icon" href="<%= asset_path('logo/Fav-Icon 49x49.svg') %>" type="image/svg+xml">
-    <link rel="apple-touch-icon" href="/icon.png">
+    <%= render "shared/favicon_tags" %>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -93,20 +92,6 @@
               <p class="mt-5 max-w-sm text-sm leading-relaxed text-[#081849]/60">
                 DevDeBizz helps service businesses turn their website, follow-up, and client journey into a clear path from interest to booked work.
               </p>
-              <div class="mt-6 flex gap-3">
-                <a href="#" aria-label="Twitter" class="home-footer-social">
-                  <i class="fa-brands fa-x-twitter"></i>
-                </a>
-                <a href="#" aria-label="LinkedIn" class="home-footer-social">
-                  <i class="fa-brands fa-linkedin-in"></i>
-                </a>
-                <a href="#" aria-label="Instagram" class="home-footer-social">
-                  <i class="fa-brands fa-instagram"></i>
-                </a>
-                <a href="#" aria-label="GitHub" class="home-footer-social">
-                  <i class="fa-brands fa-github"></i>
-                </a>
-              </div>
             </div>
 
             <% marketing_footer_columns.each do |column| %>

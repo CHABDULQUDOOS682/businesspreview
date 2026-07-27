@@ -2,18 +2,41 @@ module ApplicationHelper
   include Pagy::Frontend
 
   APP_NAME = "DevDeBizz".freeze
+  FOUNDED_YEAR = 2024
+  DEFAULT_OG_IMAGE = "logo/Website Logo PNG.png".freeze
+  DEFAULT_CONTACT_PHONE = "+1 (406) 479-2002".freeze
   DEFAULT_META_DESCRIPTION = "DevDeBizz builds mobile-ready websites, client-friendly funnels, SEO foundations, and follow-up systems for service businesses that want more qualified leads.".freeze
 
   def app_name
     APP_NAME
   end
 
+  def founded_year
+    FOUNDED_YEAR
+  end
+
   def contact_email
     ENV.fetch("CONTACT_EMAIL", "devdebizz@gmail.com")
   end
 
+  # Public phone on Contact. Override with CONTACT_PHONE, or set blank to hide.
+  def contact_phone
+    ENV.fetch("CONTACT_PHONE", DEFAULT_CONTACT_PHONE).to_s.strip.presence
+  end
+
+  def contact_phone_href
+    return if contact_phone.blank?
+
+    digits = contact_phone.gsub(/[^\d+]/, "")
+    digits.present? ? "tel:#{digits}" : nil
+  end
+
   def default_meta_description
     DEFAULT_META_DESCRIPTION
+  end
+
+  def default_og_image_url
+    image_url(DEFAULT_OG_IMAGE)
   end
 
   def canonical_page_url
@@ -34,7 +57,7 @@ module ApplicationHelper
   def seo_meta_tags
     title = content_for(:title).presence || app_name
     description = content_for(:meta_description).presence || default_meta_description
-    image = content_for(:og_image).presence || image_url("logo/Website Icon logo SVG 512x512.svg")
+    image = content_for(:og_image).presence || default_og_image_url
     canonical = canonical_page_url
     robots = robots_directive
     og_type = content_for(:og_type).presence || "website"
