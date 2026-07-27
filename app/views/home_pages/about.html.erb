@@ -1,9 +1,9 @@
 <% content_for :title, "About | DevDeBizz" %>
-<% content_for :meta_description, "DevDeBizz is a focused studio for local service businesses — clearer websites, practical systems, and digital journeys that help teams book more work." %>
+<% content_for :meta_description, "DevDeBizz is a growth studio for service businesses—clinics, studios, salons, and agencies. See our story, values, and why clients trust us with their site." %>
 
 <%= render "page_header",
   eyebrow: "About DevDeBizz",
-  title_html: 'A focused studio for <span class="home-display-accent">growth-minded local brands</span>'.html_safe,
+  title_html: 'A focused studio for <span class="home-display-accent">growth-minded service businesses</span>'.html_safe,
   subtitle: "We work with service businesses that are ready to move beyond outdated websites, scattered tools, and confusing customer journeys." %>
 
 <section class="py-20">
@@ -16,7 +16,7 @@
           That means the homepage needs to clarify the offer, service pages need to guide decision-making, and the systems behind the site need to support how your team actually works.
         </p>
         <p class="mt-4 text-lg leading-relaxed text-[#081849]/68">
-          We build with the realities of local service businesses in mind: mobile visitors, fast trust decisions, booked-call friction, and the need for handoff clarity after launch.
+          We build with the realities of service businesses in mind: mobile visitors, fast trust decisions, booked-call friction, and the need for handoff clarity after launch.
         </p>
       </div>
 
@@ -28,7 +28,7 @@
         </div>
         <div class="home-glass home-card-3d rounded-[28px] p-8">
           <p class="text-xs font-bold uppercase tracking-[0.2em] text-[#081849]/58">Best fit</p>
-          <p class="mt-3 text-lg font-semibold text-[#081849]">Barbers, clinics, studios, local agencies, and service-led teams that want a more intentional digital presence.</p>
+          <p class="mt-3 text-lg font-semibold text-[#081849]">Barbers, clinics, studios, agencies, and service-led teams that want a more intentional digital presence.</p>
         </div>
       </div>
     </div>
@@ -47,7 +47,7 @@
       <% [
         { icon: "fa-bolt", title: "Fast but thoughtful", text: "We move quickly, but we still design around the business goal and the customer journey." },
         { icon: "fa-eye", title: "Clear communication", text: "We keep the process visible, explain tradeoffs, and avoid burying clients in vague updates." },
-        { icon: "fa-location-dot", title: "Local-first thinking", text: "We care about how real local buyers browse, compare, and commit on mobile." }
+        { icon: "fa-mobile-screen", title: "Customer-first thinking", text: "We care about how real customers browse, compare, and commit on mobile." }
       ].each do |value| %>
         <div class="home-glass home-card-3d rounded-[28px] p-8">
           <i class="fa-solid <%= value[:icon] %> text-2xl text-[#5F3475]"></i>
@@ -72,8 +72,8 @@
   </div>
 
   <div class="mt-16 text-center">
-    <%= link_to contact_path, class: "home-button-primary" do %>
-      Let’s Talk About Your Project
+    <%= link_to schedule_path, class: "home-button-primary" do %>
+      Book a discovery call
     <% end %>
   </div>
 </section>

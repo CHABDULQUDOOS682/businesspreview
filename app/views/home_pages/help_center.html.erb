@@ -1,5 +1,5 @@
 <% content_for :title, "Help Center | DevDeBizz" %>
-<% content_for :meta_description, "DevDeBizz help center for common questions about websites, hosting, updates, billing, and getting support." %>
+<% content_for :meta_description, "Find answers about DevDeBizz projects, billing, hosting, and support. Browse help articles or contact the team for project-specific help." %>
 
 <%= render "page_header",
   eyebrow: "Help Center",
@@ -16,7 +16,7 @@
         <div class="mt-6 space-y-6">
           <div>
             <h3 class="font-bold text-[#081849]">How long does a website project take?</h3>
-            <p class="mt-2 text-sm leading-relaxed text-[#081849]/66">A typical service business site takes 3 to 4 weeks from scope approval to launching live.</p>
+            <p class="mt-2 text-sm leading-relaxed text-[#081849]/66"><%= marketing_timeline_summary %></p>
           </div>
           <div>
             <h3 class="font-bold text-[#081849]">Do you offer custom designs?</h3>

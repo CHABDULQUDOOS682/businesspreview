@@ -34,6 +34,12 @@ RSpec.describe ApplicationHelper, type: :helper do
     end
   end
 
+  describe "#founded_year" do
+    it "returns the fixed company founded year" do
+      expect(helper.founded_year).to eq(2024)
+    end
+  end
+
   describe "#contact_email" do
     it "returns the configured contact email" do
       stub_const("ENV", ENV.to_hash.merge("CONTACT_EMAIL" => "hello@devdebizz.com"))
@@ -42,7 +48,41 @@ RSpec.describe ApplicationHelper, type: :helper do
 
     it "falls back to the default contact email" do
       stub_const("ENV", ENV.to_hash.except("CONTACT_EMAIL"))
-      expect(helper.contact_email).to eq("devdebizz@gmail.com")
+      expect(helper.contact_email).to eq("team@devdebizz.com")
+    end
+  end
+
+  describe "#contact_phone" do
+    it "returns a configured phone number" do
+      stub_const("ENV", ENV.to_hash.merge("CONTACT_PHONE" => " (713) 555-0101 "))
+      expect(helper.contact_phone).to eq("(713) 555-0101")
+    end
+
+    it "falls back to the default public phone" do
+      stub_const("ENV", ENV.to_hash.except("CONTACT_PHONE"))
+      expect(helper.contact_phone).to eq("+1 (406) 479-2002")
+    end
+
+    it "returns nil when explicitly blank" do
+      stub_const("ENV", ENV.to_hash.merge("CONTACT_PHONE" => "  "))
+      expect(helper.contact_phone).to be_nil
+    end
+  end
+
+  describe "#contact_phone_href" do
+    it "builds a tel link from the configured phone" do
+      stub_const("ENV", ENV.to_hash.merge("CONTACT_PHONE" => "(713) 555-0101"))
+      expect(helper.contact_phone_href).to eq("tel:7135550101")
+    end
+
+    it "builds a tel link from the default phone" do
+      stub_const("ENV", ENV.to_hash.except("CONTACT_PHONE"))
+      expect(helper.contact_phone_href).to eq("tel:+14064792002")
+    end
+
+    it "returns nil when phone is blank" do
+      stub_const("ENV", ENV.to_hash.merge("CONTACT_PHONE" => ""))
+      expect(helper.contact_phone_href).to be_nil
     end
   end
 
@@ -53,7 +93,7 @@ RSpec.describe ApplicationHelper, type: :helper do
       )
       allow(helper).to receive(:content_for?).and_return(false)
       allow(helper).to receive(:content_for).and_return(nil)
-      allow(helper).to receive(:image_url).and_return("https://devdebizz.com/logo.svg")
+      allow(helper).to receive(:image_url).with("logo/Website Logo PNG.png").and_return("https://devdebizz.com/logo.png")
     end
 
     it "includes google site verification when configured" do
@@ -63,6 +103,16 @@ RSpec.describe ApplicationHelper, type: :helper do
 
       expect(result).to include('name="google-site-verification"')
       expect(result).to include("verify-token")
+    end
+
+    it "defaults og:image to the PNG brand logo" do
+      stub_const("ENV", ENV.to_hash.merge("APP_HOST" => "devdebizz.com", "APP_PROTOCOL" => "https"))
+
+      result = helper.seo_meta_tags
+
+      expect(result).to include('property="og:image"')
+      expect(result).to include("https://devdebizz.com/logo.png")
+      expect(result).not_to include("SVG")
     end
   end
 end

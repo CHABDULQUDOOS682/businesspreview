@@ -1,9 +1,9 @@
 <% content_for :title, "Portfolio | DevDeBizz" %>
-<% content_for :meta_description, "See example DevDeBizz builds for local service businesses — barbershops, salons, clinics, and consultants — with mobile-ready sites, booking, and SEO foundations." %>
+<% content_for :meta_description, "Browse DevDeBizz builds for barbershops, salons, clinics, and consultants—mobile-ready sites with booking paths, SEO foundations, and clearer conversion." %>
 
 <%= render "page_header",
   eyebrow: "Selected Work",
-  title_html: 'Built for <span class="home-display-accent">local service businesses</span>'.html_safe,
+  title_html: 'Built for <span class="home-display-accent">service businesses</span>'.html_safe,
   subtitle: "Example sites and systems we design for barbershops, salons, clinics, and other service-led teams — focused on clarity, mobile visitors, and booked work." %>
 
 <section class="py-16" data-controller="portfolio-filter">
@@ -69,11 +69,14 @@
       </div>
     <% else %>
       <div class="home-glass mx-auto max-w-2xl rounded-[28px] p-10 text-center">
-        <p class="text-lg font-semibold text-[#081849]">Portfolio launching soon</p>
-        <p class="mt-3 text-sm text-[#081849]/66">Book a call to see examples of what we build for local service businesses.</p>
+        <p class="text-lg font-semibold text-[#081849]">Want to see builds for your industry?</p>
+        <p class="mt-3 text-sm text-[#081849]/66">
+          We design websites and booking systems for barbershops, salons, clinics, consultants, and home-service teams.
+          Book a call and we’ll walk through relevant examples.
+        </p>
         <div class="mt-8">
           <%= link_to schedule_path, class: "home-button-primary" do %>
-            Book a call →
+            Book a discovery call
           <% end %>
         </div>
       </div>
@@ -86,7 +89,7 @@
     <h2 class="text-4xl font-extrabold text-[#081849] md:text-5xl">Could the next build be <span class="text-[#5F3475]">yours?</span></h2>
     <div class="mt-8">
       <%= link_to schedule_path, class: "home-button-primary" do %>
-        Book a call →
+        Book a discovery call
       <% end %>
     </div>
   </section>

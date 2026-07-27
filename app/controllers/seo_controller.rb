@@ -52,6 +52,10 @@ class SeoController < ApplicationController
     urls = [
       { loc: root_url, changefreq: "weekly", priority: "1.0" },
       { loc: services_url, changefreq: "monthly", priority: "0.9" },
+      { loc: website_design_url, changefreq: "monthly", priority: "0.85" },
+      { loc: seo_url, changefreq: "monthly", priority: "0.85" },
+      { loc: booking_systems_url, changefreq: "monthly", priority: "0.85" },
+      { loc: follow_up_systems_url, changefreq: "monthly", priority: "0.85" },
       { loc: about_url, changefreq: "monthly", priority: "0.8" },
       { loc: process_url, changefreq: "monthly", priority: "0.8" },
       { loc: pricing_url, changefreq: "weekly", priority: "0.9" },

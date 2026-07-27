@@ -2,6 +2,12 @@ require "rails_helper"
 
 RSpec.describe "Scheduling", type: :request do
   let!(:owner) { create(:user, role: "super_admin", email: "super_admin@example.com") }
+  let(:slot_date) do
+    d = Date.current + 1
+    d += 1 until d.wday == 3
+    d
+  end
+  let(:slot) { slot_date.in_time_zone.change(hour: 9, min: 30) }
 
   before do
     allow(ENV).to receive(:[]).and_call_original
@@ -30,7 +36,7 @@ RSpec.describe "Scheduling", type: :request do
 
   describe "GET /schedule/slots" do
     it "renders slot partial successfully" do
-      get schedule_slots_path, params: { date: "2026-07-22" }
+      get schedule_slots_path, params: { date: slot_date.iso8601 }
       expect(response).to have_http_status(:success)
       expect(response.body).to include("9:00 AM")
     end
@@ -48,8 +54,6 @@ RSpec.describe "Scheduling", type: :request do
   end
 
   describe "POST /schedule" do
-    let(:slot) { Time.zone.parse("2026-07-22 09:30:00") }
-
     before do
       sync_result = { google_event_id: "google_123", google_meet_url: "https://meet.google.com/abc-defg-hij" }
       allow_any_instance_of(GoogleCalendarService).to receive(:create_event!).and_return(sync_result)

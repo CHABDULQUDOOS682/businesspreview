@@ -7,6 +7,10 @@ Rails.application.routes.draw do
   get "sitemap.xml", to: "seo#sitemap", as: :sitemap, defaults: { format: :xml }
 
   get "services", to: "home_pages#services"
+  get "website-design", to: "home_pages#website_design", as: :website_design
+  get "seo", to: "home_pages#seo"
+  get "booking-systems", to: "home_pages#booking_systems", as: :booking_systems
+  get "follow-up-systems", to: "home_pages#follow_up_systems", as: :follow_up_systems
   get "about", to: "home_pages#about"
   get "process", to: "home_pages#workflow"
   get "pricing", to: "home_pages#pricing"

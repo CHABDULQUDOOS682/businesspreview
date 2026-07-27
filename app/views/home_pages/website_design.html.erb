@@ -1,0 +1,25 @@
+<% content_for :title, "Website Design for Service Businesses | DevDeBizz" %>
+<% content_for :meta_description, "Custom website design for service businesses—clear offer pages, mobile-first layouts, and CTAs that turn visitors into booked calls." %>
+
+<%= render "service_detail",
+  eyebrow: "Website design",
+  title_html: 'Websites that make service businesses <span class="home-display-accent">easier to trust — and book.</span>'.html_safe,
+  subtitle: "We design sites that explain what you do in seconds, look sharp on mobile, and guide visitors to call, book, or inquire — not wander.",
+  outcomes: [
+    { title: "More booked conversations", text: "Homepage and service pages are built around one job: help the right visitor take the next step." },
+    { title: "Faster trust on mobile", text: "Most buyers decide on a phone. Layouts, headlines, and CTAs are designed for small screens first." },
+    { title: "Clearer offer pages", text: "Services, packages, and proof are structured so prospects stop guessing and start contacting." }
+  ],
+  includes: [
+    "Landing pages or multi-page marketing sites",
+    "Service and offer page structure",
+    "Mobile-first layouts and conversion CTAs",
+    "Contact / booking path wiring",
+    "Launch-ready copy collaboration"
+  ],
+  proof_points: [
+    "Barbershops & salons",
+    "Clinics & studios",
+    "Home-service teams",
+    "Consultants & agencies"
+  ] %>
