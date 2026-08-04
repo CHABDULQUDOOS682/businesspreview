@@ -55,7 +55,7 @@
             </div>
             <div class="p-6">
               <h3 class="text-2xl font-bold text-[#081849] transition group-hover:text-[#5F3475]"><%= project.title %></h3>
-              <p class="mt-2 text-sm leading-relaxed text-[#081849]/64"><%= project.description %></p>
+              <p class="mt-2 text-sm leading-relaxed text-[#081849]/64"><%= truncate(project.description_plain, length: 160) %></p>
               <% if project.link_url.present? %>
                 <div class="mt-5">
                   <%= link_to project.link_url, target: "_blank", rel: "noopener noreferrer", class: "inline-flex items-center gap-1 text-sm font-bold text-[#213885] hover:text-[#5F3475]" do %>

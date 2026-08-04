@@ -19,74 +19,25 @@ class SeoController < ApplicationController
   end
 
   def robots_body
-    if Rails.env.staging?
-      return <<~ROBOTS
-        User-agent: *
-        Disallow: /
-      ROBOTS
-    end
-
-    host = ENV.fetch("APP_HOST", request.host)
-    protocol = ENV.fetch("APP_PROTOCOL", "https")
-
-    <<~ROBOTS
-      User-agent: *
-      Allow: /
-      Disallow: /admin
-      Disallow: /users
-      Disallow: /lp/
-      Disallow: /pay/
-      Disallow: /reviews/new/
-      Disallow: /schedule/confirmation/
-      Disallow: /schedule/slots
-      Disallow: /twilio/
-      Disallow: /webhooks/
-      Disallow: /rails/
-      Disallow: /up
-
-      Sitemap: #{protocol}://#{host}/sitemap.xml
-    ROBOTS
+    RobotsTxtBuilder.new(
+      host: ENV.fetch("APP_HOST", request.host),
+      protocol: ENV.fetch("APP_PROTOCOL", "https"),
+      staging: Rails.env.staging?
+    ).call
   end
 
   def sitemap_urls
-    urls = [
-      { loc: root_url, changefreq: "weekly", priority: "1.0" },
-      { loc: services_url, changefreq: "monthly", priority: "0.9" },
-      { loc: website_design_url, changefreq: "monthly", priority: "0.85" },
-      { loc: seo_url, changefreq: "monthly", priority: "0.85" },
-      { loc: booking_systems_url, changefreq: "monthly", priority: "0.85" },
-      { loc: follow_up_systems_url, changefreq: "monthly", priority: "0.85" },
-      { loc: about_url, changefreq: "monthly", priority: "0.8" },
-      { loc: process_url, changefreq: "monthly", priority: "0.8" },
-      { loc: pricing_url, changefreq: "weekly", priority: "0.9" },
-      { loc: portfolio_url, changefreq: "weekly", priority: "0.8" },
-      { loc: contact_url, changefreq: "monthly", priority: "0.7" },
-      { loc: blog_url, changefreq: "weekly", priority: "0.8" },
-      { loc: schedule_url, changefreq: "monthly", priority: "0.7" },
-      { loc: careers_url, changefreq: "monthly", priority: "0.4" },
-      { loc: press_url, changefreq: "monthly", priority: "0.4" },
-      { loc: partners_url, changefreq: "monthly", priority: "0.4" },
-      { loc: help_center_url, changefreq: "monthly", priority: "0.4" },
-      { loc: documentation_url, changefreq: "monthly", priority: "0.4" },
-      { loc: brand_kit_url, changefreq: "monthly", priority: "0.3" },
-      { loc: privacy_url, changefreq: "yearly", priority: "0.2" },
-      { loc: terms_url, changefreq: "yearly", priority: "0.2" },
-      { loc: cookie_policy_url, changefreq: "yearly", priority: "0.2" },
-      { loc: gdpr_url, changefreq: "yearly", priority: "0.2" },
-      { loc: accessibility_url, changefreq: "yearly", priority: "0.2" }
-    ]
+    SitemapBuilder.new(default_url_options: sitemap_url_options).call
+  end
 
-    BlogPost.published.find_each do |post|
-      next unless post.readable?
+  # Prefer the current request host so local/test/staging previews stay accurate.
+  # Production still gets https via APP_PROTOCOL when set on routes.default_url_options.
+  def sitemap_url_options
+    route_defaults = Rails.application.routes.default_url_options || {}
 
-      urls << {
-        loc: blog_post_url(post.slug),
-        lastmod: post.updated_at,
-        changefreq: "monthly",
-        priority: "0.6"
-      }
-    end
-
-    urls
+    {
+      host: request.host,
+      protocol: route_defaults[:protocol].presence || (request.ssl? ? "https" : "http")
+    }
   end
 end

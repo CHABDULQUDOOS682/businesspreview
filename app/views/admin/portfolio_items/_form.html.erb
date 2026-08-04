@@ -20,14 +20,21 @@
 
     <div class="space-y-2">
       <%= f.label :category, class: "block text-sm font-semibold text-slate-900" %>
-      <%= f.text_field :category, class: field_class, placeholder: "e.g. Barbershop" %>
+      <%= f.select :category,
+            PortfolioItem.category_options_for_select(portfolio_item.category),
+            { include_blank: "Select a category" },
+            class: field_class,
+            required: true %>
       <p class="text-xs text-slate-500">Used by the public portfolio filter chips.</p>
     </div>
   </div>
 
-  <div class="space-y-2">
+  <div class="blog-editor space-y-2">
     <%= f.label :description, class: "block text-sm font-semibold text-slate-900" %>
-    <%= f.text_area :description, rows: 3, class: field_class, placeholder: "What was built and the outcome for the business" %>
+    <p class="text-xs text-slate-500">What was built and the outcome for the business. Use the toolbar for formatting and the paperclip to insert images.</p>
+    <div class="mt-2">
+      <%= f.rich_text_area :description %>
+    </div>
   </div>
 
   <div class="space-y-2">
@@ -54,8 +61,12 @@
 
   <div class="grid gap-6 md:grid-cols-3">
     <div class="space-y-2">
-      <%= f.label :metric, class: "block text-sm font-semibold text-slate-900" %>
-      <%= f.text_field :metric, class: field_class, placeholder: "Booking-ready" %>
+      <%= f.label :metric, "Plan", class: "block text-sm font-semibold text-slate-900" %>
+      <%= f.select :metric,
+            PortfolioItem.metric_options_for_select(portfolio_item.metric),
+            { include_blank: "Select subscription plan" },
+            class: field_class %>
+      <p class="text-xs text-slate-500">Shown as a badge on the public portfolio card.</p>
     </div>
 
     <div class="space-y-2">
