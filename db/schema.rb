@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_07_27_200000) do
+ActiveRecord::Schema[8.0].define(version: 2026_08_04_200000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -400,7 +400,6 @@ ActiveRecord::Schema[8.0].define(version: 2026_07_27_200000) do
   create_table "portfolio_items", force: :cascade do |t|
     t.string "title", null: false
     t.string "category", null: false
-    t.text "description"
     t.string "metric"
     t.string "accent_color", default: "from-[#213885]/30"
     t.integer "position", default: 0, null: false

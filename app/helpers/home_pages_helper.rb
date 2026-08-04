@@ -25,7 +25,8 @@ module HomePagesHelper
       [ "About", about_path ],
       [ "Process", process_path ],
       [ "Portfolio", portfolio_path ],
-      [ "Pricing", pricing_path ]
+      [ "Pricing", pricing_path ],
+      [ "Blog", blog_path ]
     ]
   end
 

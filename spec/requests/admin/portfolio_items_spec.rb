@@ -18,6 +18,16 @@ RSpec.describe "Admin::PortfolioItems", type: :request do
       get new_admin_portfolio_item_path
       expect(response).to have_http_status(:success)
     end
+
+    it "renders category and plan selects plus rich text description" do
+      get new_admin_portfolio_item_path
+      expect(response.body).to include("Select a category")
+      expect(response.body).to include("Select subscription plan")
+      expect(response.body).to include("Essential")
+      expect(response.body).to include("Growth")
+      expect(response.body).to include("Business Pro")
+      expect(response.body).to include('trix-editor')
+    end
   end
 
   describe "POST /admin/portfolio_items" do
@@ -28,7 +38,7 @@ RSpec.describe "Admin::PortfolioItems", type: :request do
             title: "Clinic Site",
             category: "Clinic",
             description: "Appointment-focused clinic website.",
-            metric: "Appointments",
+            metric: "Business Pro",
             accent_color: "from-cyan-400/30",
             position: 10,
             link_url: "https://example.com/clinic",

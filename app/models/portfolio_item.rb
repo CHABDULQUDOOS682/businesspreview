@@ -7,13 +7,34 @@ class PortfolioItem < ApplicationRecord
     "from-rose-400/30",
     "from-violet-400/30"
   ].freeze
+
+  CATEGORIES = [
+    "Barbershop",
+    "Salon",
+    "Clinic",
+    "Consulting",
+    "Home services",
+    "Restoration",
+    "Other"
+  ].freeze
+
+  # Badge on public cards — maps to DevDeBizz subscription plans.
+  SUBSCRIPTION_METRICS = [
+    "Essential",
+    "Growth",
+    "Business Pro"
+  ].freeze
+
   IMAGE_CONTENT_TYPES = %w[image/png image/jpeg image/jpg image/webp image/gif].freeze
   IMAGE_MAX_BYTES = 5.megabytes
 
+  has_rich_text :description
   has_one_attached :image
 
   validates :title, :category, presence: true
   validates :description, presence: true
+  validates :category, inclusion: { in: CATEGORIES }
+  validates :metric, inclusion: { in: SUBSCRIPTION_METRICS }, allow_blank: true
   validates :accent_color, inclusion: { in: ACCENT_COLORS }, allow_blank: true
   validates :link_url, format: { with: URI::DEFAULT_PARSER.make_regexp(%w[http https]), message: "must be a valid http(s) URL" }, allow_blank: true
   validate :image_constraints
@@ -27,6 +48,22 @@ class PortfolioItem < ApplicationRecord
 
   def initials
     title.to_s.split.map { |word| word.first }.join.first(2).upcase
+  end
+
+  def description_plain
+    description.to_plain_text.to_s.strip
+  end
+
+  def self.category_options_for_select(current = nil)
+    options = CATEGORIES.dup
+    options << current if current.present? && options.exclude?(current)
+    options
+  end
+
+  def self.metric_options_for_select(current = nil)
+    options = SUBSCRIPTION_METRICS.dup
+    options << current if current.present? && options.exclude?(current)
+    options
   end
 
   private
