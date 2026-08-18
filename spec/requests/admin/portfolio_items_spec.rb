@@ -78,6 +78,25 @@ RSpec.describe "Admin::PortfolioItems", type: :request do
       }
       expect(response).to have_http_status(:unprocessable_entity)
     end
+
+    it "renders new when an image is attached but the item is invalid" do
+      image = fixture_file_upload(
+        Rails.root.join("spec/fixtures/files/blog_feature.png"),
+        "image/png"
+      )
+
+      post admin_portfolio_items_path, params: {
+        portfolio_item: {
+          title: "",
+          category: "",
+          description: "",
+          image: image
+        }
+      }
+
+      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response.body).to include("There were errors with your submission")
+    end
   end
 
   describe "GET /admin/portfolio_items/:id/edit" do

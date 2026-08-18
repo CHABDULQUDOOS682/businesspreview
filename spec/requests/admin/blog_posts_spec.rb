@@ -62,6 +62,24 @@ RSpec.describe "Admin::BlogPosts", type: :request do
       post admin_blog_posts_path, params: { blog_post: { title: "", excerpt: "" } }
       expect(response).to have_http_status(:unprocessable_entity)
     end
+
+    it "renders new when a feature image is attached but the post is invalid" do
+      image = fixture_file_upload(
+        Rails.root.join("spec/fixtures/files/blog_feature.png"),
+        "image/png"
+      )
+
+      post admin_blog_posts_path, params: {
+        blog_post: {
+          title: "",
+          excerpt: "",
+          featured_image: image
+        }
+      }
+
+      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response.body).to include("There were errors with your submission")
+    end
   end
 
   describe "GET /admin/blog_posts/:id/edit" do

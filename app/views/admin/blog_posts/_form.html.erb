@@ -40,7 +40,7 @@
     <%= f.file_field :featured_image, accept: "image/png,image/jpeg,image/webp,image/gif", class: "block w-full text-sm text-slate-600 file:mr-4 file:rounded-full file:border-0 file:bg-blue-50 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-blue-700 hover:file:bg-blue-100" %>
     <p class="text-xs text-slate-500">Shown on the blog index and at the top of the article. PNG, JPG, WEBP, or GIF up to 5 MB.</p>
 
-    <% if blog_post.featured_image.attached? %>
+    <% if blog_post.featured_image.attached? && blog_post.featured_image.blob&.persisted? %>
       <div class="mt-3 flex items-start gap-4 rounded-xl border border-slate-200 bg-slate-50 p-3">
         <%= image_tag blog_post.featured_image, class: "h-24 w-40 rounded-lg object-cover ring-1 ring-slate-200", alt: "" %>
         <label class="flex items-center gap-2 pt-1 text-sm text-slate-700">
@@ -48,6 +48,8 @@
           Remove current image
         </label>
       </div>
+    <% elsif blog_post.featured_image.attached? %>
+      <p class="mt-2 text-xs text-slate-500">Selected: <%= blog_post.featured_image.filename %>. Re-attach the file if you submit again.</p>
     <% end %>
   </div>
 
