@@ -8,6 +8,7 @@
 <% slot_excluding_id = local_assigns.fetch(:slot_excluding_id, @slot_excluding_id) %>
 <% slot_selected = local_assigns.fetch(:slot_selected, @slot_selected) %>
 <% available_slots = local_assigns.fetch(:available_slots, @available_slots || []) %>
+<% return_to = safe_internal_path(params[:return_to]) %>
 
 <div <%= tag.attributes(
   data: {
@@ -21,6 +22,10 @@
 ) %>>
   <%= form_with model: meeting, url: form_url, scope: :meeting, class: "space-y-4",
                 data: { action: "submit->slot-picker#validate" } do |f| %>
+    <% if return_to.present? %>
+      <%= hidden_field_tag :return_to, return_to %>
+    <% end %>
+
     <% if meeting.errors.any? %>
       <div class="rounded-lg bg-red-50 p-3 text-sm text-red-700 ring-1 ring-inset ring-red-200">
         <%= meeting.errors.full_messages.to_sentence %>
@@ -119,7 +124,7 @@
     <div class="flex items-center gap-3 pt-1">
       <%= f.submit meeting.persisted? ? "Update Meeting" : "Schedule Meeting", class: "inline-flex w-full items-center justify-center rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500" %>
       <% unless compact %>
-        <%= link_to "Back", admin_meetings_path, class: "text-sm font-semibold text-slate-600 hover:text-slate-900" %>
+        <%= link_to "Back", return_to.presence || admin_meetings_path, class: "text-sm font-semibold text-slate-600 hover:text-slate-900" %>
       <% end %>
     </div>
   <% end %>

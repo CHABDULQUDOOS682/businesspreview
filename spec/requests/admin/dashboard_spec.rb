@@ -36,6 +36,10 @@ RSpec.describe "Admin::Dashboards", type: :request do
       sign_in create(:user, :employee)
       get admin_root_path
       expect(response).to have_http_status(:success)
+      expect(response.body).not_to include("Prototype Links")
+      expect(response.body).not_to include("Links generated")
+      expect(response.body).not_to include("Available Templates")
+      expect(response.body).not_to include("Recent Engagement")
     end
   end
 

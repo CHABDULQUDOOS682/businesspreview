@@ -8,7 +8,7 @@
       <h3 class="text-base font-semibold leading-6 text-slate-900">Meetings</h3>
       <p class="mt-1 text-sm text-slate-600">Scheduled client meetings linked to this business.</p>
     </div>
-    <%= link_to "Schedule Meeting", new_admin_meeting_path(business_id: business.id), class: "inline-flex items-center rounded-lg bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500" %>
+    <%= link_to "Schedule Meeting", new_admin_meeting_path(business_id: business.id, return_to: request.fullpath), class: "inline-flex items-center rounded-lg bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500" %>
   </div>
 
   <% if meetings.any? %>
@@ -36,7 +36,7 @@
                     <%= link_to "Meet", meeting.google_meet_url, target: "_blank", rel: "noopener", class: "text-green-700 hover:text-green-800" %>
                   <% end %>
                   <% if meeting.editable? && (employee_role? ? meeting.user_id == current_user.id : true) %>
-                    <%= link_to "Edit", edit_admin_meeting_path(meeting), class: "text-indigo-600 hover:text-indigo-500" %>
+                    <%= link_to "Edit", edit_admin_meeting_path(meeting, return_to: request.fullpath), class: "text-indigo-600 hover:text-indigo-500" %>
                   <% end %>
                 </div>
               </td>
