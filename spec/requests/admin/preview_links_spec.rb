@@ -40,10 +40,11 @@ RSpec.describe "Admin::PreviewLinks", type: :request do
     context "when logged in as employee" do
       before { sign_in employee }
 
-      it "returns success" do
+      it "redirects employees away from prototype links" do
         get admin_preview_links_path
-        expect(response).to have_http_status(:success)
-        expect(response.body).to include("Generate Prototype Link")
+
+        expect(response).to redirect_to(admin_root_path)
+        expect(flash[:alert]).to include("permission")
       end
     end
   end
@@ -83,6 +84,19 @@ RSpec.describe "Admin::PreviewLinks", type: :request do
       expect(response).to redirect_to(admin_preview_links_path(business_id: business.id))
       expect(flash[:alert]).to include("is invalid")
     end
+
+    it "prevents employees from creating prototype links" do
+      sign_in employee
+
+      expect {
+        post admin_preview_links_path, params: {
+          business_id: business.id,
+          template: "barber/barber_modern"
+        }
+      }.not_to change(PreviewLink, :count)
+
+      expect(response).to redirect_to(admin_root_path)
+    end
   end
 
   describe "DELETE /admin/preview_links/:id" do
@@ -93,6 +107,16 @@ RSpec.describe "Admin::PreviewLinks", type: :request do
 
       expect(response).to redirect_to(admin_preview_links_path)
       expect(flash[:notice]).to eq("Prototype link deleted.")
+    end
+
+    it "prevents employees from deleting prototype links" do
+      sign_in employee
+
+      expect {
+        delete admin_preview_link_path(preview_link)
+      }.not_to change(PreviewLink, :count)
+
+      expect(response).to redirect_to(admin_root_path)
     end
   end
 end

@@ -197,6 +197,17 @@ RSpec.describe "Admin::Businesses", type: :request do
       expect(response.body).to include(admin_communication_path(subscription_biz.phone))
       expect(response.body).to include("Chat")
     end
+
+    it "hides prototype links from employees" do
+      sign_in employee
+      create(:preview_link, business: business)
+
+      get admin_business_path(business)
+
+      expect(response).to have_http_status(:success)
+      expect(response.body).not_to include("Prototype")
+      expect(response.body).not_to include(admin_preview_links_path)
+    end
   end
 
   describe "GET /admin/businesses/:id/edit" do

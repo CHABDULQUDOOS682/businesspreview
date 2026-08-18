@@ -1,5 +1,6 @@
 class Admin::PreviewLinksController < ApplicationController
   layout "admin"
+  before_action :require_admin_or_super_admin!
 
   def index
     @templates = PreviewLink.available_templates

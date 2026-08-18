@@ -30,20 +30,24 @@ class Admin::MeetingsController < ApplicationController
     @meeting.user = current_user
 
     MeetingManager.new.create!(@meeting)
-    redirect_to admin_meetings_path(calendar_redirect_params(@meeting)), notice: "Meeting scheduled and Google Calendar invite sent."
+    redirect_to after_meeting_path(@meeting), notice: "Meeting scheduled and Google Calendar invite sent."
   rescue ActiveRecord::RecordInvalid
-    @users = User.order(:name, :email)
-    @businesses = Business.order(:name)
-    @calendar_month = @meeting.starts_at&.to_date&.beginning_of_month || Date.current.beginning_of_month
-    @selected_date = @meeting.starts_at&.to_date || Date.current
-    @calendar = Admin::MeetingsCalendar.new(month: @calendar_month, meetings: calendar_meetings_scope)
-    @day_meetings = @calendar.meetings_on(@selected_date)
-    @total_count = scoped_meetings.count
-    @upcoming_count = scoped_meetings.upcoming.count
     assign_slot_picker_locals(@meeting)
-    render :index, status: :unprocessable_entity
+    if meeting_return_path(@meeting).present?
+      render :new, status: :unprocessable_entity
+    else
+      @users = User.order(:name, :email)
+      @businesses = Business.order(:name)
+      @calendar_month = @meeting.starts_at&.to_date&.beginning_of_month || Date.current.beginning_of_month
+      @selected_date = @meeting.starts_at&.to_date || Date.current
+      @calendar = Admin::MeetingsCalendar.new(month: @calendar_month, meetings: calendar_meetings_scope)
+      @day_meetings = @calendar.meetings_on(@selected_date)
+      @total_count = scoped_meetings.count
+      @upcoming_count = scoped_meetings.upcoming.count
+      render :index, status: :unprocessable_entity
+    end
   rescue MeetingManager::SyncError => e
-    redirect_to admin_meetings_path(date: params.dig(:meeting, :meeting_date)), alert: "Meeting could not be synced to Google Calendar: #{e.message}"
+    redirect_to after_meeting_path(date: params.dig(:meeting, :meeting_date)), alert: "Meeting could not be synced to Google Calendar: #{e.message}"
   end
 
   def edit
@@ -52,7 +56,7 @@ class Admin::MeetingsController < ApplicationController
 
   def update
     MeetingManager.new.update!(@meeting, normalized_meeting_params)
-    redirect_to admin_meetings_path(calendar_redirect_params(@meeting)), notice: "Meeting updated."
+    redirect_to after_meeting_path(@meeting), notice: "Meeting updated."
   rescue ActiveRecord::RecordInvalid
     assign_slot_picker_locals(@meeting)
     render :edit, status: :unprocessable_entity
@@ -64,14 +68,14 @@ class Admin::MeetingsController < ApplicationController
 
   def cancel
     unless @meeting.cancellable?
-      redirect_to admin_meetings_path(calendar_redirect_params(@meeting)), alert: "Only scheduled meetings can be cancelled."
+      redirect_to after_meeting_path(@meeting), alert: "Only scheduled meetings can be cancelled."
       return
     end
 
     MeetingManager.new.cancel!(@meeting)
-    redirect_to admin_meetings_path(calendar_redirect_params(@meeting)), notice: "Meeting cancelled."
+    redirect_to after_meeting_path(@meeting), notice: "Meeting cancelled."
   rescue MeetingManager::SyncError => e
-    redirect_to admin_meetings_path(calendar_redirect_params(@meeting)), alert: "Meeting could not be cancelled in Google Calendar: #{e.message}"
+    redirect_to after_meeting_path(@meeting), alert: "Meeting could not be cancelled in Google Calendar: #{e.message}"
   end
 
   def slots
@@ -235,5 +239,27 @@ class Admin::MeetingsController < ApplicationController
       status: params[:status],
       q: params[:q]
     }.compact
+  end
+
+  def meeting_return_path(meeting = nil)
+    return unless params[:return_to].to_s == "business"
+
+    business_id = meeting&.business_id.presence || params.dig(:meeting, :business_id).presence || params[:business_id]
+    return if business_id.blank?
+
+    admin_business_path(business_id)
+  end
+  helper_method :meeting_return_path
+
+  def after_meeting_path(meeting = nil, date: nil)
+    return meeting_return_path(meeting) if meeting_return_path(meeting).present?
+
+    if meeting&.starts_at.present?
+      admin_meetings_path(calendar_redirect_params(meeting))
+    elsif date.present?
+      admin_meetings_path(date: date)
+    else
+      admin_meetings_path
+    end
   end
 end

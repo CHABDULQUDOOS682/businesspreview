@@ -4,7 +4,7 @@
       <p class="portal-kicker"><%= current_role_label %> workspace</p>
       <h1 class="portal-display-title mt-3">Employee Dashboard</h1>
       <p class="portal-muted mt-3 max-w-2xl text-sm md:text-base">
-        Stay on top of the pipeline, communications, tasks, and recent engagement in a calm, focused workspace.
+        Stay on top of the pipeline, communications, tasks, and recent businesses in a calm, focused workspace.
       </p>
     </div>
   </div>
@@ -17,18 +17,10 @@
     <p class="portal-muted mt-2 text-sm">The core numbers you need to respond quickly and keep opportunities moving.</p>
   </div>
 
-  <dl class="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
+  <dl class="grid grid-cols-1 gap-4 md:grid-cols-2">
     <div class="portal-stat-card">
       <dt class="text-sm font-medium text-sand-500">Total Businesses</dt>
       <dd class="mt-4 text-4xl font-semibold tracking-tight text-sand-900"><%= @business_count %></dd>
-    </div>
-    <div class="portal-stat-card">
-      <dt class="text-sm font-medium text-sand-500">Links generated</dt>
-      <dd class="mt-4 text-4xl font-semibold tracking-tight text-accent-indigo"><%= @preview_count %></dd>
-    </div>
-    <div class="portal-stat-card">
-      <dt class="text-sm font-medium text-sand-500">Total Clicks</dt>
-      <dd class="mt-4 text-4xl font-semibold tracking-tight text-accent-blue"><%= @total_visits %></dd>
     </div>
     <div class="portal-stat-card">
       <dt class="text-sm font-medium text-sand-500">Unread Messages</dt>
@@ -39,48 +31,7 @@
   </dl>
 </section>
 
-<section class="portal-panel mt-8">
-  <div class="border-b border-sand-200 px-5 py-4 md:px-6">
-    <h3 class="text-base font-semibold text-sand-900">Available Templates</h3>
-  </div>
-  <div class="max-h-52 overflow-y-auto px-5 py-5 md:px-6">
-    <div class="flex flex-wrap gap-2">
-      <% @templates.each do |template| %>
-        <%= link_to admin_template_preview_path(template), target: "_blank", class: "inline-flex items-center gap-2 rounded-full border border-sand-200 bg-sand-50 px-3 py-1.5 text-xs font-medium text-sand-700 transition hover:border-accent-green hover:text-accent-green" do %>
-          <span class="h-1.5 w-1.5 rounded-full bg-accent-green"></span>
-          <%= template.titleize %>
-        <% end %>
-      <% end %>
-    </div>
-  </div>
-</section>
-
-<section class="mt-8 grid grid-cols-1 gap-6 xl:grid-cols-2">
-  <div class="portal-panel overflow-hidden">
-    <div class="flex items-center justify-between border-b border-sand-200 px-5 py-4 md:px-6">
-      <h3 class="text-base font-semibold text-sand-900">Recent Engagement</h3>
-      <%= link_to "View all", admin_preview_links_path, class: "text-sm font-medium text-accent-green hover:text-accent-green/80" %>
-    </div>
-    <ul role="list" class="divide-y divide-sand-200">
-      <% if @recent_clicks.any? %>
-        <% @recent_clicks.each do |link| %>
-          <li class="flex items-center justify-between gap-4 px-5 py-5 transition hover:bg-sand-50 md:px-6">
-            <div class="min-w-0 flex-1">
-              <div class="mb-2 flex flex-wrap items-center gap-2">
-                <p class="text-sm font-semibold text-sand-900"><%= link.business.name %></p>
-                <span class="inline-flex items-center rounded-full bg-accent-green-bg px-2.5 py-1 text-xs font-medium text-accent-green">Clicked on <%= link.template %></span>
-              </div>
-              <p class="text-xs text-sand-500"><%= time_ago_in_words(link.clicked_at) %> ago</p>
-            </div>
-            <%= link_to "View", admin_business_path(link.business), class: "btn-base btn-sand px-3 py-2 text-sm shadow-sm" %>
-          </li>
-        <% end %>
-      <% else %>
-        <li class="px-5 py-10 text-center text-sm text-sand-500 md:px-6">No clicks tracked yet. Send out some links to start filling this feed.</li>
-      <% end %>
-    </ul>
-  </div>
-
+<section class="mt-8">
   <div class="portal-panel overflow-hidden">
     <div class="flex items-center justify-between border-b border-sand-200 px-5 py-4 md:px-6">
       <h3 class="text-base font-semibold text-sand-900">Recent Businesses</h3>

@@ -99,6 +99,47 @@ RSpec.describe "Admin::Meetings", type: :request do
       expect(flash[:notice]).to include("Meeting scheduled")
     end
 
+    it "redirects back to the originating page when return_to is provided" do
+      sign_in employee
+
+      post admin_meetings_path, params: {
+        return_to: "business",
+        meeting: {
+          business_id: business.id,
+          client_name: "Jane",
+          client_email: "jane@example.com",
+          client_phone: "+1234567890",
+          title: "Kickoff",
+          description: "Intro",
+          starts_at: 2.days.from_now.change(hour: 11).iso8601,
+          duration_minutes: 30
+        }
+      }
+
+      expect(response).to redirect_to(admin_business_path(business))
+      expect(flash[:notice]).to include("Meeting scheduled")
+    end
+
+    it "ignores an external return_to URL" do
+      sign_in employee
+
+      post admin_meetings_path, params: {
+        return_to: "https://evil.example/phish",
+        meeting: {
+          business_id: business.id,
+          client_name: "Jane",
+          client_email: "jane@example.com",
+          client_phone: "+1234567890",
+          title: "Kickoff",
+          description: "Intro",
+          starts_at: 2.days.from_now.change(hour: 11).iso8601,
+          duration_minutes: 30
+        }
+      }
+
+      expect(response).to redirect_to(admin_meetings_path(month: 2.days.from_now.strftime("%Y-%m"), date: 2.days.from_now.to_date))
+    end
+
     it "renders the calendar when validation fails" do
       sign_in employee
       allow(manager).to receive(:create!) do |meeting|
@@ -219,6 +260,14 @@ RSpec.describe "Admin::Meetings", type: :request do
       expect(response.body).to include(business.name)
       expect(response.body).to include(business.email)
     end
+
+    it "keeps a return_to path so the form can send the user back" do
+      sign_in employee
+      get new_admin_meeting_path(business_id: business.id, return_to: "business")
+
+      expect(response).to have_http_status(:ok)
+      expect(response.body).to include(admin_business_path(business))
+    end
   end
 
   describe "PATCH /admin/meetings/:id" do
@@ -241,6 +290,28 @@ RSpec.describe "Admin::Meetings", type: :request do
       }
 
       expect(response).to redirect_to(admin_meetings_path(month: 2.days.from_now.strftime("%Y-%m"), date: 2.days.from_now.to_date))
+    end
+
+    it "redirects back to the originating page after an update" do
+      sign_in employee
+      expect(manager).to receive(:update!).and_return(my_meeting)
+
+      patch admin_meeting_path(my_meeting), params: {
+        return_to: "business",
+        meeting: {
+          business_id: business.id,
+          client_name: "Jane",
+          client_email: "jane@example.com",
+          client_phone: "+1234567890",
+          title: "Updated",
+          description: "Updated notes",
+          meeting_date: 2.days.from_now.to_date,
+          meeting_time: "12:00",
+          duration_minutes: 45
+        }
+      }
+
+      expect(response).to redirect_to(admin_business_path(business))
     end
 
     it "renders edit when validation fails" do
