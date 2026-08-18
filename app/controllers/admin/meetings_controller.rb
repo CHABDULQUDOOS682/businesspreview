@@ -33,7 +33,7 @@ class Admin::MeetingsController < ApplicationController
     redirect_to after_meeting_path(@meeting), notice: "Meeting scheduled and Google Calendar invite sent."
   rescue ActiveRecord::RecordInvalid
     assign_slot_picker_locals(@meeting)
-    if meeting_return_path.present?
+    if meeting_return_path(@meeting).present?
       render :new, status: :unprocessable_entity
     else
       @users = User.order(:name, :email)
@@ -241,13 +241,18 @@ class Admin::MeetingsController < ApplicationController
     }.compact
   end
 
-  def meeting_return_path
-    safe_internal_path(params[:return_to])
+  def meeting_return_path(meeting = nil)
+    return unless params[:return_to].to_s == "business"
+
+    business_id = meeting&.business_id.presence || params.dig(:meeting, :business_id).presence || params[:business_id]
+    return if business_id.blank?
+
+    admin_business_path(business_id)
   end
-  helper_method :meeting_return_path, :safe_internal_path
+  helper_method :meeting_return_path
 
   def after_meeting_path(meeting = nil, date: nil)
-    return meeting_return_path if meeting_return_path.present?
+    return meeting_return_path(meeting) if meeting_return_path(meeting).present?
 
     if meeting&.starts_at.present?
       admin_meetings_path(calendar_redirect_params(meeting))
@@ -256,21 +261,5 @@ class Admin::MeetingsController < ApplicationController
     else
       admin_meetings_path
     end
-  end
-
-  def safe_internal_path(path)
-    return if path.blank?
-
-    uri = URI.parse(path)
-    return if uri.scheme.present? && !%w[http https].include?(uri.scheme)
-    return if uri.host.present? && uri.host != request.host
-
-    relative = uri.host.present? ? uri.request_uri : path
-    return unless relative.start_with?("/")
-    return if relative.start_with?("//")
-
-    relative
-  rescue URI::InvalidURIError
-    nil
   end
 end

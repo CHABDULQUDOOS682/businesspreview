@@ -103,7 +103,7 @@ RSpec.describe "Admin::Meetings", type: :request do
       sign_in employee
 
       post admin_meetings_path, params: {
-        return_to: admin_business_path(business),
+        return_to: "business",
         meeting: {
           business_id: business.id,
           client_name: "Jane",
@@ -263,7 +263,7 @@ RSpec.describe "Admin::Meetings", type: :request do
 
     it "keeps a return_to path so the form can send the user back" do
       sign_in employee
-      get new_admin_meeting_path(business_id: business.id, return_to: admin_business_path(business))
+      get new_admin_meeting_path(business_id: business.id, return_to: "business")
 
       expect(response).to have_http_status(:ok)
       expect(response.body).to include(admin_business_path(business))
@@ -297,7 +297,7 @@ RSpec.describe "Admin::Meetings", type: :request do
       expect(manager).to receive(:update!).and_return(my_meeting)
 
       patch admin_meeting_path(my_meeting), params: {
-        return_to: admin_business_path(business),
+        return_to: "business",
         meeting: {
           business_id: business.id,
           client_name: "Jane",
