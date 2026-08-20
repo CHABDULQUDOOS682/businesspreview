@@ -37,18 +37,28 @@ RSpec.describe Business, type: :model do
 
   describe "scopes" do
     it "filters nurture pipeline" do
-      create(:business, sold_price: nil, subscription_fee: nil)
-      expect(Business.nurture_pipeline.count).to eq(1)
+      create(:business, sold_price: 100, subscription_fee: nil, subscription: false)
+      nurture = create(:business, sold_price: nil, subscription_fee: nil, subscription: false)
+
+      expect(Business.nurture_pipeline).to include(nurture)
+      expect(Business.nurture_pipeline).not_to include(
+        Business.find_by(sold_price: 100)
+      )
     end
 
     it "filters purchased pipeline" do
-      create(:business, sold_price: 100, subscription_fee: nil)
-      expect(Business.purchased_pipeline.count).to eq(1)
+      purchased = create(:business, sold_price: 100, subscription_fee: nil, subscription: false)
+      create(:business, sold_price: nil, subscription_fee: nil, subscription: false)
+
+      expect(Business.purchased_pipeline).to include(purchased)
+      expect(Business.purchased_pipeline.where(sold_price: nil)).to be_empty
     end
 
     it "filters subscriptions pipeline" do
-      create(:business, subscription: true)
-      expect(Business.subscriptions_pipeline.count).to eq(1)
+      subscribed = create(:business, subscription: true)
+      create(:business, sold_price: nil, subscription_fee: nil, subscription: false)
+
+      expect(Business.subscriptions_pipeline).to include(subscribed)
     end
   end
 

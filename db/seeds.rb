@@ -36,26 +36,28 @@ end
   end
 end
 
-# Demo nurture businesses so the admin list shows pagination (Pagy default: 20/page).
-niches = [ "Salon", "Barbershop", "Dental", "HVAC", "Plumbing", "Landscaping", "Auto Repair", "Cafe" ]
-cities = [ "Austin", "Denver", "Seattle", "Chicago", "Miami", "Phoenix", "Portland", "Atlanta" ]
+# Demo nurture businesses for local pagination only — never seed into test/CI/prod.
+if Rails.env.development?
+  niches = [ "Salon", "Barbershop", "Dental", "HVAC", "Plumbing", "Landscaping", "Auto Repair", "Cafe" ]
+  cities = [ "Austin", "Denver", "Seattle", "Chicago", "Miami", "Phoenix", "Portland", "Atlanta" ]
 
-25.times do |i|
-  n = i + 1
-  phone = format("+1555%07d", n)
-  next if Business.exists?(phone: phone)
+  25.times do |i|
+    n = i + 1
+    phone = format("+1555%07d", n)
+    next if Business.exists?(phone: phone)
 
-  Business.create!(
-    name: "Demo Business #{n}",
-    owner_name: "Owner #{n}",
-    city: cities[i % cities.length],
-    country: "USA",
-    niche: niches[i % niches.length],
-    phone: phone,
-    email: "demo#{n}@example.com",
-    business_number: format("B9%05d", n),
-    subscription: false,
-    sold_price: nil,
-    subscription_fee: nil
-  )
+    Business.create!(
+      name: "Demo Business #{n}",
+      owner_name: "Owner #{n}",
+      city: cities[i % cities.length],
+      country: "USA",
+      niche: niches[i % niches.length],
+      phone: phone,
+      email: "demo#{n}@example.com",
+      business_number: format("B9%05d", n),
+      subscription: false,
+      sold_price: nil,
+      subscription_fee: nil
+    )
+  end
 end
