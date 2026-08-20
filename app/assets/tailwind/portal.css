@@ -45,3 +45,28 @@
 .portal-flash-alert {
   @apply mb-4 rounded-[20px] border border-status-danger bg-status-danger-bg px-4 py-3 text-sm font-medium text-status-danger;
 }
+
+/* Pagy nav — used by admin list pages (businesses, notes, etc.) */
+.pagy {
+  @apply flex flex-wrap items-center gap-1 text-sm font-semibold text-sand-600;
+}
+
+.pagy a:not(.gap) {
+  @apply inline-flex min-w-9 items-center justify-center rounded-lg border border-sand-200 bg-white px-3 py-1.5 text-sand-700 shadow-sm transition;
+}
+
+.pagy a:not(.gap):hover {
+  @apply border-brand-200 bg-brand-50 text-brand-700;
+}
+
+.pagy a:not(.gap):not([href]) {
+  @apply cursor-default border-sand-100 bg-sand-50 text-sand-300 shadow-none;
+}
+
+.pagy a:not(.gap).current {
+  @apply cursor-default border-brand-600 bg-brand-600 text-white shadow-none hover:border-brand-600 hover:bg-brand-600 hover:text-white;
+}
+
+.pagy a.gap {
+  @apply inline-flex min-w-9 items-center justify-center px-1 text-sand-400;
+}

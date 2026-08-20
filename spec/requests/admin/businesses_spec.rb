@@ -71,21 +71,152 @@ RSpec.describe "Admin::Businesses", type: :request do
     context "when logged in as employee" do
       before do
         sign_in employee
+        nurture_biz.update!(assigned_to: employee)
       end
 
       it "forces segment to nurture even if other segment is requested" do
         get admin_businesses_path, params: { segment: "purchased" }
         expect(response).to have_http_status(:success)
         expect(assigns(:segment)).to eq("nurture")
+        expect(assigns(:work_status)).to eq("assigned")
         expect(assigns(:businesses)).to include(nurture_biz)
         expect(assigns(:businesses)).not_to include(purchased_biz)
       end
+
+      it "only lists businesses assigned to the employee" do
+        other = create(:business, name: "Other Lead", sold_price: nil, subscription_fee: nil, subscription: false)
+        get admin_businesses_path
+        expect(assigns(:businesses)).to include(nurture_biz)
+        expect(assigns(:businesses)).not_to include(other)
+      end
+
+      it "filters by work status tab" do
+        nurture_biz.update!(work_status: "in_progress")
+        get admin_businesses_path, params: { work_status: "in_progress" }
+        expect(assigns(:businesses)).to include(nurture_biz)
+
+        get admin_businesses_path, params: { work_status: "assigned" }
+        expect(assigns(:businesses)).not_to include(nurture_biz)
+      end
+    end
+  end
+
+  describe "POST /admin/businesses/assign" do
+    let!(:lead_one) { create(:business, name: "Lead One", sold_price: nil, subscription_fee: nil, subscription: false) }
+    let!(:lead_two) { create(:business, name: "Lead Two", sold_price: nil, subscription_fee: nil, subscription: false) }
+
+    it "assigns selected businesses to an employee" do
+      post assign_admin_businesses_path, params: {
+        business_ids: [ lead_one.id, lead_two.id ],
+        assigned_to_id: employee.id
+      }
+
+      expect(response).to redirect_to(admin_businesses_path)
+      expect(lead_one.reload.assigned_to).to eq(employee)
+      expect(lead_two.reload.assigned_to).to eq(employee)
+      expect(lead_one.assigned_at).to be_present
+      expect(lead_one.work_status).to eq("assigned")
+      expect(flash[:notice]).to include(employee.display_name)
+    end
+
+    it "unassigns selected businesses when no employee is chosen" do
+      lead_one.update!(assigned_to: employee, assigned_at: Time.current, work_status: "in_progress")
+
+      post assign_admin_businesses_path, params: {
+        business_ids: [ lead_one.id ],
+        assigned_to_id: ""
+      }
+
+      expect(lead_one.reload.assigned_to).to be_nil
+      expect(lead_one.assigned_at).to be_nil
+      expect(lead_one.work_status).to be_nil
+      expect(flash[:notice]).to include("Unassigned")
+    end
+
+    it "rejects assignment to non-employees" do
+      post assign_admin_businesses_path, params: {
+        business_ids: [ lead_one.id ],
+        assigned_to_id: admin.id
+      }
+
+      expect(lead_one.reload.assigned_to).to be_nil
+      expect(flash[:alert]).to include("valid employee")
+    end
+
+    it "blocks employees from assigning" do
+      sign_in employee
+      post assign_admin_businesses_path, params: {
+        business_ids: [ lead_one.id ],
+        assigned_to_id: employee.id
+      }
+      expect(response).to redirect_to(admin_root_path)
+      expect(lead_one.reload.assigned_to).to be_nil
+    end
+
+    it "filters by assignee" do
+      lead_one.update!(assigned_to: employee)
+      get admin_businesses_path, params: { assigned_to_id: employee.id }
+      expect(assigns(:businesses)).to include(lead_one)
+      expect(assigns(:businesses)).not_to include(lead_two)
+    end
+
+    it "filters unassigned businesses" do
+      lead_one.update!(assigned_to: employee)
+      get admin_businesses_path, params: { assigned_to_id: "unassigned" }
+      expect(assigns(:businesses)).to include(lead_two)
+      expect(assigns(:businesses)).not_to include(lead_one)
+    end
+  end
+
+  describe "PATCH /admin/businesses/:id/update_work_status" do
+    let!(:lead) do
+      create(:business, sold_price: nil, subscription_fee: nil, subscription: false, assigned_to: employee, work_status: "assigned")
+    end
+
+    it "lets employees move a lead to in progress" do
+      sign_in employee
+      patch update_work_status_admin_business_path(lead), params: { work_status: "in_progress" }
+      expect(response).to redirect_to(admin_business_path(lead))
+      expect(lead.reload.work_status).to eq("in_progress")
+    end
+
+    it "requires a report when marking done" do
+      sign_in employee
+      patch update_work_status_admin_business_path(lead), params: { work_status: "done", employee_report: "" }
+      expect(lead.reload.work_status).to eq("assigned")
+      expect(flash[:alert]).to include("report")
+    end
+
+    it "marks done with a report and lets admin complete with notes" do
+      sign_in employee
+      patch update_work_status_admin_business_path(lead), params: {
+        work_status: "done",
+        employee_report: "Called twice, interested in Growth plan."
+      }
+      expect(lead.reload.work_status).to eq("done")
+      expect(lead.employee_report).to include("Growth plan")
+
+      sign_in admin
+      patch update_work_status_admin_business_path(lead), params: {
+        work_status: "completed",
+        completion_notes: "Approved for proposal."
+      }
+      expect(lead.reload.work_status).to eq("completed")
+      expect(lead.completion_notes).to include("Approved")
+    end
+
+    it "allows moving status backward" do
+      lead.update!(work_status: "done", employee_report: "Done report")
+      sign_in admin
+      patch update_work_status_admin_business_path(lead), params: { work_status: "in_progress" }
+      expect(lead.reload.work_status).to eq("in_progress")
     end
   end
 
   describe "employee business email editing" do
     before do
       sign_in employee
+      business.update!(assigned_to: employee)
     end
 
     it "renders the email edit form" do
@@ -200,6 +331,7 @@ RSpec.describe "Admin::Businesses", type: :request do
 
     it "hides prototype links from employees" do
       sign_in employee
+      business.update!(assigned_to: employee)
       create(:preview_link, business: business)
 
       get admin_business_path(business)
@@ -207,6 +339,13 @@ RSpec.describe "Admin::Businesses", type: :request do
       expect(response).to have_http_status(:success)
       expect(response.body).not_to include("Prototype")
       expect(response.body).not_to include(admin_preview_links_path)
+    end
+
+    it "blocks employees from viewing unassigned businesses" do
+      sign_in employee
+      get admin_business_path(business)
+      expect(response).to redirect_to(admin_businesses_path)
+      expect(flash[:alert]).to include("do not have access")
     end
   end
 

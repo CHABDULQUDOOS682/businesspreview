@@ -1,0 +1,10 @@
+<div class="sm:col-span-3">
+  <%= form.label :assigned_to_id, "Assigned To", class: "block text-sm font-medium leading-6 text-slate-900" %>
+  <div class="mt-2">
+    <%= form.select :assigned_to_id,
+                    options_from_collection_for_select(assignee_options, :id, :display_name, form.object.assigned_to_id),
+                    { include_blank: "Unassigned" },
+                    class: field_class %>
+  </div>
+  <p class="mt-1 text-xs text-slate-500">Employee who owns outreach for this lead.</p>
+</div>

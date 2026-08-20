@@ -2,10 +2,8 @@
 <nav class="<%= mobile ? 'space-y-1 px-3 py-3' : 'sidebar-items-section-container' %>">
   <%= admin_sidebar_nav_link "Dashboard", admin_root_path, controller: "admin/dashboard", icon: :dashboard, mobile: mobile %>
   <%= admin_sidebar_nav_link "Businesses", admin_businesses_path, controller: "admin/businesses", icon: :businesses, mobile: mobile %>
-  <%= admin_sidebar_nav_link "Communications", admin_communications_path, controller: "admin/communications", icon: :communications, mobile: mobile, badge: admin_sidebar_unread_badge(mobile: mobile) %>
   <%= admin_sidebar_nav_link "All Notes", admin_notes_path, controller: "admin/notes", icon: :notes, mobile: mobile %>
   <%= admin_sidebar_nav_link "Cold Calling Scripts", admin_cold_calling_scripts_path, controller: "admin/cold_calling_scripts", icon: :cold_calling_scripts, mobile: mobile %>
   <%= admin_sidebar_nav_link "Meetings", admin_meetings_path, controller: "admin/meetings", icon: :meetings, mobile: mobile %>
-  <%= admin_sidebar_nav_link "Feedback", admin_feedbacks_path, controller: "admin/feedbacks", icon: :feedbacks, mobile: mobile %>
   <%= admin_sidebar_nav_link "My Commissions", admin_commissions_path, controller: "admin/commissions", icon: :commissions, mobile: mobile %>
 </nav>

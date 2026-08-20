@@ -2,7 +2,9 @@ class Admin::DashboardController < ApplicationController
   layout "admin"
 
   def index
-    @business_count = Business.count
+    business_scope = employee_role? ? Business.assigned_to_user(current_user) : Business.all
+
+    @business_count = business_scope.count
     @preview_count  = PreviewLink.count
     @total_visits   = PreviewLink.sum(:visit_count)
     @unread_inbound_count = Message.inbound.unread.count
@@ -13,7 +15,7 @@ class Admin::DashboardController < ApplicationController
 
     @templates = PreviewLink.available_templates
 
-    @recent_businesses = Business.order(created_at: :desc).limit(5)
+    @recent_businesses = business_scope.order(created_at: :desc).limit(5)
     @recent_clicks = PreviewLink.where("visit_count > 0").order(updated_at: :desc).limit(5)
     @feedback_stats = Admin::FeedbackStats.call
   end

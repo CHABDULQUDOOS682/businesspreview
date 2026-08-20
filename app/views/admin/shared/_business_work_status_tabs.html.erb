@@ -1,0 +1,18 @@
+<%# locals: (tabs:, current_status:) %>
+<div class="border-b border-sand-200">
+  <nav class="-mb-px flex flex-wrap gap-2 sm:gap-6" aria-label="Work status">
+    <% tabs.each do |tab| %>
+      <% active = current_status.to_s == tab[:key].to_s %>
+      <%= link_to tab[:path],
+                  class: [
+                    "inline-flex items-center gap-2 border-b-2 px-1 py-3 text-sm font-semibold transition-colors",
+                    active ? "border-accent-indigo text-accent-indigo" : "border-transparent text-sand-500 hover:border-sand-300 hover:text-sand-700"
+                  ].join(" ") do %>
+        <span><%= tab[:label] %></span>
+        <span class="<%= active ? 'bg-accent-indigo-bg text-accent-indigo ring-sand-200' : 'bg-sand-100 text-sand-600 ring-sand-200' %> inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ring-1 ring-inset">
+          <%= tab[:count] %>
+        </span>
+      <% end %>
+    <% end %>
+  </nav>
+</div>

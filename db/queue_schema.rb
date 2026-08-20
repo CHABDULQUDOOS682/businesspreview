@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_08_04_200000) do
+ActiveRecord::Schema[8.0].define(version: 2026_08_20_202324) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -185,7 +185,13 @@ ActiveRecord::Schema[8.0].define(version: 2026_08_04_200000) do
     t.string "phone_line_type"
     t.datetime "phone_lookup_checked_at"
     t.string "phone_lookup_error"
+    t.bigint "assigned_to_id"
+    t.datetime "assigned_at"
+    t.string "work_status"
+    t.text "employee_report"
+    t.text "completion_notes"
     t.index "lower((phone)::text)", name: "index_businesses_on_lower_phone", unique: true
+    t.index ["assigned_to_id"], name: "index_businesses_on_assigned_to_id"
     t.index ["business_number"], name: "index_businesses_on_business_number", unique: true
     t.index ["last_invoice_id"], name: "index_businesses_on_last_invoice_id"
     t.index ["next_subscription_invoice_at"], name: "index_businesses_on_next_subscription_invoice_at"
@@ -196,6 +202,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_08_04_200000) do
     t.index ["stripe_payment_intent_id"], name: "index_businesses_on_stripe_payment_intent_id"
     t.index ["stripe_subscription_id"], name: "index_businesses_on_stripe_subscription_id"
     t.index ["subscription_payment_status"], name: "index_businesses_on_subscription_payment_status"
+    t.index ["work_status"], name: "index_businesses_on_work_status"
   end
 
   create_table "call_logs", force: :cascade do |t|
@@ -591,6 +598,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_08_04_200000) do
   add_foreign_key "business_import_rows", "business_imports"
   add_foreign_key "business_import_rows", "businesses"
   add_foreign_key "business_imports", "users", column: "imported_by_id"
+  add_foreign_key "businesses", "users", column: "assigned_to_id"
   add_foreign_key "businesses", "users", column: "sold_by_id"
   add_foreign_key "call_logs", "businesses"
   add_foreign_key "call_logs", "users"

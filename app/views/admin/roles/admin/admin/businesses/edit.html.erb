@@ -29,6 +29,7 @@
           </div>
 
           <%= render "admin/businesses/sold_by_field", form: f, seller_options: @seller_options, field_class: field_class %>
+          <%= render "admin/businesses/assigned_to_field", form: f, assignee_options: @assignee_options, field_class: field_class %>
 
           <div class="sm:col-span-3">
             <%= f.label :city, "City", class: "block text-sm font-medium leading-6 text-slate-900" %>
