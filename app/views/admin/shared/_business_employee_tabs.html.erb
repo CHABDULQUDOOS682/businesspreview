@@ -1,0 +1,29 @@
+<%# locals: (employees:, counts:, current_employee:, segment:) %>
+<div class="mt-4 border-b border-sand-200">
+  <p class="mb-2 text-xs font-semibold uppercase tracking-wide text-sand-500">Employees</p>
+  <nav class="-mb-px flex flex-wrap gap-2 sm:gap-4" aria-label="Assigned employees">
+    <% all_active = current_employee.blank? %>
+    <%= link_to admin_businesses_path(segment: segment, work_status: params[:work_status].presence),
+                class: [
+                  "inline-flex items-center gap-2 border-b-2 px-1 py-2.5 text-sm font-semibold transition-colors",
+                  all_active ? "border-accent-green text-accent-green" : "border-transparent text-sand-500 hover:border-sand-300 hover:text-sand-700"
+                ].join(" ") do %>
+      <span>All</span>
+    <% end %>
+
+    <% employees.each do |employee| %>
+      <% active = current_employee&.id == employee.id %>
+      <% count = counts.fetch(employee, 0) %>
+      <%= link_to admin_businesses_path(segment: segment, employee_id: employee.id, work_status: params[:work_status].presence),
+                  class: [
+                    "inline-flex items-center gap-2 border-b-2 px-1 py-2.5 text-sm font-semibold transition-colors",
+                    active ? "border-accent-green text-accent-green" : "border-transparent text-sand-500 hover:border-sand-300 hover:text-sand-700"
+                  ].join(" ") do %>
+        <span><%= employee.display_name %></span>
+        <span class="<%= active ? 'bg-accent-green-bg text-accent-green ring-sand-200' : 'bg-sand-100 text-sand-600 ring-sand-200' %> inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ring-1 ring-inset">
+          <%= count %>
+        </span>
+      <% end %>
+    <% end %>
+  </nav>
+</div>

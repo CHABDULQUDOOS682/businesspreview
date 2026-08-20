@@ -7,6 +7,7 @@ class Business < ApplicationRecord
   has_many :payment_invoices, dependent: :destroy
   has_many :reviews, dependent: :destroy
   belongs_to :sold_by, class_name: "User", optional: true
+  belongs_to :assigned_to, class_name: "User", optional: true
   has_many :commissions, dependent: :destroy
   has_many :business_commission_rates, dependent: :destroy
   has_many :agency_tasks, dependent: :destroy
@@ -14,12 +15,16 @@ class Business < ApplicationRecord
 
   before_validation :normalize_phone
   before_validation :normalize_business_number
+  before_validation :sync_assigned_at
   before_create :generate_review_token
 
   validates :name, presence: true
   validates :phone, presence: true
   validates :phone, uniqueness: { case_sensitive: false }, if: -> { phone.present? }
   validates :business_number, uniqueness: { case_sensitive: false }, allow_nil: true
+  validate :assigned_to_must_be_employee, if: -> { assigned_to_id.present? }
+  validate :employee_report_required_for_done
+  validate :completion_notes_required_for_completed
 
   SUBSCRIPTION_PAYMENT_STATUSES = %w[inactive current past_due suspended].freeze
   SUBSCRIPTION_BILLING_CYCLE = 30.days
@@ -30,7 +35,15 @@ class Business < ApplicationRecord
     "subscriptions" => "Subscriptions"
   }.freeze
 
+  WORK_STATUSES = {
+    "assigned" => "Assigned",
+    "in_progress" => "In Progress",
+    "done" => "Done",
+    "completed" => "Completed"
+  }.freeze
+
   validates :subscription_payment_status, inclusion: { in: SUBSCRIPTION_PAYMENT_STATUSES }
+  validates :work_status, inclusion: { in: WORK_STATUSES.keys }, allow_nil: true
 
   scope :with_active_subscription, -> {
     where("subscription = ? OR subscription_fee IS NOT NULL", true)
@@ -47,6 +60,9 @@ class Business < ApplicationRecord
   scope :subscriptions_pipeline, -> {
     with_active_subscription
   }
+  scope :assigned_to_user, ->(user) { where(assigned_to_id: user.id) }
+  scope :unassigned, -> { where(assigned_to_id: nil) }
+  scope :with_work_status, ->(status) { where(work_status: status) }
   scope :subscription_billing_due, -> {
     with_active_subscription
       .where(subscription_payment_status: %w[current past_due])
@@ -68,7 +84,7 @@ class Business < ApplicationRecord
     SEGMENTS.key?(segment) ? segment : "nurture"
   end
 
-  def self.for_segment(segment)
+  scope :for_segment, ->(segment) {
     case normalize_segment(segment)
     when "purchased"
       purchased_pipeline
@@ -77,7 +93,7 @@ class Business < ApplicationRecord
     else
       nurture_pipeline
     end
-  end
+  }
 
   def self.segment_counts
     SEGMENTS.keys.index_with { |segment| for_segment(segment).count }
@@ -98,6 +114,17 @@ class Business < ApplicationRecord
 
   def business_segment_label
     SEGMENTS.fetch(business_segment)
+  end
+
+  def work_status_label
+    return "Unassigned" if work_status.blank?
+
+    WORK_STATUSES.fetch(work_status, work_status.to_s.humanize)
+  end
+
+  def self.normalize_work_status(status)
+    status = status.to_s
+    WORK_STATUSES.key?(status) ? status : nil
   end
 
   def subscription_active?
@@ -194,5 +221,35 @@ class Business < ApplicationRecord
 
   def generate_review_token
     self.review_token ||= SecureRandom.urlsafe_base64(16)
+  end
+
+  def sync_assigned_at
+    if assigned_to_id.blank?
+      self.assigned_at = nil
+      self.work_status = nil if assigned_to_id_changed?
+    elsif assigned_to_id_changed?
+      self.assigned_at = Time.current
+      self.work_status = "assigned"
+    end
+  end
+
+  def assigned_to_must_be_employee
+    return if assigned_to&.role_employee?
+
+    errors.add(:assigned_to, "must be an employee")
+  end
+
+  def employee_report_required_for_done
+    return unless work_status == "done"
+    return if employee_report.to_s.strip.present?
+
+    errors.add(:employee_report, "is required when marking done")
+  end
+
+  def completion_notes_required_for_completed
+    return unless work_status == "completed"
+    return if completion_notes.to_s.strip.present?
+
+    errors.add(:completion_notes, "are required when marking completed")
   end
 end

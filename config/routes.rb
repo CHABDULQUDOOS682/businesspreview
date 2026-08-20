@@ -81,11 +81,13 @@ Rails.application.routes.draw do
     resources :businesses do
       collection do
         post :import
+        post :assign
       end
       resources :payment_invoices, only: [ :create ]
       member do
         post :send_review_link
         post :verify_phone
+        patch :update_work_status
       end
     end
     resources :business_imports, only: [ :index, :show ] do
@@ -94,9 +96,6 @@ Rails.application.routes.draw do
       end
     end
     resources :communications, only: [ :index, :show, :create ] do
-      collection do
-        post :bulk_create
-      end
       member do
         post :call
       end

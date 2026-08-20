@@ -1,0 +1,32 @@
+<%# locals: (assignee_options:, segment: nil, employee_id: nil) %>
+<div data-bulk-assignment-target="actionBar" class="fixed bottom-0 inset-x-0 z-50 transform translate-y-full opacity-0 transition-all duration-300 ease-in-out pointer-events-none">
+  <div class="mx-auto max-w-7xl px-4 pb-4">
+    <div class="rounded-2xl border border-slate-800 bg-slate-900 p-6 shadow-2xl pointer-events-auto">
+      <%= form_with url: assign_admin_businesses_path, method: :post, local: true, data: { bulk_assignment_target: "form", action: "submit->bulk-assignment#submit" } do |f| %>
+        <%= hidden_field_tag :segment, segment if segment.present? %>
+        <%= hidden_field_tag :employee_id, employee_id if employee_id.present? %>
+        <div class="flex flex-col items-stretch gap-4 md:flex-row md:items-end">
+          <div class="min-w-0 flex-1">
+            <div class="mb-3 flex items-center justify-between gap-3">
+              <span class="flex items-center gap-2 font-semibold text-white">
+                <span class="flex h-6 w-6 items-center justify-center rounded-full bg-blue-600 text-[10px] font-bold" data-bulk-assignment-target="count">0</span>
+                Businesses selected
+              </span>
+              <span class="text-xs text-slate-400">Assign to an employee</span>
+            </div>
+            <%= f.select :assigned_to_id,
+                  options_from_collection_for_select(assignee_options, :id, :display_name),
+                  { include_blank: "Unassign selected" },
+                  class: "block w-full rounded-xl border-0 bg-slate-800 py-3 text-white shadow-sm ring-1 ring-inset ring-slate-700 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm" %>
+          </div>
+          <div class="flex w-full items-center gap-3 md:w-auto">
+            <button type="button" data-action="click->bulk-assignment#toggleAll" class="flex-1 rounded-xl bg-slate-800 px-4 py-3 text-sm font-semibold text-white transition hover:bg-slate-700 md:flex-none">
+              Cancel
+            </button>
+            <%= f.submit "Assign", class: "flex-1 rounded-xl bg-blue-600 px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 md:flex-none" %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

@@ -67,38 +67,6 @@ RSpec.describe "Admin::Communications", type: :request do
     end
   end
 
-  describe "POST /admin/communications/bulk_create" do
-    before do
-      allow(SmsService).to receive(:send_sms)
-    end
-
-    it "sends messages to selected businesses and redirects" do
-      expect {
-        post bulk_create_admin_communications_path, params: { business_ids: [ business.id ], body: "Bulk Hello" }
-      }.to change(Message, :count).by(1)
-      expect(response).to redirect_to(admin_businesses_path)
-      expect(SmsService).to have_received(:send_sms).with(to: business.phone, message: "Bulk Hello")
-    end
-
-    it "skips businesses without phone numbers" do
-      business.update_columns(phone: nil)
-      post bulk_create_admin_communications_path, params: { business_ids: [ business.id ], body: "Bulk Hello" }
-      expect(flash[:notice]).to include("Sent 0 messages")
-    end
-
-    it "handles individual message failures" do
-      allow(SmsService).to receive(:send_sms).and_raise(StandardError.new("Twilio error"))
-      post bulk_create_admin_communications_path, params: { business_ids: [ business.id ], body: "Bulk Hello" }
-      expect(flash[:notice]).to include("1 failed")
-    end
-
-    it "redirects if params are missing" do
-      post bulk_create_admin_communications_path, params: { business_ids: [], body: "" }
-      expect(response).to redirect_to(admin_businesses_path)
-      expect(flash[:alert]).to be_present
-    end
-  end
-
   describe "POST /admin/communications/:id/call" do
     before do
       allow(CallService).to receive(:call).and_return(double(sid: "CA_COMM_1", status: "queued"))

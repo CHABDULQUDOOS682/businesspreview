@@ -12,6 +12,7 @@ class User < ApplicationRecord
   has_many :feedbacks, dependent: :destroy
   has_many :employee_commission_rates, dependent: :destroy
   has_many :businesses_sold, class_name: "Business", foreign_key: :sold_by_id, dependent: :nullify
+  has_many :assigned_businesses, class_name: "Business", foreign_key: :assigned_to_id, dependent: :nullify
   has_many :call_logs, dependent: :nullify
 
   enum :role, {

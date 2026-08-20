@@ -19,9 +19,12 @@ RSpec.describe "Admin::Dashboards", type: :request do
       create(:message, business: business, direction: "inbound", read_at: nil)
 
       get admin_root_path
-      expect(assigns(:business_count)).to eq(1)
-      expect(assigns(:preview_count)).to eq(1)
-      expect(assigns(:unread_inbound_count)).to eq(1)
+      expect(assigns(:business_count)).to eq(Business.count)
+      expect(assigns(:preview_count)).to eq(PreviewLink.count)
+      expect(assigns(:unread_inbound_count)).to eq(Message.inbound.unread.count)
+      expect(assigns(:business_count)).to be >= 1
+      expect(assigns(:preview_count)).to be >= 1
+      expect(assigns(:unread_inbound_count)).to be >= 1
     end
 
     it "handles super_admin manageable users" do

@@ -4,14 +4,14 @@ RSpec.describe TwilioCallLogService do
   describe "#recent_calls" do
     let(:calls_resource) { double("CallsResource") }
     let(:client) { double("TwilioClient", calls: calls_resource) }
-    let!(:business) { create(:business, name: "Northside Barber", phone: "+1 (555) 000-0002") }
+    let!(:business) { create(:business, name: "Northside Barber", phone: "+1 (555) 999-0002") }
 
     it "loads calls from Twilio and matches businesses by phone number" do
       twilio_call = double(
         "TwilioCall",
         sid: "CA123",
-        from: "+15550000001",
-        to: "+15550000002",
+        from: "+15559990001",
+        to: "+15559990002",
         direction: "outbound-api",
         status: "completed",
         duration: "125",
@@ -34,8 +34,8 @@ RSpec.describe TwilioCallLogService do
       twilio_call = double(
         "TwilioCall",
         sid: "CA124",
-        from: "+15550000002",
-        to: "+15550000001",
+        from: "+15559990002",
+        to: "+15559990001",
         direction: "inbound",
         status: "completed",
         duration: "0",
