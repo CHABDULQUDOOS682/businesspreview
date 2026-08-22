@@ -150,9 +150,9 @@ RSpec.describe "HomePages", type: :request do
       get process_path
 
       expect(response.body).to include("How long projects usually take")
-      expect(response.body).to include("2–3 weeks")
-      expect(response.body).to include("4–6 weeks")
-      expect(response.body).to include("6–12+")
+      expect(response.body).to include("2–3 days")
+      expect(response.body).to include("4–6 days")
+      expect(response.body).to include("according to app size")
       expect(response.body).to include("Keyword targeting")
       expect(response.body).to include("metadata are planned before build")
     end
@@ -168,7 +168,7 @@ RSpec.describe "HomePages", type: :request do
       get help_center_path
 
       expect(response.body).to include("We start planning in the first week")
-      expect(response.body).to include("2–3 weeks")
+      expect(response.body).to include("2–3 days")
       expect(response.body).not_to include("3 to 4 weeks from scope approval")
     end
   end
@@ -185,11 +185,16 @@ RSpec.describe "HomePages", type: :request do
       expect(response.body).to include("Subscription")
       expect(response.body).to include("Essential")
       expect(response.body).to include("$30")
+      expect(response.body).to include("One-time setup fee: $99")
       expect(response.body).to include("One-time setup fee: $199")
+      expect(response.body).to include("One-time setup fee: $299")
       expect(response.body).to include("Hot Selling")
       expect(response.body).to include("Project")
       expect(response.body).to include("Starter Website")
-      expect(response.body).to include("$999")
+      expect(response.body).to include("$199")
+      expect(response.body).to include("$299")
+      expect(response.body).to include("Custom quote")
+      expect(response.body).to include("Based on features &amp; complexity")
       expect(response.body).not_to include("Retainer")
       expect(response.body).not_to include("DevOps & CI/CD")
       expect(response.body).to include("Custom Rails web application development")
