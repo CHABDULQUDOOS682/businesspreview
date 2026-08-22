@@ -2,12 +2,12 @@ module HomePagesHelper
   # Single timeline framing used on Home, Process, Pricing, and Help Center.
   MARKETING_TIMELINE_SUMMARY = <<~TEXT.squish.freeze
     We start planning in the first week. A focused starter site often launches in about
-    2–3 weeks after scope is locked; fuller multi-page builds usually take 4–6 weeks.
-    Custom booking systems and portals are scoped separately and often take 6–12+ weeks.
+    2–3 days after scope is locked; fuller multi-page builds usually take 4–6 days.
+    Custom booking systems and portals are scoped separately according to app size.
   TEXT
 
   MARKETING_TIMELINE_SHORT = <<~TEXT.squish.freeze
-    Week-one planning · Starter ~2–3 weeks · Growth builds ~4–6 weeks · Custom apps 6–12+ weeks
+    Week-one planning · Starter ~2–3 days · Growth builds ~4–6 days · Custom apps according to app size
   TEXT
 
   def marketing_timeline_summary

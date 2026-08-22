@@ -12,7 +12,7 @@
       name: "Essential",
       price: "$30",
       cadence: "/ month",
-      setup_fee: "One-time setup fee: $199",
+      setup_fee: "One-time setup fee: $99",
       description: "Best for service businesses that need a professional online presence.",
       website_size: ["Landing Page", "Hero Section", "About Section", "Services Section", "Gallery/Portfolio Section", "Contact Section", "Location Section"],
       included: [
@@ -34,7 +34,7 @@
       name: "Growth",
       price: "$50",
       cadence: "/ month",
-      setup_fee: "One-time setup fee: $299",
+      setup_fee: "One-time setup fee: $199",
       description: "Best for businesses actively trying to generate leads.",
       website_size: ["Up to 5 pages", "Home", "Services", "Gallery/Portfolio", "About", "Contact"],
       included_intro: "Everything in Essential, plus:",
@@ -63,7 +63,7 @@
       name: "Business Pro",
       price: "$99",
       cadence: "/ month",
-      setup_fee: "One-time setup fee: $499",
+      setup_fee: "One-time setup fee: $299",
       description: "Best for businesses wanting a dedicated web partner.",
       website_size: ["Up to 10 pages", "Home", "Services", "Gallery/Portfolio", "About", "Contact", "FAQ", "Appointments", "+3 Extra Pages (as needed)" ],
       included_intro: "Everything in Growth, plus:",
@@ -94,7 +94,7 @@
   project_plans = [
     {
       name: "Starter Website",
-      price: "$499",
+      price: "$199",
       cadence: "/ project",
       description: "Perfect for service businesses launching their first professional website with clear services and a simple contact path.",
       pages: ["Up to 5 pages", "Home", "About", "Services", "Portfolio/Gallery", "Contact"],
@@ -110,7 +110,7 @@
         "Domain & hosting assistance",
         "30 days post-launch support"
       ],
-      delivery: "2-3 weeks",
+      delivery: "2-3 days",
       best_for: ["Barbershops", "Salons", "Restaurants", "Consultants", "Service businesses"],
       highlight: false,
       badge: nil,
@@ -118,7 +118,7 @@
     },
     {
       name: "Business Growth",
-      price: "$999",
+      price: "$299",
       cadence: "/ project",
       description: "Built for service businesses that need more than a brochure site and want clearer service pages plus stronger lead capture.",
       pages: ["Up to 12 pages"],
@@ -137,7 +137,7 @@
         "60 days priority support"
       ],
       additional_features: ["Admin dashboard", "Blog management", "Lead collection system", "Analytics dashboard"],
-      delivery: "4-6 weeks",
+      delivery: "4-6 days",
       best_for: ["Growing salons and studios", "Clinics", "Home service companies", "Agencies", "Multi-service providers"],
       highlight: true,
       badge: "Most Popular",
@@ -145,8 +145,9 @@
     },
     {
       name: "Custom Web Application",
-      price: "Starting at $1,999",
-      cadence: "",
+      price: "Custom quote",
+      cadence: "Based on features & complexity",
+      quote_pricing: true,
       description: "For service businesses that need custom booking, dashboards, client portals, or integrations beyond a standard marketing site.",
       pages: ["Unlimited, based on requirements"],
       included_intro: "Everything in Growth, plus:",
@@ -173,7 +174,7 @@
         "Review and lead management tools",
         "Payment and invoice handoffs"
       ],
-      delivery: "6-12+ weeks",
+      delivery: "According to app size",
       best_for: ["Multi-location service teams", "Clinics with complex scheduling", "Agencies needing custom ops tools", "Businesses automating bookings and follow-up"],
       highlight: false,
       badge: nil,
@@ -183,7 +184,7 @@
 
   subscription_comparison = [
     ["Monthly price", "$30", "$50", "$99"],
-    ["Setup fee", "$199", "$299", "$499"],
+    ["Setup fee", "$99", "$199", "$299"],
     ["Pages", "Landing Page", "Up to 5", "Up to 10"],
     ["Hosting", true, true, true],
     ["SEO", "Basic Setup", "Monthly Optimization", "Advanced SEO Support"],
@@ -194,7 +195,7 @@
   ]
 
   project_comparison = [
-    ["Price", "$499", "$999", "Starting at $1,999"],
+    ["Price", "$199", "$299", "Custom quote"],
     ["Pages", "Up to 5", "Up to 12", "Unlimited"],
     ["Responsive design", true, true, true],
     ["SEO", "Basic", "Advanced", "Advanced"],
@@ -205,6 +206,15 @@
     ["Custom features", false, "Limited", "Unlimited"],
     ["API integrations", false, "Basic", "Advanced"],
     ["Support", "30 days", "60 days", "90 days"]
+  ]
+
+  faqs = [
+    ["Which option should I choose first?", "Choose Subscription if you want hosting, updates, monitoring, SEO support, and ongoing partnership. Choose Project if you need a new website or custom booking system built from the ground up."],
+    ["Can I start with a project and move to a subscription?", "Yes. Many clients launch with a project package, then move into a subscription for hosting, updates, SEO, and continuous improvements."],
+    ["Do monthly subscriptions include new pages?", "Essential focuses on maintenance and content updates. Growth and Business Pro include monthly development hours that can be used for smaller enhancements or landing page improvements."],
+    ["How long does a typical project take?", marketing_timeline_summary],
+    ["Do you handle hosting and domains?", "Yes. Subscription plans include managed hosting, SSL, backups, monitoring, and support. Project plans include domain and hosting assistance for launch."],
+    ["Can I upgrade between plans?", "Absolutely. You can move from Essential to Growth or Business Pro as your website and business needs grow."]
   ]
 
   render_value = lambda do |value|
@@ -218,231 +228,83 @@
   end
 %>
 
-<section class="py-20" data-controller="pricing-toggle">
+<section class="pb-20 pt-4">
   <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-    <div class="mb-10 flex justify-center">
-      <div class="inline-flex items-center gap-1 rounded-full border border-[#081849]/10 bg-[#081849]/5 p-1">
-        <button
-          data-pricing-toggle-target="subscriptionBtn"
-          data-action="click->pricing-toggle#toggle"
-          data-type="subscription"
-          class="rounded-full bg-[#213885] px-5 py-2 text-sm font-semibold text-[#ECDFD2] shadow-md shadow-[#213885]/25 transition-all duration-300"
-        >
-          Subscription <span data-pricing-toggle-target="subscriptionBadge" class="ml-1 rounded-full bg-[#ECDFD2]/18 px-2 py-0.5 text-[10px] uppercase tracking-[0.12em] text-[#ECDFD2]">Hot</span>
-        </button>
-        <button
-          data-pricing-toggle-target="projectBtn"
-          data-action="click->pricing-toggle#toggle"
-          data-type="project"
-          class="rounded-full px-5 py-2 text-sm font-semibold text-[#081849]/55 transition-all duration-300 hover:text-[#081849]"
-        >
-          Project
-        </button>
+    <%# Path chooser %>
+    <div class="mb-16">
+      <p class="text-center text-xs font-bold uppercase tracking-[0.18em] text-[#5F3475]">Two ways to work with us</p>
+      <h2 class="mt-3 text-center text-3xl font-extrabold text-[#081849] md:text-4xl">Choose the path that fits</h2>
+      <p class="mx-auto mt-3 max-w-2xl text-center text-sm leading-relaxed text-[#081849]/65">
+        Both options are shown on this page — nothing is hidden. Pick monthly support or a one-time build.
+      </p>
+
+      <div class="mt-10 grid gap-6 md:grid-cols-2">
+        <a href="#monthly-plans" class="home-glass home-card-3d group rounded-[28px] border border-[#081849]/10 p-8 transition-all duration-300 hover:-translate-y-1 hover:border-[#213885]/35">
+          <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#213885]/10 text-[#213885]">
+            <i class="fa-regular fa-calendar-check text-xl"></i>
+          </div>
+          <h3 class="mt-5 text-2xl font-bold text-[#081849]">Monthly partnership</h3>
+          <p class="mt-2 text-sm leading-relaxed text-[#081849]/65">Hosting, SEO, updates, and ongoing support — from $30/month.</p>
+          <ul class="mt-5 space-y-2 text-sm text-[#081849]/80">
+            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-xs text-[#213885]"></i>Predictable monthly investment</li>
+            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-xs text-[#213885]"></i>Ongoing updates & monitoring</li>
+            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-xs text-[#213885]"></i>Scales as your business grows</li>
+          </ul>
+          <span class="mt-6 inline-flex items-center gap-2 text-sm font-bold text-[#213885] group-hover:gap-3 transition-all">
+            View plans below <i class="fa-solid fa-arrow-down text-xs"></i>
+          </span>
+        </a>
+
+        <a href="#project-plans" class="home-glass home-card-3d group rounded-[28px] border border-[#081849]/10 p-8 transition-all duration-300 hover:-translate-y-1 hover:border-[#5F3475]/35">
+          <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#5F3475]/10 text-[#5F3475]">
+            <i class="fa-solid fa-laptop-code text-xl"></i>
+          </div>
+          <h3 class="mt-5 text-2xl font-bold text-[#081849]">One-time project</h3>
+          <p class="mt-2 text-sm leading-relaxed text-[#081849]/65">We design and build your site, then hand it off — from $199.</p>
+          <ul class="mt-5 space-y-2 text-sm text-[#081849]/80">
+            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-xs text-[#5F3475]"></i>Fixed project investment</li>
+            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-xs text-[#5F3475]"></i>Clear scope & delivery timeline</li>
+            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-xs text-[#5F3475]"></i>Launch with confidence</li>
+          </ul>
+          <span class="mt-6 inline-flex items-center gap-2 text-sm font-bold text-[#5F3475] group-hover:gap-3 transition-all">
+            View project options below <i class="fa-solid fa-arrow-down text-xs"></i>
+          </span>
+        </a>
       </div>
     </div>
 
-    <div data-pricing-toggle-target="panel" data-type="subscription" class="transition-all duration-300">
+    <%# Monthly partnership plans %>
+    <div id="monthly-plans" class="scroll-mt-28">
+      <div class="mb-8 max-w-2xl">
+        <p class="text-xs font-bold uppercase tracking-[0.18em] text-[#213885]">Monthly partnership</p>
+        <h2 class="mt-2 text-3xl font-extrabold text-[#081849] md:text-4xl">Subscription plans</h2>
+        <p class="mt-3 text-sm leading-relaxed text-[#081849]/65">Hosting, SEO, updates, and a web partner every month.</p>
+      </div>
+
       <div class="grid gap-6 lg:grid-cols-3">
         <% subscription_plans.each do |plan| %>
-          <div class="<%= plan[:highlight] ? 'home-card-3d relative rounded-[28px] border border-transparent bg-gradient-to-br from-[#213885] via-[#5F3475] to-[#893172] p-8 text-[#ECDFD2] shadow-2xl hover:-translate-y-1 transition-all duration-300' : 'home-glass home-card-3d relative rounded-[28px] border border-[#081849]/10 p-8 hover:-translate-y-1 transition-all duration-300 bg-white/40 shadow-[0_15px_30px_-10px_rgba(8,24,73,0.05)]' %>">
-            <% if plan[:badge].present? %>
-              <div class="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-[#213885] px-4 py-1 text-xs font-bold uppercase tracking-[0.18em] text-[#ECDFD2] shadow-lg shadow-[#213885]/35">
-                <i class="fa-solid fa-star mr-1 text-[10px]"></i><%= plan[:badge] %>
-              </div>
-            <% end %>
-            <h2 class="text-2xl font-bold <%= plan[:highlight] ? 'text-[#ECDFD2]' : 'text-[#081849]' %>"><%= plan[:name] %></h2>
-            <p class="mt-2 min-h-[44px] text-sm leading-relaxed <%= plan[:highlight] ? 'text-[#ECDFD2]/78' : 'text-[#081849]/62' %>"><%= plan[:description] %></p>
-            
-            <div class="mt-6 border-t border-b py-5 <%= plan[:highlight] ? 'border-white/10' : 'border-[#081849]/8' %>">
-              <div class="flex flex-wrap items-baseline gap-1">
-                <span class="text-5xl font-extrabold <%= plan[:highlight] ? 'text-[#ECDFD2]' : 'text-[#081849]' %>"><%= plan[:price] %></span>
-                <span class="text-sm font-semibold <%= plan[:highlight] ? 'text-[#ECDFD2]/70' : 'text-[#081849]/50' %>"><%= plan[:cadence] %></span>
-              </div>
-              <p class="mt-2 text-xs font-semibold uppercase tracking-wider <%= plan[:highlight] ? 'text-[#ECDFD2]/80' : 'text-[#5F3475]' %>"><%= plan[:setup_fee] %></p>
-            </div>
-
-            <div class="mt-8 space-y-5 text-sm">
-              <div class="rounded-2xl p-5 <%= plan[:highlight] ? 'bg-white/8 border border-white/10' : 'bg-[#081849]/3 border border-[#081849]/5' %>">
-                <h3 class="text-xs font-bold uppercase tracking-[0.16em] <%= plan[:highlight] ? 'text-[#ECDFD2]/70' : 'text-[#5F3475]' %>">Website Size</h3>
-                <ul class="mt-3 space-y-2">
-                  <% plan[:website_size].each do |item| %>
-                    <li class="flex items-center gap-2 <%= plan[:highlight] ? 'text-[#ECDFD2]/88' : 'text-[#081849]/80' %>">
-                      <i class="fa-regular fa-file-lines text-xs opacity-75 <%= plan[:highlight] ? 'text-[#ECDFD2]/60' : 'text-[#5F3475]/60' %>"></i>
-                      <span><%= item %></span>
-                    </li>
-                  <% end %>
-                </ul>
-              </div>
-
-              <div class="rounded-2xl p-5 <%= plan[:highlight] ? 'bg-white/8 border border-white/10' : 'bg-[#081849]/3 border border-[#081849]/5' %>">
-                <h3 class="text-xs font-bold uppercase tracking-[0.16em] <%= plan[:highlight] ? 'text-[#ECDFD2]/70' : 'text-[#5F3475]' %>">Included Services</h3>
-                <% if plan[:included_intro].present? %>
-                  <p class="mt-2 text-xs leading-relaxed opacity-90 <%= plan[:highlight] ? 'text-[#ECDFD2]/78' : 'text-[#081849]/62' %>"><%= plan[:included_intro] %></p>
-                <% end %>
-                <ul class="mt-3 space-y-2.5">
-                  <% 
-                    in_dashboard = false 
-                    plan[:included].each do |feature| 
-                      feature_str = feature.to_s.strip
-                      if feature_str.start_with?("Dashboard with")
-                        in_dashboard = true
-                  %>
-                        <li class="mt-4 font-bold text-xs uppercase tracking-[0.12em] <%= plan[:highlight] ? 'text-[#ECDFD2]/70' : 'text-[#5F3475]' %>"><%= feature %></li>
-                  <% 
-                      elsif feature_str.start_with?("-")
-                        in_dashboard = false
-                  %>
-                        <li class="py-1"><hr class="<%= plan[:highlight] ? 'border-white/10' : 'border-[#081849]/10' %>"></li>
-                  <% 
-                      elsif in_dashboard
-                  %>
-                        <li class="flex items-center gap-2.5 pl-3.5 <%= plan[:highlight] ? 'text-[#ECDFD2]/88' : 'text-[#081849]/80' %>">
-                          <span class="h-1.5 w-1.5 rounded-full <%= plan[:highlight] ? 'bg-[#ECDFD2]/50' : 'bg-[#5F3475]/50' %>"></span>
-                          <span><%= feature %></span>
-                        </li>
-                  <% 
-                      else
-                  %>
-                        <li class="flex items-start gap-3 <%= plan[:highlight] ? 'text-[#ECDFD2]/88' : 'text-[#081849]/80' %>">
-                          <i class="fa-solid fa-check mt-1 text-sm <%= plan[:highlight] ? 'text-[#ECDFD2]' : 'text-[#5F3475]' %>"></i>
-                          <span><%= feature %></span>
-                        </li>
-                  <% 
-                      end
-                    end
-                  %>
-                </ul>
-              </div>
-
-              <% if plan[:not_included].present? %>
-                <div class="rounded-2xl p-5 <%= plan[:highlight] ? 'bg-white/8 border border-white/10' : 'bg-[#081849]/3 border border-[#081849]/5' %>">
-                  <h3 class="text-xs font-bold uppercase tracking-[0.16em] text-[#5F3475]">Not Included</h3>
-                  <ul class="mt-3 space-y-2 text-[#081849]/62">
-                    <% plan[:not_included].each do |item| %>
-                      <li class="flex items-center gap-2">
-                        <i class="fa-solid fa-xmark text-xs text-red-500/70"></i>
-                        <span><%= item %></span>
-                      </li>
-                    <% end %>
-                  </ul>
-                </div>
-              <% end %>
-
-              <% if plan[:perfect_for].present? %>
-                <div class="rounded-2xl p-5 <%= plan[:highlight] ? 'bg-white/8 border border-white/10' : 'bg-[#081849]/3 border border-[#081849]/5' %>">
-                  <h3 class="text-xs font-bold uppercase tracking-[0.16em] <%= plan[:highlight] ? 'text-[#ECDFD2]/70' : 'text-[#5F3475]' %>">Perfect For</h3>
-                  <p class="mt-3 leading-relaxed <%= plan[:highlight] ? 'text-[#ECDFD2]/78' : 'text-[#081849]/62' %>"><%= plan[:perfect_for].join(", ") %></p>
-                </div>
-              <% end %>
-            </div>
-
-            <%= link_to contact_path, class: "mt-8 inline-flex w-full items-center justify-center rounded-full px-6 py-3 text-center text-sm font-bold transition-all duration-200 hover:-translate-y-0.5 #{plan[:highlight] ? 'bg-[#ECDFD2] text-[#213885] shadow-xl shadow-[#081849]/25 hover:bg-[#ECDFD2]/90' : 'border border-[#081849]/15 text-[#081849] hover:border-[#213885] hover:bg-[#213885] hover:text-[#ECDFD2]'}" do %>
-              <%= plan[:cta] %>
-            <% end %>
-          </div>
+          <%= render "home_pages/pricing_subscription_card", plan: plan %>
         <% end %>
       </div>
     </div>
 
-    <div data-pricing-toggle-target="panel" data-type="project" class="hidden transition-all duration-300">
-      <div class="grid gap-6 lg:grid-cols-3">
-        <% project_plans.each do |plan| %>
-          <div class="<%= plan[:highlight] ? 'home-card-3d relative rounded-[28px] border border-transparent bg-gradient-to-br from-[#213885] via-[#5F3475] to-[#893172] p-8 text-[#ECDFD2] shadow-2xl hover:-translate-y-1 transition-all duration-300' : 'home-glass home-card-3d relative rounded-[28px] border border-[#081849]/10 p-8 hover:-translate-y-1 transition-all duration-300 bg-white/40 shadow-[0_15px_30px_-10px_rgba(8,24,73,0.05)]' %>">
-            <% if plan[:badge].present? %>
-              <div class="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-[#213885] px-4 py-1 text-xs font-bold uppercase tracking-[0.18em] text-[#ECDFD2] shadow-lg shadow-[#213885]/35">
-                <i class="fa-solid fa-star mr-1 text-[10px]"></i><%= plan[:badge] %>
-              </div>
-            <% end %>
-            <h2 class="text-2xl font-bold <%= plan[:highlight] ? 'text-[#ECDFD2]' : 'text-[#081849]' %>"><%= plan[:name] %></h2>
-            <p class="mt-2 min-h-[66px] text-sm leading-relaxed <%= plan[:highlight] ? 'text-[#ECDFD2]/78' : 'text-[#081849]/62' %>"><%= plan[:description] %></p>
-            
-            <div class="mt-6 border-t border-b py-5 <%= plan[:highlight] ? 'border-white/10' : 'border-[#081849]/8' %>">
-              <div class="flex flex-wrap items-baseline gap-1">
-                <span class="text-4xl font-extrabold sm:text-5xl <%= plan[:highlight] ? 'text-[#ECDFD2]' : 'text-[#081849]' %>"><%= plan[:price] %></span>
-                <% if plan[:cadence].present? %>
-                  <span class="text-sm font-semibold <%= plan[:highlight] ? 'text-[#ECDFD2]/70' : 'text-[#081849]/50' %>"><%= plan[:cadence] %></span>
-                <% end %>
-              </div>
-            </div>
-
-            <div class="mt-8 space-y-5 text-sm">
-              <div class="rounded-2xl p-5 <%= plan[:highlight] ? 'bg-white/8 border border-white/10' : 'bg-[#081849]/3 border border-[#081849]/5' %>">
-                <h3 class="text-xs font-bold uppercase tracking-[0.16em] <%= plan[:highlight] ? 'text-[#ECDFD2]/70' : 'text-[#5F3475]' %>">Pages</h3>
-                <ul class="mt-3 space-y-2">
-                  <% plan[:pages].each do |item| %>
-                    <li class="flex items-center gap-2 <%= plan[:highlight] ? 'text-[#ECDFD2]/88' : 'text-[#081849]/80' %>">
-                      <i class="fa-regular fa-file-lines text-xs opacity-75 <%= plan[:highlight] ? 'text-[#ECDFD2]/60' : 'text-[#5F3475]/60' %>"></i>
-                      <span><%= item %></span>
-                    </li>
-                  <% end %>
-                </ul>
-              </div>
-
-              <div class="rounded-2xl p-5 <%= plan[:highlight] ? 'bg-white/8 border border-white/10' : 'bg-[#081849]/3 border border-[#081849]/5' %>">
-                <h3 class="text-xs font-bold uppercase tracking-[0.16em] <%= plan[:highlight] ? 'text-[#ECDFD2]/70' : 'text-[#5F3475]' %>">Included Services</h3>
-                <% if plan[:included_intro].present? %>
-                  <p class="mt-2 text-xs leading-relaxed opacity-90 <%= plan[:highlight] ? 'text-[#ECDFD2]/78' : 'text-[#081849]/62' %>"><%= plan[:included_intro] %></p>
-                <% end %>
-                <ul class="mt-3 space-y-2.5">
-                  <% plan[:included].each do |feature| %>
-                    <li class="flex items-start gap-3 <%= plan[:highlight] ? 'text-[#ECDFD2]/88' : 'text-[#081849]/80' %>">
-                      <i class="fa-solid fa-check mt-1 text-sm <%= plan[:highlight] ? 'text-[#ECDFD2]' : 'text-[#5F3475]' %>"></i>
-                      <span><%= feature %></span>
-                    </li>
-                  <% end %>
-                </ul>
-              </div>
-
-              <% if plan[:additional_features].present? %>
-                <div class="rounded-2xl p-5 <%= plan[:highlight] ? 'bg-white/8 border border-white/10' : 'bg-[#081849]/3 border border-[#081849]/5' %>">
-                  <h3 class="text-xs font-bold uppercase tracking-[0.16em] <%= plan[:highlight] ? 'text-[#ECDFD2]/70' : 'text-[#5F3475]' %>">Additional Features</h3>
-                  <p class="mt-3 leading-relaxed <%= plan[:highlight] ? 'text-[#ECDFD2]/78' : 'text-[#081849]/62' %>"><%= plan[:additional_features].join(", ") %></p>
-                </div>
-              <% end %>
-
-              <% if plan[:example_projects].present? %>
-                <div class="rounded-2xl p-5 <%= plan[:highlight] ? 'bg-white/8 border border-white/10' : 'bg-[#081849]/3 border border-[#081849]/5' %>">
-                  <h3 class="text-xs font-bold uppercase tracking-[0.16em] <%= plan[:highlight] ? 'text-[#ECDFD2]/70' : 'text-[#5F3475]' %>">Example Projects</h3>
-                  <p class="mt-3 leading-relaxed <%= plan[:highlight] ? 'text-[#ECDFD2]/78' : 'text-[#081849]/62' %>"><%= plan[:example_projects].join(", ") %></p>
-                </div>
-              <% end %>
-
-              <div class="rounded-2xl p-5 <%= plan[:highlight] ? 'bg-white/8 border border-white/10' : 'bg-[#081849]/3 border border-[#081849]/5' %> flex justify-between items-center">
-                <h3 class="text-xs font-bold uppercase tracking-[0.16em] <%= plan[:highlight] ? 'text-[#ECDFD2]/70' : 'text-[#5F3475]' %>">Delivery Time</h3>
-                <span class="rounded-full px-3 py-1 text-xs font-bold uppercase tracking-wider <%= plan[:highlight] ? 'bg-white/15 text-[#ECDFD2]' : 'bg-[#213885]/10 text-[#213885]' %>"><%= plan[:delivery] %></span>
-              </div>
-
-              <div class="rounded-2xl p-5 <%= plan[:highlight] ? 'bg-white/8 border border-white/10' : 'bg-[#081849]/3 border border-[#081849]/5' %>">
-                <h3 class="text-xs font-bold uppercase tracking-[0.16em] <%= plan[:highlight] ? 'text-[#ECDFD2]/70' : 'text-[#5F3475]' %>">Best For</h3>
-                <p class="mt-3 leading-relaxed <%= plan[:highlight] ? 'text-[#ECDFD2]/78' : 'text-[#081849]/62' %>"><%= plan[:best_for].join(", ") %></p>
-              </div>
-            </div>
-
-            <%= link_to contact_path, class: "mt-8 inline-flex w-full items-center justify-center rounded-full px-6 py-3 text-center text-sm font-bold transition-all duration-200 hover:-translate-y-0.5 #{plan[:highlight] ? 'bg-[#ECDFD2] text-[#213885] shadow-xl shadow-[#081849]/25 hover:bg-[#ECDFD2]/90' : 'border border-[#081849]/15 text-[#081849] hover:border-[#213885] hover:bg-[#213885] hover:text-[#ECDFD2]'}" do %>
-              <%= plan[:cta] %>
-            <% end %>
-          </div>
-        <% end %>
-      </div>
-    </div>
-
-    <div class="mt-24">
-      <h2 class="text-center text-3xl font-extrabold text-[#081849] md:text-4xl">Compare <span class="text-[#5F3475]">all features</span></h2>
-
-      <div data-pricing-toggle-target="comparison" data-type="subscription" class="mt-10 overflow-x-auto rounded-[28px] border border-[#081849]/10 bg-white/40 shadow-[0_18px_45px_rgba(8,24,73,0.06)]">
+    <%# Subscription comparison %>
+    <div class="mt-20">
+      <h2 class="text-center text-3xl font-extrabold text-[#081849] md:text-4xl">Compare <span class="text-[#5F3475]">monthly features</span></h2>
+      <div class="mt-10 overflow-x-auto rounded-[28px] border border-[#081849]/10 bg-white/40 shadow-[0_18px_45px_rgba(8,24,73,0.06)]">
         <table class="min-w-full text-sm">
           <thead>
-            <tr class="border-b border-[#081849]/10 text-left">
-              <th class="px-6 py-4 font-semibold text-[#081849]">Feature</th>
-              <th class="px-6 py-4 text-center font-semibold text-[#081849]">Essential</th>
-              <th class="px-6 py-4 text-center font-semibold text-[#5F3475]">Growth</th>
-              <th class="px-6 py-4 text-center font-semibold text-[#081849]">Business Pro</th>
+            <tr class="border-b border-[#081849]/10 bg-[#213885] text-left text-[#ECDFD2]">
+              <th class="px-6 py-4 font-semibold">Feature</th>
+              <th class="px-6 py-4 text-center font-semibold">Essential</th>
+              <th class="px-6 py-4 text-center font-semibold">Growth</th>
+              <th class="px-6 py-4 text-center font-semibold">Business Pro</th>
             </tr>
           </thead>
           <tbody class="text-[#081849]/80">
-            <% subscription_comparison.each do |feature, essential, growth, pro| %>
-              <tr class="border-b border-[#081849]/5">
-                <td class="px-6 py-4"><%= feature %></td>
+            <% subscription_comparison.each_with_index do |(feature, essential, growth, pro), index| %>
+              <tr class="border-b border-[#081849]/5 <%= index.even? ? 'bg-white/50' : 'bg-[#213885]/[0.03]' %>">
+                <td class="px-6 py-4 font-medium text-[#081849]"><%= feature %></td>
                 <% [essential, growth, pro].each do |value| %>
                   <td class="px-6 py-4 text-center"><%= render_value.call(value) %></td>
                 <% end %>
@@ -451,21 +313,40 @@
           </tbody>
         </table>
       </div>
+    </div>
 
-      <div data-pricing-toggle-target="comparison" data-type="project" class="mt-10 hidden overflow-x-auto rounded-[28px] border border-[#081849]/10 bg-white/40 shadow-[0_18px_45px_rgba(8,24,73,0.06)]">
+    <%# Project plans %>
+    <div id="project-plans" class="mt-24 scroll-mt-28">
+      <div class="mb-8 max-w-2xl">
+        <p class="text-xs font-bold uppercase tracking-[0.18em] text-[#5F3475]">One-time project builds</p>
+        <h2 class="mt-2 text-3xl font-extrabold text-[#081849] md:text-4xl">Project packages</h2>
+        <p class="mt-3 text-sm leading-relaxed text-[#081849]/65">Pay once for a designed, built, and launched website or custom app.</p>
+      </div>
+
+      <div class="grid gap-6 lg:grid-cols-3">
+        <% project_plans.each do |plan| %>
+          <%= render "home_pages/pricing_project_card", plan: plan %>
+        <% end %>
+      </div>
+    </div>
+
+    <%# Project comparison %>
+    <div class="mt-20">
+      <h2 class="text-center text-3xl font-extrabold text-[#081849] md:text-4xl">Compare <span class="text-[#5F3475]">project features</span></h2>
+      <div class="mt-10 overflow-x-auto rounded-[28px] border border-[#081849]/10 bg-white/40 shadow-[0_18px_45px_rgba(8,24,73,0.06)]">
         <table class="min-w-full text-sm">
           <thead>
-            <tr class="border-b border-[#081849]/10 text-left">
-              <th class="px-6 py-4 font-semibold text-[#081849]">Feature</th>
-              <th class="px-6 py-4 text-center font-semibold text-[#081849]">Starter</th>
-              <th class="px-6 py-4 text-center font-semibold text-[#5F3475]">Growth</th>
-              <th class="px-6 py-4 text-center font-semibold text-[#081849]">Custom</th>
+            <tr class="border-b border-[#081849]/10 bg-[#5F3475] text-left text-[#ECDFD2]">
+              <th class="px-6 py-4 font-semibold">Feature</th>
+              <th class="px-6 py-4 text-center font-semibold">Starter</th>
+              <th class="px-6 py-4 text-center font-semibold">Growth</th>
+              <th class="px-6 py-4 text-center font-semibold">Custom</th>
             </tr>
           </thead>
           <tbody class="text-[#081849]/80">
-            <% project_comparison.each do |feature, starter, growth, custom| %>
-              <tr class="border-b border-[#081849]/5">
-                <td class="px-6 py-4"><%= feature %></td>
+            <% project_comparison.each_with_index do |(feature, starter, growth, custom), index| %>
+              <tr class="border-b border-[#081849]/5 <%= index.even? ? 'bg-white/50' : 'bg-[#5F3475]/[0.03]' %>">
+                <td class="px-6 py-4 font-medium text-[#081849]"><%= feature %></td>
                 <% [starter, growth, custom].each do |value| %>
                   <td class="px-6 py-4 text-center"><%= render_value.call(value) %></td>
                 <% end %>
@@ -476,17 +357,11 @@
       </div>
     </div>
 
+    <%# FAQ %>
     <div class="mt-24">
       <h2 class="text-center text-3xl font-extrabold text-[#081849] md:text-4xl">Frequently asked <span class="text-[#5F3475]">questions</span></h2>
-      <div class="mt-10 space-y-3">
-        <% [
-          ["Which option should I choose first?", "Choose Subscription if you want hosting, updates, monitoring, SEO support, and ongoing partnership. Choose Project if you need a new website or custom booking system built from the ground up."],
-          ["Can I start with a project and move to a subscription?", "Yes. Many clients launch with a project package, then move into a subscription for hosting, updates, SEO, and continuous improvements."],
-          ["Do monthly subscriptions include new pages?", "Essential focuses on maintenance and content updates. Growth and Business Pro include monthly development hours that can be used for smaller enhancements or landing page improvements."],
-          ["How long does a typical project take?", marketing_timeline_summary],
-          ["Do you handle hosting and domains?", "Yes. Subscription plans include managed hosting, SSL, backups, monitoring, and support. Project plans include domain and hosting assistance for launch."],
-          ["Can I upgrade between plans?", "Absolutely. You can move from Essential to Growth or Business Pro as your website and business needs grow."]
-        ].each_with_index do |(question, answer), index| %>
+      <div class="mt-10 grid gap-3 md:grid-cols-2">
+        <% faqs.each_with_index do |(question, answer), index| %>
           <details class="overflow-hidden rounded-[22px] border border-[#081849]/10 bg-white/35" <%= "open" if index.zero? %>>
             <summary class="cursor-pointer list-none px-6 py-5 font-semibold text-[#081849] marker:hidden">
               <div class="flex items-center justify-between gap-4">
@@ -497,6 +372,29 @@
             <div class="px-6 pb-5 text-sm leading-relaxed text-[#081849]/68"><%= answer %></div>
           </details>
         <% end %>
+      </div>
+    </div>
+
+    <%# Mid-page CTA (not site footer) %>
+    <div class="mt-24 overflow-hidden rounded-[28px] bg-gradient-to-br from-[#213885] via-[#5F3475] to-[#893172] p-8 text-[#ECDFD2] shadow-2xl md:p-10">
+      <div class="flex flex-col items-start justify-between gap-8 md:flex-row md:items-center">
+        <div class="max-w-xl">
+          <div class="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-white/10">
+            <i class="fa-regular fa-calendar-check text-xl"></i>
+          </div>
+          <h2 class="text-2xl font-extrabold md:text-3xl">Ready to build something great?</h2>
+          <p class="mt-3 text-sm leading-relaxed text-[#ECDFD2]/78">
+            Tell us your goals and we’ll help you choose monthly partnership or a one-time project.
+          </p>
+        </div>
+        <div class="flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
+          <%= link_to schedule_path, class: "inline-flex items-center justify-center rounded-full border border-[#ECDFD2]/40 px-6 py-3 text-sm font-bold text-[#ECDFD2] transition hover:bg-white/10" do %>
+            Book a call
+          <% end %>
+          <%= link_to contact_path, class: "inline-flex items-center justify-center rounded-full bg-[#ECDFD2] px-6 py-3 text-sm font-bold text-[#213885] shadow-xl shadow-[#081849]/25 transition hover:bg-white" do %>
+            Start a project
+          <% end %>
+        </div>
       </div>
     </div>
   </div>
