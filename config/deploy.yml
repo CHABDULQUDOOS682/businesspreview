@@ -62,6 +62,7 @@ env:
     - GOOGLE_CALENDAR_WEBHOOK_URL
     - APP_HOST
     - APP_PROTOCOL
+    - OPENREPLAY_PROJECT_KEY
 
   clear:
     CONTACT_EMAIL: team@devdebizz.com
