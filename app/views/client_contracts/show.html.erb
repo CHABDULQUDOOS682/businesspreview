@@ -1,0 +1,112 @@
+<% content_for :title, @contract.title %>
+
+<div class="mx-auto max-w-3xl px-4 py-10">
+  <div class="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-900/5 sm:p-8">
+    <p class="text-xs font-semibold uppercase tracking-wider text-slate-500"><%= @contract.agency_name %></p>
+    <h1 class="mt-2 text-2xl font-bold text-slate-900"><%= @contract.title %></h1>
+    <p class="mt-1 text-sm text-slate-500"><%= @contract.kind_label %></p>
+
+    <% if flash[:notice] %>
+      <div class="mt-4 rounded-lg bg-emerald-50 px-4 py-3 text-sm text-emerald-800"><%= flash[:notice] %></div>
+    <% end %>
+    <% if flash[:alert] %>
+      <div class="mt-4 rounded-lg bg-red-50 px-4 py-3 text-sm text-red-800"><%= flash[:alert] %></div>
+    <% end %>
+
+    <div class="mt-8 space-y-6 text-sm leading-relaxed text-slate-700">
+      <section>
+        <h2 class="font-semibold text-slate-900">Parties</h2>
+        <p class="mt-2">Service provider: <%= @contract.agency_name %></p>
+        <p>Client: <%= @contract.client_name %> (<%= @contract.client_email %>)</p>
+      </section>
+      <% if @contract.amount_cents.present? %>
+        <section>
+          <h2 class="font-semibold text-slate-900">Amount</h2>
+          <p class="mt-2"><%= number_to_currency(@contract.amount) %></p>
+        </section>
+      <% end %>
+      <section>
+        <h2 class="font-semibold text-slate-900">Scope of work</h2>
+        <p class="mt-2 whitespace-pre-wrap"><%= @contract.scope_of_work %></p>
+      </section>
+      <section>
+        <h2 class="font-semibold text-slate-900">Pricing &amp; payment</h2>
+        <p class="mt-2 whitespace-pre-wrap"><%= @contract.pricing_terms %></p>
+      </section>
+      <section>
+        <h2 class="font-semibold text-slate-900">Timeline</h2>
+        <p class="mt-2 whitespace-pre-wrap"><%= @contract.timeline_terms %></p>
+      </section>
+      <section>
+        <h2 class="font-semibold text-slate-900">Term &amp; termination</h2>
+        <p class="mt-2 whitespace-pre-wrap"><%= @contract.termination_terms %></p>
+      </section>
+    </div>
+
+    <% if @contract.signed? %>
+      <div class="mt-8 rounded-xl border border-emerald-200 bg-emerald-50 p-5 text-sm text-emerald-900">
+        <p class="font-semibold">Agreement signed</p>
+        <p class="mt-2">Signed by <%= @contract.client_signer_name %> on <%= l(@contract.client_signed_at, format: :long) %>.</p>
+        <% if @contract.client_signature.attached? %>
+          <div class="mt-4 rounded-lg border border-emerald-200 bg-white p-3">
+            <%= image_tag @contract.client_signature, alt: "Client signature", class: "mx-auto h-24 w-auto max-w-full object-contain" %>
+          </div>
+        <% end %>
+      </div>
+    <% elsif @contract.void? %>
+      <div class="mt-8 rounded-xl border border-slate-200 bg-slate-50 p-5 text-sm text-slate-700">
+        This agreement is no longer active.
+      </div>
+    <% else %>
+      <%= form_with url: sign_client_contract_path(@contract.access_token),
+            method: :post,
+            class: "mt-8 space-y-5 border-t border-slate-200 pt-8",
+            data: {
+              controller: "signature-pad",
+              action: "submit->signature-pad#validate"
+            } do %>
+        <div>
+          <h2 class="text-lg font-semibold text-slate-900">Sign this agreement</h2>
+          <p class="mt-1 text-sm text-slate-600">Draw your signature below, then confirm you agree to the terms. Date and IP are recorded with the signature.</p>
+        </div>
+
+        <div>
+          <div class="flex items-center justify-between gap-3">
+            <label class="block text-sm font-semibold text-slate-800">Draw signature</label>
+            <button type="button"
+                    data-action="signature-pad#clear"
+                    class="text-sm font-medium text-slate-500 hover:text-slate-800">
+              Clear
+            </button>
+          </div>
+          <div class="mt-2 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-inner">
+            <canvas data-signature-pad-target="canvas"
+                    class="block h-[180px] w-full touch-none cursor-crosshair"
+                    data-action="mousedown->signature-pad#start mousemove->signature-pad#move mouseup->signature-pad#end mouseleave->signature-pad#end touchstart->signature-pad#start touchmove->signature-pad#move touchend->signature-pad#end">
+            </canvas>
+          </div>
+          <input type="hidden" name="signature_data" data-signature-pad-target="input" />
+          <p data-signature-pad-target="emptyError" class="mt-2 hidden text-sm text-red-600">Please draw your signature before signing.</p>
+          <p class="mt-1 text-xs text-slate-500">Use your mouse or finger to sign.</p>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-slate-700" for="signer_name">Printed name <span class="font-normal text-slate-400">(optional)</span></label>
+          <input id="signer_name" name="signer_name" type="text"
+                 class="mt-1.5 block w-full rounded-lg border-0 px-3 py-2.5 text-sm text-slate-900 shadow-sm ring-1 ring-inset ring-slate-200 focus:ring-2 focus:ring-inset focus:ring-slate-900"
+                 value="<%= params[:signer_name].presence || @contract.client_name %>"
+                 placeholder="<%= @contract.client_name %>" />
+        </div>
+
+        <label class="flex items-start gap-3 text-sm text-slate-700">
+          <input type="checkbox" name="agree" value="1" class="mt-1 rounded border-slate-300" <%= "checked" if params[:agree].present? %> />
+          <span>I have read and agree to this agreement on behalf of <%= @contract.client_name %>.</span>
+        </label>
+
+        <button type="submit" class="inline-flex rounded-full bg-slate-900 px-5 py-2.5 text-sm font-semibold text-white hover:bg-slate-800">
+          Sign agreement
+        </button>
+      <% end %>
+    <% end %>
+  </div>
+</div>

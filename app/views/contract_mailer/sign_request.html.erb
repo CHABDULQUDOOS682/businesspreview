@@ -1,0 +1,11 @@
+<p>Hi <%= @contract.client_name %>,</p>
+
+<p>Please review and sign your agreement with <%= @contract.agency_name %>:</p>
+
+<p><strong><%= @contract.title %></strong> (<%= @contract.kind_label %>)</p>
+
+<p><a href="<%= @sign_url %>"><%= @sign_url %></a></p>
+
+<p>If you have questions, reply to this email or contact us before signing.</p>
+
+<p>— <%= @contract.agency_name %></p>

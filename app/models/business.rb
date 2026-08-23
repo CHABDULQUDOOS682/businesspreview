@@ -5,6 +5,7 @@ class Business < ApplicationRecord
   has_many :meetings, dependent: :destroy
   has_many :call_logs, dependent: :nullify
   has_many :payment_invoices, dependent: :destroy
+  has_many :contracts, dependent: :destroy
   has_many :reviews, dependent: :destroy
   belongs_to :sold_by, class_name: "User", optional: true
   belongs_to :assigned_to, class_name: "User", optional: true

@@ -39,6 +39,8 @@ Rails.application.routes.draw do
   get "landing_pages/show"
   get "/lp/:uuid", to: "landing_pages#show", as: :landing_page
   get "/pay/:token", to: "payment_invoice_links#show", as: :payment_invoice_link
+  get "/contracts/:token", to: "client_contracts#show", as: :client_contract
+  post "/contracts/:token/sign", to: "client_contracts#sign", as: :sign_client_contract
   get "/reviews/new/:token", to: "reviews#new", as: :new_review_submission
   post "/reviews", to: "reviews#create", as: :review_submissions
 
@@ -84,6 +86,17 @@ Rails.application.routes.draw do
         post :assign
       end
       resources :payment_invoices, only: [ :create ]
+      resources :contracts, only: [ :new, :create, :show ] do
+        collection do
+          post :sync_all_to_sitepilot
+        end
+        member do
+          post :send_for_signature
+          post :void
+          post :sync_to_sitepilot
+          get :download
+        end
+      end
       member do
         post :send_review_link
         post :verify_phone
