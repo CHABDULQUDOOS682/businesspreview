@@ -121,6 +121,8 @@
                  payment_invoice: @payment_invoice,
                  payment_invoices: @payment_invoices %>
 
+      <%= render "admin/contracts/panel", business: @business, contracts: @contracts %>
+
       <%= render "admin/preview_links/panel", business: @business %>
 
       <%= render "admin/meetings/meetings_panel", business: @business %>

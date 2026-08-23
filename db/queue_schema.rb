@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_08_20_202324) do
+ActiveRecord::Schema[8.0].define(version: 2026_08_23_115450) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -267,6 +267,39 @@ ActiveRecord::Schema[8.0].define(version: 2026_08_20_202324) do
     t.index ["payment_invoice_id"], name: "index_commissions_on_payment_invoice_id"
     t.index ["status"], name: "index_commissions_on_status"
     t.index ["user_id"], name: "index_commissions_on_user_id"
+  end
+
+  create_table "contracts", force: :cascade do |t|
+    t.bigint "business_id", null: false
+    t.string "kind", null: false
+    t.string "status", default: "draft", null: false
+    t.string "title", null: false
+    t.string "access_token", null: false
+    t.string "client_name", null: false
+    t.string "client_email", null: false
+    t.string "agency_name", default: "DevDeBizz", null: false
+    t.text "scope_of_work", null: false
+    t.text "pricing_terms", null: false
+    t.text "timeline_terms", null: false
+    t.text "termination_terms", null: false
+    t.integer "amount_cents"
+    t.string "currency", default: "usd"
+    t.bigint "created_by_id", null: false
+    t.datetime "sent_at"
+    t.string "client_signer_name"
+    t.datetime "client_signed_at"
+    t.string "client_signer_ip"
+    t.text "client_signer_user_agent"
+    t.string "agency_signer_name"
+    t.datetime "agency_signed_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "package_key"
+    t.index ["access_token"], name: "index_contracts_on_access_token", unique: true
+    t.index ["business_id"], name: "index_contracts_on_business_id"
+    t.index ["created_by_id"], name: "index_contracts_on_created_by_id"
+    t.index ["package_key"], name: "index_contracts_on_package_key"
+    t.index ["status"], name: "index_contracts_on_status"
   end
 
   create_table "employee_commission_rates", force: :cascade do |t|
@@ -607,6 +640,8 @@ ActiveRecord::Schema[8.0].define(version: 2026_08_20_202324) do
   add_foreign_key "commissions", "payment_invoices"
   add_foreign_key "commissions", "users"
   add_foreign_key "commissions", "users", column: "approved_by_id"
+  add_foreign_key "contracts", "businesses"
+  add_foreign_key "contracts", "users", column: "created_by_id"
   add_foreign_key "employee_commission_rates", "users"
   add_foreign_key "feedbacks", "users"
   add_foreign_key "meetings", "businesses"

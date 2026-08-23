@@ -1,0 +1,62 @@
+<div class="bg-white shadow-sm ring-1 ring-slate-900/5 sm:rounded-xl overflow-hidden">
+  <div class="border-b border-slate-200 px-4 py-5 sm:px-6">
+    <div class="flex flex-wrap items-center justify-between gap-3">
+      <div>
+        <h3 class="text-base font-semibold leading-6 text-slate-900">Client contracts</h3>
+        <p class="mt-1 text-sm text-slate-500">Create an agreement, send for e-signature, and store the signed PDF.</p>
+      </div>
+      <div class="flex flex-wrap gap-2">
+      <%= button_to "Sync all to SitePilot",
+            sync_all_to_sitepilot_admin_business_contracts_path(business),
+            method: :post,
+            class: "rounded-md bg-white px-3 py-2 text-sm font-semibold text-slate-900 shadow-sm ring-1 ring-inset ring-slate-300 hover:bg-slate-50" %>
+      <%= link_to "New contract",
+            new_admin_business_contract_path(business),
+            class: "rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500" %>
+      </div>
+    </div>
+  </div>
+
+  <div class="overflow-x-auto">
+    <table class="min-w-full divide-y divide-slate-300">
+      <thead class="bg-slate-50">
+        <tr>
+          <th class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-slate-900 sm:pl-6">Title</th>
+          <th class="px-3 py-3.5 text-left text-sm font-semibold text-slate-900">Type</th>
+          <th class="px-3 py-3.5 text-left text-sm font-semibold text-slate-900">Status</th>
+          <th class="px-3 py-3.5 text-left text-sm font-semibold text-slate-900">Updated</th>
+          <th class="px-3 py-3.5 text-right text-sm font-semibold text-slate-900 sm:pr-6">Actions</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-slate-200 bg-white">
+        <% if contracts.blank? %>
+          <tr>
+            <td colspan="5" class="px-4 py-8 text-center text-sm text-slate-500 sm:px-6">No contracts yet.</td>
+          </tr>
+        <% else %>
+          <% contracts.each do |contract| %>
+            <tr class="hover:bg-slate-50">
+              <td class="py-4 pl-4 pr-3 text-sm font-medium text-slate-900 sm:pl-6"><%= contract.title %></td>
+              <td class="whitespace-nowrap px-3 py-4 text-sm text-slate-600">
+                <%= contract.kind_label %>
+                <% if contract.package_label.present? %>
+                  <span class="block text-xs text-slate-500"><%= contract.package_label %></span>
+                <% end %>
+              </td>
+              <td class="whitespace-nowrap px-3 py-4 text-sm">
+                <span class="inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset
+                  <%= contract.signed? ? 'bg-emerald-50 text-emerald-700 ring-emerald-600/20' : contract.sent? ? 'bg-amber-50 text-amber-700 ring-amber-600/20' : contract.void? ? 'bg-slate-100 text-slate-600 ring-slate-500/20' : 'bg-blue-50 text-blue-700 ring-blue-600/20' %>">
+                  <%= contract.status_label %>
+                </span>
+              </td>
+              <td class="whitespace-nowrap px-3 py-4 text-sm text-slate-600"><%= time_ago_in_words(contract.updated_at) %> ago</td>
+              <td class="whitespace-nowrap px-3 py-4 text-right text-sm sm:pr-6">
+                <%= link_to "View", admin_business_contract_path(business, contract), class: "font-semibold text-blue-600 hover:text-blue-500" %>
+              </td>
+            </tr>
+          <% end %>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -105,14 +105,27 @@ class Admin::BusinessesController < ApplicationController
   def show
     @payment_invoice = PaymentInvoice.build_for_business(@business)
     @payment_invoices = @business.payment_invoices.recent
+    @contracts = @business.contracts.recent if super_admin? || admin_role?
   end
 
   def edit
   end
 
   def update
+    previous_configured = Crm::WebhookClient.new(@business).configured?
+
     if @business.update(business_params)
       @business.activate_subscription_billing! if @business.subscription_active? && @business.sold_price_collected? && @business.next_subscription_invoice_at.blank?
+
+      newly_configured = !previous_configured && Crm::WebhookClient.new(@business.reload).configured?
+      connection_touched = @business.saved_change_to_site_api_base_url? ||
+        @business.saved_change_to_site_api_secret? ||
+        @business.saved_change_to_business_number?
+
+      if Crm::WebhookClient.new(@business).configured? && (newly_configured || connection_touched)
+        Crm::SyncBusinessContractsJob.perform_later(@business.id)
+      end
+
       redirect_to admin_business_path(@business), notice: employee_role? ? "Business email updated!" : "Business updated!"
     else
       flash.now[:alert] = @business.errors.full_messages.to_sentence

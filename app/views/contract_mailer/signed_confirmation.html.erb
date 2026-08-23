@@ -1,0 +1,7 @@
+<p>Hi <%= @contract.client_name %>,</p>
+
+<p>This confirms that <strong><%= @contract.title %></strong> was signed on <%= l(@contract.client_signed_at, format: :long) %>.</p>
+
+<p>A copy is stored with <%= @contract.agency_name %>. If your client dashboard is active, you can also open Contracts there to download the signed PDF.</p>
+
+<p>— <%= @contract.agency_name %></p>
