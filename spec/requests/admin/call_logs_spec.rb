@@ -4,8 +4,19 @@ RSpec.describe "Admin::CallLogs", type: :request do
   let(:admin) { create(:user, :admin) }
   let(:employee) { create(:user, email: "caller@example.com", name: "Casey Caller") }
   let(:business) { create(:business, name: "Northside Barber") }
+  let(:twilio_balance) do
+    TwilioBalanceService::Result.new(
+      amount: BigDecimal("18.20"),
+      currency: "USD",
+      fetched_at: Time.current,
+      error: nil
+    )
+  end
 
-  before { sign_in admin }
+  before do
+    sign_in admin
+    allow(TwilioBalanceService).to receive(:fetch).and_return(twilio_balance)
+  end
 
   describe "GET /admin/call_logs" do
     it "shows employee and business for each call" do
@@ -29,6 +40,8 @@ RSpec.describe "Admin::CallLogs", type: :request do
       expect(response.body).to include(admin_business_path(business))
       expect(response.body).to include("CA123")
       expect(response.body).to include("Outbound")
+      expect(response.body).to include("Twilio balance")
+      expect(response.body).to include("$18.20")
     end
 
     it "filters by search query including employee" do
@@ -69,6 +82,7 @@ RSpec.describe "Admin::CallLogs", type: :request do
 
       expect(response).to redirect_to(admin_root_path)
       expect(flash[:alert]).to include("do not have access")
+      expect(TwilioBalanceService).not_to have_received(:fetch)
     end
   end
 end

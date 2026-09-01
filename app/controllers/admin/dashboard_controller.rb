@@ -1,4 +1,6 @@
 class Admin::DashboardController < ApplicationController
+  include Admin::TwilioBalanceLoadable
+
   layout "admin"
 
   def index

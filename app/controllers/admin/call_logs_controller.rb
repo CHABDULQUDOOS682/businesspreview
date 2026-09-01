@@ -1,4 +1,6 @@
 class Admin::CallLogsController < ApplicationController
+  include Admin::TwilioBalanceLoadable
+
   layout "admin"
 
   before_action :require_call_log_access!

@@ -2,9 +2,18 @@ require 'rails_helper'
 
 RSpec.describe "Admin::Dashboards", type: :request do
   let(:admin) { create(:user, :admin) }
+  let(:twilio_balance) do
+    TwilioBalanceService::Result.new(
+      amount: BigDecimal("42.75"),
+      currency: "USD",
+      fetched_at: Time.current,
+      error: nil
+    )
+  end
 
   before do
     sign_in admin
+    allow(TwilioBalanceService).to receive(:fetch).and_return(twilio_balance)
   end
 
   describe "GET /admin" do
@@ -32,6 +41,15 @@ RSpec.describe "Admin::Dashboards", type: :request do
       sign_in create(:user, :super_admin)
       get admin_root_path
       expect(response).to have_http_status(:success)
+      expect(response.body).to include("Twilio balance")
+      expect(response.body).to include("$42.75")
+    end
+
+    it "shows twilio balance for admins" do
+      get admin_root_path
+
+      expect(response.body).to include("Twilio balance")
+      expect(response.body).to include("$42.75")
     end
 
     it "handles employee manageable users" do
@@ -39,6 +57,7 @@ RSpec.describe "Admin::Dashboards", type: :request do
       sign_in create(:user, :employee)
       get admin_root_path
       expect(response).to have_http_status(:success)
+      expect(response.body).not_to include("Twilio balance")
       expect(response.body).not_to include("Prototype Links")
       expect(response.body).not_to include("Links generated")
       expect(response.body).not_to include("Available Templates")
