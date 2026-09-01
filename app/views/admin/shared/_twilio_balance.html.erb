@@ -1,0 +1,29 @@
+<% balance = local_assigns.fetch(:balance) %>
+<% variant = local_assigns.fetch(:variant, :compact) %>
+
+<% if balance.present? %>
+  <% if variant == :dashboard %>
+    <div class="portal-stat-card bg-gradient-to-br from-orange-50 to-white">
+      <dt class="text-sm font-medium text-sand-500">Twilio balance</dt>
+      <dd class="mt-4 text-4xl font-semibold tracking-tight <%= balance.available? ? 'text-orange-700' : 'text-sand-500' %>">
+        <%= twilio_balance_amount_label(balance) %>
+      </dd>
+      <% if twilio_balance_updated_label(balance).present? %>
+        <p class="mt-2 text-xs text-sand-500"><%= twilio_balance_updated_label(balance) %></p>
+      <% end %>
+      <% if balance.error.present? %>
+        <p class="mt-2 text-xs text-red-600">Could not load balance from Twilio.</p>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="rounded-lg bg-white px-4 py-3 shadow-sm ring-1 ring-slate-900/5">
+      <p class="text-slate-500">Twilio balance</p>
+      <p class="mt-1 text-lg font-semibold <%= balance.available? ? 'text-orange-700' : 'text-slate-500' %>">
+        <%= twilio_balance_amount_label(balance) %>
+      </p>
+      <% if twilio_balance_updated_label(balance).present? %>
+        <p class="mt-1 text-xs text-slate-500"><%= twilio_balance_updated_label(balance) %></p>
+      <% end %>
+    </div>
+  <% end %>
+<% end %>
