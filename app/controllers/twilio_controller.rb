@@ -110,7 +110,8 @@ class TwilioController < ApplicationController
       )
     end
 
-    head :ok
+    # Twilio Dial `action` expects valid TwiML (empty Response ends the call cleanly).
+    render xml: Twilio::TwiML::VoiceResponse.new.to_s
   end
 
   private

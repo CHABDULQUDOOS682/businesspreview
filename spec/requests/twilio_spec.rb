@@ -141,6 +141,7 @@ RSpec.describe "Twilios", type: :request do
       }
 
       expect(response).to have_http_status(:ok)
+      expect(response.body).to include("<Response")
       expect(call_log.reload).to have_attributes(status: "completed", duration_seconds: 42)
     end
   end
