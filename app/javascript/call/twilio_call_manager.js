@@ -75,7 +75,7 @@ async function ensureDevice() {
 
     device = new Twilio.Device(token, {
       codecPreferences: ["opus", "pcmu"],
-      fakeLocalAudio: true,
+      fakeLocalAudio: false,
       enableIceRestart: true
     })
 
