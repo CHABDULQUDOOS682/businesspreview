@@ -1,0 +1,9 @@
+<%# locals: (business:) %>
+<div class="space-y-1">
+  <%= render "admin/shared/business_work_status_badge", business: business %>
+  <% if business.employee_report.present? %>
+    <p class="max-w-xs whitespace-pre-wrap text-xs text-slate-600" title="<%= business.employee_report %>">
+      <%= truncate(business.employee_report, length: 90) %>
+    </p>
+  <% end %>
+</div>

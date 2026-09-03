@@ -54,6 +54,7 @@ Rails.application.routes.draw do
     get "service-worker.js", to: "pwa#service_worker", as: :legacy_service_worker
     post "pwa/install_click", to: "pwa#install_click", as: :pwa_install_click
     resources :tasks, only: [ :index ]
+    resources :employees, only: [ :index ], controller: "employee_assignments"
     resources :call_logs, only: [ :index ]
     resources :payment_invoices, only: [ :index ]
     resources :preview_links, only: [ :index, :create, :destroy ]

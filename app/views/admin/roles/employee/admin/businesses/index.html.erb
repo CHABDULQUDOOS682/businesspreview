@@ -79,8 +79,8 @@
                 <td class="py-4 pl-4 pr-3 text-sm font-medium text-slate-900 sm:pl-6">
                   <div class="max-w-xs break-words"><%= b.name %></div>
                 </td>
-                <td class="whitespace-nowrap px-3 py-4 text-sm">
-                  <%= render "admin/shared/business_work_status_badge", business: b %>
+                <td class="px-3 py-4 text-sm">
+                  <%= render "admin/shared/business_work_status_cell", business: b %>
                 </td>
                 <td class="px-3 py-4 text-sm text-slate-500"><%= [b.city, b.country].compact.join(", ").presence || "Unknown" %></td>
                 <td class="px-3 py-4 text-sm text-slate-500"><%= b.niche.presence || "-" %></td>

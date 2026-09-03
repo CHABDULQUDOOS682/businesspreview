@@ -24,7 +24,7 @@
     <div>
       <%= label_tag :work_status, "Update status", class: "block text-sm font-medium text-slate-900" %>
       <%= select_tag :work_status,
-            options_for_select(Business::WORK_STATUSES.map { |k, v| [v, k] }, business.work_status),
+            options_for_select(Business.work_status_options_for(current_user).map { |k, v| [v, k] }, business.work_status),
             class: "mt-1 block w-full rounded-lg border-0 px-3 py-2.5 text-slate-900 shadow-sm ring-1 ring-inset ring-slate-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm",
             data: { work_status_form_target: "status", action: "change->work-status-form#toggle" } %>
     </div>
@@ -35,9 +35,10 @@
             rows: 4,
             class: "mt-1 block w-full rounded-lg border-0 px-3 py-2.5 text-slate-900 shadow-sm ring-1 ring-inset ring-slate-300 placeholder:text-slate-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm",
             placeholder: "Summarize calls, outcome, and next steps..." %>
-      <p class="mt-1 text-xs text-slate-500">Required when status is Done.</p>
+      <p class="mt-1 text-xs text-slate-500">Required when status is Done. Admins see this report on the Employees page.</p>
     </div>
 
+    <% unless current_user&.role_employee? %>
     <div data-work-status-form-target="notesField" class="<%= business.work_status == 'completed' ? '' : 'hidden' %>">
       <%= label_tag :completion_notes, "Admin completion notes", class: "block text-sm font-medium text-slate-900" %>
       <%= text_area_tag :completion_notes, business.completion_notes,
@@ -46,6 +47,7 @@
             placeholder: "Add closing notes about this business..." %>
       <p class="mt-1 text-xs text-slate-500">Required when status is Completed.</p>
     </div>
+    <% end %>
 
     <%= f.submit "Save status", class: "rounded-md bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-500" %>
   <% end %>

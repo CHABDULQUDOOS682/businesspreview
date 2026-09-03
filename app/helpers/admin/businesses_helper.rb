@@ -80,6 +80,30 @@ module Admin
       end
     end
 
+    def admin_business_index_work_status_tabs(segment:, counts:, total:, unassigned_count:)
+      [
+        {
+          key: "unassigned",
+          label: "Unassigned",
+          count: unassigned_count.to_i,
+          path: admin_businesses_path(segment: segment, work_status: "unassigned")
+        },
+        {
+          key: "",
+          label: "All",
+          count: total.to_i,
+          path: admin_businesses_path(segment: segment)
+        }
+      ] + Business::WORK_STATUSES.map do |key, label|
+        {
+          key: key,
+          label: label,
+          count: counts.fetch(key, 0),
+          path: admin_businesses_path(segment: segment, work_status: key)
+        }
+      end
+    end
+
     def business_location_link(business)
       location = business.business_location.presence
       return "-" if location.blank?

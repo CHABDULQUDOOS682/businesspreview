@@ -2,6 +2,7 @@ module Admin::SidebarHelper
   NAV_ACCENTS = {
     dashboard: :indigo,
     businesses: :orange,
+    employees: :green,
     communications: :green,
     tasks: :blue,
     users: :purple,
@@ -124,6 +125,8 @@ module Admin::SidebarHelper
       case name.to_sym
       when :dashboard
         '<path d="M3 13h8V3H3v10Zm10 8h8V11h-8v10Z" stroke-linecap="round" stroke-linejoin="round" />'
+      when :employees
+        '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2m13-13a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm6 13v-2a4 4 0 0 0-3-3.87" stroke-linecap="round" stroke-linejoin="round" />'
       when :businesses
         '<path d="M3 21V8l9-5 9 5v13" stroke-linecap="round" stroke-linejoin="round" />'
       when :communications
