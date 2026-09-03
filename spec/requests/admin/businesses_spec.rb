@@ -66,6 +66,49 @@ RSpec.describe "Admin::Businesses", type: :request do
         get admin_businesses_path, params: { country: "USA" }
         expect(assigns(:businesses)).to include(nurture_biz)
       end
+
+      it "does not show employee pills on the businesses index" do
+        get admin_businesses_path
+        expect(response.body).to include("Unassigned")
+        expect(response.body).to include("All")
+        expect(response.body).to include("Assigned")
+        expect(response.body).not_to include('aria-label="Assigned employees"')
+      end
+
+      it "filters unassigned businesses by work status tab" do
+        assigned = create(:business, name: "Assigned Lead", sold_price: nil, subscription_fee: nil, subscription: false, assigned_to: employee, work_status: "assigned")
+
+        get admin_businesses_path, params: { work_status: "unassigned" }
+
+        expect(assigns(:businesses)).to include(nurture_biz)
+        expect(assigns(:businesses)).not_to include(assigned)
+      end
+
+      it "filters assigned businesses by work status tab" do
+      assigned = create(:business, name: "Assigned Lead", sold_price: nil, subscription_fee: nil, subscription: false, assigned_to: employee, work_status: "assigned")
+
+      get admin_businesses_path, params: { work_status: "assigned" }
+
+      expect(assigns(:businesses)).to include(assigned)
+      expect(assigns(:businesses)).not_to include(nurture_biz)
+    end
+
+    it "shows the employee report on the index" do
+      create(
+        :business,
+        name: "Reported Lead",
+        sold_price: nil,
+        subscription_fee: nil,
+        subscription: false,
+        assigned_to: employee,
+        work_status: "done",
+        employee_report: "Called twice, interested in Growth plan."
+      )
+
+      get admin_businesses_path
+
+      expect(response.body).to include("Called twice, interested in Growth plan.")
+    end
     end
 
     context "when logged in as employee" do
@@ -133,6 +176,18 @@ RSpec.describe "Admin::Businesses", type: :request do
       expect(flash[:notice]).to include("Unassigned")
     end
 
+    it "returns to the employees page after assigning from there" do
+      post assign_admin_businesses_path, params: {
+        business_ids: [ lead_one.id ],
+        assigned_to_id: employee.id,
+        from: "employees",
+        employee_id: employee.id,
+        segment: "nurture"
+      }
+
+      expect(response).to redirect_to(admin_employees_path(segment: "nurture", employee_id: employee.id))
+    end
+
     it "rejects assignment to non-employees" do
       post assign_admin_businesses_path, params: {
         business_ids: [ lead_one.id ],
@@ -152,25 +207,21 @@ RSpec.describe "Admin::Businesses", type: :request do
       expect(response).to redirect_to(admin_root_path)
       expect(lead_one.reload.assigned_to).to be_nil
     end
-
-    it "filters by assignee" do
-      lead_one.update!(assigned_to: employee)
-      get admin_businesses_path, params: { assigned_to_id: employee.id }
-      expect(assigns(:businesses)).to include(lead_one)
-      expect(assigns(:businesses)).not_to include(lead_two)
-    end
-
-    it "filters unassigned businesses" do
-      lead_one.update!(assigned_to: employee)
-      get admin_businesses_path, params: { assigned_to_id: "unassigned" }
-      expect(assigns(:businesses)).to include(lead_two)
-      expect(assigns(:businesses)).not_to include(lead_one)
-    end
   end
 
   describe "PATCH /admin/businesses/:id/update_work_status" do
     let!(:lead) do
       create(:business, sold_price: nil, subscription_fee: nil, subscription: false, assigned_to: employee, work_status: "assigned")
+    end
+
+    it "blocks employees from marking a lead completed" do
+      sign_in employee
+      patch update_work_status_admin_business_path(lead), params: {
+        work_status: "completed",
+        completion_notes: "Should not work"
+      }
+      expect(lead.reload.work_status).to eq("assigned")
+      expect(flash[:alert]).to include("valid status")
     end
 
     it "lets employees move a lead to in progress" do

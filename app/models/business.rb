@@ -43,6 +43,8 @@ class Business < ApplicationRecord
     "completed" => "Completed"
   }.freeze
 
+  EMPLOYEE_WORK_STATUSES = WORK_STATUSES.except("completed").freeze
+
   validates :subscription_payment_status, inclusion: { in: SUBSCRIPTION_PAYMENT_STATUSES }
   validates :work_status, inclusion: { in: WORK_STATUSES.keys }, allow_nil: true
 
@@ -121,6 +123,12 @@ class Business < ApplicationRecord
     return "Unassigned" if work_status.blank?
 
     WORK_STATUSES.fetch(work_status, work_status.to_s.humanize)
+  end
+
+  def self.work_status_options_for(user)
+    return WORK_STATUSES unless user&.role_employee?
+
+    EMPLOYEE_WORK_STATUSES
   end
 
   def self.normalize_work_status(status)

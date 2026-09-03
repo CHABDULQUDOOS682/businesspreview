@@ -1,10 +1,12 @@
-<%# locals: (assignee_options:, segment: nil, employee_id: nil) %>
+<%# locals: (assignee_options:, segment: nil, employee_id: nil, work_status: nil, from: nil) %>
 <div data-bulk-assignment-target="actionBar" class="fixed bottom-0 inset-x-0 z-50 transform translate-y-full opacity-0 transition-all duration-300 ease-in-out pointer-events-none">
   <div class="mx-auto max-w-7xl px-4 pb-4">
     <div class="rounded-2xl border border-slate-800 bg-slate-900 p-6 shadow-2xl pointer-events-auto">
       <%= form_with url: assign_admin_businesses_path, method: :post, local: true, data: { bulk_assignment_target: "form", action: "submit->bulk-assignment#submit" } do |f| %>
         <%= hidden_field_tag :segment, segment if segment.present? %>
         <%= hidden_field_tag :employee_id, employee_id if employee_id.present? %>
+        <%= hidden_field_tag :work_status, work_status if work_status.present? %>
+        <%= hidden_field_tag :from, from if from.present? %>
         <div class="flex flex-col items-stretch gap-4 md:flex-row md:items-end">
           <div class="min-w-0 flex-1">
             <div class="mb-3 flex items-center justify-between gap-3">

@@ -8,9 +8,9 @@ class Admin::BusinessesController < ApplicationController
 
   def index
     @assignee_options = User.role_employee.order(:name, :email) unless employee_role?
-    @work_status = Business.normalize_work_status(params[:work_status])
 
     if employee_role?
+      @work_status = Business.normalize_work_status(params[:work_status])
       index_for_employee
     else
       index_for_admin
@@ -20,14 +20,13 @@ class Admin::BusinessesController < ApplicationController
   def assign
     business_ids = Array(params[:business_ids]).map(&:presence).compact
     if business_ids.blank?
-      redirect_to admin_businesses_path(segment: params[:segment].presence, employee_id: params[:employee_id].presence),
-                  alert: "Select at least one business to assign."
+      redirect_to after_assign_path, alert: "Select at least one business to assign."
       return
     end
 
     assignee = resolve_assignee(params[:assigned_to_id])
     if params[:assigned_to_id].present? && assignee.nil?
-      redirect_to admin_businesses_path(segment: params[:segment].presence), alert: "Choose a valid employee."
+      redirect_to after_assign_path, alert: "Choose a valid employee."
       return
     end
 
@@ -48,12 +47,12 @@ class Admin::BusinessesController < ApplicationController
         "Unassigned #{updated} #{"business".pluralize(updated)}."
       end
 
-    redirect_to admin_businesses_path(segment: params[:segment].presence, employee_id: params[:employee_id].presence), notice: notice
+    redirect_to after_assign_path, notice: notice
   end
 
   def update_work_status
     status = Business.normalize_work_status(params[:work_status])
-    if status.blank?
+    if status.blank? || (employee_role? && Business::EMPLOYEE_WORK_STATUSES.exclude?(status))
       redirect_to admin_business_path(@business), alert: "Choose a valid status."
       return
     end
@@ -190,17 +189,14 @@ class Admin::BusinessesController < ApplicationController
 
   def index_for_admin
     @segment = Business.normalize_segment(params[:segment])
-    @employee_tab = resolve_employee_tab(params[:employee_id])
-    base_scope = Business.all
-    base_scope = base_scope.assigned_to_user(@employee_tab) if @employee_tab
-
-    segment_scope = base_scope.for_segment(@segment)
-    @segment_counts = segment_counts_for(@employee_tab ? Business.assigned_to_user(@employee_tab) : Business.all)
-    @segment_unread_counts = segment_unread_counts_for(@employee_tab ? Business.assigned_to_user(@employee_tab) : Business.all)
-    @employee_tab_counts = employee_tab_counts
+    @work_status = parse_work_status_filter(params[:work_status])
+    segment_scope = Business.for_segment(@segment)
+    @segment_counts = segment_counts_for(Business.all)
+    @segment_unread_counts = segment_unread_counts_for(Business.all)
     @work_status_counts = work_status_counts_for(segment_scope)
     @work_status_total = segment_scope.count
-    segment_scope = segment_scope.with_work_status(@work_status) if @work_status.present?
+    @unassigned_count = segment_scope.unassigned.count
+    segment_scope = apply_work_status_filter(segment_scope, @work_status)
 
     @pagy, @businesses = pagy(
       apply_filters(segment_scope).includes(:assigned_to).order(created_at: :desc)
@@ -228,18 +224,25 @@ class Admin::BusinessesController < ApplicationController
     scope = scope.where(city: params[:city]) if params[:city].present?
     scope = scope.where(country: params[:country]) if params[:country].present?
 
-    unless employee_role?
-      case params[:assigned_to_id]
-      when "unassigned"
-        scope = scope.unassigned
-      when nil, ""
-        # no filter
-      else
-        scope = scope.where(assigned_to_id: params[:assigned_to_id])
-      end
-    end
-
     scope
+  end
+
+  def parse_work_status_filter(value)
+    value = value.to_s
+    return "unassigned" if value == "unassigned"
+
+    Business.normalize_work_status(value)
+  end
+
+  def apply_work_status_filter(scope, status)
+    case status
+    when "unassigned"
+      scope.unassigned
+    when *Business::WORK_STATUSES.keys
+      scope.with_work_status(status)
+    else
+      scope
+    end
   end
 
   def segment_counts_for(scope)
@@ -254,17 +257,6 @@ class Admin::BusinessesController < ApplicationController
 
   def work_status_counts_for(scope)
     Business::WORK_STATUSES.keys.index_with { |status| scope.with_work_status(status).count }
-  end
-
-  def employee_tab_counts
-    counts = Business.where.not(assigned_to_id: nil).group(:assigned_to_id).count
-    @assignee_options.index_with { |employee| counts.fetch(employee.id, 0) }
-  end
-
-  def resolve_employee_tab(employee_id)
-    return nil if employee_id.blank?
-
-    User.role_employee.find_by(id: employee_id)
   end
 
   def resolve_assignee(assigned_to_id)
@@ -306,6 +298,21 @@ class Admin::BusinessesController < ApplicationController
     permitted[:sold_by_id] = nil if permitted[:sold_by_id].blank?
     permitted[:assigned_to_id] = nil if permitted[:assigned_to_id].blank?
     permitted
+  end
+
+  def after_assign_path
+    if params[:from] == "employees"
+      admin_employees_path(
+        segment: params[:segment].presence,
+        employee_id: params[:employee_id].presence,
+        work_status: params[:work_status].presence
+      )
+    else
+      admin_businesses_path(
+        segment: params[:segment].presence,
+        work_status: params[:work_status].presence
+      )
+    end
   end
 
   def set_seller_options
