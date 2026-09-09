@@ -1,7 +1,14 @@
 class TwilioController < ApplicationController
-  skip_before_action :verify_authenticity_token, only: [ :voice, :sms, :connect_call, :dial_status ]
-  skip_before_action :authenticate_user!, only: [ :voice, :sms, :connect_call, :dial_status ]
-  skip_before_action :set_unread_message_count, only: [ :voice, :sms, :connect_call, :dial_status ]
+  WEBHOOK_ACTIONS = [ :voice, :sms, :connect_call, :dial_status ].freeze
+
+  skip_before_action :verify_authenticity_token, only: WEBHOOK_ACTIONS
+  skip_before_action :authenticate_user!, only: WEBHOOK_ACTIONS
+  skip_before_action :set_unread_message_count, only: WEBHOOK_ACTIONS
+
+  # These actions are unauthenticated by necessity (Twilio calls them), so the
+  # signature check is the only thing standing between us and a stranger
+  # dialing arbitrary numbers on our account.
+  before_action :verify_twilio_request!, only: WEBHOOK_ACTIONS
 
   def voice
     response = Twilio::TwiML::VoiceResponse.new
@@ -72,7 +79,7 @@ class TwilioController < ApplicationController
   def connect_call
     response = Twilio::TwiML::VoiceResponse.new
 
-    to_number = params[:number].presence || params[:To].presence
+    to_number = dialable_number(params[:number].presence || params[:To].presence)
     user = find_caller_user
     business = find_business_from_params(to_number)
 
@@ -115,6 +122,22 @@ class TwilioController < ApplicationController
   end
 
   private
+
+  def verify_twilio_request!
+    return if TwilioRequestVerifier.valid?(request)
+
+    Rails.logger.warn(
+      "[Twilio] Rejected unverified webhook #{request.path} from #{request.remote_ip}"
+    )
+    head :forbidden
+  end
+
+  # Accepts the E.164 numbers we store, tolerating human separators. Anything
+  # else is refused rather than handed straight to <Dial>.
+  def dialable_number(value)
+    candidate = value.to_s.gsub(/[\s().-]/, "")
+    candidate.match?(/\A\+?\d{7,15}\z/) ? candidate : nil
+  end
 
   def find_caller_user
     if params[:UserId].present?

@@ -130,6 +130,55 @@ RSpec.describe "Twilios", type: :request do
     end
   end
 
+  describe "signature verification" do
+    before do
+      stub_const("ENV", ENV.to_hash.merge(
+        "TWILIO_VERIFY_WEBHOOKS" => "true",
+        "TWILIO_AUTH_TOKEN" => "test_auth_token"
+      ))
+    end
+
+    it "refuses to dial for an unsigned request" do
+      expect {
+        post twilio_connect_path, params: { number: "+1234567890", CallSid: "CA_FORGED" }
+      }.not_to change(CallLog, :count)
+
+      expect(response).to have_http_status(:forbidden)
+      expect(response.body).not_to include("<Dial")
+    end
+
+    it "refuses unsigned inbound SMS" do
+      expect {
+        post twilio_sms_path, params: { From: "+1234567890", To: "+1", Body: "spam" }
+      }.not_to change(Message, :count)
+
+      expect(response).to have_http_status(:forbidden)
+    end
+
+    it "allows a properly signed request through" do
+      params = { "number" => "+1234567890", "CallSid" => "CA_SIGNED" }
+      signature = Twilio::Security::RequestValidator
+                    .new("test_auth_token")
+                    .build_signature_for("http://www.example.com/twilio/connect", params)
+
+      expect {
+        post twilio_connect_path, params: params, headers: { "X-Twilio-Signature" => signature }
+      }.to change(CallLog, :count).by(1)
+
+      expect(response).to have_http_status(:success)
+      expect(response.body).to include("<Dial")
+    end
+  end
+
+  describe "number validation" do
+    it "refuses to dial a value that is not a phone number" do
+      post twilio_connect_path, params: { number: "not-a-number", CallSid: "CA_JUNK" }
+
+      expect(response.body).to include("Error")
+      expect(response.body).not_to include("<Dial")
+    end
+  end
+
   describe "POST /twilio/dial_status" do
     it "updates the call log duration and status" do
       call_log = create(:call_log, twilio_call_sid: "CA_STATUS", status: "initiated", duration_seconds: nil)

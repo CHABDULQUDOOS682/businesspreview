@@ -37,6 +37,15 @@ RSpec.describe "Admin::EmployeeAssignments", type: :request do
       expect(assigns(:businesses)).not_to include(unassigned)
     end
 
+    it "escapes business names rather than rendering them as markup" do
+      assigned.update!(name: "<script>alert(1)</script>Salon")
+
+      get admin_employees_path
+
+      expect(response.body).not_to include("<script>alert(1)</script>")
+      expect(response.body).to include("&lt;script&gt;alert(1)&lt;/script&gt;")
+    end
+
     it "filters by employee tab" do
       other = create(
         :business,

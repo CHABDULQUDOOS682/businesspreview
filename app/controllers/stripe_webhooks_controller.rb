@@ -16,16 +16,25 @@ class StripeWebhooksController < ApplicationController
 
   private
 
+  # Fails closed: without a configured secret a deployed app would happily
+  # accept a forged `invoice.paid` and mark invoices paid for free.
   def verified_event
     payload = request.body.read
     signature = request.env["HTTP_STRIPE_SIGNATURE"]
     webhook_secret = ENV["STRIPE_WEBHOOK_SECRET"]
 
-    if webhook_secret.present?
-      ::Stripe::Webhook.construct_event(payload, signature, webhook_secret)
-    else
-      ::Stripe::Event.construct_from(JSON.parse(payload))
+    return ::Stripe::Webhook.construct_event(payload, signature, webhook_secret) if webhook_secret.present?
+
+    unless Rails.env.local?
+      Rails.logger.error("[StripeWebhooks] Rejected event: STRIPE_WEBHOOK_SECRET is not configured")
+      raise ::Stripe::SignatureVerificationError.new(
+        "STRIPE_WEBHOOK_SECRET is not configured",
+        signature
+      )
     end
+
+    # Local development replays payloads by hand and has no signing secret.
+    ::Stripe::Event.construct_from(JSON.parse(payload))
   end
 
   def handle_event(event)

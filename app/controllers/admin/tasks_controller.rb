@@ -3,6 +3,8 @@
 class Admin::TasksController < ApplicationController
   layout "admin"
 
+  before_action :require_admin_or_super_admin!
+
   def index
     @query = params[:q].to_s.strip
     @status_filter = params[:status].to_s.presence

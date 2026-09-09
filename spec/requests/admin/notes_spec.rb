@@ -76,4 +76,78 @@ RSpec.describe "Admin::Notes", type: :request do
       expect(response).to redirect_to(admin_business_path(business))
     end
   end
+
+  describe "employee access" do
+    let(:employee) { create(:user, :employee) }
+    let!(:my_business) { create(:business, assigned_to: employee) }
+    let!(:their_business) { create(:business, assigned_to: create(:user, :employee)) }
+    let!(:my_note) { create(:note, business: my_business, user: employee) }
+    let!(:their_note) { create(:note, business: their_business) }
+
+    before do
+      sign_out admin
+      sign_in employee
+    end
+
+    it "only lists notes for businesses assigned to the employee" do
+      get admin_notes_path
+
+      expect(assigns(:notes)).to include(my_note)
+      expect(assigns(:notes)).not_to include(their_note, note)
+    end
+
+    it "does not expose the full user directory in filters" do
+      expect { get admin_notes_path }.not_to raise_error
+      expect(assigns(:users).map(&:id)).to eq([ employee.id ])
+    end
+
+    it "blocks editing another employee's note" do
+      get edit_admin_note_path(their_note)
+
+      expect(response).to redirect_to(admin_notes_path)
+      expect(flash[:alert]).to include("do not have access")
+    end
+
+    it "blocks updating another employee's note" do
+      patch admin_note_path(their_note), params: { note: { body: "hijacked" } }
+
+      expect(their_note.reload.body).not_to eq("hijacked")
+      expect(response).to redirect_to(admin_notes_path)
+    end
+
+    it "blocks deleting another employee's note" do
+      expect {
+        delete admin_note_path(their_note)
+      }.not_to change(Note, :count)
+
+      expect(response).to redirect_to(admin_notes_path)
+    end
+
+    it "blocks creating a note on a business they are not assigned" do
+      expect {
+        post admin_notes_path, params: { note: { body: "spy", business_id: their_business.id } }
+      }.not_to change(Note, :count)
+
+      expect(flash[:alert]).to include("do not have access")
+    end
+
+    it "blocks moving their own note onto another business" do
+      patch admin_note_path(my_note), params: { note: { business_id: their_business.id } }
+
+      expect(my_note.reload.business_id).to eq(my_business.id)
+      expect(response).to redirect_to(admin_notes_path)
+    end
+
+    it "still allows managing their own note on an assigned business" do
+      patch admin_note_path(my_note), params: { note: { body: "Progress update" } }
+
+      expect(my_note.reload.body).to eq("Progress update")
+    end
+
+    it "still allows creating a note on an assigned business" do
+      expect {
+        post admin_notes_path, params: { note: { body: "Called owner", business_id: my_business.id } }
+      }.to change(Note, :count).by(1)
+    end
+  end
 end

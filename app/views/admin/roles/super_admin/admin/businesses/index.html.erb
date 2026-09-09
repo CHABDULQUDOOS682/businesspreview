@@ -139,7 +139,7 @@
                     <% if b.phone.present? %>
                       <%= render "admin/shared/business_chat_button", business: b, variant: :link %>
                     <% end %>
-                    <%= link_to "View<span class='sr-only'>, #{b.name}</span>".html_safe, admin_business_path(b), class: "text-blue-600 hover:text-blue-900" %>
+                    <%= link_to admin_business_path(b), class: "text-blue-600 hover:text-blue-900" do %>View<%= tag.span(", #{b.name}", class: "sr-only") %><% end %>
                   </div>
                 </td>
               </tr>

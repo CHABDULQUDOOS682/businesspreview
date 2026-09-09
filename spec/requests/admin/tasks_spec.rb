@@ -37,4 +37,16 @@ RSpec.describe "Admin::Tasks", type: :request do
       expect(response.body).to include("Update services page")
     end
   end
+
+  describe "authorization" do
+    it "blocks employees from the agency task list" do
+      sign_out admin
+      sign_in create(:user, :employee)
+
+      get admin_tasks_path
+
+      expect(response).to redirect_to(admin_root_path)
+      expect(response.body).not_to include("Update services page")
+    end
+  end
 end

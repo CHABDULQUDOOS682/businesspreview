@@ -75,3 +75,6 @@ gem "google-apis-calendar_v3"
 gem "googleauth"
 
 gem "prawn", "~> 2.5"
+
+# Throttles public form submissions and unauthenticated webhooks.
+gem "rack-attack", "~> 6.7"

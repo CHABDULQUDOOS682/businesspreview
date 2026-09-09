@@ -98,13 +98,13 @@ class Business < ApplicationRecord
     end
   }
 
-  def self.segment_counts
-    SEGMENTS.keys.index_with { |segment| for_segment(segment).count }
+  def self.segment_counts(scope = all)
+    SEGMENTS.keys.index_with { |segment| scope.for_segment(segment).count }
   end
 
-  def self.segment_unread_counts
+  def self.segment_unread_counts(scope = all)
     SEGMENTS.keys.index_with do |segment|
-      Message.inbound.unread.where(business_id: for_segment(segment).select(:id)).count
+      Message.inbound.unread.where(business_id: scope.for_segment(segment).select(:id)).count
     end
   end
 

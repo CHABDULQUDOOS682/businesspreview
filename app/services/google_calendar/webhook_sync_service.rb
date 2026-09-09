@@ -10,8 +10,18 @@ class GoogleCalendar::WebhookSyncService
   def call(channel_id: nil, resource_state: nil)
     return unless @google_calendar.configured?
 
+    # The channel id is a random UUID handed to us by Google when we registered
+    # the watch, so it doubles as the shared secret for this webhook. Without
+    # this check anyone can trigger a full calendar resync on every meeting.
     channel = GoogleCalendarChannel.find_by(channel_id: channel_id) if channel_id.present?
-    channel&.touch
+    if channel.blank?
+      Rails.logger.warn(
+        "[GoogleCalendar::WebhookSyncService] ignoring notification for unknown channel #{channel_id.inspect}"
+      )
+      return
+    end
+
+    channel.touch
 
     case resource_state
     when "sync"

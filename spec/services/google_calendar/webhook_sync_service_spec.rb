@@ -4,31 +4,37 @@ RSpec.describe GoogleCalendar::WebhookSyncService do
   let(:google_calendar) { instance_double(GoogleCalendarService, configured?: true) }
   let(:service) { described_class.new(google_calendar: google_calendar) }
 
+  # Google only ever notifies us on a channel we registered, so every legitimate
+  # request carries a channel id we already know.
+  let!(:channel) { create(:google_calendar_channel, channel_id: "channel-1") }
+
   describe "#call" do
     it "marks a meeting cancelled when Google cancels the event" do
       meeting = create(:meeting, google_event_id: "evt_123", status: "scheduled")
       event = Google::Apis::CalendarV3::Event.new(status: "cancelled")
       allow(google_calendar).to receive(:fetch_event).with("evt_123").and_return(event)
 
-      service.call(resource_state: "exists")
+      service.call(channel_id: "channel-1", resource_state: "exists")
 
       expect(meeting.reload).to be_cancelled
     end
 
     it "registers a watch channel during sync notifications" do
+      channel.update!(expires_at: 1.day.ago)
       allow(google_calendar).to receive(:register_webhook!)
+
       service.call(channel_id: "channel-1", resource_state: "sync")
+
       expect(google_calendar).to have_received(:register_webhook!)
     end
 
     it "returns early when Google Calendar is not configured" do
       allow(google_calendar).to receive(:configured?).and_return(false)
 
-      expect { service.call(resource_state: "exists") }.not_to raise_error
+      expect { service.call(channel_id: "channel-1", resource_state: "exists") }.not_to raise_error
     end
 
     it "touches the matching channel when channel_id is provided" do
-      channel = create(:google_calendar_channel, channel_id: "channel-1")
       allow(google_calendar).to receive(:fetch_event)
 
       expect { service.call(channel_id: "channel-1", resource_state: "exists") }
@@ -40,7 +46,7 @@ RSpec.describe GoogleCalendar::WebhookSyncService do
       event = Google::Apis::CalendarV3::Event.new(status: "cancelled")
       allow(google_calendar).to receive(:fetch_event).with("evt_123").and_return(event)
 
-      service.call(resource_state: "not_exists")
+      service.call(channel_id: "channel-1", resource_state: "not_exists")
 
       expect(meeting.reload).to be_cancelled
     end
@@ -50,24 +56,24 @@ RSpec.describe GoogleCalendar::WebhookSyncService do
       event = Google::Apis::CalendarV3::Event.new(status: "confirmed")
       allow(google_calendar).to receive(:fetch_event).with("evt_123").and_return(event)
 
-      expect { service.call(resource_state: "unknown") }.not_to change { meeting.reload.status }
+      expect { service.call(channel_id: "channel-1", resource_state: "unknown") }
+        .not_to change { meeting.reload.status }
     end
 
     it "skips watch registration when an active channel already exists" do
-      create(:google_calendar_channel)
       allow(google_calendar).to receive(:register_webhook!)
 
-      service.call(resource_state: "sync")
+      service.call(channel_id: "channel-1", resource_state: "sync")
 
       expect(google_calendar).not_to have_received(:register_webhook!)
     end
 
     it "logs and continues when watch registration fails" do
-      allow(GoogleCalendarChannel).to receive(:active).and_return(GoogleCalendarChannel.none)
+      channel.update!(expires_at: 1.day.ago)
       allow(google_calendar).to receive(:register_webhook!).and_raise(Google::Apis::Error.new("watch failed"))
 
       expect(Rails.logger).to receive(:warn).with(/watch registration failed/)
-      service.call(resource_state: "sync")
+      service.call(channel_id: "channel-1", resource_state: "sync")
     end
 
     it "skips meetings when Google returns a client error" do
@@ -75,7 +81,32 @@ RSpec.describe GoogleCalendar::WebhookSyncService do
       allow(google_calendar).to receive(:fetch_event).and_raise(Google::Apis::ClientError.new("missing"))
 
       expect(Rails.logger).to receive(:warn).with(/skipped meeting #{meeting.id}/)
-      service.call(resource_state: "exists")
+      service.call(channel_id: "channel-1", resource_state: "exists")
+    end
+
+    context "with an unrecognised channel" do
+      it "ignores a notification carrying an unknown channel id" do
+        meeting = create(:meeting, google_event_id: "evt_123", status: "scheduled")
+        allow(google_calendar).to receive(:fetch_event)
+
+        service.call(channel_id: "forged-channel", resource_state: "exists")
+
+        expect(google_calendar).not_to have_received(:fetch_event)
+        expect(meeting.reload).to be_scheduled
+      end
+
+      it "ignores a notification with no channel id at all" do
+        allow(google_calendar).to receive(:fetch_event)
+
+        service.call(resource_state: "exists")
+
+        expect(google_calendar).not_to have_received(:fetch_event)
+      end
+
+      it "does not touch any channel record" do
+        expect { service.call(channel_id: "forged-channel", resource_state: "exists") }
+          .not_to change { channel.reload.updated_at }
+      end
     end
   end
 end

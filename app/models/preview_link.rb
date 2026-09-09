@@ -18,7 +18,8 @@ class PreviewLink < ApplicationRecord
 
   private
 
+  # 48 bits was brute-forceable; these URLs are public and unauthenticated.
   def generate_uuid
-    self.uuid ||= SecureRandom.hex(6)
+    self.uuid ||= SecureRandom.hex(16)
   end
 end
