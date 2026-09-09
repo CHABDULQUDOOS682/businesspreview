@@ -32,9 +32,29 @@ RSpec.describe "Sitepilot connection status webhook", type: :request do
 
     post "/webhooks/sitepilot/connection_status",
          params: { business_number: "B000006" },
+         headers: { "X-Site-Api-Secret" => "local-dev-secret" },
          as: :json
 
     expect(response).to have_http_status(:unprocessable_entity)
     expect(response.parsed_body["ok"]).to eq(false)
+  end
+
+  it "rejects a caller that sends no secret" do
+    post "/webhooks/sitepilot/connection_status",
+         params: { business_number: "B000006" },
+         as: :json
+
+    expect(response).to have_http_status(:unauthorized)
+    expect(response.body).not_to include("tutwiler-barber-shop")
+  end
+
+  it "rejects a caller that sends the wrong secret" do
+    post "/webhooks/sitepilot/connection_status",
+         params: { business_number: "B000006" },
+         headers: { "X-Site-Api-Secret" => "not-the-secret" },
+         as: :json
+
+    expect(response).to have_http_status(:unauthorized)
+    expect(response.body).not_to include("tutwiler-barber-shop")
   end
 end

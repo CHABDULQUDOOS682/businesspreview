@@ -1,25 +1,31 @@
 class Admin::CommunicationsController < ApplicationController
   layout "admin"
 
+  before_action :authorize_conversation_access!, only: %i[show create call]
+
   def index
     # We want to show all businesses and their latest message if any
     # Plus any conversations that aren't linked to a business yet
     @segment = employee_role? ? "nurture" : Business.normalize_segment(params[:segment])
-    @segment_counts = Business.segment_counts
-    @segment_unread_counts = Business.segment_unread_counts
-    @pagy, @businesses = pagy(Business.for_segment(@segment).order(name: :asc))
+    @segment_counts = Business.segment_counts(accessible_businesses)
+    @segment_unread_counts = Business.segment_unread_counts(accessible_businesses)
+    @pagy, @businesses = pagy(accessible_businesses.for_segment(@segment).order(name: :asc))
 
-    # Get latest message for each number that isn't already associated with a business
-    @standalone_conversations = Message.where(business_id: nil)
-                                      .select(Arel.sql("DISTINCT ON (CASE WHEN direction = 'inbound' THEN from_number ELSE to_number END) *"))
-                                      .order(Arel.sql("CASE WHEN direction = 'inbound' THEN from_number ELSE to_number END, created_at DESC"))
-                                      .sort_by(&:created_at).reverse
+    # Conversations from numbers we cannot attribute to a business have no
+    # assignment to check, so they stay with admins.
+    @standalone_conversations = if employee_role?
+      []
+    else
+      Message.where(business_id: nil)
+             .select(Arel.sql("DISTINCT ON (CASE WHEN direction = 'inbound' THEN from_number ELSE to_number END) *"))
+             .order(Arel.sql("CASE WHEN direction = 'inbound' THEN from_number ELSE to_number END, created_at DESC"))
+             .sort_by(&:created_at).reverse
+    end
   end
 
   def show
     @number = params[:id] # The phone number we're chatting with
-    @business = Business.find_by(phone: @number) ||
-                Business.find_by("phone LIKE ?", "%#{@number.last(10)}") if @number.present?
+    @business = conversation_business
 
     # Flexible matching for messages using the last 10 digits to ignore +, country codes, or formatting differences
     last_10 = @number.to_s.gsub(/\s+/, "").last(10)
@@ -60,7 +66,7 @@ class Admin::CommunicationsController < ApplicationController
   def create
     @number = params[:to_number]
     @body = params[:body]
-    @business_id = params[:business_id]
+    @business_id = permitted_business_id
 
     begin
       # Send SMS via Twilio
@@ -97,5 +103,45 @@ class Admin::CommunicationsController < ApplicationController
     rescue => e
       redirect_to admin_communication_path(@number), alert: "Failed to initiate call: #{e.message}"
     end
+  end
+
+  private
+
+  # Employees only ever see the businesses assigned to them; admins see everything.
+  def accessible_businesses
+    return Business.all unless employee_role?
+
+    Business.assigned_to_user(current_user)
+  end
+
+  def conversation_number
+    (params[:to_number].presence || params[:id]).to_s
+  end
+
+  def conversation_business
+    number = conversation_number
+    return nil if number.blank?
+
+    Business.find_by(phone: number) ||
+      Business.find_by("phone LIKE ?", "%#{number.gsub(/\s+/, '').last(10)}")
+  end
+
+  # Sending SMS and placing calls both spend company money and reach clients, so
+  # an employee may only do it for a business assigned to them.
+  def authorize_conversation_access!
+    return unless employee_role?
+
+    business = conversation_business
+    return if business && business.assigned_to_id == current_user.id
+
+    redirect_to admin_communications_path,
+                alert: "You do not have access to that conversation."
+  end
+
+  def permitted_business_id
+    requested = params[:business_id].presence
+    return requested unless employee_role?
+
+    accessible_businesses.where(id: requested).pick(:id)
   end
 end

@@ -363,6 +363,76 @@ RSpec.describe "HomePages", type: :request do
       expect(response).to redirect_to(contact_path)
       expect(flash[:notice]).to include("inquiry was sent successfully")
     end
+
+    it "silently drops a submission that filled the honeypot" do
+      expect(ContactMailer).not_to receive(:new_lead_alert)
+
+      post contact_submissions_path, params: {
+        first_name: "Bot",
+        email: "bot@example.com",
+        message: "buy links",
+        ContactSubmissionGuard::HONEYPOT_FIELD => "https://spam.example"
+      }
+
+      # The bot is told it succeeded so it has no signal to retry differently.
+      expect(response).to redirect_to(contact_path)
+      expect(flash[:notice]).to include("inquiry was sent successfully")
+    end
+
+    it "asks a human to retry when Turnstile rejects them" do
+      allow(TurnstileVerifier).to receive(:required?).and_return(true)
+      allow(TurnstileVerifier).to receive(:valid?).and_return(false)
+      expect(ContactMailer).not_to receive(:new_lead_alert)
+
+      post contact_submissions_path, params: {
+        first_name: "Jane",
+        email: "jane@example.com",
+        message: "Hello",
+        "cf-turnstile-response" => "expired"
+      }
+
+      expect(response).to redirect_to(contact_path)
+      expect(flash[:alert]).to include("security check")
+    end
+
+    it "sends the lead when Turnstile passes" do
+      allow(TurnstileVerifier).to receive(:required?).and_return(true)
+      allow(TurnstileVerifier).to receive(:valid?).and_return(true)
+      mailer = instance_double(ActionMailer::MessageDelivery, deliver_later: true)
+      expect(ContactMailer).to receive(:new_lead_alert).and_return(mailer)
+
+      post contact_submissions_path, params: {
+        first_name: "Jane",
+        email: "jane@example.com",
+        message: "Hello",
+        "cf-turnstile-response" => "valid"
+      }
+
+      expect(flash[:notice]).to include("inquiry was sent successfully")
+    end
+  end
+
+  describe "GET /contact" do
+    it "renders the honeypot field" do
+      get contact_path
+
+      expect(response.body).to include("contact_website")
+    end
+
+    it "omits the Turnstile widget until a site key is configured" do
+      get contact_path
+
+      expect(response.body).not_to include("cf-turnstile")
+    end
+
+    it "renders the Turnstile widget once a site key is configured" do
+      allow(TurnstileVerifier).to receive(:site_key).and_return("site-key")
+
+      get contact_path
+
+      expect(response.body).to include("cf-turnstile")
+      expect(response.body).to include("challenges.cloudflare.com")
+    end
   end
 
   describe "GET /privacy" do

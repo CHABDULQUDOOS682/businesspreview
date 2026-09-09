@@ -45,11 +45,29 @@ class HomePagesController < ApplicationController
         # 1. Safely whitelist incoming form fields using strong parameters
         contact_params = params.permit(:first_name, :last_name, :email, :company, :service_interest, :message)
 
+        guard = ContactSubmissionGuard.new(
+            honeypot: params[ContactSubmissionGuard::HONEYPOT_FIELD],
+            turnstile_token: params["cf-turnstile-response"],
+            remote_ip: request.remote_ip
+        )
+
+        # A failed CAPTCHA is usually a real person, so say so and let them retry.
+        if guard.turnstile_failed?
+            redirect_to contact_path, alert: "Please complete the security check and try again."
+            return
+        end
+
+        # A tripped honeypot is a bot. Show the success message but send nothing.
+        unless guard.accept?
+            redirect_to contact_path, notice: contact_success_notice
+            return
+        end
+
         # 2. Hand off the layout variables directly to your background mailer thread
         ContactMailer.new_lead_alert(contact_params).deliver_later
 
         # 3. Bounce them right back to the contact screen with a success notice
-        redirect_to contact_path, notice: "Thank you! Your inquiry was sent successfully. We'll be in touch within one business day."
+        redirect_to contact_path, notice: contact_success_notice
     end
 
     def privacy
@@ -92,5 +110,11 @@ class HomePagesController < ApplicationController
     end
 
     def accessibility
+    end
+
+    private
+
+    def contact_success_notice
+        "Thank you! Your inquiry was sent successfully. We'll be in touch within one business day."
     end
 end

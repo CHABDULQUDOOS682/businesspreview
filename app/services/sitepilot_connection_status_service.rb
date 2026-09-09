@@ -30,6 +30,16 @@ class SitepilotConnectionStatusService
       )
     end
 
+    # Authenticate before looking anything up: the responses below leak whether
+    # a business exists and how it is configured.
+    if @request_secret.blank?
+      return failure(
+        http_status: :unauthorized,
+        error: "Missing Site API Secret header.",
+        missing: [ REQUIRED_FIELDS["site_api_secret"] ]
+      )
+    end
+
     business = Business.find_by(business_number: @business_number)
     unless business
       return failure(
@@ -37,6 +47,19 @@ class SitepilotConnectionStatusService
         error: "No preview_app business found with Business Number #{@business_number}. " \
                "Create or open that CRM business and paste SitePilot Connection values.",
         missing: [ REQUIRED_FIELDS["business_number"] ]
+      )
+    end
+
+    # Verify before reporting any configuration detail. The only case we answer
+    # unauthenticated is a business with no secret stored yet, which is exactly
+    # the "not connected" state the setup screen needs to diagnose.
+    if business.site_api_secret.present? && !secure_match?(@request_secret, business.site_api_secret)
+      return failure(
+        http_status: :unauthorized,
+        error: "Site API Secret in preview_app does not match SitePilot SITE_API_SECRET.",
+        missing: [],
+        mismatches: [ "Site API Secret" ],
+        business_id: business.id
       )
     end
 
@@ -49,16 +72,6 @@ class SitepilotConnectionStatusService
         error: friendly_error(missing, mismatches),
         missing: missing,
         mismatches: mismatches,
-        business_id: business.id
-      )
-    end
-
-    if @request_secret.present? && !secure_match?(@request_secret, business.site_api_secret)
-      return failure(
-        http_status: :unauthorized,
-        error: "Site API Secret in preview_app does not match SitePilot SITE_API_SECRET.",
-        missing: [],
-        mismatches: [ "Site API Secret" ],
         business_id: business.id
       )
     end

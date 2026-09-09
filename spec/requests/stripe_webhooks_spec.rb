@@ -69,6 +69,15 @@ RSpec.describe "StripeWebhooks", type: :request do
       expect(response).to have_http_status(:bad_request)
     end
 
+    it "refuses unsigned events outside development when no secret is configured" do
+      allow(Rails.env).to receive(:local?).and_return(false)
+
+      post webhooks_stripe_path, params: payload, as: :json
+
+      expect(response).to have_http_status(:bad_request)
+      expect(payment_invoice.reload.status).not_to eq("paid")
+    end
+
     it "handles invoice.payment_failed" do
       payload = { id: "evt_123", type: "invoice.payment_failed", data: { object: { id: "in_123", status: "open" } } }
       post webhooks_stripe_path, params: payload, as: :json

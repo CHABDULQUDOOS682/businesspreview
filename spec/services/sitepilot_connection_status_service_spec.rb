@@ -40,10 +40,36 @@ RSpec.describe SitepilotConnectionStatusService do
   end
 
   it "fails when business number is unknown" do
-    result = described_class.call(business_number: "B999999")
+    result = described_class.call(business_number: "B999999", request_secret: "local-dev-secret")
 
     expect(result.ok).to eq(false)
     expect(result.http_status).to eq(:not_found)
+  end
+
+  it "refuses to answer without a secret header" do
+    result = described_class.call(business_number: business.business_number)
+
+    expect(result.ok).to eq(false)
+    expect(result.http_status).to eq(:unauthorized)
+    expect(result.payload[:error]).to include("Missing Site API Secret")
+  end
+
+  it "does not disclose configured values to an unauthenticated caller" do
+    result = described_class.call(business_number: business.business_number, site_external_id: "guess")
+
+    expect(result.payload.to_s).not_to include(business.site_external_id)
+    expect(result.payload.to_s).not_to include(business.site_api_base_url)
+  end
+
+  it "does not disclose configured values when the secret is wrong" do
+    result = described_class.call(
+      business_number: business.business_number,
+      site_external_id: "guess",
+      request_secret: "wrong-secret"
+    )
+
+    expect(result.http_status).to eq(:unauthorized)
+    expect(result.payload.to_s).not_to include(business.site_external_id)
   end
 
   it "requires business_number" do
@@ -71,7 +97,8 @@ RSpec.describe SitepilotConnectionStatusService do
     result = described_class.call(
       business_number: business.business_number,
       site_external_id: "other-slug",
-      site_api_base_url: business.site_api_base_url
+      site_api_base_url: business.site_api_base_url,
+      request_secret: business.site_api_secret
     )
 
     expect(result.ok).to eq(false)
@@ -82,7 +109,8 @@ RSpec.describe SitepilotConnectionStatusService do
     result = described_class.call(
       business_number: business.business_number,
       site_external_id: business.site_external_id,
-      site_api_base_url: "http://wrong.example.com"
+      site_api_base_url: "http://wrong.example.com",
+      request_secret: business.site_api_secret
     )
 
     expect(result.ok).to eq(false)

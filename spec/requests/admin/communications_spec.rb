@@ -94,4 +94,90 @@ RSpec.describe "Admin::Communications", type: :request do
       expect(flash[:alert]).to include("Failed to initiate call")
     end
   end
+
+  describe "employee access" do
+    let(:employee) { create(:user, :employee) }
+    let(:other_employee) { create(:user, :employee) }
+    # Employees are pinned to the "nurture" segment, so keep these unsold.
+    let(:nurture) { { sold_price: nil, subscription_fee: nil, subscription: false } }
+    let!(:mine) { create(:business, phone: "+15550000001", assigned_to: employee, **nurture) }
+    let!(:theirs) { create(:business, phone: "+15550000002", assigned_to: other_employee, **nurture) }
+
+    before do
+      sign_out admin
+      sign_in employee
+      allow(SmsService).to receive(:send_sms)
+      allow(CallService).to receive(:call).and_return(double(sid: "CA_EMP", status: "queued"))
+    end
+
+    it "lists only businesses assigned to the employee" do
+      get admin_communications_path
+
+      expect(response).to have_http_status(:success)
+      expect(assigns(:businesses)).to include(mine)
+      expect(assigns(:businesses)).not_to include(theirs)
+    end
+
+    it "hides unattributed conversations from employees" do
+      create(:message, business_id: nil, from_number: "+1112223333")
+      get admin_communications_path
+
+      expect(assigns(:standalone_conversations)).to be_empty
+    end
+
+    it "opens a conversation for an assigned business" do
+      get admin_communication_path(mine.phone)
+
+      expect(response).to have_http_status(:success)
+      expect(assigns(:business)).to eq(mine)
+    end
+
+    it "blocks reading another employee's conversation" do
+      get admin_communication_path(theirs.phone)
+
+      expect(response).to redirect_to(admin_communications_path)
+      expect(flash[:alert]).to include("do not have access")
+    end
+
+    it "blocks sending SMS to a business they are not assigned" do
+      expect {
+        post admin_communications_path,
+             params: { to_number: theirs.phone, body: "hi", business_id: theirs.id }
+      }.not_to change(Message, :count)
+
+      expect(SmsService).not_to have_received(:send_sms)
+      expect(response).to redirect_to(admin_communications_path)
+    end
+
+    it "blocks calling a number they are not assigned" do
+      expect {
+        post call_admin_communication_path(theirs.phone)
+      }.not_to change(CallLog, :count)
+
+      expect(CallService).not_to have_received(:call)
+      expect(response).to redirect_to(admin_communications_path)
+    end
+
+    it "blocks conversations with numbers that match no business" do
+      get admin_communication_path("+15559999999")
+
+      expect(response).to redirect_to(admin_communications_path)
+    end
+
+    it "still allows messaging an assigned business" do
+      expect {
+        post admin_communications_path,
+             params: { to_number: mine.phone, body: "hi", business_id: mine.id }
+      }.to change(Message, :count).by(1)
+
+      expect(Message.last.business_id).to eq(mine.id)
+    end
+
+    it "refuses to attribute a message to a business the employee cannot access" do
+      post admin_communications_path,
+           params: { to_number: mine.phone, body: "hi", business_id: theirs.id }
+
+      expect(Message.last.business_id).to be_nil
+    end
+  end
 end

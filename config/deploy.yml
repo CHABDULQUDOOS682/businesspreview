@@ -63,6 +63,8 @@ env:
     - APP_HOST
     - APP_PROTOCOL
     - OPENREPLAY_PROJECT_KEY
+    - TURNSTILE_SITE_KEY
+    - TURNSTILE_SECRET_KEY
 
   clear:
     CONTACT_EMAIL: team@devdebizz.com

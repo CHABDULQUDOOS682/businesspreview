@@ -1,6 +1,12 @@
 <% content_for :title, "Contact | DevDeBizz" %>
 <% content_for :meta_description, "Contact DevDeBizz about your website, hosting, SEO, booking flows, or monthly partnership. We reply within one business day for service businesses." %>
 
+<% if TurnstileVerifier.site_key.present? %>
+  <% content_for :head do %>
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+  <% end %>
+<% end %>
+
 <%= render "page_header",
   eyebrow: "Get in Touch",
   title_html: 'Let&apos;s build something <br><span class="home-display-accent">remarkable.</span>'.html_safe,
@@ -120,6 +126,17 @@
             <span class="mb-2 block text-xs font-bold uppercase tracking-[0.18em] text-[#213885]">Project details</span>
             <%= f.text_area :message, class: "home-input", placeholder: "Tell us about your goals, timeline, and anything else we should know…", rows: 4 %>
           </label>
+
+          <%# Honeypot: hidden from people, irresistible to bots. %>
+          <div aria-hidden="true" class="pointer-events-none absolute left-[-9999px] top-auto h-0 w-0 overflow-hidden opacity-0">
+            <label for="contact_website">Website</label>
+            <%= text_field_tag ContactSubmissionGuard::HONEYPOT_FIELD, nil,
+                  id: "contact_website", tabindex: "-1", autocomplete: "off" %>
+          </div>
+
+          <% if TurnstileVerifier.site_key.present? %>
+            <div class="cf-turnstile" data-sitekey="<%= TurnstileVerifier.site_key %>"></div>
+          <% end %>
 
           <button type="submit" class="group relative w-full overflow-hidden rounded-full bg-[#213885] px-8 py-4 text-sm font-bold text-[#ECDFD2] shadow-2xl shadow-[#213885]/30 transition hover:scale-[1.02]">
             <span class="relative z-10">Send Message →</span>

@@ -9,6 +9,19 @@ RSpec.describe PreviewLink, type: :model do
       link.valid?
       expect(link.uuid).to be_present
     end
+
+    it "generates a uuid with enough entropy to resist enumeration" do
+      link = create(:preview_link, business: business)
+
+      expect(link.uuid.length).to eq(32)
+      expect(link.uuid).to match(/\A[0-9a-f]{32}\z/)
+    end
+
+    it "does not reuse uuids" do
+      uuids = Array.new(5) { create(:preview_link, business: business).uuid }
+
+      expect(uuids.uniq.size).to eq(5)
+    end
   end
 
   describe "class methods" do
