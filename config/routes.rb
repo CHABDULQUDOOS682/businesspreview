@@ -137,6 +137,9 @@ Rails.application.routes.draw do
     end
     resources :commission_rates, only: [ :index, :update ]
     resources :jobs, only: [ :index, :show ] do
+      collection do
+        post :enqueue_phone_lookup
+      end
       member do
         post :retry
       end

@@ -638,8 +638,6 @@ RSpec.describe "Admin::Businesses", type: :request do
   end
 
   describe "POST /admin/businesses/:id/verify_phone" do
-    include ActiveJob::TestHelper
-
     around do |example|
       original_adapter = ActiveJob::Base.queue_adapter
       ActiveJob::Base.queue_adapter = :test

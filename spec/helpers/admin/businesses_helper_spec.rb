@@ -189,11 +189,15 @@ RSpec.describe Admin::BusinessesHelper, type: :helper do
       expect(helper.phone_line_type_badge(business)).to include("bg-red-50")
     end
 
-    it "returns an amber badge for voip types" do
+    it "returns an amber badge for voip and fixed_or_mobile" do
       business.phone_lookup_checked_at = Time.current
-      business.phone_line_type = "fixedVoip"
+      business.phone_line_type = "voip"
 
-      expect(helper.phone_line_type_badge(business)).to include("Fixed Voip").or include("Fixedvoip")
+      expect(helper.phone_line_type_badge(business)).to include("VoIP")
+      expect(helper.phone_line_type_badge(business)).to include("bg-amber-50")
+
+      business.phone_line_type = "fixed_or_mobile"
+      expect(helper.phone_line_type_badge(business)).to include("Fixed or mobile")
       expect(helper.phone_line_type_badge(business)).to include("bg-amber-50")
     end
 
