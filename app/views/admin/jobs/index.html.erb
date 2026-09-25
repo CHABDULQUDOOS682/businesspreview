@@ -5,6 +5,21 @@
       <h1 class="portal-page-title mt-2">Background Jobs</h1>
       <p class="mt-2 text-sm text-sand-600">Monitor Solid Queue workers, enqueued jobs, and failures.</p>
     </div>
+    <% if super_admin? %>
+      <div class="flex flex-wrap items-center gap-2">
+        <%= button_to "Verify unchecked phones (#{@unchecked_phone_count})",
+                      enqueue_phone_lookup_admin_jobs_path(only_unchecked: true),
+                      method: :post,
+                      class: "btn-base btn-accent-blue px-3 py-2 text-sm shadow-sm",
+                      disabled: @unchecked_phone_count.zero?,
+                      data: { turbo_confirm: "Queue phone line-type lookup for #{@unchecked_phone_count} unchecked #{"business".pluralize(@unchecked_phone_count)}?" } %>
+        <%= button_to "Re-verify all phones",
+                      enqueue_phone_lookup_admin_jobs_path(only_unchecked: false),
+                      method: :post,
+                      class: "btn-base btn-sand px-3 py-2 text-sm shadow-sm",
+                      data: { turbo_confirm: "Queue phone line-type lookup for ALL businesses with a phone number?" } %>
+      </div>
+    <% end %>
   </div>
 <% end %>
 
