@@ -146,6 +146,5 @@ module Admin
         "premium_rate" => "Premium rate"
       }.fetch(line_type, line_type&.titleize || "Unknown")
     end
-
   end
 end
