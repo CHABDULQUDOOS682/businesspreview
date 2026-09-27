@@ -287,7 +287,6 @@ GEM
     pg (1.6.3-x86_64-darwin)
     pg (1.6.3-x86_64-linux)
     pg (1.6.3-x86_64-linux-musl)
-    phonelib (0.10.27)
     pp (0.6.3)
       prettyprint
     prawn (2.5.0)
@@ -554,7 +553,6 @@ DEPENDENCIES
   letter_opener
   pagy (~> 9.0)
   pg (~> 1.1)
-  phonelib
   prawn (~> 2.5)
   propshaft
   pry-byebug

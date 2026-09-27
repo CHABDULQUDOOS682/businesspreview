@@ -71,56 +71,6 @@ RSpec.describe "Admin::Jobs", type: :request, solid_queue: true do
     end
   end
 
-  describe "POST /admin/jobs/enqueue_phone_lookup" do
-    include ActiveJob::TestHelper
-
-    around do |example|
-      original_adapter = ActiveJob::Base.queue_adapter
-      ActiveJob::Base.queue_adapter = :test
-      clear_enqueued_jobs
-      example.run
-    ensure
-      ActiveJob::Base.queue_adapter = original_adapter
-    end
-
-    it "queues PhoneLookupBatchJob for unchecked businesses" do
-      expect {
-        post enqueue_phone_lookup_admin_jobs_path, params: { only_unchecked: true }
-      }.to have_enqueued_job(PhoneLookupBatchJob).with(only_unchecked: true)
-
-      expect(response).to redirect_to(admin_jobs_path)
-      expect(flash[:notice]).to include("unchecked")
-    end
-
-    it "queues PhoneLookupBatchJob for all businesses when only_unchecked is false" do
-      expect {
-        post enqueue_phone_lookup_admin_jobs_path, params: { only_unchecked: false }
-      }.to have_enqueued_job(PhoneLookupBatchJob).with(only_unchecked: false)
-
-      expect(response).to redirect_to(admin_jobs_path)
-      expect(flash[:notice]).to include("all businesses")
-    end
-
-    it "shows the verify buttons on the index for super admins" do
-      create(:business, phone: "+15551112222", phone_lookup_checked_at: nil)
-
-      get admin_jobs_path
-
-      expect(response.body).to include("Verify unchecked phones")
-      expect(response.body).to include("Re-verify all phones")
-    end
-
-    it "denies admins from enqueueing" do
-      sign_in create(:user, :admin)
-
-      expect {
-        post enqueue_phone_lookup_admin_jobs_path
-      }.not_to have_enqueued_job(PhoneLookupBatchJob)
-
-      expect(response).to redirect_to(admin_root_path)
-    end
-  end
-
   describe "authorization" do
     it "allows admins" do
       sign_in create(:user, :admin)
@@ -128,15 +78,6 @@ RSpec.describe "Admin::Jobs", type: :request, solid_queue: true do
       get admin_jobs_path
 
       expect(response).to have_http_status(:ok)
-    end
-
-    it "hides phone verify buttons from admins" do
-      sign_in create(:user, :admin)
-
-      get admin_jobs_path
-
-      expect(response.body).not_to include("Verify unchecked phones")
-      expect(response.body).not_to include("Re-verify all phones")
     end
 
     it "redirects employees" do

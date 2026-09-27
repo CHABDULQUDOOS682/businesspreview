@@ -4,10 +4,20 @@ require "rails_helper"
 
 RSpec.describe PhoneLookupJob, type: :job do
   let(:business) { create(:business, phone: "+16232481437") }
+  let(:lookup_resource) { double("lookup_resource") }
+  let(:lookups_v2) { double("lookups_v2") }
+  let(:lookups) { double("lookups", v2: lookups_v2) }
+  let(:twilio_client) { double("TWILIO_CLIENT", lookups: lookups) }
 
-  it "stores landline when phonelib classifies as fixed_line" do
-    parsed = instance_double(Phonelib::Phone, valid?: true, possible?: true, type: :fixed_line)
-    allow(Phonelib).to receive(:parse).with(business.phone).and_return(parsed)
+  before do
+    stub_const("TWILIO_CLIENT", twilio_client)
+    allow(lookups_v2).to receive(:phone_numbers).with(business.phone).and_return(lookup_resource)
+  end
+
+  it "stores the line type from Twilio Lookup v2" do
+    allow(lookup_resource).to receive(:fetch)
+      .with(fields: "line_type_intelligence")
+      .and_return(double(line_type_intelligence: { "type" => "landline" }))
 
     described_class.perform_now(business.id)
 
@@ -17,31 +27,26 @@ RSpec.describe PhoneLookupJob, type: :job do
     expect(business.phone_lookup_error).to be_nil
   end
 
-  it "stores mobile when phonelib classifies as mobile" do
-    parsed = instance_double(Phonelib::Phone, valid?: true, possible?: true, type: :mobile)
-    allow(Phonelib).to receive(:parse).with(business.phone).and_return(parsed)
-
-    described_class.perform_now(business.id)
-
-    expect(business.reload.phone_line_type).to eq("mobile")
-  end
-
-  it "stores an error when the number is invalid" do
-    parsed = instance_double(Phonelib::Phone, valid?: false, possible?: false, type: :unknown)
-    allow(Phonelib).to receive(:parse).with(business.phone).and_return(parsed)
+  it "stores the Twilio error when the lookup fails" do
+    response = double(
+      status_code: 404,
+      body: { "code" => 20404, "message" => "The requested resource was not found" },
+      headers: {}
+    )
+    allow(lookup_resource).to receive(:fetch).and_raise(Twilio::REST::RestError.new("Not found", response))
 
     described_class.perform_now(business.id)
 
     business.reload
     expect(business.phone_lookup_checked_at).to be_present
-    expect(business.phone_lookup_error).to eq("Invalid phone number")
+    expect(business.phone_lookup_error).to be_present
     expect(business.phone_line_type).to be_nil
   end
 
   it "returns early when the business has no phone" do
     business.update_columns(phone: "")
 
-    expect(Phonelib).not_to receive(:parse)
+    expect(twilio_client).not_to receive(:lookups)
     described_class.perform_now(business.id)
 
     expect(business.reload.phone_lookup_checked_at).to be_nil

@@ -121,30 +121,18 @@ module Admin
 
       if business.phone_lookup_error.present?
         return content_tag(:span, "Lookup failed",
-                           class: "inline-flex items-center rounded-md bg-red-50 px-2 py-0.5 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/20",
-                           title: business.phone_lookup_error)
+                           class: "inline-flex items-center rounded-md bg-red-50 px-2 py-0.5 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/20")
       end
 
       badge_class = case business.phone_line_type
       when "mobile" then "bg-emerald-50 text-emerald-700 ring-emerald-600/20"
       when "landline" then "bg-red-50 text-red-700 ring-red-600/20"
-      when "voip", "fixedVoip", "nonFixedVoip", "fixed_or_mobile" then "bg-amber-50 text-amber-800 ring-amber-600/20"
+      when "fixedVoip", "nonFixedVoip" then "bg-amber-50 text-amber-800 ring-amber-600/20"
       else "bg-slate-50 text-slate-600 ring-slate-500/10"
       end
 
-      content_tag(:span, phone_line_type_label(business.phone_line_type),
+      content_tag(:span, business.phone_line_type&.titleize || "Unknown",
                   class: "inline-flex items-center rounded-md px-2 py-0.5 text-xs font-medium ring-1 ring-inset #{badge_class}")
-    end
-
-    def phone_line_type_label(line_type)
-      {
-        "mobile" => "Mobile",
-        "landline" => "Landline",
-        "voip" => "VoIP",
-        "fixed_or_mobile" => "Fixed or mobile",
-        "toll_free" => "Toll free",
-        "premium_rate" => "Premium rate"
-      }.fetch(line_type, line_type&.titleize || "Unknown")
     end
   end
 end

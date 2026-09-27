@@ -4,7 +4,6 @@ class Admin::JobsController < ApplicationController
   layout "admin"
 
   before_action :require_jobs_access!
-  before_action :require_super_admin!, only: :enqueue_phone_lookup
   before_action :set_browser, only: :index
   before_action :set_job, only: %i[show retry]
 
@@ -13,7 +12,6 @@ class Admin::JobsController < ApplicationController
     @pagy, @jobs = pagy(@browser.jobs, limit: 25)
     @worker_processes = @browser.worker_processes
     @recurring_tasks = @browser.recurring_tasks
-    @unchecked_phone_count = Business.where.not(phone: [ nil, "" ]).where(phone_lookup_checked_at: nil).count
   end
 
   def show
@@ -27,20 +25,6 @@ class Admin::JobsController < ApplicationController
 
     @job.retry
     redirect_to admin_job_path(@job), notice: "Job queued for retry."
-  end
-
-  def enqueue_phone_lookup
-    only_unchecked = ActiveModel::Type::Boolean.new.cast(params.fetch(:only_unchecked, true))
-    PhoneLookupBatchJob.perform_later(only_unchecked: only_unchecked)
-
-    notice =
-      if only_unchecked
-        "Phone lookup queued for unchecked businesses."
-      else
-        "Phone lookup queued for all businesses."
-      end
-
-    redirect_to admin_jobs_path, notice: notice
   end
 
   private

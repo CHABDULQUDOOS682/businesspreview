@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_09_25_154500) do
+ActiveRecord::Schema[8.0].define(version: 2026_08_23_115450) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -182,14 +182,14 @@ ActiveRecord::Schema[8.0].define(version: 2026_09_25_154500) do
     t.string "site_api_secret"
     t.string "site_external_id"
     t.string "business_number"
+    t.string "phone_line_type"
+    t.datetime "phone_lookup_checked_at"
+    t.string "phone_lookup_error"
     t.bigint "assigned_to_id"
     t.datetime "assigned_at"
     t.string "work_status"
     t.text "employee_report"
     t.text "completion_notes"
-    t.string "phone_line_type"
-    t.datetime "phone_lookup_checked_at"
-    t.string "phone_lookup_error"
     t.index "lower((phone)::text)", name: "index_businesses_on_lower_phone", unique: true
     t.index ["assigned_to_id"], name: "index_businesses_on_assigned_to_id"
     t.index ["business_number"], name: "index_businesses_on_business_number", unique: true

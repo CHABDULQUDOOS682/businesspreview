@@ -107,12 +107,6 @@ class Admin::BusinessesController < ApplicationController
     @contracts = @business.contracts.recent if super_admin? || admin_role?
   end
 
-  def verify_phone
-    business = Business.find(params[:id])
-    PhoneLookupJob.perform_later(business.id)
-    redirect_to admin_business_path(business), notice: "Number verification queued."
-  end
-
   def edit
   end
 
@@ -169,6 +163,12 @@ class Admin::BusinessesController < ApplicationController
     else
       redirect_to admin_business_path(@business), alert: "Invalid delivery method."
     end
+  end
+
+  def verify_phone
+    business = Business.find(params[:id])
+    PhoneLookupJob.perform_later(business.id)
+    redirect_to admin_business_path(business), notice: "Number verification queued."
   end
 
   private
